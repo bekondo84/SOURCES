@@ -133,7 +133,7 @@
       </div>
        
     <!-- Fenetre Modale Global -->
-    <div id="globalModal" class="modal" data-backdrop="false" role="dialog">
+    <div id="globalModal" class="modal fade" data-backdrop="false" role="dialog">
        <div class="modal-dialog   modal-lg">
          <div class="modal-content" >
             <div class="modal-header" >
@@ -268,7 +268,7 @@
 
                         $('body').data( 'fv_open_modals', $('body').data( 'fv_open_modals' ) + 1 );
 
-                        $(this).css('z-index', 3000 + (10 * $('body').data( 'fv_open_modals' )));
+                        $(this).css('z-index', 1040 + (10 * $('body').data( 'fv_open_modals' )));
 
                         $( '.modal-backdrop' ).not( '.fv-modal-stack' )
                                 .css( 'z-index', 1039 + (10 * $('body').data( 'fv_open_modals' )));
