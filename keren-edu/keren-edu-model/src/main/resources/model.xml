@@ -1,0 +1,594 @@
+<?xml version="1.0"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<model-config xmlns:xsi="http://www.w3.org/2001/XMLSchema"
+	xsi:schemaLocation="http://www.megatimgroup.net/model-config ../xsd/model-config.xsd"
+	xmlns="http://www.megatimgroup.net/model-config">
+<elements>
+        <element type="com.kerenedu.school.Contacts"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+         <element type="com.kerenedu.school.Nationalite"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+         <element type="com.kerenedu.school.Eleve"  idclass="long"  idname="id"  deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+         <element type="com.kerenedu.school.DossierMedical"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+         <element type="com.kerenedu.school.NiveauScolaire"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        <element type="com.kerenedu.school.Profession"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+         <element type="com.kerenedu.configuration.AnneScolaire"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        <element type="com.kerenedu.configuration.PeriodeScolaire"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+         
+        <element type="com.kerenedu.configuration.Filiere"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        <element type="com.kerenedu.configuration.Reduction"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        <element type="com.kerenedu.configuration.Service"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        <element type="com.kerenedu.configuration.Etablissement"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        
+         <element type="com.kerenedu.inscription.Inscription"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        
+         <element type="com.kerenedu.configuration.Classe"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+         <element type="com.kerenedu.configuration.FraisScolaire"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        <element type="com.kerenedu.configuration.Niveau"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+
+      
+         <element type="com.kerenedu.reglement.Caisse"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        
+          <element type="com.kerenedu.configuration.Matiere"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        
+           <element type="com.kerenedu.personnel.Professeur"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        
+           
+           <element type="com.kerenedu.personnel.ProfMatiereEns"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        
+           
+           <element type="com.kerenedu.personnel.MatiereCoutProf"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+
+	   <element type="com.kerenedu.personnel.JoursCours"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+         <element type="com.kerenedu.personnel.PlanifCours"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+         <element type="com.kerenedu.personnel.TrancheHoraireCours"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        
+         <element type="com.kerenedu.discipline.TypeAbscence"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        
+           <element type="com.kerenedu.discipline.Abscence"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        
+            <element type="com.kerenedu.configuration.NoteSMS"  idclass="long"  idname="id"   deseable="true" >
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+
+			<element type="com.kerenedu.configuration.NoteMail" idclass="long"
+				idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.configuration.ConfigMail" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			<element type="com.kerenedu.notes.CoefMatiere" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.configuration.GroupeCours" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.configuration.UniteEns" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.notes.CoefMatiere" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			<element type="com.kerenedu.notes.CoefMatiereDetail" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.notes.Examen" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.notes.Note" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.notes.NoteDetail" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			<element type="com.kerenedu.notes.MatiereNote" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.notes.Bulletin" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.model.report.ViewBulletin" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.personnel.EmargementProf" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.personnel.EmargementProfDetails" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.discipline.Presence" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.configuration.Appreciation" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			<element type="com.kerenedu.personnel.Diplome" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			<element type="com.kerenedu.personnel.StatusProf" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			
+			<element type="com.kerenedu.reglement.Echeancier"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+			<element type="com.kerenedu.reglement.FichePaiement"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        <element type="com.kerenedu.reglement.Paiement"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+			
+	        <element type="com.kerenedu.reglement.EcheancierDlt"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        <element type="com.kerenedu.reglement.Retard"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	                
+	        <element type="com.kerenedu.reglement.Reglement"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	        <element type="com.kerenedu.reglement.ReglementProf"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	        <element type="com.kerenedu.reglement.FichePaiementProf"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	        <element type="com.kerenedu.reglement.PaiementProf"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	        <element type="com.kerenedu.reglement.RetenueProf"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        <element type="com.kerenedu.reglement.PrimeProf"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	        <element type="com.kerenedu.reglement.AvanceProf"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	         <element type="com.kerenedu.stages.LieuStage"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.stages.BesionStage"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.stages.BesionStageV"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	          <element type="com.kerenedu.stages.Stage"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	           <element type="com.kerenedu.stages.StageE"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.stages.StageCL"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        <element type="com.kerenedu.stages.DivisionStage"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	        <element type="com.kerenedu.stages.SuiviStage"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        <element type="com.kerenedu.stages.SuiviStageEleve"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        <element type="com.kerenedu.stages.TacheStage"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        <element type="com.kerenedu.stages.EvaluationStage"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.notes.TraitNote"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        <element type="com.kerenedu.notes.ModelBulletin" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			<element type="com.kerenedu.notes.LigneBulletinClasse" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+			<element type="com.kerenedu.notes.BulletinHelperGenerate" idclass="long" idname="id" deseable="true">
+				<roles>
+					<role>ADMIN</role>
+				</roles>
+			</element>
+        
+        	<element type="com.kerenedu.reglement.ConsultationPaie"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+			
+	        <element type="com.kerenedu.reglement.ConsultationEch"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        <element type="com.kerenedu.configuration.Cycle"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.school.Responsable"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        <element type="com.kerenedu.configuration.TypeDepense"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.model.report.ViewAnniversaire"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.model.report.ViewListeEleve"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	         <element type="com.kerenedu.model.report.ViewBilanFinancier"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	          <element type="com.kerenedu.model.report.ViewRetardPaiement"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.model.report.ViewDltPaiement"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	         <element type="com.kerenedu.model.report.ViewBilanFinancierEcole"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	         <element type="com.kerenedu.dashboard.ViewDashboard"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	          <element type="com.kerenedu.configuration.EventEdu"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	          <element type="com.kerenedu.configuration.UserEducation"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	          <element type="com.kerenedu.configuration.RappelE"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	           <element type="com.kerenedu.configuration.MatiereDlt"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	       <element type="com.kerenedu.model.report.ViewNoteHelper"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	       <element type="com.kerenedu.reglement.Depense"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	       <element type="com.kerenedu.configuration.ServiceFilliere"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.configuration.SectionE"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.reglement.Remise"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.reglement.TypeRemise"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.notes.HelpProfClasse"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.discipline.LigneAbscence"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	         <element type="com.kerenedu.notes.CloseExamen"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        <element type="com.kerenedu.model.report.ViewEmargement"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	       
+	          <element type="com.kerenedu.model.report.ViewPaiementJournalier"  idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.inscription.Inscriptionclone" idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.model.report.ViewBilanServiceEleve" idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	         <element type="com.kerenedu.reglement.Recette" idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	          <element type="com.kerenedu.reglement.FichePaiementOptionel" idclass="long"  idname="id"   deseable="true" >
+	            <roles>
+	                <role>ADMIN</role>
+	            </roles>           
+	        </element>
+	        
+	        
+	             
+    </elements>
+    
+</model-config>
+ 	
