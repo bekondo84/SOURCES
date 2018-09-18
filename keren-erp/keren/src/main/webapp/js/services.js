@@ -188,6 +188,12 @@ angular.module("mainApp")
                     return  restResource.search({path:'filter',first:firstResult,max:maxResult});
                  }
            },
+           treefilter:function(predicats ,firstResult , maxResult){
+               $http.defaults.headers.common['predicats']= angular.toJson(predicats);               
+                if(angular.isDefined(restResource)){
+                    return  restResource.search({path:'tree',first:firstResult,max:maxResult});
+                 }
+           },
            /**
              return the number of items which match the specific criteria
             @predicats: array of criteria({fieldName:name,fieldValue:value ,criteria:EQUAL}

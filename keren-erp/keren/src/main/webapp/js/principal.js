@@ -8413,7 +8413,36 @@ $scope.gererChangementFichier3 = function(event,model){
                       });
           }//end if(name)
       };
-      
+      /**
+       * 
+       * @param {type} item
+       * @returns {undefined}
+       */
+      $scope.loadTreeData = function(item){
+          $http.defaults.headers.common['userid']= $rootScope.globals.user.id;   
+                      $http.defaults.headers.common['search_text']= $scope.searchCriteria;  
+                      restService.treefilter($scope.predicats ,$scope.pagination.beginIndex , $scope.pagination.pageSize)
+                               .$promise.then(function(datas){                                    
+                                    if(datas){
+                                        $scope.datas = datas;                             
+                                        if($scope.pagination.beginIndex<=0){
+                                            $scope.pagination.endIndex = $scope.pagination.pageSize;
+                                            if($scope.pagination.totalPages<=$scope.pagination.pageSize){
+                                                $scope.pagination.endIndex=$scope.pagination.totalPages;
+                                            }//end if($scope.pagination.totalPages<=$scope.pagination.pageSize){
+                                        }//end if($scope.pagination.beginIndex<=0){
+                                        $scope.pagination.hasnext();
+                                        $scope.pagination.hasprevious();
+                                        $rootScope.$broadcast("dataLoad" , {
+                                            message:"dataLoad",item:item
+                                        });
+                                        commonsTools.hideDialogLoading();
+                                    }
+                               } ,function(error){
+                                   commonsTools.hideDialogLoading();
+                                   commonsTools.showMessageDialog(error);
+                               });  
+      };
        /**  
                Chargement des donnees 
                Rafresh the data from the data store
@@ -11870,7 +11899,12 @@ $scope.gererChangementFichier3 = function(event,model){
                     divElem.appendChild($scope.editableTableListComponent(metaData));
                 }else{
                     $scope.updatebtnlabel ='Modifier';
-                    divElem.appendChild($scope.tableListComponent(metaData));
+                    if($scope.currentAction.treeView!=null 
+                            && $scope.currentAction.formView.template!=null){
+                        divElem.appendChild(commonsTools.xmlListParser($scope.currentAction.treeView.template));
+                    }else{
+                        divElem.appendChild($scope.tableListComponent(metaData));
+                    }//end if($scope.currentAction.treeView!=null){
                 }//end if(modes.length==1 && modes[0]=='tree'){
                 //Insertion du tableau
                 var items = listElem.find("div");
@@ -11942,6 +11976,49 @@ $scope.gererChangementFichier3 = function(event,model){
            * @param {type} metaData
            * @returns {undefined}
            */
+          $scope.treePanelComponent = function(metaData){
+               $scope.windowType = "tree";
+               $scope.previousType="tree";
+               var listElem  = null ; 
+                var content = $scope.viewSelector("calendar") ;
+                listElem = angular.element(content);
+                if(metaData==null||!angular.isDefined(metaData)){
+                   return ;
+                }//end if(metaData==null||!angular.isDefined(metaData)){
+                $scope.desablecreate = true;
+                $scope.desableupdate = true;
+                $scope.desabledelete = true;
+                $scope.desableprint = true;
+//                 listElem = $scope.buildActionsMenu(listElem);
+                listElem = $scope.buildPrintActionsMenu(listElem);
+                //Insertion de la zone de filter
+                var items = listElem.find("ul");
+                for(var i=0; i<items.length;i++){                     
+                     if(items.eq(i).attr("id")=="filterActionsId"){
+                           items.eq(i).replaceWith($scope.filterOptionsComponent(metaData));
+                     }//end if(items.eq(i).attr("id")=="filterActionsId"){  
+                }               
+                var divElem = document.createElement("div");
+                divElem.setAttribute("class","treeview");
+                divElem.setAttribute("id","datawidget");
+                //Insertion du tableau
+                var items = listElem.find("div");
+                for(var i=0; i<items.length;i++){                     
+                     if(items.eq(i).attr("id")=="datawidget"){
+                           items.eq(i).replaceWith(divElem);
+                     }//end if(items.eq(i).attr("id")=="datawidget"){  
+                     if(items.eq(i).attr("id")=="viewmodeid"){
+                           items.eq(i).replaceWith($scope.viewModeBuilder());
+                     }  
+                }//end for(var i=0; i<items.length;i++){     
+
+                return listElem;
+          };
+          /**
+           * 
+           * @param {type} metaData
+           * @returns {undefined}
+           */
            $scope.calendarPanelComponent = function(metaData){               
                $scope.windowType = "calendar";
                $scope.previousType="calendar";
@@ -11951,13 +12028,13 @@ $scope.gererChangementFichier3 = function(event,model){
                 listElem = angular.element(content);
                 if(metaData==null||!angular.isDefined(metaData)){
                    return ;
-                 }
-                 $scope.desablecreate = true;
-                 $scope.desableupdate = true;
-                 $scope.desabledelete = true;
-                 $scope.desableprint = true;
+                }//end if(metaData==null||!angular.isDefined(metaData)){
+                $scope.desablecreate = true;
+                $scope.desableupdate = true;
+                $scope.desabledelete = true;
+                $scope.desableprint = true;
 //                 listElem = $scope.buildActionsMenu(listElem);
-                 listElem = $scope.buildPrintActionsMenu(listElem);
+                listElem = $scope.buildPrintActionsMenu(listElem);
                 //Insertion de la zone de filter
                 var items = listElem.find("ul");
                 for(var i=0; i<items.length;i++){                     
@@ -12189,6 +12266,60 @@ $scope.gererChangementFichier3 = function(event,model){
 
                  return listElem;
           };
+          /**
+           * 
+           * @param {type} metaData
+           * @param {type} elem
+           * @returns {unresolved}
+           */
+          $scope.treeFramePanelBuilder = function(metaData,elem){
+                  $scope.previousType="tree";
+                  $scope.windowType="tree";
+                  var listElem  = null ;                  
+//                   console.log("listFramePanelBuilder inside ====== "+$scope.enabledVerticalMenu+" ==== "+angular.toJson(metaData));             
+                  if($rootScope.globals.theme!=null&&$rootScope.globals.theme.container){
+                       listElem = angular.element($rootScope.globals.theme.container);
+                   }else {
+                       if($scope.enabledVerticalMenu){       
+                            listElem = angular.element("<div>")
+                                          .addClass("col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2")
+                                          .attr("id" , "container")
+                                          .attr("style" ,"position: absolute;width: 84.2%;height: 91%;margin-left:15.55% ;margin-right:0px;padding:0px;");
+                        }else{
+                          listElem = angular.element("<div>")
+                                           .addClass("col-sm-12  col-md-12")
+                                           .attr("id" , "container")
+                                           .attr("style" ,"position: absolute;width: 100%;height: 91.0%; margin:0px;padding:0px;" );                   
+
+                        }
+                    }//end if($rootScope.globals.theme!=null&&$rootScope.globals.theme.container){
+                 if(metaData){
+                     listElem.append($scope.treePanelComponent(metaData));
+                 }else{
+                      if(elem){
+                         listElem.append(elem);
+                      }
+                 }//endif(metaData)                 
+                  //var content = $scope.viewSelector('list') ;
+                  //listElem.append(angular.element(content)); 
+                  var compileFn = $compile(listElem);
+                  compileFn($scope);
+                  //Insertion du tableau
+                  var items = $element.find("div");
+                  for(var i=0; i<items.length;i++){                       
+                       if(items.eq(i).attr("id")=="container"){
+                             items.eq(i).replaceWith(listElem);
+                            // console.log("listFramePanelBuilder ====== "+$scope.enabledVerticalMenu);
+                       }//end if(items.eq(i).attr("id")=="container"){  
+                  }//end for(var i=0; i<items.length;i++){ 
+                  $('#datawidget').treeview({
+//                        color: "#428bca",
+                        showTags: true,
+                        data: $scope.datas
+                      });
+  
+                 return listElem;
+          };
 
           /**
              Fonction de construction des 
@@ -12223,6 +12354,8 @@ $scope.gererChangementFichier3 = function(event,model){
                      $scope.calendarFramePanelBuilder($scope.metaData);
                 }else if($scope.windowType=="kaban"){
                      $scope.kabanFramePanelBuilder($scope.metaData);
+                }else if($scope.windowType=="tree"){
+                     $scope.treeFramePanelBuilder($scope.metaData);
                 }else{
                     $scope.listFramePanelBuilder($scope.metaData);
                 } //end if($scope.windowType=="calendar")                
@@ -12536,6 +12669,9 @@ $scope.gererChangementFichier3 = function(event,model){
                                                        $scope.loadData(item);                                                    
                                                     }else if(mode && mode[0]=="form"){
                                                         $scope.formFramePanelBuilder($scope.displayEditPanel());                                                       
+                                                    }else if(mode && mode[0]=="list"){
+                                                        $scope.treeFramePanelBuilder(metaData); 
+                                                        $scope.loadTreeData(item);
                                                     }else{
                                                         $scope.listFramePanelBuilder(metaData);
                                                         $scope.loadData(item);                                                    

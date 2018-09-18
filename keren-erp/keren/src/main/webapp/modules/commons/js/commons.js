@@ -1102,7 +1102,23 @@ angular.module('keren.core.commons')
                }//end if(metaData.groups){
                 return map;
             },
-
+            /**
+             * 
+             * @param {type} template
+             * @param {type} scope
+             * @param {type} model
+             * @param {type} metaData
+             * @returns {undefined}
+             */
+            xmlListParser : function(template){
+                if(angular.isDefined(template)
+                        ||template==null){
+                    return null;
+                }//end if(angular.isDefined(template)
+                var container = document.createElement('div');
+                container.innerHTML = template;
+                return container;
+            },
            /**
             * 
             * @param {type} template

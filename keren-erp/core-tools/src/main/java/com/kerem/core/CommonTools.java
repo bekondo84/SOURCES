@@ -300,6 +300,7 @@ public class CommonTools {
         TreeRecord record = new TreeRecord();
         record.setCode(view.getId());
         record.setScript(FileHelper.transformJaxBToScript(view));
+        record.setTemplate(view.getTemplate());
         record.setTitre(view.getLabel());
         return record;
     }
