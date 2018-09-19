@@ -66,7 +66,10 @@ angular.module("mainApp")
                 var lang = navigator.language || navigator.userLanguage;
 //                console.log("Service.getMetaData:function(action) ===================== "+lang);
                   if(angular.isDefined(restResource)){
-                       $http.defaults.headers.common['action']=angular.toJson(action);
+                      if(angular.isDefined(action) 
+                              && action!=null){
+                          $http.defaults.headers.common['action']=angular.toJson(action.id);
+                      }//end if(angular.isDefined(action)
                      return  restResource.get({path:'meta'});
                   }
             },
