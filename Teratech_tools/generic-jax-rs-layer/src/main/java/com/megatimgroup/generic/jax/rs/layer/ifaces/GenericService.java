@@ -12,6 +12,7 @@ import com.megatimgroup.generic.jax.rs.layer.impl.FilterPredicat;
 import com.megatimgroup.generic.jax.rs.layer.impl.ImportData;
 import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import com.megatimgroup.generic.jax.rs.layer.impl.RSNumber;
+import com.megatimgroup.generic.jax.rs.layer.impl.TreeNode;
 import com.megatimgroup.mgt.commons.tools.ValidatorError;
 import java.io.Serializable;
 import java.util.List;
@@ -266,6 +267,18 @@ public interface GenericService<T ,PK extends Serializable> {
     @Path("filter/{first}/{max}")
     public List<T> filter(@Context HttpHeaders headers ,@PathParam("first") int firstResult, @PathParam("max") int maxResult);
     
+    /**
+     * Build the tree node data
+     * to override by the user
+     * @param headers
+     * @param firstResult
+     * @param maxResult
+     * @return 
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("tree/{first}/{max}")
+    public List<TreeNode> treefilter(@Context HttpHeaders headers ,@PathParam("first") int firstResult, @PathParam("max") int maxResult);
     
     /**
      * methode de filtre des entites d'une classe en fonction des prédicats de filtres
