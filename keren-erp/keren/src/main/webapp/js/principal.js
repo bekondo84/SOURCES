@@ -8842,6 +8842,11 @@ $scope.gererChangementFichier3 = function(event,model){
                                  commonsTools.hideDialogLoading();
                                  commonsTools.showMessageDialog(error);
                             });
+                     }else{
+                         var observable = $scope.observablePools[fieldName];
+                         if(observable){
+                            observable.notifyObservers();
+                         }//end if(observable)
                      }//end if(item.id=='load'){
            
         };
