@@ -58,8 +58,8 @@ public interface GenericService<T ,PK extends Serializable> {
 
         /**
          * 
-         * @param entities
-         * @return 
+     * @param headers
+         * @param entities 
          */
         @POST
         @Consumes({MediaType.APPLICATION_JSON})
@@ -81,6 +81,7 @@ public interface GenericService<T ,PK extends Serializable> {
 	
         /**
          * 
+     * @param headers
          * @param entity :Entity describing the import meta data
      * @return 
          */
@@ -98,6 +99,7 @@ public interface GenericService<T ,PK extends Serializable> {
         
         /**
          * 
+     * @param headers
          * @param entity
          * @return 
          */
@@ -109,6 +111,7 @@ public interface GenericService<T ,PK extends Serializable> {
         
         /**
 	 * Methode generique de mise a jour d'une entite
+     * @param headers
          * @param entities
 	 */
         @PUT
@@ -145,7 +148,6 @@ public interface GenericService<T ,PK extends Serializable> {
      * @param headers
          * @param propertyName
 	 * @param id	ID de l'entite
-	 * @param properties Conteneur de Proprietes a charger immediatement
 	 * @return Entite recherchee
 	 */
         @GET
@@ -169,7 +171,6 @@ public interface GenericService<T ,PK extends Serializable> {
          /**
          * 
      * @param headers
-     * @param value
          * @return 
          */
         @GET
@@ -233,7 +234,6 @@ public interface GenericService<T ,PK extends Serializable> {
      * @param headers
 	 * @param propertyName	Nom de la propriete Unique
 	 * @param propertyValue	Valeur de la propriete Unique
-	 * @param properties	Ensemble des proprietes a charger en EAGER
 	 * @return	Objet recherche
 	 */
          @GET
@@ -246,7 +246,6 @@ public interface GenericService<T ,PK extends Serializable> {
      * @param headers
 	 * @param propertyName	Nom de la propriete Unique
 	 * @param propertyValue	Valeur de la propriete Unique
-	 * @param properties	Ensemble des proprietes a charger en EAGER
 	 * @return	Objet recherche
 	 */
          @GET

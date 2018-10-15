@@ -395,7 +395,7 @@ angular.module('keren.core.commons')
                     if(!angular.isDefined(metaData)||metaData==null){
                         return ;
                     }//end if(!angular.isDefined(metaData)||metaData==null){
-//                    console.log("commons.selectpickerKeyup ================  ::: "+angular.toJson(metaData));
+//                    console.log("commons.selectpickerKeyup ================  ::: "+model);
                     for(var i=0;i<metaData.columns.length;i++){
                         var field = metaData.columns[i];
                         if(field.type=='object'){
@@ -665,6 +665,9 @@ angular.module('keren.core.commons')
                              }//end if(items.eq(i).attr("id")=="datatable"){ 
                          }//end for(var i=0; i<items.length;i++){      
                     }//end if(angular.isDefined(theme) && angular.isDefined(theme.script)){
+                },
+                reportHTMLTemplateParser: function(scope, script){
+                    
                 },
                 /**
                  * Return le container de navigation
@@ -2127,7 +2130,11 @@ angular.module('keren.core.commons')
                         key = part[0];                        
                     }else{
                         key+=part[0];
-                    }
+                    }//end if(i==1){     
+//                    if(part.length>1){
+//                        var left = part[1].split(']');
+//                        key+=left[0];
+//                    }//end if(part.length>1){
                 }
                 return key;
             },

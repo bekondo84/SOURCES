@@ -35,7 +35,7 @@ public class Facture extends DocumentAchat implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "DOAC_ID")
-    @Predicate(label = "Document source",type = DocumentAchat.class,target = "many-to-one")
+    @Predicate(label = "Document source",type = BonCommande.class,target = "many-to-one")
     private BonCommande docachat;
     
     @Predicate(label = "Document d'origine")

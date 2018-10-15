@@ -1470,7 +1470,7 @@ angular.module("mainApp")
                      var entity = data[this.template["observable"]];
                      var elem = entity[template["fieldname"]];
                      data[modelsplit[modelsplit.length-1]] = elem;
-//                     console.log("principal.notify :::: model : "+this.model+" ==== template : "+angular.toJson(template)+" ==== parentmodel : "+parentmodel+" === isObject:"+angular.isObject(elem)+" ==== elem:"+angular.toJson(elem));
+                     console.log("principal.notify :::: model : "+this.model+" ==== template : "+angular.toJson(template)+" ==== parentmodel : "+parentmodel+" === isObject:"+angular.isObject(elem)+" ==== elem:"+angular.toJson(elem));
                      if(angular.isObject(elem)){
                          var key = commonsTools.keygenerator(this.model);
                          $scope.dataCache[""+key+""] = new Array();
@@ -2811,7 +2811,6 @@ $scope.gererChangementFichier3 = function(event,model){
                //Creation de l'entree
                //Filter criteria
                var key = commonsTools.keygenerator(model);
-//               console.log("$scope.manyToOneComponent = ======= mode :"+model+" ====== entityname:"+metaData.entityName+" === field:"+field.fieldName+" === index:"+index+" ==== path:"+modelpath+" ===== key:"+key);
                if(angular.isDefined($scope.filtertemplate)){
                     $scope.filtertemplate[""+key+""] = field.filter ;
                }//end if(angular.isDefined($scope.filtertemplate)){
@@ -2860,14 +2859,11 @@ $scope.gererChangementFichier3 = function(event,model){
               optionElem.setAttribute('value' , '');
               optionElem.appendChild(document.createTextNode('Please select option'));
               selectElem.appendChild(optionElem);             
-//              if($scope.windowType=="view"||(field.updatable==false&&$scope.windowType!='new')){
-//                  selectElem.setAttribute('disabled' , 'disabled');
-//              }
               if((metaData.desableupdate==false)&&(($scope.windowType=="view")||
                         ((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType==false)))){
                     selectElem.setAttribute('disabled' , 'true');
 //                    buttonElem.setAttribute('disabled' , 'disabled');
-                }//end if(($scope.metaData.desableupdate==false)&&(($scope.windowType=="view")
+              }//end if(($scope.metaData.desableupdate==false)&&(($scope.windowType=="view")
               //Desactiver la creation
             var spanElem = document.createElement('span');
             spanElem.setAttribute('class' , 'input-group-btn');
@@ -2887,17 +2883,15 @@ $scope.gererChangementFichier3 = function(event,model){
             }else if( nextIndex==4){
                 buttonElem.setAttribute('data-target', '#myModal2');
             }//end if(index==1)           
-            spanElem.appendChild(buttonElem);
-            
+            spanElem.appendChild(buttonElem);            
             var spanElem_1 = document.createElement('span');
             spanElem_1.setAttribute('class','glyphicon glyphicon-plus');
             spanElem_1.setAttribute('aria-hidden' , 'true');
             spanElem_1.setAttribute('style' , 'color:blue');
             buttonElem.appendChild(spanElem_1);
-
             if(($scope.windowType=="view")||(metaData.createonfield==false)||((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType==false))){
                 buttonElem.setAttribute('disabled' , 'disabled');
-            }  
+            }//end if(($scope.windowType=="view")||(metaData.createonfield==false)  
             if(field.editable==false){
                 buttonElem.setAttribute('disabled' , 'disabled');
                 selectElem.setAttribute('disabled' , 'true');
@@ -2908,7 +2902,8 @@ $scope.gererChangementFichier3 = function(event,model){
             if(field.hidden!=null&&field.hidden.length>0){
                 divElem.setAttribute('ng-hide',field.hidden);
             }//end if(field.hidden!=null&&field.hidden.length==0)
-            //Traitement des observable
+//            console.log("$scope.manyToOneComponent = ======= mode :"+model+" ====== entityname:"+metaData.entityName+" === field:"+field.fieldName+" === index:"+index+" ==== path:"+modelpath+" ===== key:"+key+" ==== observable : "+field.observable+" ==== observer : "+angular.toJson(field.observer));
+               //Traitement des observable
             if(field.observable==true){
                 var observable = new Observable();
                 $scope.observablePools[field.fieldName] = observable;
@@ -5743,7 +5738,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                     for(var i=0; i<items.length;i++){
                                        if(items.eq(i).attr("id")=="report"){
                                              items.eq(i).replaceWith(iframe);                               
-                                       }  
+                                       }//end if(items.eq(i).attr("id")=="report"){  
                                    }//enn$d for(var i=0; i<items.length;i++){
                                    //var compileFn = $compile(contentElem);
 
@@ -5753,8 +5748,8 @@ $scope.gererChangementFichier3 = function(event,model){
                                        if(items.eq(i).attr("id")=="innerpanel"){
                                              items.eq(i).replaceWith(contentElem);
                                               //console.log(" ======================= on a trouve report  innerpanel");
-                                       }  
-                                  }
+                                       }//end if(items.eq(i).attr("id")=="innerpanel"){  
+                                  }//end for(var i=0; i<items.length;i++){
                                   document.getElementById("report_template").innerHTML = "";
                                  //doc.save("Test.pdf");
                              },
@@ -7927,7 +7922,7 @@ $scope.gererChangementFichier3 = function(event,model){
                 }
                $scope.innerWindowType = false;          
                var report = $scope.dataCache["report"];
-               var url = 'http://'+$location.host()+':'+$location.port()+'/'+angular.lowercase(report.model)+'/'+angular.lowercase(report.entity)+'/'+report.method;
+               var url = 'http://'+$location.host()+':'+$location.port()+'/'+angular.lowercase(report.model)+'/'+angular.lowercase(report.entity)+'/bi/'+report.method;
                commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");        
 //               $http.defaults.headers.common['args']= angular.toJson($scope.temporalData);
 //$http.get(url, {responseType: 'arraybuffer',data:angular.toJson($scope.temporalData)})
@@ -8519,7 +8514,7 @@ $scope.gererChangementFichier3 = function(event,model){
            var urlPath = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/";
            $http.post(urlPath,item).then(
                 function(response){
-                   if(angular.isDefined(link)){
+                   if(angular.isDefined(link)&& link!=null && link!=''){
                        var urlPah="http://"+$location.host()+":"+$location.port()+"/kerencore/menuaction/bystringproperty/name/"+link;
                        $http.get(urlPah)
                                .then(function(response){
@@ -8772,7 +8767,6 @@ $scope.gererChangementFichier3 = function(event,model){
 //            console.log("$scope.getData = function(model ,item ,entityName,moduleName,index,modelpath)============ model : "+model+" ====== modelpath : "+modelpath+"  === "+angular.toJson(item));            
             var modelpart = model.split(".");
             var fieldName = modelpart[modelpart.length-1];
-//            console.log("$scope.getData ===      "+model+" ==== "+item+" === "+entityName+" ==== "+moduleName+" === "+fieldName+" == "+$scope.observablePools[fieldName]+"  ::: index : "+index);
             var url = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/count";
             if(item.id=='load'){
                     $http.get(url)
@@ -8844,6 +8838,7 @@ $scope.gererChangementFichier3 = function(event,model){
                             });
                      }else{
                          var observable = $scope.observablePools[fieldName];
+//                         console.log("$scope.getData ===      "+model+" ==== "+item+" === "+entityName+" ==== "+moduleName+" === "+fieldName+" == "+angular.toJson($scope.observablePools[fieldName])+"  ::: index : "+index);
                          if(observable){
                             observable.notifyObservers();
                          }//end if(observable)
@@ -10755,7 +10750,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                entity = $scope.temporalData;
                            }//end if(extern==true){
 //                           console.log("$scope.buttonAction = function(data,type,states,index,extern) ================== innerWindow : "+$scope.innerWindowType+" ====== Type Window : "+$scope.windowType+" ===== extern : "+extern+" === data : "+angular.toJson(data));
-                            var url="http://"+$location.host()+":"+$location.port()+"/"+data.model+"/"+data.entity+"/"+data.method;                        
+                            var url="http://"+$location.host()+":"+$location.port()+"/"+data.model+"/"+data.entity+"/bi/"+data.method;                        
                             $http.put(url,entity, {responseType: 'arraybuffer'})
                               .then(function(response){
                                     var contentElem = $scope.viewSelector("report");
@@ -12744,9 +12739,9 @@ $scope.gererChangementFichier3 = function(event,model){
                                         commonsTools.showMessageDialog(error);
                                     });                            
                         }else if($scope.currentAction.modal){  
-//                               if($scope.windowType!='list' && !angular.isDefined(index)){
-//                                   $scope.listFramePanelBuilder($scope.metaData);
-//                               }//end if($scope.windowType!='list')
+                               if($scope.windowType!='list' && !angular.isDefined(index)){
+                                   $scope.listFramePanelBuilder($scope.metaData);
+                               }//end if($scope.windowType!='list')
 //                               console.log("Chargement MetaData apres $scope.editDialogBuilderExtern(metaData) ====== ==== Index : "+index); 
                                commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
                                restService.getMetaData($scope.currentAction).$promise
