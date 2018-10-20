@@ -155,7 +155,11 @@ angular.module("mainApp")
    $scope.numberofnewmessages = 0;
    $scope.numberofconnectusers = 0;
    //List of available users and canal
-   $scope.tchatinput = new Array();        
+   $scope.tchatinput = new Array();
+   
+   $scope.hostname = $location.host();
+    
+    $scope.portvalue = $location.port();
    //Utilisateur courant
    $scope.agendaModule = { id:-1 , name:"discussionconf",label:"Discussion",selected:false,hasmenu:false,
                           groups:[
@@ -175,7 +179,7 @@ angular.module("mainApp")
                       {id:-1 , name:"utilisateurs",label:"Utilisateurs",icon:"glyphicon glyphicon-user" ,showmenu:true,
                        actions:[
                           {id:-1,name:"utilisateur" , label:"Utilisateurs",icon:"glyphicon glyphicon-user",entityName:"Utilisateur",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',hide:false,viewMode:'kaban,tree,form'
-                              ,kaban:{code:"application_001",script:"<div class='col-md-12 col-sm-12' id='detail-panel-body-header'> <div class='col-md-3 col-sm-4'> <div id='imageContent'  style='float: left;margin-left: -20px;'> <img id='apercuImageContent' src='http://localhost:8080/keren/auth/resource/static/{{item.image }}' alt='Image ' ng-click='imageClick()' height='70' width='75'></div> </div> <div  class='col-md-8 col-sm-7'> <div style='font-weight: bold;'>{{item.designation}}</div> <div>{{item.courriel | cut:true:50:'...'}}</div> <div> <div class='col-sm-6 col-md-6 pull-left' >{{item.societe.designation}}</div></div> </div> </div>"}},
+                              ,kaban:{code:"application_001",script:"<div class='col-md-12 col-sm-12' id='detail-panel-body-header'> <div class='col-md-3 col-sm-4'> <div id='imageContent'  style='float: left;margin-left: -20px;'> <img id='apercuImageContent' src='http://{{hostname}}:{{portvalue}}/keren/auth/resource/static/{{item.image }}' alt='Image ' ng-click='imageClick()' height='70' width='75'></div> </div> <div  class='col-md-8 col-sm-7'> <div style='font-weight: bold;'>{{item.designation}}</div> <div>{{item.courriel | cut:true:50:'...'}}</div> <div> <div class='col-sm-6 col-md-6 pull-left' >{{item.societe.designation}}</div></div> </div> </div>"}},
                           {id:-2,name:"groupes" , label:"Groupes",icon:"glyphicon glyphicon-list-alt",entityName:"Groupe",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',hide:false},
                           {id:-3,name:"societe" , label:"Societes",icon:"glyphicon glyphicon-home",entityName:"Societe",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',hide:false},
                           {id:-4,name:"pays" , label:"Pays",icon:"glyphicon glyphicon-flag",entityName:"pays",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',hide:false}
@@ -219,9 +223,9 @@ angular.module("mainApp")
                       {id:-1 , name:"application",label:"Applications",icon:"glyphicon glyphicon-th",showmenu:true,
                        actions:[
                           {id:-1,name:"applications" ,hide:false, label:"Applications",icon:"glyphicon glyphicon-th-list",entityName:"MenuModule",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',viewMode:'kaban,tree,form'
-                              ,kaban:{code:"application_001",script:"<div class='col-md-12 col-sm-12' id='detail-panel-body-header'> <div class='col-md-3 col-sm-4'> <div id='imageContent'  style='float: left;margin-left: -20px;'> <img id='apercuImageContent' src='http://localhost:8080/keren/auth/resource/static/{{item.icon}}' alt='Image ' ng-click='imageClick()' height='70' width='75'></div> </div> <div  class='col-md-8 col-sm-7'> <div style='font-weight: bold;'>{{item.designation | cut:true:20:'...'}}</div> <div>{{item.shortDescription | cut:true:50:'...'}}</div> <div> <div class='col-sm-6 col-md-6 pull-left' >{{item.autor}}</div> <div class='col-sm-6 col-md-6 pull-right'><a href='{{item.website}}'>{{item.name}}</a></div> </div> </div> </div>"}},
+                              ,kaban:{code:"application_001",script:"<div class='col-md-12 col-sm-12' id='detail-panel-body-header'> <div class='col-md-3 col-sm-4'> <div id='imageContent'  style='float: left;margin-left: -20px;'> <img id='apercuImageContent' src='http://{{hostname}}:{{portvalue}}/keren/auth/resource/static/{{item.icon}}' alt='Image ' ng-click='imageClick()' height='70' width='75'></div> </div> <div  class='col-md-8 col-sm-7'> <div style='font-weight: bold;'>{{item.designation | cut:true:20:'...'}}</div> <div>{{item.shortDescription | cut:true:50:'...'}}</div> <div> <div class='col-sm-6 col-md-6 pull-left' >{{item.autor}}</div> <div class='col-sm-6 col-md-6 pull-right'><a href='{{item.website}}'>{{item.name}}</a></div> </div> </div> </div>"}},
                           {id:-2,name:"application_update" ,hide:false, label:"MISEAJOUR",icon:"glyphicon glyphicon-refresh",entityName:"MenuModule",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',viewMode:'kaban,tree,form'
-                              ,kaban:{code:"application_001",script:"<div class='col-md-12 col-sm-12' id='detail-panel-body-header'> <div class='col-md-3 col-sm-4'> <div id='imageContent'  style='float: left;margin-left: -20px;'> <img id='apercuImageContent' src='http://localhost:8080/keren/auth/resource/static/{{item.icon}}' alt='Image ' ng-click='imageClick()' height='70' width='75'></div> </div> <div  class='col-md-8 col-sm-7'> <div style='font-weight: bold;'>{{item.designation | cut:true:20:'...'}}</div> <div>{{item.shortDescription | cut:true:50:'...'}}</div> <div> <div class='col-sm-6 col-md-6 pull-left' >{{item.autor}}</div> <div class='col-sm-6 col-md-6 pull-right'><a href='{{item.website}}'>{{item.name}}</a></div> </div> </div> </div>"}}                          
+                              ,kaban:{code:"application_001",script:"<div class='col-md-12 col-sm-12' id='detail-panel-body-header'> <div class='col-md-3 col-sm-4'> <div id='imageContent'  style='float: left;margin-left: -20px;'> <img id='apercuImageContent' src='http://{{hostname}}:{{portvalue}}/keren/auth/resource/static/{{item.icon}}' alt='Image ' ng-click='imageClick()' height='70' width='75'></div> </div> <div  class='col-md-8 col-sm-7'> <div style='font-weight: bold;'>{{item.designation | cut:true:20:'...'}}</div> <div>{{item.shortDescription | cut:true:50:'...'}}</div> <div> <div class='col-sm-6 col-md-6 pull-left' >{{item.autor}}</div> <div class='col-sm-6 col-md-6 pull-right'><a href='{{item.website}}'>{{item.name}}</a></div> </div> </div> </div>"}}                          
                        ]}                       
                  ]
 
@@ -245,6 +249,7 @@ angular.module("mainApp")
     $scope.windowType = 'new';
     
     $scope.messageType = "inner";
+    
     $scope.innerWindowType = 'new';
     
     $scope.currentModule = null;
@@ -1392,6 +1397,10 @@ angular.module("mainApp")
           * Activate de back button
           */
          $scope.showback = false;
+         
+        $scope.hostname = $location.host();
+
+        $scope.portvalue = $location.port();
          /**
           * Container de navigation
           */
