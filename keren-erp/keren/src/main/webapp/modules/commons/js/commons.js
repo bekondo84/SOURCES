@@ -385,6 +385,15 @@ angular.module('keren.core.commons')
                                   scope.keyupDataLoarder(model+'.'+fieldname,value);
                             });
                 },
+                searchkeyevent:function(id,scope){
+                    console.log("commons.searchkeyevent ================  :::  === "+scope.searchCriteria+" === "+id);
+                    $('#'+id).on('keyup',
+                              function(event){
+                                  scope.searchCriteria = $('#'+id).val();
+                                  console.log("commons.searchkeyevent ================  :::  === "+scope.searchCriteria+" === "+id);
+                                  scope.searchAction();
+                              });
+                },
                 /**
                  * Attache keyup event on many-to-one and many-to-many 
                  * components
