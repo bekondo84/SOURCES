@@ -3684,10 +3684,10 @@ $scope.gererChangementFichier3 = function(event,model){
             var metaData = $scope.getCurrentMetaData(modelpath);
             var oldItem = $scope.dataCache[key];
             var oldfieldname = $scope.dataCache[key+"_fieldname"];               
-            var id = "td"+Math.abs(item.id)+"_"+fieldname;
+            var id = "td"+Math.abs(item.compareid)+"_"+fieldname;
             var oldId = null;
             if(oldItem!=null){
-                oldId = "td"+Math.abs(oldItem.id)+"_"+oldfieldname;
+                oldId = "td"+Math.abs(oldItem.compareid)+"_"+oldfieldname;
             }//end if(oldItem!=null)
 //            console.log("$scope.getTemplate = function(item) =========  ==== new : "+fieldname+" ==== old :"+oldfieldname+" === "+key+" ======= new : "+id+" :::: old : "+oldId+" ======== "+model+" :::: "+modelpath+" :::: "+index+" === "+angular.toJson(item));            
             //Recherche du span contenant 
@@ -3871,7 +3871,7 @@ $scope.gererChangementFichier3 = function(event,model){
          */
         $scope.identfiantenerator = function(item,index){
 //             var date = new Date();
-             var id = "td"+Math.abs(item.id)+"_"+index;
+             var id = "td"+Math.abs(item.compareid)+"_"+index;
              return id ;
         };
         /**
@@ -4293,7 +4293,7 @@ $scope.gererChangementFichier3 = function(event,model){
                 aElem.setAttribute('href' , '#');
                 aElem.setAttribute('ng-click' , "removeFromTable('"+model+"',item,'"+modelpath+"')"); 
                 tdElem.appendChild(aElem);
-                spanElem = document.createElement('span');
+                var spanElem = document.createElement('span');
                 spanElem.setAttribute('class' , 'glyphicon glyphicon-trash');
                 spanElem.setAttribute('aria-hidden' , 'true');
                 aElem.appendChild(spanElem);
@@ -8508,7 +8508,64 @@ $scope.gererChangementFichier3 = function(event,model){
                     commonsTools.notifyWindow("Une erreur est servenu pendant le traitement" ,"<br/>"+ex.message,"danger");
                 }              
        };
-       
+       /**
+        * 
+        * @returns {undefined}
+        */
+       $scope.loadDataSearch = function(){
+           //Chargement des donnees
+                //restService.url('societe');
+//               console.log('$scope.loadData = function() ::::::::::::::::'+$scope.pagination.currentPage+"==== "+$scope.pagination.totalPages+" ==== "+angular.isNumber($scope.pagination.totalPages));
+               try{   /**var pageBeginIndex = $scope.pagination.currentPage - $scope.pagination.pageSize;
+                      if(pageBeginIndex<0){
+                          pageBeginIndex = 0;
+                      }   **/       
+                      $http.defaults.headers.common['userid']= $rootScope.globals.user.id;   
+                      $http.defaults.headers.common['search_text']= $scope.searchCriteria;  
+                      restService.filter($scope.predicats ,$scope.pagination.beginIndex , $scope.pagination.pageSize)
+                               .$promise.then(function(datas){                                    
+                                    if(datas){
+                                        $scope.datas = datas;
+                                //Traitement des donnÃ©es
+                                       if($scope.calendarrecord){
+                                            for(var i=0;i<datas.length;i++){
+                                               var data = datas[i];
+                                               if($scope.calendarrecord.titlefield){
+                                                   data['title'] = data[$scope.calendarrecord.titlefield];
+                                               }
+                                               if($scope.calendarrecord.startfield){
+                                                   data['start'] = data[$scope.calendarrecord.startfield];
+                                               }
+                                               if($scope.calendarrecord.endfield){
+                                                   data['end'] = data[$scope.calendarrecord.endfield];
+                                               }
+                                               data['allDay'] = $scope.calendarrecord.allday;
+                                            }//end for(var i=0;i<datas.length;i++){
+                                            $scope.eventSources = [datas];
+                                        }//end if($scope.calendarrecord)
+                                        if($scope.pagination.beginIndex<=0){
+                                            $scope.pagination.endIndex = $scope.pagination.pageSize;
+                                            if($scope.pagination.totalPages<=$scope.pagination.pageSize){
+                                                $scope.pagination.endIndex=$scope.pagination.totalPages;
+                                            }//end if($scope.pagination.totalPages<=$scope.pagination.pageSize){
+                                        }//end if($scope.pagination.beginIndex<=0){
+                                        $scope.pagination.hasnext();
+                                        $scope.pagination.hasprevious();                                       
+                                        commonsTools.hideDialogLoading();
+                                    }
+                               } ,function(error){
+                                   commonsTools.hideDialogLoading();
+                                   commonsTools.showMessageDialog(error);
+                               });  
+                      
+//                      for(var i=0 ; i<$scope.predicats.length;i++){
+//                         console.log($scope.predicats[i].fieldName+" ==== "+$scope.predicats[i].fieldValue);
+//                      }
+               }catch(ex){
+                    commonsTools.hideDialogLoading();
+                    commonsTools.notifyWindow("Une erreur est servenu pendant le traitement" ,"<br/>"+ex.message,"danger");
+                }              
+       };
        /**
         * 
         * @param {type} model
@@ -8955,6 +9012,8 @@ $scope.gererChangementFichier3 = function(event,model){
                 $scope.windowType = 'list';
                if($scope.datas.length==0 
                        ||$scope.datas[0].id>0){
+                   var now = new Date();
+//                   $scope.currentObject.id = now.getTime();
                    $scope.datas.unshift($scope.currentObject);
                }else{
                    $scope.notifyWindow("Une erreur est servenu pendant le traitement" ,"<br/>Veuillez enregistrer la ligne courante et rÃ©essayer","danger");
@@ -11139,6 +11198,11 @@ $scope.gererChangementFichier3 = function(event,model){
                             ielem.setAttribute('class',"{{stateIcon(obj."+metaData.columns[i].fieldName+")}}");
                             ielem.setAttribute("style","color:{{stateColor(obj."+metaData.columns[i].fieldName+")}};");
                             thElem.appendChild(ielem);
+                        }else if(metaData.columns[i].type=='boolean'){
+                            var input = document.createElement('input');
+                            input.setAttribute('type' , 'checkbox');
+                            input.setAttribute('ng-model' , 'obj.'+metaData.columns[i].fieldName);
+                            thElem.appendChild(input);
                         }else{                            
                           thElem.innerHTML = "{{obj."+metaData.columns[i].fieldName+"}}";
                         }//end if(metaData.columns[i].type=='object'){
@@ -11164,14 +11228,19 @@ $scope.gererChangementFichier3 = function(event,model){
                                       thElem.innerHTML = "{{obj."+metaData.groups[i].columns[j].fieldName+".designation}}";
                                     }else if(metaData.groups[i].columns[j].type=='combobox'){
                                         thElem.innerHTML = "{{comboboxselctionvalues(obj."+metaData.groups[i].columns[j].fieldName+",'"+metaData.groups[i].columns[j].value+"')}}";
-                                    }else if(metaData.columns[i].type=='radio'){
+                                    }else if(metaData.groups[i].columns[j].type=='radio'){
                                         thElem.innerHTML = "{{radioselctionvalues(obj."+metaData.groups[i].columns[j].fieldName+",'"+metaData.groups[i].columns[j].value+"')}}";
-                                    }else if(metaData.columns[i].type=='color'){
+                                    }else if(metaData.groups[i].columns[j].type=='color'){
                                         thElem.setAttribute('style',"background-color:{{obj."+metaData.groups[i].columns[j].fieldName+"}};");
             //                            thElem.innerHTML = "{{comboboxselctionvalues(obj."+metaData.columns[i].fieldName+",'"+metaData.columns[i].value+"')}}";
+                                    }else if(metaData.groups[i].columns[j].type=='boolean'){
+                                        var input = document.createElement('input');
+                                        input.setAttribute('type' , 'checkbox');
+                                        input.setAttribute('ng-model' , 'obj.'+metaData.groups[i].columns[j].fieldName);
+                                        thElem.appendChild(input);
                                     }else{
                                       thElem.innerHTML = "{{obj."+metaData.groups[i].columns[j].fieldName+"}}";                                      
-                                    }
+                                    }//end if(metaData.groups[i].columns[j].type=='object'){
                                     if(metaData.groups[i].columns[j].type=='number'){
                                         thElem.setAttribute('class','text-center');
                                     }

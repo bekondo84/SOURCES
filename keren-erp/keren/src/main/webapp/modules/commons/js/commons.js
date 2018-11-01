@@ -386,12 +386,12 @@ angular.module('keren.core.commons')
                             });
                 },
                 searchkeyevent:function(id,scope){
-                    console.log("commons.searchkeyevent ================  :::  === "+scope.searchCriteria+" === "+id);
+//                    console.log("commons.searchkeyevent ================  :::  === "+scope.searchCriteria+" === "+id);
                     $('#'+id).on('keyup',
                               function(event){
                                   scope.searchCriteria = $('#'+id).val();
                                   console.log("commons.searchkeyevent ================  :::  === "+scope.searchCriteria+" === "+id);
-                                  scope.searchAction();
+                                  scope.loadDataSearch();
                               });
                 },
                 /**
