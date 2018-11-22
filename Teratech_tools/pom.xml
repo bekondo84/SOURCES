@@ -24,8 +24,7 @@
         <module>generic-jsf-layer</module>
 <!--		<module>generic-gwt-layer</module>-->
         <module>classesgenerator</module>
-		<module>filehelper</module>
-        <module>morphSmartFacade</module>
+		<module>filehelper</module>        
     </modules>
     
 </project>
