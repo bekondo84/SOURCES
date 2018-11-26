@@ -12,7 +12,8 @@ import java.util.ArrayList;
 
 /**
  *ProviderLoadBalancer is forwarding message via each gateway 
- * @author BEKO
+ * @author BEKO*
+ * 26/11/2018
  */
 public class ProviderLoadBalancer  extends LoadBalancer{
 
