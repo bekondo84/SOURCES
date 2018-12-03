@@ -390,7 +390,7 @@ angular.module('keren.core.commons')
                     $('#'+id).on('keyup',
                               function(event){
                                   scope.searchCriteria = $('#'+id).val();
-                                  console.log("commons.searchkeyevent ================  :::  === "+scope.searchCriteria+" === "+id);
+//                                  console.log("commons.searchkeyevent ================  :::  === "+scope.searchCriteria+" === "+id);
                                   scope.loadDataSearch();
                               });
                 },

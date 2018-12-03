@@ -89,9 +89,9 @@ angular.module("mainApp").config(['$translateProvider',
             Voir:'Display'
         });
         $translateProvider.translations('fr',{
-            PJ:'PiÃ¨ce(s) Jointe(s)',
+            PJ:'Pièce(s) Jointe(s)',
             UPPWD:'Modifier le Mot de passe',
-            MAIL:'BoÃ®te de rÃ©ception',
+            MAIL:'Boîte de reception',
             EVENTTITLE:'Titre evenement',
             EVENTDATE:'Date evenement',
             EMAIL:'Adresse mail',
@@ -102,7 +102,7 @@ angular.module("mainApp").config(['$translateProvider',
             SHOWHOURS:'Afficher heure comme',
             CALENDAROPTIONS:'Options du calendrier',
             ADDELEMENT:'Ajouter un element',
-            MISEAJOUR:'Mise Ã  jour',
+            MISEAJOUR:'Mise à jour',
             CANAUX:'Canaux de communication',
             MENUGROUP:'Menu Elements',
             MENUACTION:'Menus Action',
@@ -112,12 +112,12 @@ angular.module("mainApp").config(['$translateProvider',
             DASHBORDVIEW:'Tableaux de bord',
             TERME:'Termes traduits',
             EXPORTBD:'Exporter le schema',
-            DBSAVE:'Sauvegarde DonnÃ©es' ,
-            CALENDAR_DESC:'Gestion des Ã©vÃ©nements',
+            DBSAVE:'Sauvegarde Données' ,
+            CALENDAR_DESC:'Gestion des évènements',
             APPLI_DESC:'Gestion des Applications',
             CONFIG_DESC:'Administration de la plateforme',
             DISCUSION_DESC:'Plateforme collaborative',
-            IMPORTDATA:'Importer les donnÃ©es au format CVS',
+            IMPORTDATA:'Importer les données au format CVS',
             VALIDATETITRE:'Compte rendu validation'
         });
         $translateProvider.preferredLanguage('fr');
@@ -384,7 +384,8 @@ angular.module("mainApp")
                         //restService.downloadPNG("appli_icon_id","logo.png");
      };
 /**
- * 
+ * Restoration de la precedente session 
+ * de l'utilisateur connecté
  * @param {type} session
  * @returns {undefined}
  */
@@ -871,36 +872,36 @@ angular.module("mainApp")
      */
     $scope.getDefaultModule();
 
-/**
-            Reception du signal de changement de module
-          **/
-          $scope.$on("calandarActionItem" , function(event , args){
-                    $scope.currentModule = $scope.calandarModule;
-                    var entity = args.item;
-                    $scope.currentAction = args.action;
-                    var filter = args.restriction;
-                    $scope.enabledVerticalMenu = false;
-                    $scope.moduleValue = "others";
-                    $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu});
-                    //Notification du changement du module
-                     $rootScope.$broadcast("currentActionUpdate" ,{
-                        item:entity, action:$scope.currentAction , verticalMenu:$scope.enabledVerticalMenu,restriction:filter});   
-                    //Hide the calendar panel
-                    $scope.showCalendar = false ;
-                    //Hide the discussion
-                    $scope.showDiscussion = false;
-                    //Hide General
-                    $scope.hideOther = $scope.showCalendar || $scope.showDiscussion ;    
-                    $scope.principalscreen = false;
+     /**
+        Reception du signal de changement de module
+      **/
+    $scope.$on("calandarActionItem" , function(event , args){
+              $scope.currentModule = $scope.calandarModule;
+              var entity = args.item;
+              $scope.currentAction = args.action;
+              var filter = args.restriction;
+              $scope.enabledVerticalMenu = false;
+              $scope.moduleValue = "others";
+              $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu});
+              //Notification du changement du module
+               $rootScope.$broadcast("currentActionUpdate" ,{
+                  item:entity, action:$scope.currentAction , verticalMenu:$scope.enabledVerticalMenu,restriction:filter});   
+              //Hide the calendar panel
+              $scope.showCalendar = false ;
+              //Hide the discussion
+              $scope.showDiscussion = false;
+              //Hide General
+              $scope.hideOther = $scope.showCalendar || $scope.showDiscussion ;    
+              $scope.principalscreen = false;
 //                    console.log("principal.calandarActionItem =================== "+$scope.currentModule);
-                  
-          });
+
+    });
     //Hide Discussion login , calendar ,discussion ,others
     //Chargement des modules de l'utilisateur connectÃ©;
 //    $scope.$on("user_modules" ,function(event ,args){
 //        console.log("Felicitation vous ÃƒÂªte authentifiÃ© == "+args.modules);
 //    });
-   /**
+       /**
             * Reception des evenement de d'edition des etats $scope.numberofconnectusers = 0;
             */
           $scope.$on("updatemessagesnumber" , function(event, args){
@@ -913,6 +914,9 @@ angular.module("mainApp")
                $scope.numberofconnectusers = args.value;
           });
           
+          /**
+           * Refresh the message 
+           */
           $scope.$on("refresh_message",function(event,args){
                 var message = args.message;
                 var zoneid = null;//"zone"+item.id;
@@ -1593,12 +1597,14 @@ angular.module("mainApp")
           */
          $scope.canCreate = function(){
 //             console.log("$scope.canCreate = function() =================== "+angular.toJson($rootScope.globals.user));
-             if(angular.isDefined($scope.metaData) && $scope.metaData.desablecreate==true){
-                 return false;
-             }else if($scope.currentAction){
-                 return ($scope.currentAction.securitylevel>=0)&&($scope.currentAction.securitylevel<=1);
+             var result = true ;
+             if(angular.isDefined($scope.metaData) && $scope.metaData.desablecreate==true && $scope.windowType=='new'){
+                 result &= false;
+             }//end if(angular.isDefined($scope.metaData) && $scope.metaData.desablecreate==true ){
+             if($scope.currentAction){
+                 result &=  ($scope.currentAction.securitylevel>=0)&&($scope.currentAction.securitylevel<=1);
              }//end if($scope.currentAction){ 
-             return false ;
+             return result ;
          };
          /**
             * Deconnexion de l'applicatiopn
@@ -1608,6 +1614,10 @@ angular.module("mainApp")
                commonsTools.hideDialogLoading();                                                        
                $rootScope.$broadcast("login" , {  });  
            };
+           /**
+            * 
+            * @returns {Boolean}
+            */
          $scope.canDelete = function(){
              if(angular.isDefined($scope.metaData) && $scope.metaData.desabledelete==true){
                  return false;
@@ -1616,8 +1626,12 @@ angular.module("mainApp")
              }
              return false;
          };
+         /**
+          * 
+          * @returns {Boolean}
+          */
          $scope.canUpdate = function(){
-             if(angular.isDefined($scope.metaData) && $scope.metaData.desableupdate==true){
+             if(angular.isDefined($scope.metaData) && $scope.metaData.desableupdate==true  && $scope.windowType=='update'){
                  return false;
              }else if($scope.currentAction){
                  return ($scope.currentAction.securitylevel>=0)&&($scope.currentAction.securitylevel<=1);
@@ -1642,8 +1656,14 @@ angular.module("mainApp")
              return $scope.selectedObjects.length>0 && $scope.showApplication==false;
          };
           /**
-
-           **/
+           * 
+           * @param {type} texte
+           * @param {type} color
+           * @param {type} colorContent
+           * @param {type} topPos
+           * @param {type} leftPos
+           * @returns {undefined}
+           */
           $scope.showDialogLoading =function(texte, color, colorContent, topPos,leftPos) {
             $('body').append("<div id='dialogContent' style='width:100%;height:100%;position:absolute;z-index:2000;text-align:center;'></div>");
             $('#dialogContent').append("<div id='dialogWindow'></div>");
@@ -1657,12 +1677,20 @@ angular.module("mainApp")
             $('#dialogContent').fadeIn();
           };
 
+/**
+ * 
+ * @returns {undefined}
+ */
           $scope.hideDialogLoading =function() {
             $('#dialogContent').fadeOut(function(){
               $('#dialogContent').remove();
             });
           };
 
+/**
+ * 
+ * @returns {undefined}
+ */
            $scope.hellordWordDialog = function() {            
             //On affiche le dialog
             commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
@@ -3299,7 +3327,7 @@ $scope.gererChangementFichier3 = function(event,model){
              for(var i=0 ; i< metaData.columns.length;i++){
                 if(angular.isDefined(metaData.columns[i].search) && metaData.columns[i].search){
                      var tdElem = document.createElement('td');
-                     if(metaData.columns[i].type!='array'&& metaData.columns[i].type!='object'&& metaData.columns[i].type!='combobox'){
+                     if(metaData.columns[i].type!='array'&& metaData.columns[i].type!='object'&& metaData.columns[i].type!='combobox'&&metaData.columns[i].type!='boolean'){
                          tdElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+'}}'));
                          if(metaData.columns[i].type=='number'){
                             tdElem.setAttribute('class','text-right');
@@ -3309,6 +3337,11 @@ $scope.gererChangementFichier3 = function(event,model){
                           tdElem.appendChild(document.createTextNode("{{item."+metaData.columns[i].fieldName+"['designation']}}"));
                      }else if(metaData.columns[i].type=='combobox'){
                          tdElem.appendChild(document.createTextNode("{{comboboxselctionvalues(item."+metaData.columns[i].fieldName+",'"+metaData.columns[i].value+"')}}"));
+                     }else if(metaData.columns[i].type=='boolean'){
+                         var input = document.createElement('input');
+                         input.setAttribute('type' , 'checkbox');
+                         input.setAttribute('ng-model' , 'item.'+metaData.columns[i].fieldName);
+                         tdElem.appendChild(input);
                      }//end if(metaData.columns[i].type!='array'&& metaData.columns[i].type!='object')
                      tdElem.setAttribute('data-toggle' , "modal");
                      //tdElem.setAttribute('data-target' , '#myModal');
@@ -3334,7 +3367,7 @@ $scope.gererChangementFichier3 = function(event,model){
                             if(angular.isDefined(metaData.groups[i].columns[j].search) && metaData.groups[i].columns[j].search){
                                 var tdElem = document.createElement('td');
                                 if(metaData.groups[i].columns[j].type!='array'&& metaData.groups[i].columns[j].type!='object'
-                                        && metaData.groups[i].columns[j].type!='combobox'){
+                                        && metaData.groups[i].columns[j].type!='combobox' && metaData.groups[i].columns[j].type!='boolean'){
                                     tdElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+'}}'));
                                     if(metaData.groups[i].columns[j].type=='number'){
                                         tdElem.setAttribute('class','text-right');
@@ -3343,6 +3376,11 @@ $scope.gererChangementFichier3 = function(event,model){
                                     tdElem.appendChild(document.createTextNode("{{item."+metaData.groups[i].columns[j].fieldName+"['designation']}}"));
                                 }else if(metaData.groups[i].columns[j].type=='combobox'){
                                     tdElem.appendChild(document.createTextNode("{{comboboxselctionvalues(item."+metaData.groups[i].columns[j].fieldName+",'"+metaData.groups[i].columns[j].value+"')}}"));
+                                }else if(metaData.groups[i].columns[j].type=='boolean'){
+                                    var input = document.createElement('input');
+                                    input.setAttribute('type' , 'checkbox');
+                                    input.setAttribute('ng-model' , 'item.'+metaData.groups[i].columns[j].fieldName);
+                                    tdElem.appendChild(input);
                                 }//end if(metaData.columns[i].type!='array'&& metaData.columns[i].type!='object')
                                 tdElem.setAttribute('data-toggle' , "modal");
                                  if(nextIndex==1){
@@ -3718,7 +3756,12 @@ $scope.gererChangementFichier3 = function(event,model){
                     spanelem.appendChild(document.createTextNode(data['designation']));
                 }else{
                     var field = $scope.getField(metaData,oldfieldname);
-                    if(field.type!='combobox'){
+                    /**if(field.type=='boolean'){
+                         var input = document.createElement('input');
+                         input.setAttribute('type' , 'checkbox');
+                         input.setAttribute('value' , data);
+                         spanelem.appendChild(input);
+                    }else**/ if(field.type!='combobox'){
                         spanelem.appendChild(document.createTextNode(data));
                     }else {
                         var values = field.value.split(';');
@@ -6287,7 +6330,7 @@ $scope.gererChangementFichier3 = function(event,model){
               }//end if(angular.isDefined($scope.currentAction.viewMode)){
               $scope.hideannuler = modes[0]==='form';
               $scope.enablefollowerpanel = false;
-              $scope.desablecreateedit = ($scope.isviewOperation()||!$scope.canCreate());//||!$scope.canUpdate();
+              $scope.desablecreateedit = ($scope.isviewOperation()||!$scope.canCreate())||!$scope.canUpdate();
               $scope.desableupdateedit = $scope.isupdateOperation()||!$scope.canUpdate()||$scope.iscreateOperation();
               $scope.desabledeleteedit = !$scope.canDelete()||$scope.iscreateOperation()||$scope.isupdateOperation()||($scope.showApplication==true&&$scope.currentObject.active==true);
               $scope.desableprintedit=$scope.iscreateOperation()||!$scope.canPrint()||$scope.isviewOperation()||$scope.isupdateOperation();
@@ -7076,7 +7119,7 @@ $scope.gererChangementFichier3 = function(event,model){
 //            console.log("$scope.listDialogBuilder ===== "+index+" ===== "+model+" ==== "+modelpath+" === "+angular.toJson(metaData));     
            //Chargement des donnÃ¯Â¿Â½es
            $scope.temporalPagination.beginIndex=0;
-           $scope.temporalPagination.currentPage=1;
+           $scope.temporalPagination.currentPage=0;
            $scope.temporalPagination.module = metaData.moduleName;
            $scope.temporalPagination.model = metaData.entityName;
            var url="http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(metaData.moduleName)+"/"+angular.lowercase(metaData.entityName)+"/count";
@@ -7084,6 +7127,9 @@ $scope.gererChangementFichier3 = function(event,model){
                    .then(function(response){
 //                           console.log("$scope.listDialogBuilder = function(model) :::::: "+angular.toJson(response.data)+" === "+angular.isNumber(angular.fromJson(angular.toJson(response.data))));
                            var itemscount = response.data.value;
+                           if(itemscount>0){
+                               $scope.temporalPagination.currentPage=1;
+                           }//end if(itemscount>0){
                            $scope.temporalPagination.totalPages = response.data.value;
                            $scope.temporalPagination.endIndex = $scope.temporalPagination.pageSize;
                            if(itemscount<$scope.temporalPagination.pageSize){
@@ -7106,7 +7152,8 @@ $scope.gererChangementFichier3 = function(event,model){
                          }//end if(endIndex==1){
                          viewElem.setAttribute('id' , bodyID);
                          var searchElem = document.createElement("div");
-                         searchElem.innerHTML = "<nav id='listebar' class='navbar navbar-default container-heading-panel'  role='navigation'> <div class='col-sm-12  col-md-12  nav nav-justified navbar-nav container-heading-panel'> <div class='navbar-header col-sm-12 col-md-12  container-heading-panel'> </div> <div class='col-sm-12 col-md-12  container-heading-panel'> <form class='navbar-form navbar-search  navbar-right' role='Search' id='listfiltercontainer' style='width: 100%;' > <div class='input-group' style='width: 100%;'><span class='input-group-btn pull-left'  style='display: inline-block;width: 20%;'> <button type='button' class='btn btn-search btn-sm btn-default dropdown-toggle' data-toggle='dropdown' id='filtermtmtbtn' style='width: 100%;'> <span class='glyphicon glyphicon-filter'></span> <span class='label-icon'>Filtres</span> <span class='caret'></span> </button> <ul class='dropdown-menu' role='menu'  id='filterMtmActionsId'> <li> <a href='#'> <!-- <span class='glyphicon glyphicon-user'></span> <span class='label-icon'>Search By User</span> --> <span> <input type='text' style='border: none;'> <input type='checkbox' name='name' ng-model='checkbox01'> </span> </a> </li> <li> <a href='#'> <span class='glyphicon glyphicon-book'></span> <span class='label-icon'>Search By Organization</span> </a> </li> </ul> </span> <span class='input-group-btn  pull-left' style='display: inline-block;width: 80%;'> <input type='text' ng-model='temporalSearchCriteria' class='form-control input-sm' style='width: 97%;'> <button type='button' class='btn btn-search btn-sm btn-default'  ng-click=listsearchAction('"+model+"')> <span class='glyphicon glyphicon-search'></span> </button> </span>  </div>  </form> </div>  <span class='pull-right'> <div class='btn-group'  role='group'  aria-label='group 3'> <span class='btn btn-default btn-sm'>{{temporalPagination.currentPage}}-{{temporalPagination.endIndex}} / {{temporalPagination.totalPages}} </span> <button type='button'  class='btn btn-default btn-sm' ng-click='temporalPagination.previous_2()'  ng-disabled='!temporalPagination.hasprevious()'> <span class='glyphicon glyphicon-chevron-left'  aria-hidden='true'></span> </button> <button type='button'  class='btn btn-default btn-sm' ng-click='temporalPagination.next_2()' ng-disabled='!temporalPagination.hasnext()'> <span class='glyphicon glyphicon-chevron-right'  aria-hidden='true'></span> </button> </div> </span> </div> </div> </nav>";
+//                         searchElem.innerHTML = "<nav id='listebar' class='navbar navbar-default container-heading-panel'  role='navigation'> <div class='col-sm-12  col-md-12  nav nav-justified navbar-nav container-heading-panel'> <div class='navbar-header col-sm-12 col-md-12  container-heading-panel'> </div> <div class='col-sm-12 col-md-12  container-heading-panel'> <form class='navbar-form navbar-search  navbar-right' role='Search' id='listfiltercontainer' style='width: 100%;' > <div class='input-group' style='width: 100%;'><span class='input-group-btn pull-left'  style='display: inline-block;width: 20%;'> <button type='button' class='btn btn-search btn-sm btn-default dropdown-toggle' data-toggle='dropdown' id='filtermtmtbtn' style='width: 100%;'> <span class='glyphicon glyphicon-filter'></span> <span class='label-icon'>Filtres</span> <span class='caret'></span> </button> <ul class='dropdown-menu' role='menu'  id='filterMtmActionsId'> <li> <a href='#'> <!-- <span class='glyphicon glyphicon-user'></span> <span class='label-icon'>Search By User</span> --> <span> <input type='text' style='border: none;'> <input type='checkbox' name='name' ng-model='checkbox01'> </span> </a> </li> <li> <a href='#'> <span class='glyphicon glyphicon-book'></span> <span class='label-icon'>Search By Organization</span> </a> </li> </ul> </span> <span class='input-group-btn  pull-left' style='display: inline-block;width: 80%;'> <input type='text' ng-model='temporalSearchCriteria' class='form-control input-sm' style='width: 97%;'> <button type='button' class='btn btn-search btn-sm btn-default'  ng-click=listsearchAction('"+model+"')> <span class='glyphicon glyphicon-search'></span> </button> </span>  </div>  </form> </div>  <span class='pull-right'> <div class='btn-group'  role='group'  aria-label='group 3'> <span class='btn btn-default btn-sm'>{{temporalPagination.currentPage}}-{{temporalPagination.endIndex}} / {{temporalPagination.totalPages}} </span> <button type='button'  class='btn btn-default btn-sm' ng-click='temporalPagination.previous_2()'  ng-disabled='!temporalPagination.hasprevious()'> <span class='glyphicon glyphicon-chevron-left'  aria-hidden='true'></span> </button> <button type='button'  class='btn btn-default btn-sm' ng-click='temporalPagination.next_2()' ng-disabled='!temporalPagination.hasnext()'> <span class='glyphicon glyphicon-chevron-right'  aria-hidden='true'></span> </button> </div> </span> </div> </div> </nav>";
+                         searchElem.innerHTML = "<nav id='listebar' class='navbar navbar-default container-heading-panel'  role='navigation'> <div class='col-sm-12  col-md-12  nav nav-justified navbar-nav container-heading-panel'> <div class='navbar-header col-sm-12 col-md-12  container-heading-panel'> </div> <div class='col-sm-12 col-md-12  container-heading-panel'> <form class='navbar-form navbar-search  navbar-right' role='Search' id='listfiltercontainer' style='width: 100%;' > <div class='input-group' style='width: 100%;'><span class='input-group-btn pull-left'  style='display: inline-block;width: 20%;'> <button ng-hide='true' type='button' class='btn btn-search btn-sm btn-default dropdown-toggle' data-toggle='dropdown' id='filtermtmtbtn' style='width: 100%;'> <span class='glyphicon glyphicon-filter'></span> <span class='label-icon'>Filtres</span> <span class='caret'></span> </button> <ul class='dropdown-menu' role='menu'  id='filterMtmActionsId'> <li> <a href='#'> <!-- <span class='glyphicon glyphicon-user'></span> <span class='label-icon'>Search By User</span> --> <span> <input type='text' style='border: none;'> <input type='checkbox' name='name' ng-model='checkbox01'> </span> </a> </li> <li> <a href='#'> <span class='glyphicon glyphicon-book'></span> <span class='label-icon'>Search By Organization</span> </a> </li> </ul> </span> <span class='input-group-btn  pull-left' style='display: inline-block;width: 80%;'> <input type='text' ng-model='temporalSearchCriteria' ng-keyup=listsearchAction('"+model+"') class='form-control input-sm' style='width: 97%;'> <button type='button' class='btn btn-search btn-sm btn-default'  ng-click=listsearchAction('"+model+"')> <span class='glyphicon glyphicon-search'></span> </button> </span>  </div>  </form> </div>  <span class='pull-right'> <div class='btn-group'  role='group'  aria-label='group 3'> <span class='btn btn-default btn-sm'>{{temporalPagination.currentPage}}-{{temporalPagination.endIndex}} / {{temporalPagination.totalPages}} </span> <button type='button'  class='btn btn-default btn-sm' ng-click='temporalPagination.previous_2()'  ng-disabled='!temporalPagination.hasprevious()'> <span class='glyphicon glyphicon-chevron-left'  aria-hidden='true'></span> </button> <button type='button'  class='btn btn-default btn-sm' ng-click='temporalPagination.next_2()' ng-disabled='!temporalPagination.hasnext()'> <span class='glyphicon glyphicon-chevron-right'  aria-hidden='true'></span> </button> </div> </span> </div> </div> </nav>";
                          viewElem.appendChild(searchElem);
                          //Construction de la partie recherche
                          var editPanel =  $scope.listPanelDialogComponent(metaData,index);
@@ -8418,6 +8465,21 @@ $scope.gererChangementFichier3 = function(event,model){
           }//end if(name)
       };
       /**
+       * Remove the nodes fill on node
+       * @param {type} nodes
+       * @returns {undefined}
+       */
+      $scope.cleanTreeNodes = function(nodes){
+          for(var i=0 ; i<nodes.length;i++){
+              var node = nodes[i];
+              if(node.nodes.length>0){
+                  $scope.cleanTreeNodes(node.nodes);
+              }else{
+                  delete node.nodes;
+              }//end if(node.nodes.length>0){
+          }//end for(var i=0 ; i<nodes.length;i++){
+      };
+      /**
        * 
        * @param {type} item
        * @returns {undefined}
@@ -8428,7 +8490,9 @@ $scope.gererChangementFichier3 = function(event,model){
                       restService.treefilter($scope.predicats ,$scope.pagination.beginIndex , $scope.pagination.pageSize)
                                .$promise.then(function(datas){                                    
                                     if(datas){
-                                        $scope.datas = datas;                             
+                                        $scope.datas = datas;       
+                                        $scope.cleanTreeNodes($scope.datas);
+//                                        console.log("principal.loadTreeData = function(item) ======= "+angular.toJson($scope.datas));
                                         if($scope.pagination.beginIndex<=0){
                                             $scope.pagination.endIndex = $scope.pagination.pageSize;
                                             if($scope.pagination.totalPages<=$scope.pagination.pageSize){
@@ -9976,7 +10040,9 @@ $scope.gererChangementFichier3 = function(event,model){
                  $scope.reset(); 
                  $scope.dataCache['resources'] = new Array();
                  $scope.dataCache['names'] = new Array();
-                 $scope.pagination.currentPage = $scope.pagination.beginIndex+1;
+                 if($scope.pagination.currentPage!=0){
+                     $scope.pagination.currentPage = $scope.pagination.beginIndex+1;
+                 }//end if($scope.pagination.currentPage!=0){
                  $scope.displayListPanel();
 
              }catch(ex){
@@ -9997,7 +10063,7 @@ $scope.gererChangementFichier3 = function(event,model){
                $http.defaults.headers.common['search_text']= $scope.searchCriteria;  
               restService.count($scope.predicats)
                 .$promise.then(function(data){
-                    $scope.pagination.currentPage=1;
+                    $scope.pagination.currentPage=0;
                     $scope.pagination.beginIndex = 0;
                     $scope.pagination.totalPages = data.value ;                                                  
                     $scope.loadData();
@@ -10289,10 +10355,11 @@ $scope.gererChangementFichier3 = function(event,model){
          */
          $scope.listsearchAction = function(model){
              var metaData = $scope.getCurrentMetaData(model);  
-//             console.log("$scope.listsearchAction LEVEL 1 = "+angular.toJson(metaData.searchfields)+" ==================== "+model);
+//             console.log("$scope.listsearchAction LEVEL 1 = "+angular.toJson(metaData.searchfields)+" ==================== "+model+" ====== temporalSearch : "+$scope.temporalSearchCriteria);
              if(metaData){                           
                      var part = model.split(".");
-                     $http.defaults.headers.common['predicats']= angular.toJson($scope.temporalPredicats);                     
+                     $http.defaults.headers.common['predicats']= angular.toJson($scope.temporalPredicats);  
+                     $http.defaults.headers.common['search_text']= angular.toJson($scope.temporalSearchCriteria);  
                      $scope.temporalPagination.currentPage=1;
                      $scope.temporalPagination.module = metaData.moduleName;
                      $scope.temporalPagination.model = metaData.entityName;
@@ -10313,10 +10380,14 @@ $scope.gererChangementFichier3 = function(event,model){
                              });
              }//end if(metaData) 
          };
-         //
+         /**
+          * 
+          * @param {type} filename
+          * @returns {undefined}
+          */
          $scope.followerpiecejointeviewAction = function(id,filename){
              $scope.piecejointeviewAction(id);
-         },
+         };
          /**
           * 
           * @param {type} filename
@@ -12391,63 +12462,71 @@ $scope.gererChangementFichier3 = function(event,model){
                             // console.log("listFramePanelBuilder ====== "+$scope.enabledVerticalMenu);
                        }//end if(items.eq(i).attr("id")=="container"){  
                   }//end for(var i=0; i<items.length;i++){ 
-                  var defaultData = [
-                    {
-                      text: 'Parent 1',
-                      href: '#parent1',
-                      tags: ['4'],
-                      nodes: [
-                        {
-                          text: 'Child 1',
-                          href: '#child1',
-                          tags: ['2'],
-                          nodes: [
-                            {
-                              text: 'Grandchild 1',
-                              href: '#grandchild1',
-                              tags: ['4']
-                            },
-                            {
-                              text: 'Grandchild 2',
-                              href: '#grandchild2',
-                              tags: ['0']
-                            }
-                          ]
-                        },
-                        {
-                          text: 'Child 2',
-                          href: '#child2',
-                          tags: ['0']
-                        }
-                      ]
-                    },
-                    {
-                      text: 'Parent 2',
-                      href: '#parent2',
-                      tags: ['0']
-                    },
-                    {
-                      text: 'Parent 3',
-                      href: '#parent3',
-                       tags: ['0']
-                    },
-                    {
-                      text: 'Parent 4',
-                      href: '#parent4',
-                      tags: ['0']
-                    },
-                    {
-                      text: 'Parent 5',
-                      href: '#parent5'  ,
-                      tags: ['0']
-                    }
-                  ];
-                  $('#datawidget').treeview({
-//                        color: "#428bca",
-                        showTags: true,
-                        data: defaultData
-                      });
-  
+                 
+                 if($scope.datas.length>0){
+                    $('#datawidget').treeview({
+ //                        color: "#428bca",
+                         showTags: true,
+                         data: $scope.datas
+                       });
+                 }//end if($scope.datas.length>0){
+//                  var defaultData = [
+//                    {
+//                      text: 'Parent 1',
+//                      href: '#parent1',
+//                      tags: ['4'],
+//                      nodes: [
+//                        {
+//                          text: 'Child 1',
+//                          href: '#child1',
+//                          tags: ['2'],
+//                          nodes: [
+//                            {
+//                              text: 'Grandchild 1',
+//                              href: '#grandchild1',
+//                              tags: ['4']
+//                            },
+//                            {
+//                              text: 'Grandchild 2',
+//                              href: '#grandchild2',
+//                              tags: ['0']
+//                            }
+//                          ]
+//                        },
+//                        {
+//                          text: 'Child 2',
+//                          href: '#child2',
+//                          tags: ['0']
+//                        }
+//                      ]
+//                    },
+//                    {
+//                      text: 'Parent 2',
+//                      href: '#parent2',
+//                      tags: ['0']
+//                    },
+//                    {
+//                      text: 'Parent 3',
+//                      href: '#parent3',
+//                       tags: ['0']
+//                    },
+//                    {
+//                      text: 'Parent 4',
+//                      href: '#parent4',
+//                      tags: ['0']
+//                    },
+//                    {
+//                      text: 'Parent 5',
+//                      href: '#parent5'  ,
+//                      tags: ['0']
+//                    }
+//                  ];
+//                  $('#datawidget').treeview({
+////                        color: "#428bca",
+//                        showTags: true,
+//                        data: defaultData
+//                      });
+                 
                  return listElem;
           };
 
@@ -12779,7 +12858,10 @@ $scope.gererChangementFichier3 = function(event,model){
                                         //Parametres pagination
                                         restService.count($scope.predicats)
                                               .$promise.then(function(data){
-                                                  $scope.pagination.currentPage=1;
+                                                  $scope.pagination.currentPage=0;
+                                                  if(data.value>0){
+                                                      $scope.pagination.currentPage=1;                                                  
+                                                  }//end if(data.value>0){
                                                   $scope.pagination.beginIndex = 0;
                                                   var action = angular.fromJson($scope.currentAction);
                                                    $scope.pagination.totalPages = data.value ;                                                  
