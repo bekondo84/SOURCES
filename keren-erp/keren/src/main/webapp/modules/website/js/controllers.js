@@ -111,8 +111,20 @@ angular.module('keren.core.website')
                          var urlPath = "http://"+$location.host()+":"+$location.port()+"/keren/auth/login/crypto"; 
                                 $http.post(urlPath ,{username:"website@website",password:"websiteteratech2013"})
                                         .then(function(response){
-    //                                        console.log("$scope.login = function() remember == encrypt pwd : "+response.data);                            
+    //                                        console.log("$scope.login = function() remember == encrypt pwd : "+response.data);                                           
                                             authenticationService.setCredentialWithoutBroatcast("website@website",response.data);
+                                              //Chargement du module website pour besion de securité
+                                            var url2 = "http://"+$location.host()+":"+$location.port()+"/kerencore/websitemodule/categorie/"+$rootScope.website;
+                                            $http.get(url2)
+                                                    .then(function(response){
+//                                                        console.log("websitemode.controller.===================== "+response.data);
+                                                        if(response.data!='web_site'){
+                                                            $rootScope.$broadcast("login" , {  });  
+                                                            commonsTools.hideDialogLoading();
+                                                        }//end if(response.data=='web_site'){
+                                                    },function(error){
+                                                        commonsTools.showMessageDialog(error);     
+                                                    });
                                             $rootScope.$broadcast("gotowebsite" , {username:$rootScope.globals.currentUser.username});
                                         },function(error){
                                             commonsTools.showMessageDialog(error);                                            

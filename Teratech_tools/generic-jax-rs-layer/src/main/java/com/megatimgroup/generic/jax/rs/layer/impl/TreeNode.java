@@ -10,14 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Node of tree view 
  * @author BEKO
  */
 public class TreeNode implements Serializable,Comparable<TreeNode>{
 
-    private String text ;
     
-    private String[] tags;
+    protected String text ;
+    
+    protected List<String> tags;
     
     private long source;
     
@@ -25,7 +26,7 @@ public class TreeNode implements Serializable,Comparable<TreeNode>{
     
     private String entityname ;    
     
-    private List<TreeNode> children = new ArrayList<TreeNode>();
+    protected List<TreeNode> nodes = new ArrayList<TreeNode>();
 
     /**
      * 
@@ -47,6 +48,10 @@ public class TreeNode implements Serializable,Comparable<TreeNode>{
         this.modulename = moduleName;
     }
 
+    /**
+     * Node description
+     * @return 
+     */
     public String getText() {
         return text;
     }
@@ -55,16 +60,34 @@ public class TreeNode implements Serializable,Comparable<TreeNode>{
         this.text = text;
     }
 
-    public String[] getTags() {
+    /**
+     * Nodes Tags (number of items 
+     * @return 
+     */
+    public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(String[] tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
     }
 
-    
+    /**
+     * Nodes children
+     * @return 
+     */
+    public List<TreeNode> getNodes() {
+        return nodes;
+    }
 
+    public void setNodes(List<TreeNode> nodes) {
+        this.nodes = nodes;
+    }
+
+   /**
+    * the ID of the entity
+    * @return 
+    */
     public long getSource() {
         return source;
     }
@@ -73,6 +96,10 @@ public class TreeNode implements Serializable,Comparable<TreeNode>{
         this.source = source;
     }
 
+    /**
+     * the name of entity that 
+     * @return 
+     */
     public String getEntityname() {
         return entityname;
     }
@@ -81,6 +108,10 @@ public class TreeNode implements Serializable,Comparable<TreeNode>{
         this.entityname = entityname;
     }    
 
+    /**
+     * The name of module containig the entity
+     * @return 
+     */
     public String getModulename() {
         return modulename;
     }
@@ -90,16 +121,6 @@ public class TreeNode implements Serializable,Comparable<TreeNode>{
     }    
     
 
-    public List<TreeNode> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<TreeNode> children) {
-        this.children = children;
-    }
-    
-    
-    
     @Override
     public int compareTo(TreeNode o) {
         //To change body of generated methods, choose Tools | Templates.

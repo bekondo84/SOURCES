@@ -57,6 +57,11 @@ angular.module('keren.core.commons')
                   }
                 };
 }]);
+/**
+ * CommonsTools Factory for Keren-ERP
+ * @param {type} param1
+ * @param {type} param2
+ */
 angular.module('keren.core.commons')
         .factory('commonsTools',function($filter,$compile,$http,$location,$interval){
             //Liste des contraintes
@@ -166,7 +171,7 @@ angular.module('keren.core.commons')
                         return instance;
                     }
                 };
-            })();
+            })();         
             var WebSiteContext = (function(){
                 var instance;
                 function createInstance(){

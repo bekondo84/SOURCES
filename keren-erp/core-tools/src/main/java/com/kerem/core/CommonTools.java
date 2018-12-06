@@ -219,6 +219,7 @@ public class CommonTools {
         record.setCode(view.getId());
         record.setTitre(view.getLabel());
         record.setExtern(view.isExtern());
+        record.setScript(view.getTemplate());
         if(view.getSearch()!=null){
             record.setEntity(view.getSearch().getEntity());
             record.setModel(view.getSearch().getModule());
@@ -226,28 +227,29 @@ public class CommonTools {
             record.setSearch(FileHelper.transformJaxBToScript(view.getSearch()));
             record.setClazz(view.getSearch().getClazz());
             record.setIgnore(view.getSearch().isIgnore());
-        }//end if(view.getSearch()!=null)        
+        }//end if(view.getSearch()!=null)    
+        
 //        System.out.println(CommonTools.class.toString()+" ========================================= "+view.getTemplate());
-        if(view.getTemplate()!=null&&!view.getTemplate().trim().isEmpty()){
-            DocumentBuilderFactory odbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder odb = odbf.newDocumentBuilder();
-            InputStream stream = new ByteArrayInputStream(view.getTemplate().getBytes(StandardCharsets.UTF_8.name()));
-            Document odoc = odb.parse(stream);
-    //        DOMParser parser = new DOMParser();
-    //        parser.parse(view.getTemplate());
-    //        Document document = parser.getDocument();
-//            StringWriter xmlWriter = new StringWriter() ;
-//            XMLSerializer ser = new XMLSerializer(xmlWriter,
-//              new OutputFormat("xml", "UTF-8", true));
-//            ser.serialize(odoc);
-            DOMSource domSource = new DOMSource(odoc);
-            StringWriter writer = new StringWriter();
-            StreamResult result = new StreamResult(writer);
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer transformer = tf.newTransformer();
-            transformer.transform(domSource, result);
-            record.setScript(writer.toString());
-        }//end if(view.getTemplate()!=null&&!view.getTemplate().trim().isEmpty()){
+//        if(view.getTemplate()!=null&&!view.getTemplate().trim().isEmpty()){
+//            DocumentBuilderFactory odbf = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder odb = odbf.newDocumentBuilder();
+//            InputStream stream = new ByteArrayInputStream(view.getTemplate().getBytes(StandardCharsets.UTF_8.name()));
+//            Document odoc = odb.parse(stream);
+//    //        DOMParser parser = new DOMParser();
+//    //        parser.parse(view.getTemplate());
+//    //        Document document = parser.getDocument();
+////            StringWriter xmlWriter = new StringWriter() ;
+////            XMLSerializer ser = new XMLSerializer(xmlWriter,
+////              new OutputFormat("xml", "UTF-8", true));
+////            ser.serialize(odoc);
+//            DOMSource domSource = new DOMSource(odoc);
+//            StringWriter writer = new StringWriter();
+//            StreamResult result = new StreamResult(writer);
+//            TransformerFactory tf = TransformerFactory.newInstance();
+//            Transformer transformer = tf.newTransformer();
+//            transformer.transform(domSource, result);
+//            record.setScript(writer.toString());
+//        }//end if(view.getTemplate()!=null&&!view.getTemplate().trim().isEmpty()){
         return record;
     }
     

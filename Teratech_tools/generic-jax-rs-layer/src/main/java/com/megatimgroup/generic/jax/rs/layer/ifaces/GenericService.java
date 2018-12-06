@@ -8,6 +8,7 @@ package com.megatimgroup.generic.jax.rs.layer.ifaces;
 import com.bekosoftware.genericdaolayer.dao.tools.Predicat;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
 import com.megatim.common.annotations.OrderType;
+import com.megatimgroup.generic.jax.rs.layer.impl.AbstractTreeContainer;
 import com.megatimgroup.generic.jax.rs.layer.impl.FilterPredicat;
 import com.megatimgroup.generic.jax.rs.layer.impl.ImportData;
 import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;

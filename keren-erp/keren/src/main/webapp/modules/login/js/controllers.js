@@ -25,7 +25,7 @@ angular.module('keren.core.login')
              * @returns {undefined}
              */
             $scope.login = function(e){
-                console.log("Authentication Login methode === "+$scope.username+" === "+$scope.password+" ====== event : "+e.key);
+//                console.log("Authentication Login methode === "+$scope.username+" === "+$scope.password+" ====== event : "+e.key);
                 if(angular.isDefined(e) && e.key!="Enter"){
                     return ;
                 }//end if(angular.isDefined(e) && e.key!="Enter"){

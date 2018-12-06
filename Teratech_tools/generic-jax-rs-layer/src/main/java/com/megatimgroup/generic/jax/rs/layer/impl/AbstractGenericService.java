@@ -557,15 +557,15 @@ public  abstract class AbstractGenericService< T , PK extends Serializable> impl
     }
 
     /**
-     * 
+     * Node structure of tree view
      * @param headers
      * @param firstResult
      * @param maxResult
      * @return 
      */
     @Override
-    public  List<TreeNode> treefilter(HttpHeaders headers, int firstResult, int maxResult){    
-       return new ArrayList<TreeNode>();
+    public  List<TreeNode> treefilter(HttpHeaders headers, int firstResult, int maxResult){       
+       return new ArrayList<>();
     }
     
     

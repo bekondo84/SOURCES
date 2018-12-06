@@ -5143,18 +5143,18 @@ $scope.gererChangementFichier3 = function(event,model){
                              };
       
 
-/**
- * 
- * @returns {Boolean}
- */
-    $scope.isCVS = function(){
-        return $scope.importData.format!='cvs';
-    };
-    $scope.exportAll = function(){
-        return $scope.importData.typeexport=='1';
-    },
- /**
-           * 
+        /**
+         * 
+         * @returns {Boolean}
+         */
+            $scope.isCVS = function(){
+                return $scope.importData.format!='cvs';
+            };
+            $scope.exportAll = function(){
+                return $scope.importData.typeexport=='1';
+            };
+            /**
+                      * 
            * @param {type} metaData
            * @returns {undefined}
            */
@@ -5196,511 +5196,17 @@ $scope.gererChangementFichier3 = function(event,model){
            * @returns {undefined}
            */
           $scope.displayReportPanel_HTML = function(script){ 
-              var container = document.createElement('div');
-              container.innerHTML = script;
-//              divElem.setAttribute('style','width:100%;');
-              $scope.reportbuilder(container,0);
-              document.getElementById("report_template").innerHTML = container.innerHTML;
-//              console.log("$scope.displayReportPanel_HTML ============== "+container.innerHTML);
-          };
-          
-          /**
-           * 
-           * @param {type} html
-           * @param {type} conter
-           * @returns {undefined}
-           */
-          $scope.reportbuilder = function(html,counter){
-              var k = counter;
-              for(var i=0 ; i<html.childNodes.length;i++){
-                  k = k+1;
-//                  html.childNodes[i].id = k;
-                  $scope.computeReportField(html.childNodes[i],html);
-                  $scope.reportbuilder(html.childNodes[i],k+1);
-              }  
-          };
-          /**
-           * 
-           * @param {type} node
-           * @param {type} name
-           * @returns {undefined}
-           */
-          $scope.hasAttribute = function(node , name){
-              if(node){
-                  if(node.attributes){
-                      for(var i=0 ;i<node.attributes.length;i++){
-                          if(node.attributes[i]&&node.attributes[i].name==name){
-                              return true;
-                          }
-                      }//endfor(var i=0 ;node.attributes.length;i++)
-                  }
-              }//end if(node)
-              return false;
-          };
-          
-          /**
-           * 
-           * @param {type} node
-           * @param {type} name
-           * @returns {undefined}
-           */
-          $scope.getAttribute = function(node , name){
-              if(node){
-                  if(node.attributes){
-                      for(var i=0 ;i<node.attributes.length;i++){
-                          if(node.attributes[i]&&node.attributes[i].name==name){
-                              return node.attributes[i].value;
-                          }
-                      }//endfor(var i=0 ;node.attributes.length;i++)
-                  }
-              }//end if(node)
-          };
-          /**
-           * 
-           * @param {type} node
-           * @returns {undefined}
-           */
-          $scope.computeReportField = function(node,html){
-              if(node){
-                  if($scope.hasAttribute(node,"for")){
-//                        console.log("$scope.displayReportPanel_HTML with for ============== "+node.nodeName+" == "+node.nodeValue); 
-                        $scope.forNodeBuilder(node,html,null);
-                  }else if($scope.hasAttribute(node,"if")){
-//                      $scope.ifnodebuilder(node,html);
-//                      console.log("$scope.displayReportPanel_HTML with if ============== "+node.nodeName);
-                  }else if($scope.hasAttribute(node,"expr")){
-//                      var text = $scope.getAttribute(node,"expr");
-//                      text = text.replace(/'/g , "\"");
-//                      var  result = $scope.exprEval(text,null);
-//                      if(result){
-//                          node.textContent = result;
-//                      }else{
-//                          node.textContent = ' ';
-//                      }//end if(result)     
-//                      console.log("$scope.displayReportPanel_HTML with if ============== "+node.nodeName);
-                  }else if($scope.hasAttribute(node,"func")){
-//                      var text = $scope.getAttribute(node,"func");
-////                      text = text.replace(/'/g , "\"");
-//                      var  result = $scope.funcEval(node,null);
-//                      if(result){
-//                          node.textContent = result;
-//                      }else{
-//                          node.textContent = ' ';
-//                      }//end if(result)     
-//                      console.log("$scope.displayReportPanel_HTML with if ============== "+node.nodeName);
-                  }else{
-                      var text = $scope.getnodevalue(node,null);
-                      //console.log("$scope.displayReportPanel_HTML with if ============== "+node.tagName+" === "+node.parentNode.nodeName);
-                      if(text){
-                          node.nodeValue =text;
-                     }//end if(text)
-//                     $scope.computeReportField(node,html);
-                  }//end if(node.for)
-              }//end if(node)
-          };
-           /**
-           * 
-           * @param {type} node
-           * @param {type} data
-           * @returns {undefined}
-           */
-          $scope.computeDOMNode = function(node , data){
-             if(node){
-                  if($scope.hasAttribute(node,"for")){      
-//                        console.log("$scope.displayReportPanel_HTML with for ============== "+node.nodeName+" == "+node.nodeValue); 
-                        $scope.forNodeBuilder(node,null,data);//(node,data,null);
-                  }else if($scope.hasAttribute(node,"if")){
-                        $scope.ifnodebuilder(node,data);
-//                      console.log("$scope.displayReportPanel_HTML with if ============== "+node.nodeName);
-                  }else if($scope.hasAttribute(node,"expr")){
-                      var text = $scope.getAttribute(node,"expr");
-                      text = text.replace(/'/g , "\"");
-                      $scope.removeAttribute(node,"expr");
-                      var  result = $scope.exprEval(text,data);
-                      if(result){
-                          node.textContent = result;
-                      }else{
-                          node.textContent = ' ';
-                      }//end if(result)     
-//                      console.log("$scope.displayReportPanel_HTML with if ============== "+node.nodeName);
-                  }else if($scope.hasAttribute(node,"func")){
-                      var text = $scope.getAttribute(node,"func");
-//                      text = text.replace(/'/g , "\"");
-                      var  result = $scope.funcEval(node,data);
-                      if(result){
-                          node.textContent = result;
-                      }else{
-                          node.textContent = ' ';
-                      }//end if(result)     
-//                      console.log("$scope.displayReportPanel_HTML with if ============== "+node.nodeName);
-                  }else{
-                       var text = $scope.getnodevalue(node,data);                       
-//                       console.log("$scope.computeDOMNode ============== "+text+"======="+node.nodeName+" === "+node.childNodes.length);
-                       if(node.childNodes.length==0){
-                           node.textContent = text;
-                       }else{
-                            for(var j=0 ; j<node.childNodes.length;j++){
-                                 $scope.computeDOMNode(node.childNodes[j],data);
-                            }//end for(var j=0 ; j<node.childNodes.length;i++){                            
-                        }
-                  }//end if(node.for)
-              }//end if(node)
-          };
-          /**
-           * Evaluation d'une expression arithmetique et logique
-           * @param {type} exp
-           * @param {type} obj
-           * @returns {undefined}
-           */
-         $scope.exprEval = function(exp,obj){
-              if(exp){                 
-                 var pattern = /(\w+)[.](\w+)/g;
-                 var matches = exp.match(pattern);
-                 if(matches){
-                     for(var i=0 ;i<matches.length;i++){
-                          exp=exp.replace(matches[i],$scope.getnodevalue(null,obj,matches[i]));
-                     }
-                 }
-//                 console.log("$scope.exprEval = function(exp,obj) exp = "+exp+" === match ="+angular.toJson(matches));
-                 return eval(exp);     
-              }//end if(exp)
-          };
-          /**
-           * 
-           * @param {type} func
-           * @returns {undefined}
-           */
-          $scope.funcEval = function(node,obj){
-              var text = $scope.getAttribute(node,"func");
-              text = text.replace(/'/g , "\"");
-              var func = angular.fromJson(text);
-              if(func && func.type&&func.data&&func.expr){                  
-                  if(func.type=='sum'){
-                      return $scope.sum(func.expr,$scope.getnodeEntity(node,obj,null));
-                  }else if(func.type=='product'){
-                      return $scope.product(func.expr,$scope.getnodeEntity(node,obj,null));
-                  }else if(func.type=='avarage'){
-                      return $scope.avarage(func.expr,$scope.getnodeEntity(node,obj,null));
-                  }
-              }//end if(func && func.type&&func.data&&func.expr)
-              return "undefined";
-          };
-          /**
-           * Sommes les elements enevaluant exp
-           * @param {type} datas
-           * @param {type} exp
-           * @returns {undefined}
-           */
-          $scope.sum = function(exp,obj){
-              if(exp){
-                  if(angular.isArray(obj)){
-                      var result = 0 ;
-                     for(var i=0 ; i<obj.length;i++){
-                         result += $scope.exprEval(obj[i],exp);
-                     }//end for(var i=0 ; i<datas.length;i++)
-                     return result;
-                  }else if(angular.isObject(obj)){
-                      return $scope.exprEval(obj,exp);
-                  }else{
-                      return $scope.exprEval(exp);
-                  }//end if(datas)
-              }//end if(exp)
-              return "undefined";
-          };
-          /**
-           * Sommes les elements enevaluant exp
-           * @param {type} datas
-           * @param {type} exp
-           * @returns {undefined}
-           */
-          $scope.product = function(exp,obj){
-              if(exp){
-                  if(angular.isArray(obj)){
-                      var result = 0 ;
-                     for(var i=0 ; i<obj.length;i++){
-                         result *= $scope.exprEval(obj[i],exp);
-                     }//end for(var i=0 ; i<datas.length;i++)
-                     return result;
-                  }else if(angular.isObject(obj)){
-                      return $scope.exprEval(obj,exp);
-                  }else{
-                      return $scope.exprEval(exp);
-                  }//end if(datas)
-              }//end if(exp)
-              return "undefined";
-          };
-          /**
-           * Sommes les elements enevaluant exp
-           * @param {type} datas
-           * @param {type} exp
-           * @returns {undefined}
-           */
-          $scope.avarage = function(exp,obj){
-              if(exp){
-                  if(angular.isArray(obj)&&obj.length>0){
-                      var result = 0 ;
-                     for(var i=0 ; i<obj.length;i++){
-                         result += $scope.exprEval(obj[i],exp);
-                     }//end for(var i=0 ; i<datas.length;i++)
-                     return (result/obj.length);
-                  }else if(angular.isObject(obj)){
-                      return $scope.exprEval(obj,exp);
-                  }else{
-                      return $scope.exprEval(exp);
-                  }//end if(datas)
-              }//end if(exp)
-              return "undefined";
-          };
-         
-           /**
-           * 
-           * @param {type} node
-           * @param {type} datas
-           * @param {type} html
-           * @returns {undefined}
-           */
-          $scope.ifnodebuilder = function(node,data){
-                try{
-                  if(node){
-                      var text = $scope.getAttribute(node,"if");
-                      text = text.replace(/'/g , "\"");
-                      var ifobject = angular.fromJson(text);
-                      $scope.removeAttribute(node , "if");
-                      if(ifobject && ifobject['op1']&&ifobject['op2']&&ifobject['cond']){
-                          if(angular.isString(ifobject['op1'])){//La source donnÃ©es est l'object courant
-                              var op1value = ifobject['op1'];
-                              var value_1 = $scope.getnodevalue(null,data,op1value);
-                              var value_2 = $scope.getnodevalue(null,data,ifobject['op2']);
-                              var result = $scope.conditionexpr(value_1,value_2,ifobject['cond']);
-//                              console.log(node.nodeName+"$scope.ifnodebuilder = function(node,html,data) ========= "+value_1+" == "+value_2+" == "+result);
-                              if(result){
-                                 $scope.computeDOMNode(node,data);                                 
-                              }else{
-                                  var parentnode = node.parentNode;
-                                  parentnode.removeChild(node); 
-                              }//end if(result)
-                          }
-                      }//end if(ifobject && ifobject['op1']&&ifobject['op2']&&ifobject['cond'])
-                  }//end if(node && datas)
-                  
-               }catch(ex){
-                    console.error(ex);
-                    commonsTools.showMessageDialog(ex);
-                }
-          };
-          /**
-           * 
-           * @param {type} value_1
-           * @param {type} value_2
-           * @param {type} cond
-           * @returns {undefined}
-           */
-          $scope.conditionexpr = function(value_1,value_2,cond){
-              if(value_1 && value_2 && cond){
-                 if(cond=='<'){
-                     return value_1<value_2;
-                 }else if(cond=='>'){
-                     return value_1>value_2;
-                 }else if(cond=='=='){
-                     return value_1==value_2;
-                 }else if(cond=='==='){
-                     return value_1===value_2;
-                 }else if(cond=='>='){
-                     return value_1>=value_2;
-                 }else if(cond=='<='){
-                     return value_1>value_2;
-                 }                     
-                 
-              }//end if(value_1 && value_2 && cond)
-              return false;
-          };
-         /**
-          * 
-          * @param {type} node
-          * @param {type} html
-          * @param {type} data
-          * @returns {undefined}
-          */
-          $scope.forNodeBuilder = function(node,html,data){
-            try{  
-              if(node){
-                  var text = $scope.getAttribute(node,"for");
-                  text = text.replace(/'/g , "\"");
-                  //console.log(text);
-                  //var text ='{"source":"datas","var":"obj"}';
-                  var forobject = angular.fromJson(text);
-//                  var id = $scope.getAttribute(node,"id");
-//                  console.log("$scope.forNodeBuilder = == "+forobject['source']);                
-                  if(forobject && forobject['source']){
-                      var datas = null ;
-                      if(angular.isString(forobject['source'])){
-                          if(forobject['source']=="selected"){
-                              datas = $scope.selectedObjects;
-                          }else if(forobject['source']=="datas"){
-                              datas = $scope.datas;
-                          }else if(forobject['source']=="requete"){
-                              datas = $scope.temporalDatas;
-                          }else {
-                              var part = forobject['source'].split(".");
-                              if(part.length>1){
-                                  var key = part[1];
-                                  datas = data[key];
-//                                  console.log("$scope.forNodeBuilder ====== "+angular.toJson(data));
-                              }
-                          }
-                          $scope.fortargetbuilder(node,datas,html);
-                      }else if(forobject.source.model&&forobject.source.entity&&forobject.source.method){
-                          commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
-                          var url ="http://"+$location.host()+":"+$location.port()+"/"+forobject.source.model+"/"+forobject.source.entity+"/"+forobject.source.method;
-                          $http.get(url)
-                                  .then(function(response){
-                                      var datas = response.data;
-                                      $scope.fortargetbuilder(node,datas,html);
-                                      commonsTools.hideDialogLoading();
-                                  },function(error){
-                                      commonsTools.hideDialogLoading();
-                                      commonsTools.showMessageDialog(error);
-                                  });
-                      }
-                  }//end if(forobject)
-              }   
-            }catch(ex){
-                console.error(ex);
-                commonsTools.showMessageDialog(ex);
-            }
-          };
-          /**
-           * 
-           * @param {type} cible
-           * @param {type} source
-           * @returns {undefined}
-           */
-          $scope.copyAttribute = function(node , source){
-              if(node && source){
-                  if(node.attributes){
-                      for(var i=0 ;i<node.attributes.length;i++){
-                          if(node.attributes[i]&&node.attributes[i].name!="for"&&node.attributes[i].name!="if"){
-                              source.setAttribute(node.attributes[i].name,node.attributes[i].value);
-                          }
-                      }//endfor(var i=0 ;node.attributes.length;i++)
-                  }
-              }//end if(node)
-          };
-          /**
-           * 
-           * @param {type} node
-           * @param {type} name
-           * @returns {undefined}
-           */
-         $scope.removeAttribute = function(node , name){
-             if(node){
-                  if(node.attributes){                      
-                    node.attributes.removeNamedItem(name);                      
-                  }
-              }//end if(node)
-         };
-          /**
-           * 
-           * @param {type} node
-           * @param {type} datas
-           * @returns {undefined}
-           */
-          $scope.fortargetbuilder = function(node, datas,html){
-              if(node && datas){                 
-                  $scope.removeAttribute(node,"for");
-                  for(var i=0 ; i<datas.length;i++){
-                       var nd = node.cloneNode(true);
-                       for(var j=0 ; j<nd.childNodes.length;j++){
-                              $scope.computeDOMNode(nd.childNodes[j],datas[i]);
-                      }//end for(var j=0 ; j<node.childNodes.length;i++){
-                      node.parentNode.appendChild(nd);              
-//                      container.appendChild(htmlElem);                
-                  }//end for(var i=0 ; i<node.childNodes.length;i++)
-                  node.parentNode.removeChild(node);
-              }//end if(node && datas)
-          };
-          /**
-           * 
-           * @param {type} node
-           * @param {type} obj
-           * @returns {undefined}
-           */
-          $scope.getnodevalue = function(node,obj,text){
-              var value = null;
-              if(!angular.isDefined(node)|| node==null){
-                  value = text;
-              }else {
-                  value = node.textContent;
-              }
-              if(value && angular.isString(value)){
-                    var part = value.split(".");
-                    if(part.length>1){
-                          var data = obj;
-                          if(part[0]=='data'){
-                              data=$scope.currentObject;
-                          }else if(part[0]=='user'){
-                              data= $rootScope.globals.user;
-                          }else if(part[0]=='company'){
-                              data= $rootScope.globals.company;
-                          }
-//                          console.log("$scope.getnodevalue ======= "+value+" === "+angular.toJson(data)+" ==== "+part[1]);
-                          //console.log("$scope.displayReportPanel_HTML with if ============== "+angular.toJson(part));
-                              //Suite du traitement
-                          if(data){
-                              var result = data;
-                              for(var i=1 ; i<part.length;i++){
-                                  result = result[part[i]];
-                                  if(!result){
-                                      return "";                              
-                                  }
-                              }
-                              if(angular.isObject(result)){
-                                  return result.designation;
-                              }
-                              return result;
-                          }//end if(data)
-                      }else{
-                          if(angular.isObject(value)){
-                              return value['designation'];
-                          }//end if(angular.isObject(value))
-                          return value;
-                      }//end if(part.length>1){
-                }        
-                return value;
-                
-          };
-          /**
-           * 
-           * @param {type} node
-           * @param {type} obj
-           * @returns {undefined}
-           */
-          $scope.getnodeEntity = function(node,obj,text){
-              var value = node.textContent;
-              if(!angular.isDefined(node)|| node==null){
-                  value = text;
-              }
-                if(value){
-                    var part = value.split(".");
-                    if(part.length>1){
-                          var data = obj;
-                          if(part[0]=='data'){
-                              data=$scope.currentObject;
-                          }else if(part[0]=='user'){
-                              data= $rootScope.globals.user;
-                          }else if(part[0]=='company'){
-                              data= $rootScope.globals.company;
-                          }
-                          //console.log("$scope.displayReportPanel_HTML with if ============== "+angular.toJson(part));
-                              //Suite du traitement
-                          return data;
-                      }else{                          
-                          return value;
-                      }//end if(part.length>1){
-                }                
-                return null;
-                
-          };
+              var container = angular.element(script);
+              var compileFn = $compile(container);
+              var container = compileFn($scope);
+              $timeout(function(){
+                 document.getElementById("report_template").innerHTML = container[0].outerHTML;  
+                 $scope.displayer();
+//                 console.log("$scope.displayReportPanel_HTML 000 ============== "+container[0].outerHTML);
+             });
+//             console.log("$scope.displayReportPanel_HTML ============== "+container);
+          };          
+        
           /**
            * 
            * @returns {undefined}
@@ -5741,20 +5247,30 @@ $scope.gererChangementFichier3 = function(event,model){
            */
           $scope.displayReportPanel = function(script){
                 //alert("::::::::::::::::::::  "+$scope.selectedObjects+" :::::: "+$scope.windowType);
-                var  contentElem = $scope.viewSelector('report') ;
-                var compileFn = $compile(contentElem);
-                compileFn($scope);
-                if($scope.windowType=='list'){
+               if($scope.windowType=='list'){
                    if($scope.selectedObjects.length>0){
                        $scope.templateReportList($scope.metaData);
+                        $scope.displayer();
                    }else{
                         $scope.notifyWindow("Veuillez selectionner au moins une ligne" ,"<br/>","warning");
-                    }//end if($scope.selectedObjects.length>0)
+                   }//end if($scope.selectedObjects.length>0)
                 }else if($scope.windowType=='report'){
-                    $scope.displayReportPanel_HTML(script);
+                    $scope.displayReportPanel_HTML(script);   
+//                    return ;
                 }else{
                     $scope.editReportPanelComponent($scope.metaData);
-                }
+                    $scope.displayer();
+                }              
+              
+          };
+          /**
+           * Construct the viewer of pdf report
+           * @returns {undefined}
+           */
+          $scope.displayer = function(){
+                var  contentElem = $scope.viewSelector('report') ;
+                var compileFn = $compile(contentElem);
+                compileFn($scope);                
                 var doc = new jsPDF("l", "pt", "a4");
                 var specialElementHandlers = {
                     '#editor': function (element, renderer) {
@@ -5807,9 +5323,7 @@ $scope.gererChangementFichier3 = function(event,model){
                              },
                              margins                                 
                       );
-              
           };
-          
           /**
              * 
              * @param {type} message
