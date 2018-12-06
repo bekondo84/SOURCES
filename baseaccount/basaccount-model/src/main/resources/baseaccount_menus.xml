@@ -20,7 +20,7 @@
 	      <action id="plc_01" type="action" name="plc_name01" label="Action 1" value="{'name':'update_pwd'}"/>
 		  <action id="plc_02" type="object" name="plc_name02" label="Action 2" value="{'model':'email','entity':'mail','method':'sendmail','template':{'object':'Modification de mot de passe','source':'user.courriel','cible':'object.courriel','message':'Votre mot de passe est @object.password'}}"/>
 	 </menuitem>
-	 <menuitem id="base_account_02" label="Plan Analytique" parent_ref="base_account_compta" entity_ref="CompteAnalytique" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th-list"/>
+	 <menuitem id="base_account_02" label="Plan Analytique" parent_ref="base_account_compta" entity_ref="CompteAnalytique" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th-list" report="base_account_report04"/>
 	 <menuitem id="base_account_03" label="Taux Taxes" parent_ref="base_account_compta" entity_ref="Taxe" model_ref="baseaccount" gyphycon="glyphicon glyphicon-minus"/>
 	 <menuitem id="base_account_04" label="Code Journaux" parent_ref="base_account_compta" entity_ref="JournalComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt"/>
 	 <menu id="base_account_tiers" label="Plan Tiers" parent="base_account" gyphycon="glyphicon glyphicon-user"/>
@@ -46,29 +46,52 @@
 			 <field name="courriel" target="email"/>
 			 <field name="active" />
 		</sheet>
+		<template>
+		     <![CDATA[
+		       <div">
+					 <field name="code"/>
+					 <field name="label"/>
+					 <field name="adresse"/>
+					 <field name="tel" target="tel"/>
+					 <field name="fax" target="tel"/>
+					 <field name="courriel" target="email"/>
+					 <field name="active" />
+			   </div>
+			   ]]>
+		  </template>
 	 </formRecord>
 	 <reportRecord  id="base_account_report01" label="Situations" action_ref="base_account_01"  extern="false">
 	      <template>
 		     <![CDATA[
-		       <div for="{'source':'datas','var':'obj'}">
-			       <label>N Compte</label><p>obj.code</p>
-				   <label>Libelle</label><p>obj.libele</p>
-			       <table class="table  table-striped table-bordered table-hover table-condensed">
-				       <thead> 
-					      <tr style="font-weight: bold;">
-						     <td>Section analytique</td><td>Clé repartition</td><td>quantité</td>
-						  </tr>
-					   </thead>
-					   <tbody>
-					      <tr for="{'source':'obj.analytiques','var':'obj'}">
-						     <td>obj.compte</td><td if="{'op1':'obj.type','op2':'0','cond':'=='}">Pourcentage</td>
-							 <td if="{'op1':'obj.type','op2':'1','cond':'=='}">Equilibre</td>
-							 <td if="{'op1':'obj.type','op2':'2','cond':'=='}">Montant</td>
-							 <td>obj.quantite</td>
-						  </tr>
-					   </tbody>
-				   </table>
-			   </div>
+			    <div>  
+					  <header>
+					   <h1>En tête Document</h1>
+					  </header>
+					  <footer>
+							<div>Page <span class="pageCounter"></span>/<span class="totalPages"></span></div>
+					  </footer>
+					 <div ng-repeat='obj in datas'>
+						   <label>N Compte</label><p>{{obj.code}}</p>
+						   <label>Libelle</label><p>{{obj.libele}}</p>
+						   <table class="table  table-striped table-bordered table-hover table-condensed">
+							   <thead> 
+								  <tr style="font-weight: bold;">
+									 <td>Section analytique</td><td>Clé repartition</td><td>quantité</td>
+								  </tr>
+							   </thead>
+							   <tbody>
+								  <tr ng-repeat='obj2 in obj.analytiques'>
+									 <td>{{obj2.compte.designation}}</td>
+									 <td ng-if="obj2.type=='0'">Pourcentage</td>
+									 <td ng-if="obj2.type=='1'">Equilibre</td>
+									 <td ng-if="obj2.type=='2'">Montant</td>
+									 <td>{{obj2.quantite}}</td>
+								  </tr>
+							   </tbody>
+						   </table>
+						   <!--ADD_PAGE-->
+					   </div>
+				 </div>	  
 			   ]]>
 		  </template>
 	 </reportRecord>
@@ -87,7 +110,7 @@
 						  </tr>
 					   </thead>
 					   <tbody>
-					      <tr for="{'source':'requete','var':'obj'}">
+					      <tr ng-repeat="temporalDatas in obj">
 						     <td>obj.dateEcriture</td><td>obj.refPiece</td><td>obj.compte</td>
 							 <td>obj.journal</td><td>obj.libelle</td><td>obj.debit</td><td>obj.credit</td>
 						  </tr>
@@ -98,6 +121,12 @@
 		  </template>
 	 </reportRecord>
 	 <reportRecord  id="base_account_report03" label="IReport Report" action_ref="base_account_01"  extern="true">
+	      <search entity="EcritureSearch" module="baseaccount" method="pdf">
+		     <field name="code"/>
+             <field name="libele"/>			 
+		  </search>	     
+	 </reportRecord>
+	  <reportRecord  id="base_account_report04" label="IReport Report" action_ref="base_account_02"  extern="true">
 	      <search entity="EcritureSearch" module="baseaccount" method="pdf">
 		     <field name="code"/>
              <field name="libele"/>			 
