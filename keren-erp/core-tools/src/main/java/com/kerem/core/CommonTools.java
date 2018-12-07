@@ -31,16 +31,12 @@ import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import com.megatimgroup.generic.jax.rs.layer.impl.MetaGroup;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -51,16 +47,9 @@ import javax.imageio.ImageIO;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
@@ -128,6 +117,24 @@ public class CommonTools {
         record.setTemplate(view.getTemplate());
         record.setTitre(view.getLabel());
         return record;
+    }
+    
+    /**
+     * 
+     * @param template
+     * @return 
+     */
+    public static com.core.templates.Template getTemplate(Template template){
+        com.core.templates.Template record = new com.core.templates.Template();
+        record.setCode(template.getId());
+        record.setScript(template.getScript());
+        record.setName(template.getName());
+        record.setType(template.getType());
+        record.setIndex(template.isIndex());
+        record.setModuleName(template.getModelRef());
+        record.setEntityRef(template.getEntityRef());
+        record.setMethodRef(template.getMethodRef());
+        return record ;
     }
     
     /**

@@ -633,30 +633,30 @@ angular.module('keren.core.commons')
                         });
                 
             },
-                /**
-                 * Builder of the custom principal screen
-                 * @param {type} theme
-                 * @returns {undefined}
-                 */
-                principalScreenBuilder:function(theme,scope){
+            /**
+             * Builder of the custom principal screen
+             * @param {type} theme
+             * @returns {undefined}
+             */
+            principalScreenBuilder:function(theme,scope){
 //                    console.log("commons.principalScreenBuilder(theme,scope) ======== "+theme.script);
-                    if(angular.isDefined(theme) && angular.isDefined(theme.script)){
-                         var viewElem = document.createElement("div");
-                         viewElem.setAttribute('id' , 'modulescontainer');
-                         viewElem.setAttribute('style' , "height: 100%;width: 100%;position: absolute;");
-                         viewElem.innerHTML = theme.script;
-                         var compileFn = $compile(viewElem);
-                         compileFn(scope);
-                         var items = $(document).find("div");
-                         for(var i=0; i<items.length;i++){                 
-                             if(items.eq(i).attr("id")==="modulescontainer"){
-                                   items.eq(i).replaceWith(viewElem);
-                                   scope.defaultui = false;
+                if(angular.isDefined(theme) && angular.isDefined(theme.script)){
+                     var viewElem = document.createElement("div");
+                     viewElem.setAttribute('id' , 'modulescontainer');
+                     viewElem.setAttribute('style' , "height: 100%;width: 100%;position: absolute;");
+                     viewElem.innerHTML = theme.script;
+                     var compileFn = $compile(viewElem);
+                     compileFn(scope);
+                     var items = $(document).find("div");
+                     for(var i=0; i<items.length;i++){                 
+                         if(items.eq(i).attr("id")==="modulescontainer"){
+                               items.eq(i).replaceWith(viewElem);
+                               scope.defaultui = false;
 //                                   console.log("commons.principalScreenBuilder =============== trouve");
-                             }//end if(items.eq(i).attr("id")=="datatable"){ 
-                         }//end for(var i=0; i<items.length;i++){      
-                    }//end if(angular.isDefined(theme) && angular.isDefined(theme.script)){                    
-                },
+                         }//end if(items.eq(i).attr("id")=="datatable"){ 
+                     }//end for(var i=0; i<items.length;i++){      
+                }//end if(angular.isDefined(theme) && angular.isDefined(theme.script)){                    
+            },
                 /**
                  * 
                  * @param {type} theme
@@ -1075,13 +1075,12 @@ angular.module('keren.core.commons')
             * @returns {undefined}
             */
           removeFromArray: function(array , item){
-               if(angular.isDefined(array)){
-                  
+              if(angular.isDefined(array)){                  
                   for(var i=0 ; i<array.length;i++){
                      if(array[i].id == item.id){
                         array.splice(i , 1);
-                     }
-                  }
+                     }//end  if(array[i].id == item.id){
+                  }//end if(angular.isDefined(array)){       
                   //console.log(array+" ====== "+item);                             
               }
           },
@@ -1128,7 +1127,8 @@ angular.module('keren.core.commons')
              * @returns {undefined}
              */
             xmlListParser : function(template){
-                if(angular.isDefined(template)
+//                console.log("commons.xmlListParser ================== "+template);
+                if(!angular.isDefined(template)
                         ||template==null){
                     return null;
                 }//end if(angular.isDefined(template)
@@ -1171,7 +1171,34 @@ angular.module('keren.core.commons')
 //                      items.eq(i).replaceWith(titleheader);                  
                  }//end for(var i=0; i<items.length;i++){   
                  return container;
+            },  /**
+            * 
+            * @returns {undefined}
+            */
+           preParser:function(script ,module){
+               var container = angular.element(script);
+               var items = container.find("ng-include");
+               for(var i=0 ;i<items.length;i++){
+                   var item = items.eq(i);
+                   var attr = item.attr("src");
+//                   console.log("commsTools.preParser ================== "+angular.toJson(attr));
+                   if(angular.isDefined(attr)&& attr!=""){
+                       this.itemPreParser(item,attr,module);
+                   }//end if(angular.isDefined(attr)&& attr!=""){
+               }//end for(var i=0 ;i<items.length;i++){               
+               return container;               
             },
+            /**
+             * 
+             */
+           itemPreParser:function(item , name,module){
+//                 console.log("commsTools.itemPreParser ================== "+angular.toJson(module.templates));
+                 for(var i=0 ;i<module.templates.length;i++){
+                     var template = module.templates[i];
+                     item.replaceWith(angular.element(template.script));
+                 }//end for(var i=0 ;i<module.templates.length;i++){
+           } ,
+
             /**
              * 
              * @param {type} error
@@ -2290,14 +2317,7 @@ angular.module('keren.core.commons')
                }//end for(var i=0 ; i<metaData.groups.length;i++){
                return entity;
            },
-           /**
-            * 
-            * @returns {undefined}
-            */
-           websiteTemplate:function(){
-               
-           }
-
+         
        };
             
  });

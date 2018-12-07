@@ -3419,7 +3419,7 @@ $scope.gererChangementFichier3 = function(event,model){
                             var total = commonsTools.sumTableField(fieldnames[i],data[field.fieldName]);
                             if(total){
                                 thelem.appendChild(document.createTextNode(total));
-                                thelem.setAttribute('class','text-right');
+                                thelem.setAttribute('class','text-center');
                             }//end if(total)
                         }//end if(data)
                     }//end for(var i=0 ;  i<fieldnames.length ; i++)
@@ -3626,7 +3626,7 @@ $scope.gererChangementFichier3 = function(event,model){
                             var total = commonsTools.sumTableField(fieldnames[i],data[field.fieldName]);
                             if(total){
                                 thelem.appendChild(document.createTextNode(total));
-                                thelem.setAttribute('class','text-right');
+                                thelem.setAttribute('class','text-center');
                             }//end if(total)
                         }//end if(data)
                     }//end for(var i=0 ;  i<fieldnames.length ; i++)
@@ -5168,19 +5168,21 @@ $scope.gererChangementFichier3 = function(event,model){
                   row.appendChild(colmd12);
                   var panel = document.createElement("div");
                   colmd12.appendChild(panel);
-                  panel.setAttribute("class" ,"panel panel-default");
-                  var header = document.createElement("div");
-                  header.setAttribute("class","panel-heading");
+                  //panel.setAttribute("class" ,"panel panel-default");
+                  var header = document.createElement("header");
+//                  header.setAttribute("class","panel-heading");
                   panel.appendChild(header);
                   var h3 = document.createElement("h3");
                   var strong = document.createElement("strong");
                   strong.appendChild(document.createTextNode(metaData.listTitle));
                   h3.appendChild(strong);
-                  h3.setAttribute("class","panel-title text-center");
+                  //h3.setAttribute("class","panel-title text-center");
                   header.appendChild(h3);
+                  var footer = document.createElement("footer");
+                  panel.appendChild(footer);
                   //Body Creation
                   var body = document.createElement("div");
-                  body.setAttribute("class","panel-body")
+                  //body.setAttribute("class","panel-body")
                   body.appendChild(report);
                   panel.appendChild(body);
                   var divElem = document.createElement('div');
@@ -5191,12 +5193,13 @@ $scope.gererChangementFichier3 = function(event,model){
           };
           
           /**
-           * 
+           * Moteur de template pour le traitement des 
+           * etats à partir de HTML
            * @param {type} String
            * @returns {undefined}
            */
           $scope.displayReportPanel_HTML = function(script){ 
-              var container = angular.element(script);
+              var container = commonsTools.preParser(script,$scope.currentModule);
               var compileFn = $compile(container);
               var container = compileFn($scope);
               $timeout(function(){
@@ -5228,7 +5231,7 @@ $scope.gererChangementFichier3 = function(event,model){
                 for(var i=0; i<items.length;i++){
                    if(items.eq(i).attr("id")=="datawidget"){
                          items.eq(i).replaceWith(container);                               
-                   }  
+                   }//end if(items.eq(i).attr("id")=="datawidget"){  
                 }//enn$d for(var i=0; i<items.length;i++){
                  // ///Remplacement dans la vue
                 var items = $element.find("div");
@@ -5279,9 +5282,9 @@ $scope.gererChangementFichier3 = function(event,model){
                 };
                 var source = $("#report_template")[0],
                         margins={
-                            top: 40,
-                            bottom: 60,
-                            left: 60,
+                            top: 25,
+                            bottom: 40,
+                            left: 40,
                             width: 700
                         };
                         doc.fromHTML(
@@ -11564,7 +11567,7 @@ $scope.gererChangementFichier3 = function(event,model){
                 }else{
                     $scope.updatebtnlabel ='Modifier';
                     if($scope.currentAction.treeView!=null 
-                            && $scope.currentAction.formView.template!=null){
+                            && $scope.currentAction.treeView.template!=null){
                         divElem.appendChild(commonsTools.xmlListParser($scope.currentAction.treeView.template));
                     }else{
                         divElem.appendChild($scope.tableListComponent(metaData));

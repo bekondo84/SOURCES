@@ -17,7 +17,7 @@
 			  </dashboardentry>			  
 		 </dashboard>         	 
 	 </dashboardRecord>
-  <website  id="portailweb" action_ref="keren_website_dashboard_002">
+  <website  id="portailweb" action_ref="keren_website_dashboard_002" categorie="secure_web_site">
      <template id="index" name="index" type="page" index="true">
 	      <script>
 		     <![CDATA[ 	

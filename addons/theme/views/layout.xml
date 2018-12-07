@@ -128,7 +128,7 @@
 								  </div>  
 								  <div class="col-lg-2 col-md-2 col-sm-2  col-xs-3  text-center"  style="padding-bottom: 30px;height: 100px;width: 100px;" ng-repeat="module in modules" >
 									<a href="#" ng-click="getModule(module)"    data-toggle="tooltip" data-placement="auto" title="{{module.shortDescription | translate}}" >
-									  <img class="img-fluid img-thumbnail" id="application{{module.id}}" ng-src="http://localhost:8080/keren/auth/resource/static/{{module.icon}}" alt="" style="width: 100%;height: 80%;">
+									  <img class="img-fluid img-thumbnail" id="application{{module.id}}" ng-src="http://{{hostname}}:{{portvalue}}/keren/auth/resource/static/{{module.icon}}" alt="" style="width: 100%;height: 80%;">
 									</a>
 									<small style="color: white;">{{module.label | translate}}</small>
 								  </div>
@@ -246,7 +246,7 @@
 								 <header-builder entity-metadata="{{metaData}}"  full-screen="false" 
 											   select-action="{{currentAction}}"     data-value="{{modules}}"   ng-show="hideOther==false">             
 								 </header-builder>        
-								<div ng-controller="calendarCtrl" style="height: 100%;background-color: white;">
+								<div ng-controller="calendarCtrl" style="background-color: white;">
 								  <ng-include src="'modules/calendrier/views/calendar.html'"  ng-show = "showCalendar==true"></ng-include>
 								 </div>
 								 <div ng-controller="discussionCtrl"  style="width: 100%;margin-left: 15.5px;">
@@ -504,12 +504,12 @@
 												   {{updatebtnlabel | translate}}
 												</a>                            
 											 </li>
-											  <li role="presentation"  ng-hide="desableupdateedit || hideannuler===true">
+											  <li role="presentation"  ng-hide="desablecreate || hideannuler===true">
 												<a role="menuitem" tabindex="-1" href="#"  ng-click="dupliquerAction()">
 												   {{'Dupliquer' | translate}}
 												</a>                            
 											 </li>
-											 <li role="presentation"  ng-hide="desableupdateedit || hideannuler===true">
+											 <li role="presentation"  ng-hide="desablecreate || hideannuler===true">
 												<a role="menuitem" tabindex="-1" href="#"  ng-click="addElementAction()">
 												   {{'Creer' | translate}}
 												</a>                            
