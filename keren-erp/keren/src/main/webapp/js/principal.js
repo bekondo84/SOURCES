@@ -5198,13 +5198,13 @@ $scope.gererChangementFichier3 = function(event,model){
            * @param {type} String
            * @returns {undefined}
            */
-          $scope.displayReportPanel_HTML = function(script){ 
+          $scope.displayReportPanel_HTML = function(script,report){ 
               var container = commonsTools.preParser(script,$scope.currentModule);
               var compileFn = $compile(container);
               var container = compileFn($scope);
               $timeout(function(){
                  document.getElementById("report_template").innerHTML = container[0].outerHTML;  
-                 $scope.displayer();
+                 $scope.displayer(report);
 //                 console.log("$scope.displayReportPanel_HTML 000 ============== "+container[0].outerHTML);
              });
 //             console.log("$scope.displayReportPanel_HTML ============== "+container);
@@ -5248,21 +5248,20 @@ $scope.gererChangementFichier3 = function(event,model){
            * 
            * @returns {undefined}
            */
-          $scope.displayReportPanel = function(script){
-                //alert("::::::::::::::::::::  "+$scope.selectedObjects+" :::::: "+$scope.windowType);
+          $scope.displayReportPanel = function(script , report){                
                if($scope.windowType=='list'){
                    if($scope.selectedObjects.length>0){
                        $scope.templateReportList($scope.metaData);
-                        $scope.displayer();
+                        $scope.displayer(report);
                    }else{
                         $scope.notifyWindow("Veuillez selectionner au moins une ligne" ,"<br/>","warning");
                    }//end if($scope.selectedObjects.length>0)
                 }else if($scope.windowType=='report'){
-                    $scope.displayReportPanel_HTML(script);   
+                    $scope.displayReportPanel_HTML(script , report);   
 //                    return ;
                 }else{
                     $scope.editReportPanelComponent($scope.metaData);
-                    $scope.displayer();
+                    $scope.displayer(report);
                 }              
               
           };
@@ -5270,14 +5269,39 @@ $scope.gererChangementFichier3 = function(event,model){
            * Construct the viewer of pdf report
            * @returns {undefined}
            */
-          $scope.displayer = function(){
+          $scope.displayer = function(report){                
                 var  contentElem = $scope.viewSelector('report') ;
                 var compileFn = $compile(contentElem);
-                compileFn($scope);                
-                var doc = new jsPDF("l", "pt", "a4");
+                compileFn($scope);  
+                var orientation ='p';
+                var unite = 'pt';
+                var format = 'a4';
+                if(angular.isDefined(report)){
+                    if(report.orientation && report.orientation!=""){
+                        orientation = report.orientation;
+                    }//end if(report.orientation && report.orientation!=""){
+                    if(report.unite && report.unite!=""){
+                        unite = report.unite;
+                    }//end if(report.orientation && report.orientation!=""){
+                    if(report.format && report.format!=""){
+                        format = report.format;
+                    }//end if(report.orientation && report.orientation!=""){
+                }//end if(angular.isDefined(report)){
+//                console.log("::::::::::::::::::::   :::::: orientation : "+orientation+"  unite : "+unite+" === format : "+format);
+                var doc = new jsPDF(orientation, unite, format);
+                doc.setProperties({
+                        title: $scope.metaData.entityName,
+                        subject: 'Info about PDF',
+                        author: 'BKD',
+                        keywords: 'generated, javascript, web 2.0, ajax',
+                        creator: 'BEKO&PARTNER'
+                });
                 var specialElementHandlers = {
                     '#editor': function (element, renderer) {
                         return true;
+                    },
+                    '.controls':function(element,renderer){
+                        return true ;
                     }
                 };
                 var source = $("#report_template")[0],
@@ -7971,8 +7995,8 @@ $scope.gererChangementFichier3 = function(event,model){
                                             commonsTools.hideDialogLoading();
                                             commonsTools.showMessageDialog(error);
                                         });
-                          }else{
-                              $scope.displayReportPanel(report.script);
+                          }else{                              
+                              $scope.displayReportPanel(report.script,report);
                               commonsTools.hideDialogLoading();
                           }//end if(report.model&&report.entity)                          
                       },function(error){

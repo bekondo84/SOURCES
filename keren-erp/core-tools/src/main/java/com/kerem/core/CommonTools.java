@@ -227,6 +227,9 @@ public class CommonTools {
         record.setTitre(view.getLabel());
         record.setExtern(view.isExtern());
         record.setScript(view.getTemplate());
+        record.setFormat(view.getFormat());
+        record.setOrientation(view.getOrientation());
+        record.setUnit(view.getUnit());
         if(view.getSearch()!=null){
             record.setEntity(view.getSearch().getEntity());
             record.setModel(view.getSearch().getModule());

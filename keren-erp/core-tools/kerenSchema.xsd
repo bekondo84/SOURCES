@@ -167,6 +167,9 @@
             <xs:attribute name="parent" type="xs:string" />
             <xs:attribute name="action_ref" type="xs:string" />
             <xs:attribute name="extern" type="xs:boolean" default="false" />
+            <xs:attribute name="format" type="xs:string" default="a4" />
+            <xs:attribute name="orientation" type="xs:string" default="l" />
+            <xs:attribute name="unit" type="xs:string" default="pt" />
         </xs:complexType>
     </xs:element>   
      <xs:element name="container"  type="xs:string">
