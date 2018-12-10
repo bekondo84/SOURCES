@@ -634,6 +634,41 @@ angular.module('keren.core.commons')
                 
             },
             /**
+             * Parse theme to inject javascript ,css and less file content
+             * @param {type} view
+             * @returns {undefined}
+             */
+            themeParser:function(view){
+                var container = angular.element(view);
+                var items = container.find("include");
+                for(var i=0; i<items.length;i++){ 
+                       var item = items.eq(i);
+                       var type = item.attr('type');
+                       var src = item.attr("src");
+                       if(type=='css'){
+                           var url = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
+                           var linkElem = document.createElement('style');
+                           linkElem.setAttribute('type','text/css');
+                           linkElem.innerHTML='@import url("'+url+'");';
+                           item.replaceWith(linkElem);
+                       }else if(type=='less'){
+                           var url = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
+                           var linkElem = document.createElement('style');
+                           linkElem.setAttribute('type','text/less');
+                           linkElem.innerHTML='@import url("'+url+'");';
+                           item.replaceWith(linkElem);
+                       }else if(type=='javascript'){
+                           var url = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
+                           $('<script />', { type : 'text/javascript', src : url}).appendTo('body');
+//                            scope.javascripts.push(url);
+//                           var scriptElem = document.createElement('script');
+//                           scriptElem.setAttribute('src',url);
+                           item.remove();
+                       }//end if(type=='css'){
+                }//end for(var i=0; i<items.length;i++){
+                return container;
+            },
+            /**
              * Builder of the custom principal screen
              * @param {type} theme
              * @returns {undefined}
@@ -641,16 +676,18 @@ angular.module('keren.core.commons')
             principalScreenBuilder:function(theme,scope){
 //                    console.log("commons.principalScreenBuilder(theme,scope) ======== "+theme.script);
                 if(angular.isDefined(theme) && angular.isDefined(theme.script)){
-                     var viewElem = document.createElement("div");
-                     viewElem.setAttribute('id' , 'modulescontainer');
-                     viewElem.setAttribute('style' , "height: 100%;width: 100%;position: absolute;");
-                     viewElem.innerHTML = theme.script;
-                     var compileFn = $compile(viewElem);
+                    //Parse the HTML theme
+                    var viewElem = document.createElement("div");
+                    viewElem.setAttribute('id' , 'modulescontainer');
+                    viewElem.setAttribute('style' , "height: 100%;width: 100%;position: absolute;");
+                    viewElem.innerHTML = theme.script;                
+                    var container = this.themeParser(viewElem);
+                    var compileFn = $compile(container);
                      compileFn(scope);
                      var items = $(document).find("div");
                      for(var i=0; i<items.length;i++){                 
                          if(items.eq(i).attr("id")==="modulescontainer"){
-                               items.eq(i).replaceWith(viewElem);
+                               items.eq(i).replaceWith(container);
                                scope.defaultui = false;
 //                                   console.log("commons.principalScreenBuilder =============== trouve");
                          }//end if(items.eq(i).attr("id")=="datatable"){ 

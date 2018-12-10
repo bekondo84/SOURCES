@@ -133,8 +133,10 @@ angular.module('keren.core.website')
                            
                };
               /**
-               * 
+               * HTML parser parse the HTML 
+               * treatment of javascript file css, less file
                * @param {type} template
+               * @param {type} cible
                * @param {type} position
                * @returns {undefined}
                */
