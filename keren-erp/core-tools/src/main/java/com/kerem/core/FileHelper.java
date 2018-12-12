@@ -15,22 +15,44 @@ import com.kerem.genarated.Kabanentry;
 import com.kerem.genarated.Keren;
 import com.kerem.genarated.Search;
 import com.kerem.genarated.TreeRecord;
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.dom4j.DocumentFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -64,7 +86,7 @@ public class FileHelper {
     }
     
     /**
-     * Retourne le repertoires contenant ù
+     * Retourne le repertoires contenant Ã¹
      * les modules
      * @return 
      */
@@ -423,7 +445,9 @@ public class FileHelper {
      * @return 
      */
     public static TreeRecord transformScriptToTree(String script) throws JAXBException{
-        StringReader reader = new StringReader(script);
+        StringBuilder builder = new StringBuilder();
+        builder.append(ngTemplateParse(script));
+        StringReader reader = new StringReader(builder.toString());
         JAXBContext ctx = JAXBContext.newInstance(TreeRecord.class);
         Unmarshaller unmarshaller = ctx.createUnmarshaller();
         TreeRecord record = (TreeRecord) unmarshaller.unmarshal(reader);
@@ -437,7 +461,9 @@ public class FileHelper {
      * @throws JAXBException 
      */
      public static CalendarRecord transformScriptToCalendar(String script) throws JAXBException{
-        StringReader reader = new StringReader(script);
+        StringBuilder builder = new StringBuilder();
+        builder.append(ngTemplateParse(script));
+        StringReader reader = new StringReader(builder.toString());
         JAXBContext ctx = JAXBContext.newInstance(CalendarRecord.class);
         Unmarshaller unmarshaller = ctx.createUnmarshaller();
         CalendarRecord record = (CalendarRecord) unmarshaller.unmarshal(reader);
@@ -451,7 +477,9 @@ public class FileHelper {
      * @throws JAXBException 
      */
     public static FormRecord transformScriptToForm(String script) throws JAXBException{
-        StringReader reader = new StringReader(script);
+        StringBuilder builder = new StringBuilder();
+        builder.append(ngTemplateParse(script));
+        StringReader reader = new StringReader(builder.toString());
         JAXBContext ctx = JAXBContext.newInstance(FormRecord.class);
         Unmarshaller unmarshaller = ctx.createUnmarshaller();
         FormRecord record = (FormRecord) unmarshaller.unmarshal(reader);
@@ -464,7 +492,9 @@ public class FileHelper {
      * @throws JAXBException 
      */
     public static DashboardRecord transformScriptToDashboard(String script) throws JAXBException{
-        StringReader reader = new StringReader(script);
+        StringBuilder builder = new StringBuilder();
+        builder.append(ngTemplateParse(script));
+        StringReader reader = new StringReader(builder.toString());
         JAXBContext ctx = JAXBContext.newInstance(DashboardRecord.class);
         Unmarshaller unmarshaller = ctx.createUnmarshaller();
         DashboardRecord record = (DashboardRecord) unmarshaller.unmarshal(reader);
@@ -478,10 +508,85 @@ public class FileHelper {
      * @throws JAXBException 
      */
     public static Search transformScriptToSearch(String script) throws JAXBException{
-        StringReader reader = new StringReader(script);
+        StringBuilder builder = new StringBuilder();
+        builder.append(ngTemplateParse(script));
+        StringReader reader = new StringReader(builder.toString());
         JAXBContext ctx = JAXBContext.newInstance(Search.class);
         Unmarshaller unmarshaller = ctx.createUnmarshaller();
         Search record = (Search) unmarshaller.unmarshal(reader);
         return record;
+    }
+  
+    /**
+     * Treatment of ng-template directive
+     * @param script
+     * @return 
+     */
+    public static String ngTemplateParse(String script) throws JAXBException {
+        if(script==null || script.trim().isEmpty()){
+            return script;
+        }//end if(script==null || script.trim().isEmpty()){
+//       System.out.println(FileHelper.class.toString()+".ngTemplateParse ========================= "+script);
+       try {            
+            DocumentBuilderFactory factory =
+                    DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();  
+            StringBuilder xmlbuilder = new StringBuilder();
+            xmlbuilder.append(script);
+            ByteArrayInputStream input = new ByteArrayInputStream(xmlbuilder.toString().getBytes("UTF-8"));
+            Document doc = builder.parse(input);
+            NodeList nodes_list = doc.getChildNodes();
+            for(int i=0 ; i<nodes_list.getLength();i++){
+                ngTemplateNodeParser(nodes_list.item(i), builder,doc);
+            }//end for(int i=0 ; i<nodes_list.getLength();i++){
+            DOMSource domSource = new DOMSource(doc);
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.transform(domSource, result);
+            return writer.toString().substring(38);
+        } catch (Exception ex) {
+            throw   new JAXBException(ex);
+        }
+    }
+   /**
+    * 
+    * @param node
+    * @param builder
+    * @return
+    * @throws SAXException
+    * @throws IOException 
+    */
+    private static void ngTemplateNodeParser(Node node , DocumentBuilder builder,Document document) throws SAXException, IOException{
+        if(node.getNodeType()==Node.ELEMENT_NODE){
+            Element element = (Element) node ;            
+            if(element.getTagName().equalsIgnoreCase("ng-template")){
+                String src = element.getAttribute("src");
+                StringBuilder pathbuilder = new StringBuilder();
+                pathbuilder.append(getAddonsDirectory())
+                        .append(File.separator)
+                        .append(src);
+                File tmpfile = new File(pathbuilder.toString());
+                if(tmpfile.exists()){
+                    Document doc = builder.parse(tmpfile);
+//                    System.out.println(FileHelper.class.toString()+".ngTemplateNodeParser ========================= "+tmpfile.getAbsolutePath()+" == nodes count : "+((Element)doc.getChildNodes().item(0)).getTagName());
+                    NodeList node_list = doc.getChildNodes();
+                    for(int i=0 ;i<node_list.getLength();i++){
+                        ngTemplateNodeParser(node_list.item(i) ,builder,doc);
+                    }//end for(int i=0 ;i<node_list.getLength();i++){
+                    if(doc.getChildNodes().getLength()>0){
+                        document.getDocumentElement().replaceChild(document.importNode(doc.getDocumentElement(),true),element);
+                    }//end if(doc.getChildNodes().getLength()>0){
+                }//end if(tmpfile.exists()){                
+            }else{
+                //Traitement des noeuds du node
+                NodeList node_list = element.getChildNodes();
+                for(int i=0 ;i<node_list.getLength();i++){
+                    ngTemplateNodeParser(node_list.item(i) ,builder,document);
+                }//end for(int i=0 ;i<node_list.getLength();i++){
+            }//end if(element.getTagName().equalsIgnoreCase("ng-template")){
+        }//end if(node.getNodeType()==Node.ELEMENT_NODE){
+//        return node ;
     }
 }

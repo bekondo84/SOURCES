@@ -40,7 +40,8 @@
   <website  id="posweb" action_ref="keren_pos_dashboard_002">
      <template id="pos_index" name="index" type="page" index="true">
 	      <script>
-		     <![CDATA[ 	
+		     <![CDATA[
+                 <div>			 
                     <style>
 					   .outer-div{ text-align: center; } .inner-div{ display: inline-block; padding: 10px; } .trt-select-btn{ background-color: #325c89; color: white; height: 30px; width: 200px; padding: 5px; text-align: center; display: inline-block; } .trt-payment-btn{ background-color: green; color: white; height: 50px; width: 200px; padding: 5px; margin-top: -13px; text-align: center; display: inline-block; vertical-align: middle; line-height: 40px; } .trt-select-div{ padding: 5px; cursor: pointer; } .trt-sale-container{height: 92%; background-color: #e4e2e4;  } .trt-card-img{ width: 100%; padding: 3px; height: 100px; background-color: ##c1c0b5; }  .card-img-top{ border:1px solid #e5e5e1; border-radius: 1px; -webkit-border-radius:1px; -moz-border-radius:1px; -webkit-box-shadow:1px 1px 5px #999; -moz-box-shadow:1px 1px 5px #999; background-color: #e5e5e1; width: 110px; height: 90px; }  .tr-card-container{ box-shadow: 1px 1px 1px #d9d7d9; border: solid 2px #d9d7d9; text-align: center; padding: 6px; margin: 0; padding-left: 0; padding-right: 0; background-color: #fffeff; cursor: pointer; } .trt-resume-table{ background-color: #fffeff; } .trt-resume-row{ height: 10px; } .trt-input-tr{ height: 20px; width: 60px; text-align: center; } .trt-td-middle{ border-top: hidden !important; }
 					</style>
@@ -200,8 +201,9 @@
 						  </footer>
 					   </div>
 					  </div>
-					<include src="posweb.js"  type="javascript">
-					<include src="clean-blog.min.js"  type="javascript">					
+					<include src="posweb.js"  type="javascript" />
+					<include src="clean-blog.min.js"  type="javascript" />	
+                </div>						
 			 ]]>
 		  </script>
 	 </template>     

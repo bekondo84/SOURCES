@@ -257,7 +257,9 @@ angular.module("mainApp")
     $scope.currentObject = null;
 
     $scope.currentUser = null;
-
+    
+    $scope.company = null;    
+    
     $scope.enabledVerticalMenu = false;
 
     $scope.tableheaderselected = false;
@@ -267,29 +269,7 @@ angular.module("mainApp")
     $scope.filtertemplate = new Object();
    
     $scope.principalscreen = true ;
-    
-  
-     /**
-        * Chargement du theme de l'application
-        * @returns {undefined}
-        */
-       $scope.loadTheme = function(){
-           var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/themerecord/theme"; 
-           commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
-           $http.get(url)
-                   .then(function(response){
-                       var theme = response.data;
-                       $rootScope.globals.theme = theme;
-                       commonsTools.principalScreenBuilder(theme,$scope);
-                   },function(error){
-                       commonsTools.hideDialogLoading();
-                       commonsTools.showMessageDialog(error);
-                       $rootScope.globals.theme = null;
-                   });
-       };
-       //Chargmeent du theme
-       $scope.loadTheme();
-       
+          
      /**
       * 
       * @returns {Boolean}
@@ -348,8 +328,12 @@ angular.module("mainApp")
                         //Initialisation du user en cours
                                 $http.defaults.headers.common['userid']=angular.toJson(data[0].id);
                                 $rootScope.globals.company = $rootScope.globals.user.societeCourante;
-//                                $scope.currentUser = $rootScope.globals.user;
+                                $scope.company = $rootScope.globals.company;
                                 $translate.use('fr');
+                                //Conservation de la langue si existe
+                                if(data[0].langue){
+                                    $rootScope.globals.langue = data[0].langue;
+                                }//end if(data[0].langue)
                                 if(data[0].langue && data[0].langue.codeISO=="en"){
                                     $translate.use('en');
                                 }//end if(data[0].langue.codeISO=="fr_FR"){
@@ -867,10 +851,33 @@ angular.module("mainApp")
         $rootScope.$broadcast("currentActionUpdate" ,{
                                    action:action , verticalMenu:$scope.enabledVerticalMenu});  
     };
-    /**
-     * Chargement du module par defaut
-     */
-    $scope.getDefaultModule();
+    
+     /**
+        * Chargement du theme de l'application
+        * @returns {undefined}
+        */
+       $scope.loadTheme = function(){
+           var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/themerecord/theme"; 
+           commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
+           $http.get(url)
+                   .then(function(response){
+                       var theme = response.data;
+                       if(angular.isDefined(theme) && angular.isDefined(theme.script)){
+                            $rootScope.globals.theme = theme;
+                            commonsTools.principalScreenBuilder(theme,$scope); 
+                            $scope.getDefaultModule();
+                        }else{
+                            $scope.loadTheme();    
+                        }//end if(angular.isDefined(theme) && angular.isDefined(theme.script)){
+                   },function(error){
+                       commonsTools.hideDialogLoading();
+                       commonsTools.showMessageDialog(error);
+                       $rootScope.globals.theme = null;
+                       $scope.getDefaultModule();                       
+                   });
+       };
+       //Chargmeent du theme
+       $scope.loadTheme();    
 
      /**
         Reception du signal de changement de module
@@ -1004,7 +1011,8 @@ angular.module("mainApp")
            
 
            $scope.currentObject = new Object();
-           
+           //The user current company
+           $scope.company = null;
            //Contient la liste du contenue des lignes selectionnÃ©es
           $scope.selectedObjects = [];
 
@@ -3328,9 +3336,17 @@ $scope.gererChangementFichier3 = function(event,model){
                 if(angular.isDefined(metaData.columns[i].search) && metaData.columns[i].search){
                      var tdElem = document.createElement('td');
                      if(metaData.columns[i].type!='array'&& metaData.columns[i].type!='object'&& metaData.columns[i].type!='combobox'&&metaData.columns[i].type!='boolean'){
-                         tdElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+'}}'));
                          if(metaData.columns[i].type=='number'){
+                            tdElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+'}}'));
                             tdElem.setAttribute('class','text-right');
+                         }else if(metaData.columns[i].type=='date'){
+                             if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
+                                 tdElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+' | date:"'+$rootScope.globals.langue.formatDate+'"}}'));
+                             }else{
+                                 tdElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+' | date:"dd-MM-yyyy"}}'));
+                             }//end if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
+                         }else{
+                             tdElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+'}}'));
                          }//end if(metaData.columns[i].type=='number'){
                      }else if(metaData.columns[i].type=='object'){
                           //console.log("$scope.oneToManyComponent ============= "+"{{item."+metaData.columns[i].fieldName+"['designation']}}");
@@ -3368,10 +3384,18 @@ $scope.gererChangementFichier3 = function(event,model){
                                 var tdElem = document.createElement('td');
                                 if(metaData.groups[i].columns[j].type!='array'&& metaData.groups[i].columns[j].type!='object'
                                         && metaData.groups[i].columns[j].type!='combobox' && metaData.groups[i].columns[j].type!='boolean'){
-                                    tdElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+'}}'));
-                                    if(metaData.groups[i].columns[j].type=='number'){
+                                    if(metaData.groups[i].columns[j].type=='date'){
+                                        if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
+                                            tdElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+' | date:"'+$rootScope.globals.langue.formatDate+'"}}')); 
+                                        }else{
+                                            tdElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+' | date:"dd-MM-yyyy"}}'));  
+                                        }//end if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){                                                                             
+                                    }else if(metaData.groups[i].columns[j].type=='number'){
+                                        tdElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+'}}'));
                                         tdElem.setAttribute('class','text-right');
-                                    }
+                                    }else{
+                                        tdElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+'}}'));
+                                    }//end if(metaData.groups[i].columns[j].type=='number'){
                                 }else if(metaData.groups[i].columns[j].type=='object'){
                                     tdElem.appendChild(document.createTextNode("{{item."+metaData.groups[i].columns[j].fieldName+"['designation']}}"));
                                 }else if(metaData.groups[i].columns[j].type=='combobox'){
@@ -3930,12 +3954,20 @@ $scope.gererChangementFichier3 = function(event,model){
                      if(metaData.columns[i].type!='array'&& metaData.columns[i].type!='object'
                               && metaData.columns[i].type!='combobox'){
                          var spanElem = document.createElement("span");
-                         spanElem.setAttribute("id","{{identfiantenerator(item , '"+metaData.columns[i].fieldName+"')}}");
-                         spanElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+'}}'));
-                         tdElem.appendChild(spanElem);
+                         spanElem.setAttribute("id","{{identfiantenerator(item , '"+metaData.columns[i].fieldName+"')}}");                         
                          if(metaData.columns[i].type=='number'){
+                             spanElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+'}}'));
                             tdElem.setAttribute('class','text-center');
-                         }
+                         }else if(metaData.columns[i].type=='date'){
+                             if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
+                                 spanElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+' | date:"'+$rootScope.globals.langue.formatDate+'"}}'));
+                             }else{
+                                 spanElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+' | date:"dd-MM-yyyy"}}'));
+                             }//end if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){                             
+                         }else{
+                             spanElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+'}}'));
+                         }//end if(metaData.columns[i].type=='number'){
+                         tdElem.appendChild(spanElem);                         
                      }else if(metaData.columns[i].type=='object'){
                           //console.log("$scope.oneToManyComponent ============= "+"{{item."+metaData.columns[i].fieldName+"['designation']}}");
                           var spanElem = document.createElement("span");
@@ -3965,12 +3997,20 @@ $scope.gererChangementFichier3 = function(event,model){
                                 if(metaData.groups[i].columns[j].type!='array'&& metaData.groups[i].columns[j].type!='object' 
                                         && metaData.groups[i].columns[j].type!='combobox'){
                                     var spanElem = document.createElement("span");
-                                    spanElem.setAttribute("id","{{identfiantenerator(item , '"+metaData.columns[i].fieldName+"')}}");
-                                    spanElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+'}}'));
-                                    tdElem.appendChild(spanElem);
+                                    spanElem.setAttribute("id","{{identfiantenerator(item , '"+metaData.columns[i].fieldName+"')}}");                                    
                                     if(metaData.groups[i].columns[j].type=='number'){
+                                        spanElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+'}}'));
                                         tdElem.setAttribute('class','text-center');
+                                    }else if(metaData.groups[i].columns[j].type=='date'){
+                                        if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
+                                             spanElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+' | date:"'+$rootScope.globals.langue.formatDate+'"}}'));
+                                        }else{
+                                             spanElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+' | date:"dd-MM-yyyy"}}'));
+                                        }//end if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){                                       
+                                    }else{
+                                        spanElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+'}}'));
                                     }//end if(metaData.groups[i].columns[j].type=='number'){
+                                    tdElem.appendChild(spanElem);
                                 }else if(metaData.groups[i].columns[j].type=='object'){
                                     var spanElem = document.createElement("span");
                                     spanElem.setAttribute("id","{{identfiantenerator(item , '"+metaData.columns[i].fieldName+"')}}");
@@ -4036,11 +4076,19 @@ $scope.gererChangementFichier3 = function(event,model){
                               && metaData.columns[i].type!='radio'){
                          var spanElem = document.createElement("span");
                          spanElem.setAttribute("id","{{identfiantenerator(obj , '"+metaData.columns[i].fieldName+"')}}");
-                         spanElem.appendChild(document.createTextNode('{{obj.'+metaData.columns[i].fieldName+'}}'));
-                         tdElem.appendChild(spanElem);
                          if(metaData.columns[i].type=='number'){
+                             spanElem.appendChild(document.createTextNode('{{obj.'+metaData.columns[i].fieldName+'}}'));
                             tdElem.setAttribute('class','text-center');
+                         }else if(metaData.columns[i].type=='date'){
+                             if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
+                                 spanElem.appendChild(document.createTextNode('{{obj.'+metaData.columns[i].fieldName+' | date:"'+$rootScope.globals.langue.formatDate+'"}}'));
+                             }else{
+                                 spanElem.appendChild(document.createTextNode('{{obj.'+metaData.columns[i].fieldName+' | date:"dd-MM-yyyy"}}'));
+                             }//end if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){                             
+                         }else{
+                             spanElem.appendChild(document.createTextNode('{{obj.'+metaData.columns[i].fieldName+'}}'));
                          }//end if(metaData.columns[i].type=='number'){
+                         tdElem.appendChild(spanElem);
                      }else if(metaData.columns[i].type=='radio'){
                             var spanElem = document.createElement("span");
                             spanElem.setAttribute("id","{{identfiantenerator(obj , '"+metaData.columns[i].fieldName+"')}}");
@@ -4082,12 +4130,20 @@ $scope.gererChangementFichier3 = function(event,model){
                                 if(metaData.groups[i].columns[j].type!='array'&& metaData.groups[i].columns[j].type!='object' 
                                         && metaData.groups[i].columns[j].type!='combobox'){
                                     var spanElem = document.createElement("span");
-                                    spanElem.setAttribute("id","{{identfiantenerator(item , '"+metaData.columns[i].fieldName+"')}}");
-                                    spanElem.appendChild(document.createTextNode('{{obj.'+metaData.groups[i].columns[j].fieldName+'}}'));
-                                    tdElem.appendChild(spanElem);
+                                    spanElem.setAttribute("id","{{identfiantenerator(item , '"+metaData.columns[i].fieldName+"')}}");                                    
                                     if(metaData.groups[i].columns[j].type=='number'){
+                                        spanElem.appendChild(document.createTextNode('{{obj.'+metaData.groups[i].columns[j].fieldName+'}}'));
                                         tdElem.setAttribute('class','text-center');
+                                    }else if(metaData.groups[i].columns[j].type=='date'){
+                                        if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
+                                            spanElem.appendChild(document.createTextNode('{{obj.'+metaData.groups[i].columns[j].fieldName+' | date:"'+$rootScope.globals.langue.formatDate+'"}}')); 
+                                        }else{
+                                            spanElem.appendChild(document.createTextNode('{{obj.'+metaData.groups[i].columns[j].fieldName+' | date:"dd-MM-yyyy"}}')); 
+                                        }//end if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){                                       
+                                    }else{
+                                        spanElem.appendChild(document.createTextNode('{{obj.'+metaData.groups[i].columns[j].fieldName+'}}'));
                                     }//end if(metaData.groups[i].columns[j].type=='number'){
+                                    tdElem.appendChild(spanElem);
                                 }else if(metaData.groups[i].columns[j].type=='radio'){
                                         var spanElem = document.createElement("span");
                                         spanElem.setAttribute("id","{{identfiantenerator(obj , '"+metaData.groups[i].columns[j].fieldName+"')}}");
@@ -4244,10 +4300,18 @@ $scope.gererChangementFichier3 = function(event,model){
                 if(angular.isDefined(metaData.columns[i].search) && metaData.columns[i].search){
                      var tdElem = document.createElement('td');
                      if(metaData.columns[i].type!='array'&& metaData.columns[i].type!='object' 
-                             && metaData.columns[i].type!='combobox'){
-                         tdElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+'}}'));
+                             && metaData.columns[i].type!='combobox'){                         
                          if(metaData.columns[i].type=='number'){
+                             tdElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+'}}'));
                             tdElem.setAttribute('class','text-right');
+                         }else if(metaData.columns[i].type=='date'){
+                             if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
+                                 tdElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+' | date:"'+$rootScope.globals.langue.formatDate+'"}}'));  
+                             }else{
+                                 tdElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+' | date:"dd-MM-yyyy"}}'));  
+                             }//end if($rootScope.globals.langue && $rootScope.globals.langue.formatDate)                           
+                         }else{
+                             tdElem.appendChild(document.createTextNode('{{item.'+metaData.columns[i].fieldName+'}}'));
                          }//end if(metaData.columns[i].type=='number')
                      }else if(metaData.columns[i].type=='object'){
                           //console.log("$scope.oneToManyComponent ============= "+"{{item."+metaData.columns[i].fieldName+"['designation']}}");
@@ -4270,11 +4334,19 @@ $scope.gererChangementFichier3 = function(event,model){
                             if(angular.isDefined(metaData.groups[i].columns[j].search) && metaData.groups[i].columns[j].search){
                                 var tdElem = document.createElement('td');
                                 if(metaData.groups[i].columns[j].type!='array'&& metaData.groups[i].columns[j].type!='object' 
-                                        && metaData.groups[i].columns[j].type!='combobox'){
-                                    tdElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+'}}'));
+                                        && metaData.groups[i].columns[j].type!='combobox'){                                    
                                     if(metaData.groups[i].columns[j].type=='number'){
+                                        tdElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+'}}'));
                                         tdElem.setAttribute('class','text-right');
-                                     }
+                                     }else if(metaData.groups[i].columns[j].type=='date'){
+                                         if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
+                                             tdElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+' | date:"'+$rootScope.globals.langue.formatDate+'"}}'));
+                                         }else{
+                                           tdElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+' | date:"dd-MM-yyyy"}}'));
+                                         }//end if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
+                                     }else{
+                                         tdElem.appendChild(document.createTextNode('{{item.'+metaData.groups[i].columns[j].fieldName+'}}'));
+                                     }//end if(metaData.groups[i].columns[j].type=='number'){
                                 }else if(metaData.groups[i].columns[j].type=='object'){
                                     tdElem.appendChild(document.createTextNode("{{item."+metaData.groups[i].columns[j].fieldName+"['designation']}}"));
                                 }else if(metaData.groups[i].columns[j].type=='combobox'){
@@ -10817,6 +10889,12 @@ $scope.gererChangementFichier3 = function(event,model){
                             input.setAttribute('type' , 'checkbox');
                             input.setAttribute('ng-model' , 'obj.'+metaData.columns[i].fieldName);
                             thElem.appendChild(input);
+                        }else if(metaData.columns[i].type=='date'){
+                            if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
+                                thElem.innerHTML = '{{obj.'+metaData.columns[i].fieldName+' | date:"'+$rootScope.globals.langue.formatDate+'"}}';
+                            }else{
+                                thElem.innerHTML = '{{obj.'+metaData.columns[i].fieldName+' | date:"dd-MM-yyyy"}}';
+                            }//end if($rootScope.globals.langue && $rootScope.globals.langue.formatDate)
                         }else{                            
                           thElem.innerHTML = "{{obj."+metaData.columns[i].fieldName+"}}";
                         }//end if(metaData.columns[i].type=='object'){
@@ -10852,6 +10930,12 @@ $scope.gererChangementFichier3 = function(event,model){
                                         input.setAttribute('type' , 'checkbox');
                                         input.setAttribute('ng-model' , 'obj.'+metaData.groups[i].columns[j].fieldName);
                                         thElem.appendChild(input);
+                                    }else if(metaData.groups[i].columns[j].type=='date'){
+                                        if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
+                                            thElem.innerHTML = '{{obj.'+metaData.groups[i].columns[j].fieldName+' | date:"'+$rootScope.globals.langue.formatDate+'"}}';  
+                                        }else{
+                                            thElem.innerHTML = '{{obj.'+metaData.groups[i].columns[j].fieldName+' | date:"dd-MM-yyyy"}}';  
+                                        }//end if($rootScope.globals.langue && $rootScope.globals.langue.formatDate){
                                     }else{
                                       thElem.innerHTML = "{{obj."+metaData.groups[i].columns[j].fieldName+"}}";                                      
                                     }//end if(metaData.groups[i].columns[j].type=='object'){
@@ -12126,6 +12210,7 @@ $scope.gererChangementFichier3 = function(event,model){
           **/
           $scope.$on("currentModule" , function(event , args){
                   $scope.currentModule = args.module;
+                  $scope.company = $rootScope.globals.company;
                   if($scope.currentModule.hasmenu==true){
                         $scope.enabledVerticalMenu = args.verticalMenu;
                         $scope.exportbtnlabel = 'Exporter';    
@@ -12134,7 +12219,7 @@ $scope.gererChangementFichier3 = function(event,model){
                         $scope.showApplication = false;
                         if($scope.currentModule.name=='application'){                            
                             $scope.exportbtnlabel = 'Installer/Desinstaller';
-                            $scope.updatebtnlabel ='Mise ÃƒÂ  jour';
+                            $scope.updatebtnlabel ='Mise à jour';
                             $scope.deletebtnlabel='Supprimer';
                             $scope.showApplication = true;
                         }  //end if($scope.currentModule.name=='application')                        

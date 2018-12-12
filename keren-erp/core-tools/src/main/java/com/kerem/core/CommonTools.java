@@ -114,7 +114,8 @@ public class CommonTools {
         FormRecord record = new FormRecord();
         record.setCode(view.getId());
         record.setScript(FileHelper.transformJaxBToScript(view));
-        record.setTemplate(view.getTemplate());
+        String template = FileHelper.ngTemplateParse(view.getTemplate());
+        record.setTemplate(template);
         record.setTitre(view.getLabel());
         return record;
     }
@@ -124,10 +125,11 @@ public class CommonTools {
      * @param template
      * @return 
      */
-    public static com.core.templates.Template getTemplate(Template template){
+    public static com.core.templates.Template getTemplate(Template template) throws JAXBException{
         com.core.templates.Template record = new com.core.templates.Template();
         record.setCode(template.getId());
-        record.setScript(template.getScript());
+        String temp = FileHelper.ngTemplateParse(template.getScript());
+        record.setScript(temp);
         record.setName(template.getName());
         record.setType(template.getType());
         record.setIndex(template.isIndex());
@@ -162,7 +164,8 @@ public class CommonTools {
     public static KabanRecord getKabanentry(com.kerem.genarated.Kabanentry view) throws JAXBException{
         KabanRecord record = new KabanRecord();
         record.setCode(view.getId());
-        record.setScript(view.getTemplate());
+        String template = FileHelper.ngTemplateParse(view.getTemplate());
+        record.setScript(template);
 //        record.setTitre(view.getLabel());
         return record;
     }
@@ -178,36 +181,46 @@ public class CommonTools {
 //        if(view.getPri)
 //        record.setScript(view.getP);
         if(view.getPrincipal()!=null){
-            record.setScript(view.getPrincipal().getTemplate());
+            String template = FileHelper.ngTemplateParse(view.getPrincipal().getTemplate());
+            record.setScript(template);
         }//end if(view.getPrincipal()!=null){
         if(view.getDiscussiontemplate()!=null){
-            record.setDiscussion(view.getDiscussiontemplate().getTemplate());
+            String template = FileHelper.ngTemplateParse(view.getDiscussiontemplate().getTemplate());
+            record.setDiscussion(template);
         }
         if(view.getFormtemplate()!=null){
-            record.setForm(view.getFormtemplate().getTemplate());
+            String template = FileHelper.ngTemplateParse(view.getFormtemplate().getTemplate());
+            record.setForm(template);
         }
 //        record.setScript(view.get);
         if(view.getTreetemplate()!=null){
-            record.setTree(view.getTreetemplate().getTemplate());
+            String template = FileHelper.ngTemplateParse(view.getTreetemplate().getTemplate());
+            record.setTree(template);
 //            record.setContainer(view.getContainertemplate().getTemplate());
         }
         if(view.getContainertemplate()!=null){
-            record.setContainer(view.getContainertemplate().getTemplate());
+            String template = FileHelper.ngTemplateParse(view.getContainertemplate().getTemplate());
+            record.setContainer(template);
         }
         if(view.getReporttemplate()!=null){
-            record.setReport(view.getReporttemplate().getTemplate());
+            String template = FileHelper.ngTemplateParse(view.getReporttemplate().getTemplate());
+            record.setReport(template);
         }
         if(view.getDashboardtemplate()!=null){
-            record.setDashbord(view.getDashboardtemplate().getTemplate());
+            String template = FileHelper.ngTemplateParse(view.getDashboardtemplate().getTemplate());
+            record.setDashbord(template);
         }
         if(view.getCalendartemplate()!=null){
-            record.setCalendar(view.getCalendartemplate().getTemplate());
+            String template = FileHelper.ngTemplateParse(view.getCalendartemplate().getTemplate());
+            record.setCalendar(template);
         }
         if(view.getImporttemplate()!=null){
-            record.setImporter(view.getImporttemplate().getTemplate());
+            String template = FileHelper.ngTemplateParse(view.getImporttemplate().getTemplate());
+            record.setImporter(template);
         }
         if(view.getExporttemplate()!=null){
-            record.setExport(view.getExporttemplate().getTemplate());
+            String template = FileHelper.ngTemplateParse(view.getExporttemplate().getTemplate());
+            record.setExport(template);
         }
 //        record.setTitre("Theme Keren");
         return record;
@@ -226,7 +239,8 @@ public class CommonTools {
         record.setCode(view.getId());
         record.setTitre(view.getLabel());
         record.setExtern(view.isExtern());
-        record.setScript(view.getTemplate());
+        String template = FileHelper.ngTemplateParse(view.getTemplate());
+        record.setScript(template);
         record.setFormat(view.getFormat());
         record.setOrientation(view.getOrientation());
         record.setUnit(view.getUnit());
@@ -237,29 +251,8 @@ public class CommonTools {
             record.setSearch(FileHelper.transformJaxBToScript(view.getSearch()));
             record.setClazz(view.getSearch().getClazz());
             record.setIgnore(view.getSearch().isIgnore());
-        }//end if(view.getSearch()!=null)    
-        
+        }//end if(view.getSearch()!=null)          
 //        System.out.println(CommonTools.class.toString()+" ========================================= "+view.getTemplate());
-//        if(view.getTemplate()!=null&&!view.getTemplate().trim().isEmpty()){
-//            DocumentBuilderFactory odbf = DocumentBuilderFactory.newInstance();
-//            DocumentBuilder odb = odbf.newDocumentBuilder();
-//            InputStream stream = new ByteArrayInputStream(view.getTemplate().getBytes(StandardCharsets.UTF_8.name()));
-//            Document odoc = odb.parse(stream);
-//    //        DOMParser parser = new DOMParser();
-//    //        parser.parse(view.getTemplate());
-//    //        Document document = parser.getDocument();
-////            StringWriter xmlWriter = new StringWriter() ;
-////            XMLSerializer ser = new XMLSerializer(xmlWriter,
-////              new OutputFormat("xml", "UTF-8", true));
-////            ser.serialize(odoc);
-//            DOMSource domSource = new DOMSource(odoc);
-//            StringWriter writer = new StringWriter();
-//            StreamResult result = new StreamResult(writer);
-//            TransformerFactory tf = TransformerFactory.newInstance();
-//            Transformer transformer = tf.newTransformer();
-//            transformer.transform(domSource, result);
-//            record.setScript(writer.toString());
-//        }//end if(view.getTemplate()!=null&&!view.getTemplate().trim().isEmpty()){
         return record;
     }
     
@@ -284,7 +277,7 @@ public class CommonTools {
      * @param entity
      * @return 
      */
-    public static WebSiteModule getWebSiteRecord(Website entity){
+    public static WebSiteModule getWebSiteRecord(Website entity) throws JAXBException{
         WebSiteModule record = new WebSiteModule();
         record.setCode(entity.getId());
         record.setCategorie(entity.getCategorie());
@@ -293,7 +286,9 @@ public class CommonTools {
             WebSiteComponent comp = new WebSiteComponent();
             comp.setCode(temp.getId());comp.setEntity(temp.getEntityRef());
             comp.setIndexPage(temp.isIndex());comp.setMethod(temp.getMethodRef());
-            comp.setScript(temp.getScript());comp.setType(temp.getType());
+            String template = FileHelper.ngTemplateParse(temp.getScript());
+            comp.setScript(template);
+            comp.setType(temp.getType());
             comp.setVar(temp.getVarRef());comp.setModele(temp.getModelRef());
             Date date = new Date();
             comp.setCompareid(date.getTime());comp.setCreateonfield(true);
@@ -312,7 +307,8 @@ public class CommonTools {
         TreeRecord record = new TreeRecord();
         record.setCode(view.getId());
         record.setScript(FileHelper.transformJaxBToScript(view));
-        record.setTemplate(view.getTemplate());
+        String template = FileHelper.ngTemplateParse(view.getTemplate());
+        record.setTemplate(template);
         record.setTitre(view.getLabel());
         return record;
     }

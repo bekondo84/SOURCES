@@ -691,7 +691,7 @@ angular.module('keren.core.commons')
                                scope.defaultui = false;
 //                                   console.log("commons.principalScreenBuilder =============== trouve");
                          }//end if(items.eq(i).attr("id")=="datatable"){ 
-                     }//end for(var i=0; i<items.length;i++){      
+                     }//end for(var i=0; i<items.length;i++){                    
                 }//end if(angular.isDefined(theme) && angular.isDefined(theme.script)){                    
             },
                 /**
@@ -1222,7 +1222,9 @@ angular.module('keren.core.commons')
                    if(angular.isDefined(attr)&& attr!=""){
                        this.itemPreParser(item,attr,module);
                    }//end if(angular.isDefined(attr)&& attr!=""){
-               }//end for(var i=0 ;i<items.length;i++){               
+               }//end for(var i=0 ;i<items.length;i++){  
+//               items = container.find('?xml');
+//               console.log("commsTools.preParser ================== "+items.length);
                return container;               
             },
             /**
