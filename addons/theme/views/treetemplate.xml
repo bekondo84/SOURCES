@@ -8,7 +8,7 @@
 					</li> 
 					<li>                   
 					  <div class="input-group col-md-4 pull-right" >
-						<input class="search__field" type="text"  ng-model="searchCriteria" name="x" placeholder="Search term..." />
+						<input class="search__field" type="text"  ng-model="searchCriteria" name="x" placeholder="Search term..." ng-keyup="loadDataSearch()" />
 						<span class="input-group-btn">
 						  <button class="btn btn-default btn-sm" type="button" ng-click="searchAction()" style="margin-top: -7px;border:solid 1px #f5f5f5;">
 							  <span class="glyphicon glyphicon-search">

@@ -50,6 +50,12 @@
 		     <![CDATA[
                 <div  style="height: 100%;width:100%;">			 
 					  <style type="text/css">
+					      .table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
+									   background-color: white;
+									}
+						  .table-striped > tbody > tr:nth-child(even) > td, .table-striped > tbody > tr:nth-child(even) > th {
+							   background-color: #efefef;
+							}
 						  .search__field {
 							background-color: transparent;
 							border: solid 1px #f5f5f5;
@@ -88,6 +94,7 @@
 						.dashboard-body{
 						   
 						}
+
 						</style>
 						<ng-template src="theme/views/treetemplate.xml"></ng-template>
 				 </div>
