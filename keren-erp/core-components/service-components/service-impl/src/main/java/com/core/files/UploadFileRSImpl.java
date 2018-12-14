@@ -89,10 +89,13 @@ public class UploadFileRSImpl  implements UploadFileRS{
         if(headers.getRequestHeader("names")!=null){
             names = gson.fromJson(headers.getRequestHeader("names").get(0),new TypeToken<List<String>>(){}.getType());
         }//end if(headers.getRequestHeader("names")!=null){
-        String modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
-        FileHelper.setCurrentModule(modulename);
-        String fileName = "";
-//
+        String modulename = null ;
+         if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+             modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
+         FileHelper.setCurrentModule(modulename);
+        String fileName = "";//
 		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		List<InputPart> inputParts = uploadForm.get("resources");
 //                System.out.println(UploadFileRSImpl.class.toString()+" ======================== "+inputParts);
@@ -128,7 +131,10 @@ public class UploadFileRSImpl  implements UploadFileRS{
     @Override
     public Response downloadImageFile(@Context HttpHeaders headers,String filename) {
          Gson gson = new Gson();
-         String modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
+         String modulename = null ;
+         if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+             modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
 //         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
          FileHelper.setCurrentModule(modulename);
         try {
@@ -149,7 +155,11 @@ public class UploadFileRSImpl  implements UploadFileRS{
     public Response downloadImageFile2(@Context HttpHeaders headers,String filename, String name) {
         //To change body of generated methods, choose Tools | Templates.
          Gson gson = new Gson();
-         String modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
+         String modulename = null ;
+         if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+             modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
          FileHelper.setCurrentModule(modulename);
          try {
             //To change body of generated methods, choose Tools | Templates.
@@ -171,7 +181,11 @@ public class UploadFileRSImpl  implements UploadFileRS{
     public Response downloadPdfFile(@Context HttpHeaders headers,String filename,String name) {
         //To change body of generated methods, choose Tools | Templates.
          Gson gson = new Gson();
-         String modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
+         String modulename = null ;
+         if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+             modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
          FileHelper.setCurrentModule(modulename);
         try{
                 String resourceDir = FileHelper.getStaticDirectory()+File.separator+filename;
@@ -190,8 +204,12 @@ public class UploadFileRSImpl  implements UploadFileRS{
     public Response downloadTextFile(@Context HttpHeaders headers,String filename,String name) {
        //To change body of generated methods, choose Tools | Templates.
          Gson gson = new Gson();
-        String modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
-        FileHelper.setCurrentModule(modulename);
+         String modulename = null ;
+         if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+             modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
+         FileHelper.setCurrentModule(modulename);
          try{
                 String resourceDir = FileHelper.getStaticDirectory()+File.separator+filename;
                 File file = new File(resourceDir);
@@ -216,8 +234,12 @@ public class UploadFileRSImpl  implements UploadFileRS{
     public Response downloadFile(@Context HttpHeaders headers,String filename, String name) {
         //To change body of generated methods, choose Tools | Templates.
             Gson gson = new Gson();
-            String modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
-            FileHelper.setCurrentModule(modulename);
+            String modulename = null ;
+            if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+                modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
+            }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
+           FileHelper.setCurrentModule(modulename);
             try{
                   String resourceDir = FileHelper.getStaticDirectory()+File.separator+filename;
                   File file = new File(resourceDir);
@@ -353,9 +375,13 @@ public class UploadFileRSImpl  implements UploadFileRS{
     @Override
     public void deleteFile(@Context HttpHeaders headers,String filename) {
         //To change body of generated methods, choose Tools | Templates.
-        Gson gson = new Gson();
-        String modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
-        FileHelper.setCurrentModule(modulename);
+         Gson gson = new Gson();
+         String modulename = null ;
+         if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+             modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
+         FileHelper.setCurrentModule(modulename);
         File fichier = new File(FileHelper.getStaticDirectory()+File.separator+filename);
 //            System.out.println(UploadFileRSImpl.class.toString()+" ==== "+fichier.getAbsolutePath());
         if(fichier.exists()&&fichier.isFile()){

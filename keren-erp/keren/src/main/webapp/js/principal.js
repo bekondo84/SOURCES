@@ -9053,6 +9053,16 @@ $scope.gererChangementFichier3 = function(event,model){
                         $scope.exportbtnlabel = "Installer";
                     }//end if($scope.currentObject.active){
                 }//end if($scope.showApplication==true){
+//                console.log("principal.viewAction ==================== "+angular.toJson(item));
+                if(commonsTools.isexternemodule($scope.currentModule.name)){
+                    if(item.ownermodule && item.ownermodule!= $scope.currentModule.name){
+                        $http.defaults.headers.common['modulename']= item.ownermodule;       
+                    }else{
+                        $http.defaults.headers.common['modulename']= $scope.currentModule.name;       
+                    }//end if($scope.item.ownermodule){
+                }else{
+                    $http.defaults.headers.common['modulename']= null;
+                }//end if(commonsTools.isexternemodule($scope.currentModule.name)){
                 restService.findById(item.id).$promise
                         .then(function(data){
                             $scope.currentObject = data;
@@ -9083,7 +9093,12 @@ $scope.gererChangementFichier3 = function(event,model){
                 $scope.selectedObjects = [];     
                  restService.findById(id).$promise
                         .then(function(data){
-                            $scope.currentObject = data;                           
+                            $scope.currentObject = data;   
+                            if($scope.currentObject.ownermodule && $scope.currentObject.ownermodule!= $scope.currentModule.name){
+                               $http.defaults.headers.common['modulename']= item.ownermodule;       
+                            }else{
+                               $http.defaults.headers.common['modulename']= $scope.currentModule.name;       
+                            }//end if($scope.item.ownermodule){
                             //Recuperation du premier element
                             var index = commonsTools.getIndex($scope.datas,data);
                             if(angular.isDefined(index)){
@@ -9099,6 +9114,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                     $scope.exportbtnlabel = "Installer";
                                 }//end if($scope.currentObject.active){
                             }//end if($scope.showApplication==true){
+                            //
 //                            console.log("$scope.viewAction ============== "+angular.toJson(data));
                             $scope.displayEditPanel();
 //                            console.log("$scope.viewAction after display ============== "+angular.toJson(data));

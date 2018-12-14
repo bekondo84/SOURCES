@@ -253,6 +253,13 @@ angular.module('keren.core.commons')
                 var nbreTchatBox = 0;
                 var listeTchatBox = {};
             return {
+                isexternemodule:function(name){
+                    if(name=='discussionconf' || name=='calandar'||name=='configuration'||name=='application'){
+                        return false ;
+                    }else{
+                        return true;
+                    }//end if(name=='discussionconf' || name=='calandar'||name=='configuration'||name=='application'){
+                },
                 setWebContext:function(currentuser){return WebSiteContext.setInstance(currentuser);},
                 getWebContext:function(){return WebSiteContext.getInstance();},
                 startWebsiteWorker:function(scope){
