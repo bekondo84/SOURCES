@@ -15,7 +15,6 @@ import com.kerem.genarated.Kabanentry;
 import com.kerem.genarated.Keren;
 import com.kerem.genarated.Search;
 import com.kerem.genarated.TreeRecord;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -24,34 +23,25 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.dom4j.DocumentFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -66,6 +56,15 @@ public class FileHelper {
     public static String TEMP_STATIC_DIR = "standalone"+File.separator+"data"+File.separator+"keren"+File.separator+"resources"+File.separator+"static";
     public static String TEMP_CONFIG_DIR = "standalone"+File.separator+"data"+File.separator+"keren"+File.separator+"resources"+File.separator+"config";
     public static String TEMP_DIR = "standalone"+File.separator+"tmp"+File.separator+"keren";
+    private static String CURRENT_MODULE = null;
+    
+    /**
+     * Current module 
+     * @param module 
+     */
+    public static void setCurrentModule(String module){
+         FileHelper.CURRENT_MODULE = module;
+    }
     /**
      * Retourn le chemin courant
      * @return 
@@ -86,6 +85,31 @@ public class FileHelper {
     }
     
     /**
+     * 
+     * @param from
+     * @param to
+     * @throws IOException 
+     */
+    public static void copyFile(File from , File to) throws IOException{
+       Files.copy(Paths.get(from.toURI()), Paths.get(to.toURI()), StandardCopyOption.REPLACE_EXISTING);
+    }
+    
+    /**
+     * Delete file or repository
+     * @param repo 
+     * @throws java.io.IOException 
+     */
+    public static void deleteFile(File repo) throws IOException{        
+         if(repo.isDirectory()){
+             for(File file : repo.listFiles()){
+                 deleteFile(file);
+             }//end for(File file : repo.listFiles()){
+              Files.deleteIfExists(Paths.get(repo.toURI()));
+         }else{
+            Files.deleteIfExists(Paths.get(repo.toURI()));
+         }//end if(repo.isFile()){
+    }
+    /**
      * Retourne le repertoires contenant Ã¹
      * les modules
      * @return 
@@ -100,8 +124,22 @@ public class FileHelper {
      * @return 
      */
     public static File getReportsDirectory(){
-         File binDirectory = FileHelper.getCurrentDirectory();        
-         return new File(binDirectory.getParent()+File.separator+TEMP_REPORT_DIR);
+         File binDirectory = FileHelper.getCurrentDirectory();
+         StringBuilder builder = new StringBuilder();
+         builder.append(binDirectory.getParent())
+                     .append(File.separator)
+                     .append(TEMP_REPORT_DIR);
+         if(CURRENT_MODULE==null){
+             return new File(builder.toString());
+         }else{        
+             builder.append(File.separator)
+                     .append(CURRENT_MODULE);
+             File file = new File(builder.toString());
+             if(!file.exists()){
+                 file.mkdir();                 
+             }//end if(!file.exists()){
+             return file ;
+         }//end if(CURRENT_MODULE==null){
     }
     
     /**
@@ -109,8 +147,22 @@ public class FileHelper {
      * @return 
      */
     public static File getStaticDirectory(){
-         File binDirectory = FileHelper.getCurrentDirectory();        
-         return new File(binDirectory.getParent()+File.separator+TEMP_STATIC_DIR);
+         File binDirectory = FileHelper.getCurrentDirectory(); 
+         StringBuilder builder = new StringBuilder();
+             builder.append(binDirectory.getParent())
+                     .append(File.separator)
+                     .append(TEMP_STATIC_DIR);
+         if(CURRENT_MODULE==null){
+             return new File(builder.toString());
+         }else{             
+             builder.append(File.separator)
+                     .append(CURRENT_MODULE);
+             File file = new File(builder.toString());
+             if(!file.exists()){
+                 file.mkdir();                 
+             }//end if(!file.exists()){
+             return file ;
+         }//end if(CURRENT_MODULE==null){        
     }
     
     public static File getConfigDirectory(){
@@ -279,23 +331,58 @@ public class FileHelper {
      * Traitement des fichieers pour le reporting
      * Deplacement de ces fichiers vers le reportoire de reportings
      * @param manifest
+     * @param <error>
      * @throws IOException 
      */
     public static  void processReporting(Manifest manifest)  throws IOException{
          if(manifest==null) return ;        
+         FileHelper.setCurrentModule(manifest.getFilename());
         //verification que le manifest reference un fichier
         for(String report : manifest.getReports()){
             String path = getAddonsDirectory().getPath()+File.separator+manifest.getFilename()+File.separator+report;
             File source = new File(path);
             if(source.exists()){
-                createDirectory(getReportsDirectory()+File.separator+manifest.getFilename());
-                File cible = new File(getReportsDirectory()+File.separator+manifest.getFilename()+File.separator+source.getName());
-                moveFile(source, cible);
+                StringBuilder builder = new StringBuilder();
+                builder.append(getStaticDirectory().toString());
+                createDirectory(builder.toString());
+                builder.append(File.separator)
+                        .append(source.getName());
+                File cible = new File(builder.toString());
+                copyFile(source, cible);
             }//end if(source.exists()){
         }//end for(String core : manifest.getCores()){
     }
     
     /**
+     * Suppresion des fichier lie a un module
+     * @param manifest 
+     */
+    public static void unProcessReporting(Manifest manifest) throws IOException{
+         if(manifest==null) return ;        
+         FileHelper.setCurrentModule(manifest.getFilename());
+        //verification que le manifest reference un fichier
+         StringBuilder builder = new StringBuilder();
+         builder.append(getReportsDirectory().toString());
+       File cible = new File(builder.toString());
+        deleteFile(cible);
+    }
+    
+    /**
+     * 
+     * @param manifest
+     * @throws IOException 
+     */
+    public static void unProcessImages(Manifest manifest) throws IOException{
+         if(manifest==null) return ;        
+         FileHelper.setCurrentModule(manifest.getFilename());
+        //verification que le manifest reference un fichier
+         StringBuilder builder = new StringBuilder();
+         builder.append(getStaticDirectory().toString());
+       File cible = new File(builder.toString());
+        deleteFile(cible);
+    }
+     
+   /**
      * 
      * @param directory
      * @throws IOException 
@@ -314,16 +401,50 @@ public class FileHelper {
      */
     public static void processImages(Manifest manifest)  throws IOException{
         if(manifest==null) return ;        
+        FileHelper.setCurrentModule(manifest.getFilename());
         //verification que le manifest reference un fichier
         for(String image : manifest.getImages()){
             String path = getAddonsDirectory().getPath()+File.separator+manifest.getFilename()+File.separator+image;
             File source = new File(path);
             if(source.exists()){
-                createDirectory(getStaticDirectory()+File.separator+manifest.getFilename());
-                File cible = new File(getStaticDirectory()+File.separator+manifest.getFilename()+File.separator+source.getName());
-                moveFile(source, cible);
+                StringBuilder builder = new StringBuilder();
+                builder.append(getStaticDirectory().toString());
+                createDirectory(builder.toString());
+                builder.append(File.separator)
+                        .append(source.getName());
+                File cible = new File(builder.toString());
+                copyFile(source, cible);
             }//end if(source.exists()){
         }//end for(String core : manifest.getCores()){
+    }
+    
+    /**
+     * Traitement de l'icon du module
+     * @param manifest 
+     * @return  
+     * @throws java.io.IOException 
+     */
+    public static String processIcon(Manifest manifest) throws IOException{
+        if(manifest.getIcon()!=null && !manifest.getIcon().trim().isEmpty()){
+            FileHelper.setCurrentModule(null);
+            StringBuilder builder = new StringBuilder();
+            builder.append(getAddonsDirectory().getPath())
+                    .append(File.separator)
+                    .append(manifest.getFilename())
+                    .append(File.separator)
+                    .append(manifest.getIcon());
+            File source = new File(builder.toString());
+            if(source.exists()){
+                builder = new StringBuilder(getStaticDirectory().toString());
+                builder.append(File.separator)
+                        .append(source.getName());
+                File cible = new File(builder.toString());
+                copyFile(source, cible);
+            }//end if(source.exists()){
+            FileHelper.setCurrentModule(manifest.getFilename());
+             return source.getName();
+        }//end if(manifest.getIcon()!=null && !manifest.getIcon().trim().isEmpty()){
+        return "avatar.png";
     }
     /**
      * 
@@ -589,4 +710,6 @@ public class FileHelper {
         }//end if(node.getNodeType()==Node.ELEMENT_NODE){
 //        return node ;
     }
+    
+    
 }

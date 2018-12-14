@@ -149,17 +149,16 @@ angular.module("mainApp")
     $scope.deletebtnlabel = 'Supprimer'; 
     //Module courant = application
     $scope.showApplication = false;
-   //Hide Discussion login , calendar ,discussion ,others
-   $scope.moduleValue = "login";
-   //Number de messages
-   $scope.numberofnewmessages = 0;
-   $scope.numberofconnectusers = 0;
-   //List of available users and canal
-   $scope.tchatinput = new Array();
-   
-   $scope.hostname = $location.host();
-    
+    //Hide Discussion login , calendar ,discussion ,others
+    $scope.moduleValue = "login";
+    //Number de messages
+    $scope.numberofnewmessages = 0;
+    $scope.numberofconnectusers = 0;
+    //List of available users and canal
+    $scope.tchatinput = new Array();   
+    $scope.hostname = $location.host();    
     $scope.portvalue = $location.port();
+    $scope.protocol = $location.protocol(); 
    //Utilisateur courant
    $scope.agendaModule = { id:-1 , name:"discussionconf",label:"Discussion",selected:false,hasmenu:false,
                           groups:[
@@ -453,6 +452,8 @@ angular.module("mainApp")
             $scope.currentModule = module;
             $scope.enabledVerticalMenu = false;
             $scope.moduleValue = "others";
+            $http.defaults.headers.common['moduleid']= $scope.currentModule.id;
+            $http.defaults.headers.common['modulename']= $scope.currentModule.name;                  
             //Notification du changement du module
             $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu});
             if(angular.isDefined(module.groups) && (module.groups.length > 0)){
@@ -481,6 +482,8 @@ angular.module("mainApp")
         $scope.principalscreen = true ;
         $scope.currentModule = null;
         $scope.currentAction = null;
+        $http.defaults.headers.common['moduleid']= null;
+        $http.defaults.headers.common['modulename']= null;
     };
     /**
      * 
@@ -572,6 +575,8 @@ angular.module("mainApp")
       $scope.enabledVerticalMenu = false;
       $scope.moduleValue = "others";
       $scope.currentModule = $scope.configurationModule;
+      $http.defaults.headers.common['moduleid']= null;
+      $http.defaults.headers.common['modulename']= null;                  
       //Notification du changement du module
       $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu});
       if(angular.isDefined($scope.currentModule.groups) && ($scope.currentModule.groups.length > 0)){
@@ -599,6 +604,8 @@ angular.module("mainApp")
          $scope.enabledVerticalMenu = true;
         $scope.moduleValue = "applications";
         $scope.currentModule = $scope.applicationsModule;
+        $http.defaults.headers.common['moduleid']= null;
+        $http.defaults.headers.common['modulename']= null;                  
         //Notification du changement du module
         $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu});
         if(angular.isDefined($scope.currentModule.groups) && ($scope.currentModule.groups.length > 0)){
@@ -628,6 +635,8 @@ angular.module("mainApp")
         $scope.showDiscussion = true;
         $scope.moduleValue = "discussion";
         $scope.currentModule = $scope.agendaModule;
+        $http.defaults.headers.common['moduleid']= null;
+        $http.defaults.headers.common['modulename']= null;                  
         //Desactivi
         $scope.enabledVerticalMenu = false;
         $scope.hideOther = $scope.showCalendar || $scope.showDiscussion ;
@@ -656,12 +665,14 @@ angular.module("mainApp")
         $scope.moduleValue = "calendar";
         $scope.principalscreen = false;
         $scope.currentModule = $scope.calandarModule;
+        $http.defaults.headers.common['moduleid']= null;
+        $http.defaults.headers.common['modulename']= null;                  
         //Initialisation du service Rest
         restService.url('event','kerencore');
         restService.getMetaData(null).$promise.then(
                         function(metaData){
                              $scope.metaData = metaData;
-                             var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/event/event/"+$rootScope.globals.userinfo.id; 
+                             var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/event/event/"+$rootScope.globals.userinfo.id; 
                              $http.get(url).then(
                                 /**
                                  * 
@@ -708,7 +719,7 @@ angular.module("mainApp")
               $scope.currentUser = $rootScope.globals.userinfo;
                $scope.tchatinput = new Array();
 //                 console.log(angular.toJson($scope.currentUser));
-                var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/canal/canaux/"+$scope.currentUser.courriel;
+                var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/canal/canaux/"+$scope.currentUser.courriel;
                 commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
                 $http.get(url)
                         .then(function(response){
@@ -716,7 +727,7 @@ angular.module("mainApp")
                              for(var i=0;i<result.length;i++){
                                 $scope.tchatinput.push(result[i]);
                              }//end for(var i=0;i<result.length;i++){
-                             var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/canal/directe/"+$scope.currentUser.courriel;
+                             var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/canal/directe/"+$scope.currentUser.courriel;
 //                commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
                             $http.get(url)
                                     .then(function(response){
@@ -808,17 +819,17 @@ angular.module("mainApp")
         var zoneid = "zone"+item.id;
         var idUser = $scope.currentUser.id;
         var idFriend = item.id;
-        var photoUser = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+$scope.currentUser.image;
-        var photoFriend = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+item.image;
+        var photoUser = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+$scope.currentUser.image;
+        var photoFriend = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+item.image;
         var nameFriend = item.designation;       
         if(angular.isDefined($scope.currentModule) && $scope.currentModule.name!=="discussionconf"){
             commonsTools.addToTchatContext(zoneid,$scope.currentUser,item);
             commonsTools.addChatZone(zoneid,idUser,idFriend,photoUser,photoFriend,nameFriend,$scope);
             //Chargement des donnÃ©es
            var messages = new Array();
-           var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/kmessage/direct/"+$scope.currentUser.id+"/"+item.id+"/0/15";
+           var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/kmessage/direct/"+$scope.currentUser.id+"/"+item.id+"/0/15";
            if(item.editTitle==='CANAL'){
-              url = "http://"+$location.host()+":"+$location.port()+"/kerencore/kmessage/canal/"+$scope.currentUser.id+"/"+item.id+"/0/15";
+              url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/kmessage/canal/"+$scope.currentUser.id+"/"+item.id+"/0/15";
            }//end if(item.editTitle==='CANAL'){
            $http.get(url)
                     .then(function(response){
@@ -826,10 +837,10 @@ angular.module("mainApp")
 //                         $filter('orderBy')(messages,'id',true); 
                          for(var i=messages.length-1 ; i>=0 ;i--){
                              var sens = 0;
-                             var photo = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+$scope.currentUser.image;
+                             var photo = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+$scope.currentUser.image;
                              if($scope.currentUser.id!=messages[i].sender.id){
                                  sens = 1;
-                                 photo = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+item.image;
+                                 photo = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+item.image;
                              }//end if($scope.currentUser.id!=messages[i].sender.id){
                              var today = new Date();
                              $scope.addMessage(zoneid,today.getTime(),idUser,sens,photo,messages[i],commonsTools.formatDat(new Date(messages[i].date)));
@@ -857,7 +868,7 @@ angular.module("mainApp")
         * @returns {undefined}
         */
        $scope.loadTheme = function(){
-           var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/themerecord/theme"; 
+           var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/themerecord/theme"; 
            commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
            $http.get(url)
                    .then(function(response){
@@ -943,8 +954,8 @@ angular.module("mainApp")
                      commonsTools.addToTchatContext(zoneid,$scope.currentUser,item);
                      instance = commonsTools.getToTchatContext(zoneid);
                 }//end if(!angular.isDefined(instance[zoneid])){
-                var photoUser = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+$scope.currentUser.image;
-                var photoFriend = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+item.image;
+                var photoUser = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+$scope.currentUser.image;
+                var photoFriend = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+item.image;
                 var nameFriend = item.designation;
                 if(angular.isDefined($scope.currentModule)&&$scope.currentModule!=null
                         && $scope.currentModule.name!=="discussionconf" && !commonsTools.isTchatOpen(zoneid)){
@@ -954,10 +965,10 @@ angular.module("mainApp")
                 if(!commonsTools.contains(instance[zoneid].messages,message)){
                     instance[zoneid].messages.push(message);
                     var sens = 0;
-                    var photo = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+$scope.currentUser.image;
+                    var photo = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+$scope.currentUser.image;
                     if($scope.currentUser.id!=message.sender.id){
                         sens = 1;
-                        photo = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+item.image;
+                        photo = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+item.image;
                     }//end if($scope.currentUser.id!=messages[i].sender.id){
                     var today = new Date();
                     instance[zoneid].messages.push(message);
@@ -1323,7 +1334,7 @@ angular.module("mainApp")
                                          commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");  
                                          //this.currentPage = (this.currentPage*this.pageSize)%this.totalPages; 
                                         $scope.temporalPagination.beginIndex = $scope.temporalPagination.endIndex;  //+1
-                                         var url = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.temporalPagination.module)+"/"+angular.lowercase($scope.temporalPagination.model)+"/filter/"+$scope.temporalPagination.beginIndex+"/"+$scope.temporalPagination.pageSize;
+                                         var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.temporalPagination.module)+"/"+angular.lowercase($scope.temporalPagination.model)+"/filter/"+$scope.temporalPagination.beginIndex+"/"+$scope.temporalPagination.pageSize;
                                          //Chargement des donnes                                          
                                            var dmodel = this.model;
                                           $http.get(url)
@@ -1364,7 +1375,7 @@ angular.module("mainApp")
                                             $scope.temporalPagination.endIndex = $scope.temporalPagination.pageSize;                                                             
                                          }//end if(this.endIndex<=0)
                                          var dmodel = $scope.temporalPagination.model;
-                                         var url = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.temporalPagination.module)+"/"+angular.lowercase($scope.temporalPagination.model)+"/filter/"+$scope.temporalPagination.beginIndex+"/"+$scope.temporalPagination.pageSize;
+                                         var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.temporalPagination.module)+"/"+angular.lowercase($scope.temporalPagination.model)+"/filter/"+$scope.temporalPagination.beginIndex+"/"+$scope.temporalPagination.pageSize;
                                           $http.get(url)
                                                   .then(function(response){
                                                       var datas = response.data;
@@ -1408,11 +1419,10 @@ angular.module("mainApp")
          /**
           * Activate de back button
           */
-         $scope.showback = false;
-         
+         $scope.showback = false;         
         $scope.hostname = $location.host();
-
         $scope.portvalue = $location.port();
+        $scope.protocol = $location.protocol(); 
          /**
           * Container de navigation
           */
@@ -1540,7 +1550,7 @@ angular.module("mainApp")
                      }//end if(angular.isDefined(entity)){
 //                     console.log("notify:function(event , parameters) ============= model "+this.model+" method:"+template["methodname"]+" :::: entity : "+angular.toJson(entity));
                      var metaData = $scope.getParentMetaData(this.model);
-                     var url = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(metaData.moduleName)+"/"+angular.lowercase(metaData.entityName)+"/"+template["methodname"];
+                     var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(metaData.moduleName)+"/"+angular.lowercase(metaData.entityName)+"/"+template["methodname"];
                      $http.get(url)
                              .then(function(response){//$scope.getf
 //                                 console.log("notify:function(event , parameters) ============= model "+this.model+" method:"+template["methodname"]+" :::: entity : "+angular.toJson(parameters)+" ===== ID : "+id+" ==== entity : "+angular.toJson(data)+" ===== key : "+modelsplit[modelsplit.length-1]+" ==== reponse : "+response.data);
@@ -2474,14 +2484,14 @@ angular.module("mainApp")
               $scope.dataCache['resources'].push(file);
               $scope.dataCache['names'].push(filename);
               //transfert des resources et mise a jour du menu
-              var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe";
+              var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe";
               var data = {id:-1,compareid:-1,designation:"",editTitle:""
                     ,listTitle:"",moduleName:'kerencore',selected:false,createonfield:true,desablecreate:false,
                     serial:"1234",activefilelien:false,desabledelete:false,filename:filename,attachename:file.name,entityserial:$scope.currentObject.serial,entityid:$scope.currentObject.id};
              commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%"); 
              $http.post(url,data)
                       .then(function(response){
-                           var url2 = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/upload";
+                           var url2 = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/upload";
                            $http.defaults.headers.common['names']= angular.toJson($scope.dataCache['names']); 
                                                 restService.uploadFile($scope.dataCache['resources'])
                                                     .then(function(response){
@@ -2520,7 +2530,7 @@ angular.module("mainApp")
                    if(angular.lowercase(part[0])!="currentobject"){
                        data = $scope.temporalData;
                    }//end if(angular.lowercase(part[0])!="currentobject"){
-//                   var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/png/"+(data[field.fieldName]);
+//                   var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/png/"+(data[field.fieldName]);
 //                   console.log("$scope.imageComponentBuilder ============== "+angular.toJson(data)+"====="+data[field.fieldName]+" ==== "+field.fieldName);  
                    var parts = model.split('.');
                    var divElem = document.createElement('div');
@@ -2629,13 +2639,13 @@ angular.module("mainApp")
               $scope.dataCache['resources'].push(file);
               $scope.dataCache['names'].push(filename);
               //transfert des resources et mise a jour du menu
-//              var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe";
+//              var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe";
               var data = {id:-1,compareid:-1,designation:"",editTitle:""
                     ,listTitle:"",moduleName:'kerencore',selected:false,createonfield:true,desablecreate:false,
                     serial:"1234",activefilelien:false,desabledelete:false,filename:filename,attachename:file.name,entityserial:null,entityid:null};
              $scope.dataCache["messageobject"].piecesjointe.push(data);
              commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%"); 
-//             var url2 = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/temporalupload";
+//             var url2 = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/temporalupload";
 //             console.log("$scope.gererChangementFichier = function(event) =============== "+angular.toJson($scope.dataCache["messageobject"]));
             $http.defaults.headers.common['names']= angular.toJson($scope.dataCache['names']); 
             restService.uploadFile2($scope.dataCache['resources'])
@@ -2682,13 +2692,13 @@ $scope.gererChangementFichier3 = function(event,model){
               $scope.dataCache['resources'].push(file);
               $scope.dataCache['names'].push(filename);
               //transfert des resources et mise a jour du menu
-//              var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe";
+//              var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe";
 //              var data = {id:-1,compareid:-1,designation:"",editTitle:""
 //                    ,listTitle:"",moduleName:'kerencore',selected:false,createonfield:true,desablecreate:false,
 //                    serial:"1234",activefilelien:false,desabledelete:false,filename:filename,attachename:file.name,entityserial:null,entityid:null};
 //             $scope.dataCache["messageobject"].piecesjointe.push(data);
              commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%"); 
-//             var url2 = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/temporalupload";
+//             var url2 = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/temporalupload";
 //             console.log("$scope.gererChangementFichier = function(event) =============== "+angular.toJson($scope.dataCache["messageobject"]));
             $http.defaults.headers.common['names']= angular.toJson($scope.dataCache['names']); 
             restService.uploadFile2($scope.dataCache['resources'])
@@ -2733,13 +2743,13 @@ $scope.gererChangementFichier3 = function(event,model){
               $scope.dataCache['resources'].push(file);
               $scope.dataCache['names'].push(filename);
               //transfert des resources et mise a jour du menu
-//              var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe";
+//              var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe";
 //              var data = {id:-1,compareid:-1,designation:"",editTitle:""
 //                    ,listTitle:"",moduleName:'kerencore',selected:false,createonfield:true,desablecreate:false,
 //                    serial:"1234",activefilelien:false,desabledelete:false,filename:filename,attachename:file.name,entityserial:null,entityid:null};
 //             $scope.dataCache["messageobject"].piecesjointe.push(data);
              commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%"); 
-//             var url2 = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/temporalupload";
+//             var url2 = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/temporalupload";
 //             console.log("$scope.gererChangementFichier = function(event) =============== "+angular.toJson($scope.dataCache["messageobject"]));
             $http.defaults.headers.common['names']= angular.toJson($scope.dataCache['names']); 
             restService.uploadFile2($scope.dataCache['resources'])
@@ -5289,7 +5299,7 @@ $scope.gererChangementFichier3 = function(event,model){
            * @returns {undefined}
            */
           $scope.displayDashboardPanel = function(){
-//                var url ="http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.currentObject.moduleName)+"/"+angular.lowercase($scope.currentObject.entity)+"/"+angular.lowercase($scope.currentObject.method);
+//                var url =$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.currentObject.moduleName)+"/"+angular.lowercase($scope.currentObject.entity)+"/"+angular.lowercase($scope.currentObject.method);
 //                console.log("principal.displayDashboardPanel ================================ "+url);
                 $scope.showreporttitle = false;
                 $scope.suffixedittitle = $scope.currentObject.designation;
@@ -5589,7 +5599,7 @@ $scope.gererChangementFichier3 = function(event,model){
                      }//end if(pbjmenu!=null){
                  }//end if(viewElem!=null)
                  commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%"); 
-                var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe/pj/"+model.serial+"/"+model.id;
+                var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe/pj/"+model.serial+"/"+model.id;
                 $http.get(url)
                         .then(function(response){
                             var pieces = response.data;
@@ -5973,12 +5983,12 @@ $scope.gererChangementFichier3 = function(event,model){
                  $scope.piecejointeMenu(listElem,$scope.currentObject,$scope.metaData);
              }//end if($scope.metaData.activefilelien==true &&($scope.windowType=="update"||$scope.windowType=="view"))
              if($scope.metaData.activatefollower==true && $scope.windowType!='new'){
-                 var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/follower/entity/"+$scope.currentObject.serial+"/"+$scope.currentObject.id;
+                 var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/follower/entity/"+$scope.currentObject.serial+"/"+$scope.currentObject.id;
                  $http.get(url)
                          .then(function(response){
                              $scope.dataCache['follower'] = response.data;                             
                              if(!$scope.dataCache['follower']){
-                                    var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/follower/meta";
+                                    var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/follower/meta";
                                     $http.get(url)
                                             .then(function(response){
                                                 $scope.dataCache['follower'] = $scope.createFreeEmptyObject(response.data);
@@ -6737,7 +6747,7 @@ $scope.gererChangementFichier3 = function(event,model){
            $scope.temporalPagination.currentPage=0;
            $scope.temporalPagination.module = metaData.moduleName;
            $scope.temporalPagination.model = metaData.entityName;
-           var url="http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(metaData.moduleName)+"/"+angular.lowercase(metaData.entityName)+"/count";
+           var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(metaData.moduleName)+"/"+angular.lowercase(metaData.entityName)+"/count";
            $http.get(url)
                    .then(function(response){
 //                           console.log("$scope.listDialogBuilder = function(model) :::::: "+angular.toJson(response.data)+" === "+angular.isNumber(angular.fromJson(angular.toJson(response.data))));
@@ -7526,11 +7536,11 @@ $scope.gererChangementFichier3 = function(event,model){
                         }//end if(angular.lowercase(entityName)=="utilisateur")
                     }//end for(var i=0;i<$scope.dataCache[entityName].length;i++)
                     
-                    var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/follower";
+                    var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/follower";
                     if($scope.dataCache['follower'].id==-1){
                         $http.post(url,$scope.dataCache['follower'])
                                 .then(function(response){
-                                        var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/follower/entity/"+$scope.currentObject.serial+"/"+$scope.currentObject.id;
+                                        var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/follower/entity/"+$scope.currentObject.serial+"/"+$scope.currentObject.id;
                                         $http.get(url)
                                                 .then(function(response){
                                                     $scope.dataCache['follower'] = response.data;  
@@ -7545,7 +7555,7 @@ $scope.gererChangementFichier3 = function(event,model){
                         
                         $http.put(url+"/"+$scope.dataCache['follower'].id,$scope.dataCache['follower'])
                                 .then(function(response){
-                                     var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/follower/entity/"+$scope.currentObject.serial+"/"+$scope.currentObject.id;
+                                     var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/follower/entity/"+$scope.currentObject.serial+"/"+$scope.currentObject.id;
                                     $http.get(url)
                                             .then(function(response){
                                                 $scope.dataCache['follower'] = response.data;  
@@ -8256,11 +8266,11 @@ $scope.gererChangementFichier3 = function(event,model){
        $scope.saveonly = function(model ,item ,entityName,moduleName,link){
 //           console.log("$scope.saveonly = function(model ,item ,entityName,moduleName) ==== "+link);
            commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%"); 
-           var urlPath = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/";
+           var urlPath = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/";
            $http.post(urlPath,item).then(
                 function(response){
                    if(angular.isDefined(link)&& link!=null && link!=''){
-                       var urlPah="http://"+$location.host()+":"+$location.port()+"/kerencore/menuaction/bystringproperty/name/"+link;
+                       var urlPah=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/menuaction/bystringproperty/name/"+link;
                        $http.get(urlPah)
                                .then(function(response){
 //                                   console.log("$scope.saveonly = function(model ,item ,entityName,moduleName,link) ===== "+angular.toJson(response.data));
@@ -8295,10 +8305,10 @@ $scope.gererChangementFichier3 = function(event,model){
         */
        $scope.saveanrelaod = function(model ,item ,entityName,moduleName,modelpath){
            commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%"); 
-           var urlPath = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/";
+           var urlPath = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/";
            $http.post(urlPath,item).then(
                 function(response){
-                   urlPath = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/byid/compareid/"+item.compareid;
+                   urlPath = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/byid/compareid/"+item.compareid;
                    $http.get(urlPath).then( 
                       function(response){
                            var modelentity = $scope.getParentModel(modelpath);
@@ -8463,7 +8473,7 @@ $scope.gererChangementFichier3 = function(event,model){
             var key = commonsTools.keygenerator(model);
             commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");  
             $http.defaults.headers.common['live_search']= text; 
-            var urlPath = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(meta.moduleName)+"/"+angular.lowercase(meta.entityName)+"/filter/0/5";
+            var urlPath = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(meta.moduleName)+"/"+angular.lowercase(meta.entityName)+"/filter/0/5";
             $http.get(urlPath).then(
                     function(response){
                                     //alert("Data: "+response.data+" === "+model);   
@@ -8512,7 +8522,7 @@ $scope.gererChangementFichier3 = function(event,model){
 //            console.log("$scope.getData = function(model ,item ,entityName,moduleName,index,modelpath)============ model : "+model+" ====== modelpath : "+modelpath+"  === "+angular.toJson(item));            
             var modelpart = model.split(".");
             var fieldName = modelpart[modelpart.length-1];
-            var url = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/count";
+            var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/count";
             if(item.id=='load'){
                     $http.get(url)
                             .then(function(response){
@@ -8526,7 +8536,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                             if(item.id == "load"){       
                                                 commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");  
                                                  //Chargement des donnÃ¯Â¿Â½es
-                                                 var urlPath = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/filter/0/10";
+                                                 var urlPath = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/filter/0/10";
                                                  $http.get(urlPath).then( 
                                                    function(response){
                                                         //alert("Data: "+response.data+" === "+model);   
@@ -8606,7 +8616,7 @@ $scope.gererChangementFichier3 = function(event,model){
                     //var obj = array[array.length-1];                   
                     commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");               
                      //Chargement des donnÃ¯Â¿Â½es
-                     var urlPath = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/filter/"+$scope.temporalPagination.beginIndex+"/"+$scope.temporalPagination.pageSize;
+                     var urlPath = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/filter/"+$scope.temporalPagination.beginIndex+"/"+$scope.temporalPagination.pageSize;
                      $http.get(urlPath).then( 
                        function(response){
                             //alert("Data: "+response.data+" === "+model);   
@@ -9143,12 +9153,12 @@ $scope.gererChangementFichier3 = function(event,model){
            */
           $scope.dashboardEntryBtn = function(model , entity , method){
               //chargement des metaData
-              var url = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(model)+"/"+angular.lowercase(entity)+"/meta";
+              var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(model)+"/"+angular.lowercase(entity)+"/meta";
               commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
               $http.get(url)
                       .then(function(response){
                           var metadata = response.data ;
-                          var url2 = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(model)+"/"+angular.lowercase(entity)+"/"+method;
+                          var url2 = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(model)+"/"+angular.lowercase(entity)+"/"+method;
                           $http.get(url2)
                                   .then(function(response){
                                       var data = response.data;
@@ -9209,7 +9219,7 @@ $scope.gererChangementFichier3 = function(event,model){
           };
            $scope.saveOrUpdateEditableListtAction = function(item){
                     commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
-                     var url="http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.metaData.moduleName)+"/"+angular.lowercase($scope.metaData.entityName);
+                     var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.metaData.moduleName)+"/"+angular.lowercase($scope.metaData.entityName);
                      var validate = $scope.validateFields($scope.metaData , item);
                      if(validate.length>0){
                         var message = "";
@@ -9327,7 +9337,7 @@ $scope.gererChangementFichier3 = function(event,model){
                 var parts = $scope.importData.fichier.split('\\');
                 imp.fichier = parts[parts.length-1];
                 commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
-                var url="http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.metaData.moduleName)+"/"+angular.lowercase($scope.metaData.entityName)+"/import";
+                var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.metaData.moduleName)+"/"+angular.lowercase($scope.metaData.entityName)+"/import";
                 $http.put(url,imp)
                         .then(function(response){
                             var errors = commonsTools.converErrorsMap(response.data);
@@ -9360,7 +9370,7 @@ $scope.gererChangementFichier3 = function(event,model){
                 var parts = $scope.importData.fichier.split('\\');
                 imp.fichier = parts[parts.length-1];
                 commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
-                var url="http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.metaData.moduleName)+"/"+angular.lowercase($scope.metaData.entityName)+"/validateimport";
+                var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.metaData.moduleName)+"/"+angular.lowercase($scope.metaData.entityName)+"/validateimport";
                 $http.put(url,imp)
                         .then(function(response){
                             var errors = commonsTools.converErrorsMap(response.data);
@@ -9497,7 +9507,7 @@ $scope.gererChangementFichier3 = function(event,model){
                       }//end for(var i=0 ;i<$scope.selectedObjects.length;i++){
                   }//end if($scope.tableheaderselected==false){
                   commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");   
-                  var url="http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.metaData.moduleName)+"/"+angular.lowercase($scope.metaData.entityName)+"/export";
+                  var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.metaData.moduleName)+"/"+angular.lowercase($scope.metaData.entityName)+"/export";
                   $http.put(url,$scope.importData,{responseType: "arraybuffer"})
                           .then(function(response){
                                 var linkElement = document.createElement('a');
@@ -9771,11 +9781,11 @@ $scope.gererChangementFichier3 = function(event,model){
            Ajout d'un abornÃ©e pour un message
          **/
          $scope.editPanelAjoutAborne = function(){            
-            var url="http://"+$location.host()+":"+$location.port()+"/kerencore/utilisateur/meta";
+            var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/utilisateur/meta";
             $http.get(url)
                     .then(function(response){
                         var metaData = response.data;
-                        var url="http://"+$location.host()+":"+$location.port()+"/kerencore/canal/directe/"+$rootScope.globals.user.courriel;
+                        var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/canal/directe/"+$rootScope.globals.user.courriel;
                         $http.get(url)
                                 .then(function(response){
                                     var datas = response.data;                                    
@@ -9905,10 +9915,10 @@ $scope.gererChangementFichier3 = function(event,model){
              }else if(type=='canaux'){
                  $scope.dataCache['follower'].canaux.splice(id ,1);
              }//end if(type=='abonnes')
-              var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/follower/"+$scope.dataCache['follower'].id;
+              var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/follower/"+$scope.dataCache['follower'].id;
               $http.put(url,$scope.dataCache['follower'])
                     .then(function(response){
-                         var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/follower/entity/"+$scope.currentObject.serial+"/"+$scope.currentObject.id;
+                         var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/follower/entity/"+$scope.currentObject.serial+"/"+$scope.currentObject.id;
                         $http.get(url)
                                 .then(function(response){
                                     $scope.dataCache['follower'] = response.data;  
@@ -9925,11 +9935,11 @@ $scope.gererChangementFichier3 = function(event,model){
            Ajout d'un abornÃ©e pour un message
          **/
          $scope.editPanelAjoutCanaux = function(){
-            var url="http://"+$location.host()+":"+$location.port()+"/kerencore/canal/meta";
+            var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/canal/meta";
             $http.get(url)
                     .then(function(response){
                         var metaData = response.data;
-                        var url="http://"+$location.host()+":"+$location.port()+"/kerencore/canal/canaux/"+$rootScope.globals.user.courriel;
+                        var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/canal/canaux/"+$rootScope.globals.user.courriel;
                         $http.get(url)
                                 .then(function(response){
                                     var datas = response.data;                                    
@@ -9978,7 +9988,7 @@ $scope.gererChangementFichier3 = function(event,model){
                      $scope.temporalPagination.currentPage=1;
                      $scope.temporalPagination.module = metaData.moduleName;
                      $scope.temporalPagination.model = metaData.entityName;
-                     var url = "http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(metaData.moduleName)+"/"+angular.lowercase(metaData.entityName)+"/count";
+                     var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(metaData.moduleName)+"/"+angular.lowercase(metaData.entityName)+"/count";
                      commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
                      $http.get(url)
                              .then(function(response){
@@ -10010,7 +10020,7 @@ $scope.gererChangementFichier3 = function(event,model){
           */
          $scope.followerpiecejointedeleteAction = function(filename){
                 commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%"); 
-                var url2 = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/temporal/"+filename;
+                var url2 = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/temporal/"+filename;
                 $http({method:"DELETE" , url:url2
                 }).then(function(response){
                      for(var i=0 ; i<$scope.dataCache['messageobject'].piecesjointe.length;i++){
@@ -10031,13 +10041,13 @@ $scope.gererChangementFichier3 = function(event,model){
           * @returns {undefined}
           */
          $scope.piecejointedeleteAction = function(id,filename){
-             var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe/";
+             var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe/";
              commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");              
              $http({
                  method:"DELETE", url:url+id                 
              }).then(function(response){
                  $scope.piecejointeMenu(null,$scope.currentObject,$scope.metaData);
-                 var url2 = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/";
+                 var url2 = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/";
                  $http({method:"DELETE" , url:url2+filename
                  }).then(function(response){
                      commonsTools.hideDialogLoading();
@@ -10074,13 +10084,13 @@ $scope.gererChangementFichier3 = function(event,model){
           */
          $scope.piecejointeviewAction = function(id){
              //Recuperation de la piece jointe
-             var url ="http://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe/byid/id/"+id;
+             var url =$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe/byid/id/"+id;
              commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");   
              $http.get(url)
                      .then(function(response){
                          var pj = response.data;
                          if(pj){
-                             var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/";
+                             var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/";
                              var parts = pj.attachename.split(".");
                              var type = "application/pdf";
                              var extension = parts[parts.length-1];
@@ -10171,7 +10181,7 @@ $scope.gererChangementFichier3 = function(event,model){
 //             console.log("$scope.downloadAction = function(model , fieldName) =================== model :"+model+" === fieldName :"+fieldName+" ==== pj:"+pj);
             commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");   
                   if(pj){
-                             var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/";
+                             var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/";
                              var parts = pj.split(".");
                              var type = "application/pdf";
                              var extension = parts[parts.length-1];
@@ -10263,7 +10273,7 @@ $scope.gererChangementFichier3 = function(event,model){
                     }//end if($scope.messageType=="inner")
                     $scope.dataCache["follower"].messages.push($scope.dataCache['messageobject']);
 //                    console.log("$scope.sendAction ==== "+$scope.messageType);
-                    var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/follower/send/"+$rootScope.globals.user.id;
+                    var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/follower/send/"+$rootScope.globals.user.id;
                     commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
                     $http.post(url,$scope.dataCache["follower"])
                             .then(function(response){                               
@@ -10381,7 +10391,7 @@ $scope.gererChangementFichier3 = function(event,model){
                       }else {//Cas des autres button des types actions
                           //Create differ
                           commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
-                          var url="http://"+$location.host()+":"+$location.port()+"/kerencore/menuaction/bystringproperty/name/"+data.name;
+                          var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/menuaction/bystringproperty/name/"+data.name;
                           //console.log("$scope.buttonAction = "+angular.toJson(data)+" == "+type+" === "+data.name+"==== "+url); 
                           $http.get(url)
                                   .then(function(response){                    
@@ -10404,7 +10414,7 @@ $scope.gererChangementFichier3 = function(event,model){
                    }else if(type==='link') {
                        //Create differ
                           commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
-                          var url="http://"+$location.host()+":"+$location.port()+"/kerencore/menuaction/bystringproperty/name/"+data.name;
+                          var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/menuaction/bystringproperty/name/"+data.name;
                           //console.log("$scope.buttonAction = "+angular.toJson(data)+" == "+type+" === "+data.name+"==== "+url); 
                           $http.get(url)
                                   .then(function(response){                    
@@ -10464,7 +10474,7 @@ $scope.gererChangementFichier3 = function(event,model){
                        if(data.model&&data.entity&&data.method){
                            var template = $scope.templateDataBuilder(data['template'],extern);
                            commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
-                           var url="http://"+$location.host()+":"+$location.port()+"/"+data.model+"/"+data.entity+"/"+data.method;
+                           var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+data.model+"/"+data.entity+"/"+data.method;
                            $http.post(url,template)
                                    .then(function(response){
                                        $scope.notifyWindow("Status Operation" ,"L'opÃ©ration s'est dÃ©roulÃ©e avec sucess","success");  
@@ -10480,7 +10490,7 @@ $scope.gererChangementFichier3 = function(event,model){
                      if(states){
                        if(data.model&&data.entity&&data.method && $scope.currentObject){
                            commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
-                           var url="http://"+$location.host()+":"+$location.port()+"/"+data.model+"/"+data.entity+"/"+data.method;
+                           var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+data.model+"/"+data.entity+"/"+data.method;
                             $http.defaults.headers.common['states']=states;
                             $http.put(url,$scope.currentObject)
                                    .then(function(response){
@@ -10505,7 +10515,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                entity = $scope.temporalData;
                            }//end if(extern==true){
 //                           console.log("$scope.buttonAction = function(data,type,states,index,extern) ================== innerWindow : "+$scope.innerWindowType+" ====== Type Window : "+$scope.windowType+" ===== extern : "+extern+" === data : "+angular.toJson(data));
-                            var url="http://"+$location.host()+":"+$location.port()+"/"+data.model+"/"+data.entity+"/bi/"+data.method;                        
+                            var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+data.model+"/"+data.entity+"/bi/"+data.method;                        
                             $http.put(url,entity, {responseType: 'arraybuffer'})
                               .then(function(response){
                                     var contentElem = $scope.viewSelector("report");
@@ -10568,7 +10578,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                } 
                            }//end for(var key in template){
 //                           console.log("$scope.buttonAction = function(data,type,states,index,extern){ =============== extern : "+extern+"=== template : "+angular.toJson($http.defaults.headers.common));
-                           var url="http://"+$location.host()+":"+$location.port()+"/"+data.model+"/"+data.entity+"/"+data.method;   
+                           var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+data.model+"/"+data.entity+"/"+data.method;   
                            $http.get(url, {responseType: "arraybuffer"})
                                      .then(function(response){
 //                                         console.log("$scope.piecejointeviewAction  ============================================= "+angular.toJson(response));
@@ -11701,7 +11711,7 @@ $scope.gererChangementFichier3 = function(event,model){
            * @returns {unresolved}
            */
            $scope.kabanPanelComponent = function(metaData){
-//                var url ="http://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.currentObject.moduleName)+"/"+angular.lowercase($scope.currentObject.entity)+"/"+angular.lowercase($scope.currentObject.method);
+//                var url =$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase($scope.currentObject.moduleName)+"/"+angular.lowercase($scope.currentObject.entity)+"/"+angular.lowercase($scope.currentObject.method);
                 $scope.windowType ="kaban";
                 $scope.previousType="kaban";
                 var listElem  = null ; 
@@ -12240,7 +12250,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                                 //console.log("Chargement MetaData "+angular.toJson(metaData));
                                                 $scope.predicats = new Array();
                                                 $scope.metaData = metaData; 
-                                                var url ="http://"+$location.host()+":"+$location.port()+"/kerencore/menumodule/refresh";
+                                                var url =$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/menumodule/refresh";
                                                 //Parametres pagination
                                                 $http.post(url)
                                                         .then(function(response){
@@ -12286,7 +12296,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                                 //console.log("Chargement MetaData "+angular.toJson(metaData));
                                                 $scope.predicats = new Array();
                                                 $scope.metaData = metaData; 
-                                                var url ="http://"+$location.host()+":"+$location.port()+"/kerencore/menumodule/install";
+                                                var url =$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/menumodule/install";
                                                 //Parametres pagination
                                                 $http.post(url,$scope.currentObject)
                                                         .then(function(response){
@@ -12323,16 +12333,19 @@ $scope.gererChangementFichier3 = function(event,model){
            * Installation d'un nouveau module
            * @returns {undefined}
            */
-          $scope.uninstallApplication = function(){
+          $scope.uninstallApplication = function(item){
                commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
                     //Initialisation de l'url
+                    if(angular.isDefined(item)){
+                        $scope.currentObject = item;
+                    }//end if(angular.isDefined(item)){
                     restService.url(angular.lowercase($scope.currentAction.entityName),angular.lowercase($scope.currentAction.moduleName));
                     $scope.metaData = restService.getMetaData(null).$promise
                                     .then(function(metaData){
                                                 //console.log("Chargement MetaData "+angular.toJson(metaData));
                                                 $scope.predicats = new Array();
                                                 $scope.metaData = metaData; 
-                                                var url ="http://"+$location.host()+":"+$location.port()+"/kerencore/menumodule/uninstall";
+                                                var url =$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/menumodule/uninstall";
                                                 //Parametres pagination
                                                 $http.post(url,$scope.currentObject)
                                                         .then(function(response){
@@ -12347,7 +12360,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                                                             $scope.searchCriteria = new String();               
                                                                             $scope.listFramePanelBuilder(metaData);
                                                                             $scope.loadData();
-                                                                            $scope.notifyWindow("Status Operation" ,"L'opÃ©ration s'est dÃ©roulÃ©e avec sucess","success");  
+                                                                            $scope.notifyWindow("Status Operation" ,"L'opération s'est dÃ©roulÃ©e avec sucess","success");  
                                                                             location.reload();
                                                                       }
                                                                       , function(error){
@@ -12385,7 +12398,7 @@ $scope.gererChangementFichier3 = function(event,model){
                      $scope.updateApplication();
                 }else if($scope.currentAction.name=="export_bd"){//export the data base
                     commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");   
-                    var url="http://"+$location.host()+":"+$location.port()+"/kerencore/resource/exportbd";
+                    var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/exportbd";
                     $http.get(url,{responseType: "arraybuffer"})
                           .then(function(response){
                                 var linkElement = document.createElement('a');
@@ -12433,7 +12446,7 @@ $scope.gererChangementFichier3 = function(event,model){
                           templateID =$scope.currentAction.dashboard.id;
                           commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
                           //end if($scope.currentAction.dashboard)
-                          var url = "http://"+$location.host()+":"+$location.port()+"/"+model+"/"+entity+"/"+method+"/"+templateID;
+                          var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+model+"/"+entity+"/"+method+"/"+templateID;
                           $http.get(url)
                                   .then(function(response){
                                         $scope.currentObject = response.data;
@@ -12672,7 +12685,7 @@ $scope.gererChangementFichier3 = function(event,model){
 //             console.log("$scope.downloadAction = function(model , fieldName) =================== model :"+model+" === fieldName :"+fieldName+" ==== pj:"+pj);
              commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");   
                   if(pj){
-                             var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/";
+                             var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/";
                              var parts = pj.split(".");
                              var type = "application/pdf";
                              var extension = parts[parts.length-1];
@@ -12723,7 +12736,7 @@ $scope.gererChangementFichier3 = function(event,model){
                              }//end if(extension=='pdf')
                              $http.get(url, {responseType: "arraybuffer"})
                                      .then(function(response){
-                                         console.log("$scope.piecejointeviewAction  ============================================= "+type+" === file name : "+pj);
+//                                         console.log("$scope.piecejointeviewAction  ============================================= "+type+" === file name : "+pj);
 //                                         var filename = response.headers['x-filename'];
 //                                         var contentType = response.headers['content-type'];
                                          try{
@@ -12798,8 +12811,7 @@ $scope.gererChangementFichier3 = function(event,model){
                             $http.defaults.headers.common['predicats']= angular.toJson($scope.predicats); 
                             $http.defaults.headers.common['values']= angular.toJson($scope.getSelectLines()); 
                             var url = 'http://'+$location.host()+':'+$location.port()+'/'+angular.lowercase(report.model)+'/'+angular.lowercase(report.entity)+'/'+report.method;
-                            commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");        
-             //               $http.defaults.headers.common['args']= angular.toJson($scope.temporalData);
+                            commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");      
              //$http.get(url, {responseType: 'arraybuffer',data:angular.toJson($scope.temporalData)})
                             if(report.extern==false){
                                 $http.put(url,$scope.temporalData)

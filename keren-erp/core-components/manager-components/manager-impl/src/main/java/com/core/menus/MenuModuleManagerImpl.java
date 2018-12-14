@@ -201,6 +201,9 @@ public class MenuModuleManagerImpl
             if(module.getTheme()!=null){
                 module.setInstallable(false);
             }//end if(module.getTheme()!=null){
+            //Copy de l'icon dans le repertoire static            
+            String icon = FileHelper.processIcon(manifest);            
+            module.setIcon(icon);
             dao.update(module.getId(), module);
             //Deplacement des artefacts javaee
             FileHelper.processCore(manifest);
@@ -208,14 +211,16 @@ public class MenuModuleManagerImpl
             FileHelper.processReporting(manifest);
             //Copies des images 
             FileHelper.processImages(manifest);
+            
     }    
 
     /**
      * 
      * @param module 
+     * @throws java.io.IOException 
      */
     @Override
-    public void uninstallApplication(MenuModule module) {
+    public void uninstallApplication(MenuModule module) throws IOException {
         //To change body of generated methods, choose Tools | Templates.
         if(module==null||!module.isActive()) return ;
         module = dao.findByPrimaryKey("id", module.getId());
@@ -242,6 +247,12 @@ public class MenuModuleManagerImpl
         //Mise a jour du status du module
         module.setActive(false);
         dao.update(module.getId(), module);
+        //Lecture du fichier manifest liée
+//        Manifest manifest = FileHelper.getManifest(module);
+        //Suppression des images
+//        FileHelper.unProcessImages(manifest);
+        //Suppression du repertoire des tempates
+//        FileHelper.unProcessReporting(manifest);
     }
     
     /**

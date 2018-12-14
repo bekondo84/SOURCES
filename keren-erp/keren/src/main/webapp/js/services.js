@@ -36,7 +36,7 @@ angular.module("mainApp")
              Build the restName base of the entityName
             **/
             url:function(entityName,moduleName){
-                 urlPath = "http://"+$location.host()+":"+$location.port()+"/"+moduleName+"/"+entityName+"/";
+                 urlPath = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+moduleName+"/"+entityName+"/";
                  restResource = $resource(urlPath+":path/:first/:max/:propertyname/:id/:value"
                        ,{path:'@path',first:'@first',max:'@max',id:'@id'}
                        ,{search:{
@@ -215,7 +215,7 @@ angular.module("mainApp")
            uploadFile:function(files){
 //               console.log("restService.uploadFile:function(files) ========= "+angular.toJson(files));
                //URL de la resource responsable de transfert du fichier
-               var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/upload";
+               var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/upload";
                var fd = new FormData();
                //Take the first select 
                fd.append("resources",files[0]);        
@@ -226,7 +226,7 @@ angular.module("mainApp")
            uploadFile2:function(files){
 //               console.log("restService.uploadFile:function(files) ========= "+angular.toJson(files));
                //URL de la resource responsable de transfert du fichier
-               var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/temporalupload";
+               var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/temporalupload";
                var fd = new FormData();
                //Take the first select 
                fd.append("resources",files[0]);        
@@ -240,7 +240,7 @@ angular.module("mainApp")
             * @returns {undefined}
             */
            downloadPNG:function(filename,imgID){
-               var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/png/"+filename;
+               var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/png/"+filename;
                $http.get(url, {responseType: "arraybuffer"})
                        .then(function(response){
                                 var arrayBufferView = new Uint8Array(response.data );
@@ -261,7 +261,7 @@ angular.module("mainApp")
             * @returns {undefined}
             */
            getPNG_URL:function(filename){
-               var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/png/"+filename;
+               var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/png/"+filename;
                $http.get(url, {responseType: "arraybuffer"})
                        .then(function(response){
                                 var arrayBufferView = new Uint8Array(response.data );

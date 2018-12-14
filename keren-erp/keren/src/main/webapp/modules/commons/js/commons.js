@@ -286,7 +286,7 @@ angular.module('keren.core.commons')
                     
                 },
                 backtocore : function(scope){
-                     var url = "http://"+$location.host()+":"+$location.port()+"/keren";
+                     var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren";
                      var key = $('#website_cache').attr('value');
                      var session = angular.fromJson(sessionStorage.getItem(key));
                      key= "kerensession";
@@ -308,10 +308,10 @@ angular.module('keren.core.commons')
                  * @returns {undefined}
                  */
                 goto : function(scope, websiteid,templateid , fragment){
-                    var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/websitemodule/indexpage/"+websiteid;
+                    var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/websitemodule/indexpage/"+websiteid;
                     if(angular.isDefined(templateid)
                             && templateid!=null){
-                          url = "http://"+$location.host()+":"+$location.port()+"/kerencore/websitemodule/fragment/"+websiteid+"/"+templateid;
+                          url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/websitemodule/fragment/"+websiteid+"/"+templateid;
                     }//end if(angular.isDefined(args.cible)
                     this.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
                     var stopmoteur = function(IdMoteur){clearInterval(IdMoteur);};
@@ -335,19 +335,19 @@ angular.module('keren.core.commons')
                                     var type = item.attr('type');
                                     var src = item.attr("src");
                                     if(type=='css'){
-                                        var url = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
+                                        var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
                                         var linkElem = document.createElement('style');
                                         linkElem.setAttribute('type','text/css');
                                         linkElem.innerHTML='@import url("'+url+'");';
                                         item.replaceWith(linkElem);
                                     }else if(type=='less'){
-                                        var url = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
+                                        var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
                                         var linkElem = document.createElement('style');
                                         linkElem.setAttribute('type','text/less');
                                         linkElem.innerHTML='@import url("'+url+'");';
                                         item.replaceWith(linkElem);
                                     }else if(type=='javascript'){
-                                        var url = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
+                                        var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
                                         $('<script />', { type : 'text/javascript', src : url}).appendTo('body');
 //                                        scope.javascripts.push(url);
              //                           var scriptElem = document.createElement('script');
@@ -623,7 +623,7 @@ angular.module('keren.core.commons')
              * @returns {undefined}
              */
             sendAction : function(message){
-                var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/smessage/send/"+message.sender.id;
+                var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/smessage/send/"+message.sender.id;
 //                    commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
                 $http.post(url,message)
                         .then(function(response){                                                        
@@ -646,19 +646,19 @@ angular.module('keren.core.commons')
                        var type = item.attr('type');
                        var src = item.attr("src");
                        if(type=='css'){
-                           var url = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
+                           var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
                            var linkElem = document.createElement('style');
                            linkElem.setAttribute('type','text/css');
                            linkElem.innerHTML='@import url("'+url+'");';
                            item.replaceWith(linkElem);
                        }else if(type=='less'){
-                           var url = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
+                           var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
                            var linkElem = document.createElement('style');
                            linkElem.setAttribute('type','text/less');
                            linkElem.innerHTML='@import url("'+url+'");';
                            item.replaceWith(linkElem);
                        }else if(type=='javascript'){
-                           var url = "http://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
+                           var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
                            $('<script />', { type : 'text/javascript', src : url}).appendTo('body');
 //                            scope.javascripts.push(url);
 //                           var scriptElem = document.createElement('script');
@@ -2373,7 +2373,7 @@ angular.module('keren.core.commons')
              Build the restName base of the entityName
             **/
             url:function(entityName,moduleName){
-                 urlPath = "http://"+$location.host()+":"+$location.port()+"/"+moduleName+"/"+entityName+"/";
+                 urlPath = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+moduleName+"/"+entityName+"/";
                  restResource = $resource(urlPath+":path/:first/:max/:propertyname/:id"
                        ,{path:'@path',first:'@first',max:'@max',id:'@id'}
                        ,{search:{
@@ -2519,7 +2519,7 @@ angular.module('keren.core.commons')
             */
            uploadFile:function(files){
                //URL de la resource responsable de transfert du fichier
-               var url = "http://"+$location.host()+":"+$location.port()+"/kerencore/resource/upload";
+               var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/upload";
                var fd = new FormData();
                //Take the first select 
                for(var i=0;i<files.length;i++){
