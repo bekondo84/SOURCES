@@ -81,7 +81,7 @@ public class CommonTools {
         if(item.getAction()!=null){
             for(Action act:item.getAction()){
                 ActionItem data = new ActionItem(act.getId(),act.getType(), act.getLabel(), act.getValue());
-//                data.set
+               data.setState(act.getStates());
                 actions.add(data);
             }
         }
@@ -545,6 +545,45 @@ public class CommonTools {
         }while(ligne!=null);
         return buffer.toString().trim();
     }
+    
+    /**
+     * 
+     * @param filename
+     * @return 
+     */
+    private static String getFileType(String filename){
+        String[] part = filename.split(".");
+        if(part.length>1){
+            return part[part.length-1];            
+        }//end if(part.length>1){
+        return null;
+    }
+    
+    private static String getMimeType(String type){
+        if(type.equalsIgnoreCase("pdf"))
+            return "application/pdf";
+        else if(type.equalsIgnoreCase("png")||type.equalsIgnoreCase("jpeg"))
+            return "image/png";
+        else if(type.equalsIgnoreCase("doc")||type.equalsIgnoreCase("dot"))
+            return "application/msword";
+        else if(type.equalsIgnoreCase("docx")||type.equalsIgnoreCase("dotx"))
+            return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        else if(type.equalsIgnoreCase("xls")||type.equalsIgnoreCase("xlt")||type.equalsIgnoreCase("xla"))
+            return type = "application/vnd.ms-excel";
+        else if(type.equalsIgnoreCase("xlsx")||type.equalsIgnoreCase("xltx"))
+            return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        else if(type.equalsIgnoreCase("ppt")||type.equalsIgnoreCase("pot")||type.equalsIgnoreCase("pps")||type.equalsIgnoreCase("ppa"))
+            return "application/vnd.ms-powerpoint";
+        else if(type.equalsIgnoreCase("pptx"))
+            return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+        else if(type.equalsIgnoreCase("mdb"))
+            return "application/vnd.ms-access";
+        else if(type.equalsIgnoreCase("rar"))
+            return "application/x-rar-compressed, application/octet-stream";
+        else if(type.equalsIgnoreCase("odt"))
+            return "application/vnd.oasis.opendocument.text";
+        return null;
+    }
     /**
      * 
      * @param file
@@ -553,12 +592,28 @@ public class CommonTools {
      * @throws FileNotFoundException 
      */
      public static Response getStream(File file,String filename) throws FileNotFoundException{
-        String[] names = file.getName().split(".");
-        FileInputStream fileInputStream = new FileInputStream(file);
-        Response.ResponseBuilder responseBuilder = Response.ok((Object)fileInputStream);
-//        responseBuilder.type("text/plain");
-        responseBuilder.header("Content-Disposition", "attachment; filename="+filename);
-        return responseBuilder.build();
+       /* String extension =getFileType(file.getName());
+        if(extension.equalsIgnoreCase("pdf")){
+            return getPdf(file, filename);
+        }else if(extension.equalsIgnoreCase("txt") || extension.equalsIgnoreCase("sql")){
+            return getText(file, filename);
+        }else if(extension.equalsIgnoreCase("png")){
+            try {
+                return getImage(file, filename);
+            } catch (IOException ex) {
+               throw  new FileNotFoundException(ex.getMessage());
+            }
+        }else*/{
+            String[] names = file.getName().split(".");
+            FileInputStream fileInputStream = new FileInputStream(file);
+            Response.ResponseBuilder responseBuilder = Response.ok((Object)fileInputStream);
+//            String mimetype = getMimeType(extension);
+//            if(mimetype!=null){
+//                responseBuilder.type(mimetype);
+//            }//end if(mimetype!=null){
+            responseBuilder.header("Content-Disposition", "attachment; filename="+file.getName());
+            return responseBuilder.build();
+        }//end  if(extension.equalsIgnoreCase("pdf")){
     }
     /**
      * 

@@ -1997,14 +1997,14 @@ angular.module('keren.core.commons')
                         aElem.setAttribute('role','menuitem');
                         aElem.setAttribute('tabindex','-1');
                         aElem.setAttribute('href','#');
-                        aElem.setAttribute('ng-click',"updateAction("+terme+")");
+                        aElem.setAttribute('ng-click',"refreshApplication("+terme+")");
                         aElem.appendChild(document.createTextNode('{{updatebtnlabel | translate}}')) ;
                         liElem.appendChild(aElem);
                     }else{
                         var liElem = document.createElement('li');
                         var aElem = document.createElement('a');                        
                         liElem.setAttribute('role','presentation');
-                        liElem.setAttribute('ng-hide','desableupdate');
+                        liElem.setAttribute('ng-hide',"!canUpdate("+terme+")");
                         ulelem.appendChild(liElem);
                         aElem = document.createElement('a');
                         aElem.setAttribute('role','menuitem');
@@ -2014,8 +2014,9 @@ angular.module('keren.core.commons')
                         aElem.appendChild(document.createTextNode('{{updatebtnlabel | translate}}')) ;
                         liElem.appendChild(aElem);
                         //Bloc dupliquer
+                        liElem = document.createElement('li');
                         liElem.setAttribute('role','presentation');
-                        liElem.setAttribute('ng-hide','desablecreate');
+                        liElem.setAttribute('ng-hide',"!canCreate("+terme+")");
                         ulelem.appendChild(liElem);
                         aElem = document.createElement('a');
                         aElem.setAttribute('role','menuitem');
@@ -2027,7 +2028,7 @@ angular.module('keren.core.commons')
                         //Bloc 3
                         liElem = document.createElement('li');
                         liElem.setAttribute('role','presentation');
-                        liElem.setAttribute('ng-hide','desabledelete');
+                        liElem.setAttribute('ng-hide',"!canDelete("+terme+")");
                         ulelem.appendChild(liElem);
                         aElem = document.createElement('a');
                         aElem.setAttribute('role','menuitem');

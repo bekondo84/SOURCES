@@ -213,6 +213,40 @@ public class MenuModuleManagerImpl
             FileHelper.processImages(manifest);
             
     }    
+    
+    
+    @Override
+    public void refreshApplication(MenuModule module) throws Exception {
+        //To change body of generated methods, choose Tools | Templates.
+         //To change body of generated methods, choose Tools | Templates.
+            if(module==null) return ;   
+            //Verifier si le module a deja fait l'object d'une installation
+             if(!module.isActive()) return ;
+            //Lecture du fichier manifest liée
+             Manifest manifest = FileHelper.getManifest(module);
+             //On arrete si le fichier manifest est introuvable
+             if(manifest==null) return ;           
+            //Chargement des Vues
+            List<Keren> views = FileHelper.getViews(module);
+            //Creation ou mise ajour de la vue
+            applicationMenusBulder(module, views);
+            //Creation du theme
+            //Mise a jour du module
+            module.setActive(true);
+            if(module.getTheme()!=null){
+                module.setInstallable(false);
+            }//end if(module.getTheme()!=null){
+            //Copy de l'icon dans le repertoire static            
+            String icon = FileHelper.processIcon(manifest);            
+            module.setIcon(icon);
+            dao.update(module.getId(), module);
+            //Copies des templates reports
+            FileHelper.processReporting(manifest);
+            //Copies des images 
+            FileHelper.processImages(manifest);
+    }
+
+    
 
     /**
      * 
@@ -254,6 +288,7 @@ public class MenuModuleManagerImpl
         //Suppression du repertoire des tempates
 //        FileHelper.unProcessReporting(manifest);
     }
+    
     
     /**
      * Suppression des groupes
