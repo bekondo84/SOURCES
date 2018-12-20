@@ -2149,7 +2149,7 @@ angular.module("mainApp")
                    textareaElem.setAttribute('ng-model' , model);
                    $scope.constraintsProvider(field , textareaElem);
                    if((($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType!='new'))||(field.editable==false))){
-                        if(($scope.metaData.desableupdate==false)){
+                        if(($scope.metaData.desableupdate==false && $scope.innerWindowType!='new')){
                             textareaElem.setAttribute('readonly' , 'readonly');
                         }else{
                             if((field.updatable==false)||(field.editable==false)){
@@ -2228,15 +2228,14 @@ angular.module("mainApp")
                     inputElem.setAttribute('ng-model' , model);
                     $scope.constraintsProvider(field , inputElem);
                     if((($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType!='new'))||(field.editable==false))){
-                        if(($scope.metaData.desableupdate==false)){
+                        if(($scope.metaData.desableupdate==false && $scope.innerWindowType!='new')){
                             inputElem.setAttribute('readonly' , 'readonly');
                         }else{
                             if((field.updatable==false)||(field.editable==false)){
                                 inputElem.setAttribute('readonly' , 'readonly');
                             }//end if((field.updatable==false)||(field.editable==false)){
                         }
-                    }//end if(($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')
-                    
+                    }//end if(($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')                    
                     if(field.hide){
                         divElem.setAttribute('ng-hide',true);
                     }//end if(field.hide)
@@ -2309,7 +2308,7 @@ angular.module("mainApp")
                     $scope.constraintsProvider(field , inputElem);
                     if(($scope.windowType=="view")||
                             ((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType==false))||(field.editable==false)){
-                        if($scope.metaData.desableupdate==false){
+                        if($scope.metaData.desableupdate==false && $scope.innerWindowType!='new'){
                             inputElem.setAttribute('ng-disabled', 'true'); 
                         }//end if($scope.metaData.desableupdate==false){
                     }//end if(($scope.windowType=="view")||
@@ -2387,7 +2386,7 @@ angular.module("mainApp")
 //                    $scope.constraintsProvider(field , inputElem);
                     if(($scope.windowType=="view")||
                             ((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType==false))||(field.editable==false)){
-                        if($scope.metaData.desableupdate==false){
+                        if($scope.metaData.desableupdate==false && $scope.innerWindowType!='new'){
                             for(var i=0;i<inputs.length;i++){
                                 inputs[i].setAttribute('ng-disabled', 'true'); 
                             }//end for(var i=0;i<inputs.length;i++){
@@ -2838,7 +2837,7 @@ $scope.gererChangementFichier3 = function(event,model){
 //                  selectElem.setAttribute('disabled' , 'disabled');
 //              }
               if((($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType!='new'))||(field.editable==false))){
-                    if(($scope.metaData.desableupdate==false)){
+                    if(($scope.metaData.desableupdate==false && $scope.innerWindowType!='new')){
                        selectElem.setAttribute('disabled' , 'true');
                     }else{
                         if((field.updatable==false)||(field.editable==false)){
@@ -2940,12 +2939,19 @@ $scope.gererChangementFichier3 = function(event,model){
                var optionElem = document.createElement('option');
               optionElem.setAttribute('value' , '');
               optionElem.appendChild(document.createTextNode('Please select option'));
-              selectElem.appendChild(optionElem);             
-              if((metaData.desableupdate==true)&&(($scope.windowType=="view")||
-                        ((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType==false)))){
+              selectElem.appendChild(optionElem);
+              //if((($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType!='new'))||(field.editable==false))){
+             if((($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType!='new'))||(field.editable==false))){
+                if(($scope.metaData.desableupdate==false && $scope.innerWindowType!='new')){
                     selectElem.setAttribute('disabled' , 'true');
-//                    buttonElem.setAttribute('disabled' , 'disabled');
-              }//end if(($scope.metaData.desableupdate==false)&&(($scope.windowType=="view")
+////                    buttonElem.setAttribute('disabled' , 'disabled');
+                }else{
+                    if((field.updatable==false)||(field.editable==false)){
+                       selectElem.setAttribute('disabled' , 'true');
+////                    buttonElem.setAttribute('disabled' , 'disabled');
+                    }//end if((field.updatable==false)||(field.editable==false)){
+                }
+            }//end if(($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')
               //Desactiver la creation
             var spanElem = document.createElement('span');
             spanElem.setAttribute('class' , 'input-group-btn');
@@ -3124,10 +3130,19 @@ $scope.gererChangementFichier3 = function(event,model){
                selectElem.setAttribute('ng-model' , model);
                selectElem.setAttribute('ng-change' , "getData('"+model+"',item,'"+metaData.entityName+"','"+metaData.moduleName+"',"+(index+1)+",'"+modelpath+"')");
                divElem_1.appendChild(selectElem);  
-               if(($scope.windowType=="view")||
-                        ((angular.isDefined(field) &&angular.isDefined(field.updatable) && field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType==false))){
-                    selectElem.setAttribute('disabled' , 'true');                    
-                }
+//               if(($scope.windowType=="view")||
+//                        ((angular.isDefined(field) &&angular.isDefined(field.updatable) && field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType==false))){
+//                    selectElem.setAttribute('disabled' , 'true');                    
+//                }
+                if((($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType!='new'))||(field.editable==false))){
+                    if(($scope.metaData.desableupdate==false && $scope.innerWindowType!='new')){
+                        selectElem.setAttribute('disabled' , 'true'); 
+                    }else{
+                        if((field.updatable==false)||(field.editable==false)){
+                            selectElem.setAttribute('disabled' , 'true'); 
+                        }//end if((field.updatable==false)||(field.editable==false)){
+                    }
+                }//end if(($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')
                var key = commonsTools.keygenerator(model);
                $scope.filtertemplate[key] = field.filter ;
               selectElem.setAttribute('ng-options' , "item as item.designation for item in dataCache."+key);
@@ -6477,9 +6492,7 @@ $scope.gererChangementFichier3 = function(event,model){
                } else if(items.eq(i).attr("id")==footerID){
                    items.eq(i).replaceWith(footerDiv);
                } 
-           } 
-
-           
+           }            
            items = $(document).find("h4");
            for(var i=0; i<items.length;i++){               
                if(items.eq(i).attr("id")==titleID){
