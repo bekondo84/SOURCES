@@ -39,6 +39,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.teratech.achat.jaxrs.impl.base.EmplacementRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.base.EntrepotRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.base.FamilleArticleRSImpl.class);
+        resources.add(com.teratech.achat.jaxrs.impl.base.LienEmplacementRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.base.PaysRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.base.RegionRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.base.SocieteRSImpl.class);
@@ -60,6 +61,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.teratech.achat.jaxrs.impl.operations.BonCommandeRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.BonReceptionRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.CMDEFactureTMPRSImpl.class);
+        resources.add(com.teratech.achat.jaxrs.impl.operations.ControleQualiteRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.DemandePrixRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.DocumentAchatRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.EntreeRSImpl.class);
@@ -67,7 +69,13 @@ public class ApplicationConfig extends Application {
         resources.add(com.teratech.achat.jaxrs.impl.operations.FactureRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.LigneDocumentAchatRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.LigneDocumentStockRSImpl.class);
+        resources.add(com.teratech.achat.jaxrs.impl.operations.LigneReponseDPRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.LotRSImpl.class);
+        resources.add(com.teratech.achat.jaxrs.impl.operations.ReponseFournisseurRSImpl.class);
+        resources.add(com.teratech.achat.jaxrs.impl.tools.DARejetRSImpl.class);
+        resources.add(com.teratech.achat.jaxrs.impl.tools.ReponseToCommandeRSImpl.class);
+        resources.add(com.teratech.achat.jaxrs.impl.tools.SendCommandFormRSImpl.class);
+        resources.add(com.teratech.achat.jaxrs.impl.tools.SendDPFormRSImpl.class);
     }
     
 }

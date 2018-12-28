@@ -73,9 +73,9 @@ public class FactureManagerImpl
     public Facture find(String propertyName, Long entityID) {
         Facture data = super.find(propertyName, entityID); //To change body of generated methods, choose Tools | Templates.
         Facture result = new Facture(data);
-        for(LigneDocumentAchat ligne:data.getLignes()){
-            result.getLignes().add(new LigneDocumentAchat(ligne));
-        }//end for(LigneDocumentAchat ligne:data.getLignes()){
+//        for(LigneDocumentAchat ligne:data.getLignes()){
+//            result.getLignes().add(new LigneDocumentAchat(ligne));
+//        }//end for(LigneDocumentAchat ligne:data.getLignes()){
         for(Acompte ac:data.getAcomptes()){
             result.getAcomptes().add(new Acompte(ac));
         }//end for(Acompte ac:data.getAcomptes()){

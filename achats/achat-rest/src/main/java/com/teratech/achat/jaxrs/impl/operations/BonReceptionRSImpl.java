@@ -1,25 +1,32 @@
 
 package com.teratech.achat.jaxrs.impl.operations;
 
+import com.bekosoftware.genericdaolayer.dao.tools.RestrictionsContainer;
 import javax.ws.rs.Path;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.kerem.core.KerenExecption;
 import com.kerem.core.MetaDataUtil;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
+import com.megatimgroup.generic.jax.rs.layer.impl.FilterPredicat;
 import com.megatimgroup.generic.jax.rs.layer.impl.MetaColumn;
 import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
+import com.megatimgroup.generic.jax.rs.layer.impl.RSNumber;
+import com.teratech.achat.core.ifaces.operations.BonCommandeManagerRemote;
 import com.teratech.achat.core.ifaces.operations.BonReceptionManagerRemote;
 import com.teratech.achat.jaxrs.ifaces.operations.BonReceptionRS;
+import com.teratech.achat.model.operations.BonCommande;
 import com.teratech.achat.model.operations.BonReception;
-import com.teratech.achat.model.operations.Facture;
-import com.teratech.achat.model.operations.LigneDocumentAchat;
+import com.teratech.achat.model.operations.LigneDocumentStock;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
 
 
 /**
@@ -40,6 +47,9 @@ public class BonReceptionRSImpl
      */
     @Manager(application = "teratechachat", name = "BonReceptionManagerImpl", interf = BonReceptionManagerRemote.class)
     protected BonReceptionManagerRemote manager;
+    
+     @Manager(application = "teratechachat", name = "BonCommandeManagerImpl", interf = BonCommandeManagerRemote.class)
+    protected BonCommandeManagerRemote bcmanager;
 
     public BonReceptionRSImpl() {
         super();
@@ -63,13 +73,13 @@ public class BonReceptionRSImpl
          try {
             //To change body of generated methods, choose Tools | Templates.
             MetaData meta= MetaDataUtil.getMetaData(new BonReception(), new HashMap<String, MetaData>(), new ArrayList<String>());
-            MetaColumn workbtn = new MetaColumn("button", "work2", "Imprimer le bon", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'bonreception','method':'imprime'}");
-            workbtn.setStates(new String[]{"etabli"});
+            MetaColumn workbtn = new MetaColumn("button", "work2", "Imprimer le bon", false, "report", null);
+            workbtn.setValue("{'name':'bcach_report01','model':'teratechachat','entity':'bonreception','method':'imprime'}");
+            workbtn.setStates(new String[]{"etabli","qualite"});
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work3", "Contrôler la qualité", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'bonreception','method':'confirme'}");
-            workbtn.setStates(new String[]{"etabli"});
+            workbtn = new MetaColumn("button", "work3", "Contrôler la qualité", false, "link", null);
+            workbtn.setValue("{'name':'teratech_achat_ope_6_1',template:{'bonlivraison':'object','fournisseur':'object.fournisseur'},'header':['bonlivraison']}");
+            workbtn.setStates(new String[]{"etabli","qualite"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
              workbtn = new MetaColumn("button", "work4", "Rejeter", false, "workflow", null);
@@ -78,8 +88,8 @@ public class BonReceptionRSImpl
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
             workbtn = new MetaColumn("button", "work4", "Transferer en stock", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'bonreception','method':'transfere'}");
-            workbtn.setStates(new String[]{"etabli"});
+            workbtn.setValue("{'model':'teratechachat','entity':'bonreception','method':'transfere','critical':true,'alert':'Cette action va modifier le stock \nVoulez vous continuer ?'}");
+            workbtn.setStates(new String[]{"transfere"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
             workbtn = new MetaColumn("button", "work4", "Générer la facture", false, "workflow", null);
@@ -89,7 +99,7 @@ public class BonReceptionRSImpl
             meta.getHeader().add(workbtn);
             workbtn = new MetaColumn("button", "work5", "Annuler", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'bonreception','method':'annule'}");
-            workbtn.setStates(new String[]{"etabli"});
+            workbtn.setStates(new String[]{"disponible"});
             meta.getHeader().add(workbtn);
             MetaColumn stautsbar = new MetaColumn("workflow", "state", "State", false, "statusbar", null);
             meta.getHeader().add(stautsbar);
@@ -102,25 +112,112 @@ public class BonReceptionRSImpl
         return null;
     }
 
+     @Override
+    public List<BonReception> filter(HttpHeaders headers, int firstResult, int maxResult) {
+        Gson gson =new Gson();
+        //Type predType = ;
+        List contraints = new ArrayList();
+        if(headers.getRequestHeader("predicats")!=null&&!headers.getRequestHeader("predicats").isEmpty()){
+            contraints = gson.fromJson(headers.getRequestHeader("predicats").get(0),new TypeToken<List<FilterPredicat>>(){}.getType());
+        } //end if(headers.getRequestHeader("predicats")!=null){     
+        String searchText = null;
+
+        String liveSearch = null;
+        if(headers.getRequestHeader("search_text")!=null && !headers.getRequestHeader("search_text").isEmpty()){
+            searchText = gson.fromJson(headers.getRequestHeader("search_text").get(0),String.class);
+        } //end if(headers.getRequestHeader("predicats")!=null){     
+        if(headers.getRequestHeader("live_search")!=null && !headers.getRequestHeader("live_search").isEmpty()){
+            liveSearch = gson.fromJson(headers.getRequestHeader("live_search").get(0),String.class);
+        } //end if(headers.getRequestHeader("predicats")!=null){     
+
+//        System.out.println(AbstractGenericService.class.toString()+" === "+headers.getRequestHeader("predicats")+" === "+firstResult+" === "+maxResult+" == "+contraints);   
+        RestrictionsContainer container = RestrictionsContainer.newInstance();  
+        if(contraints!=null&&!contraints.isEmpty()){
+            for(Object obj : contraints){
+                FilterPredicat filter = (FilterPredicat) obj ;
+                if(filter.getFieldName()!=null&&!filter.getFieldName().trim().isEmpty()
+                        &&filter.getValue()!=null&&!filter.getValue().isEmpty()){
+                        container = addPredicate(container,filter);
+                }//end if(filter.getFieldName()!=null&&!filter.getFieldName().trim().isEmpty()
+            }//end  for(Object obj : contraints)
+        }//end if(contraints!=null&&!contraints.isEmpty())
+
+        if(liveSearch!=null&&!liveSearch.trim().isEmpty()){
+            container.addLike("searchkeys", liveSearch);
+        }else if(searchText!=null&&!searchText.trim().isEmpty()){
+            container.addLike("searchkeys", searchText);
+        }//end if(searchText!=null&&!searchText.trim().isEmpty()){        
+         Long _dpid = null;
+        if(headers.getRequestHeader("commande")!=null&&!headers.getRequestHeader("commande").isEmpty()){
+             _dpid = gson.fromJson(headers.getRequestHeader("commande").get(0), Long.class);
+              container.addEq("commande.id", _dpid);        
+         }//end if(headers.getRequestHeader("commande")!=null&&!headers.getRequestHeader("commande").isEmpty()){
+        //List result = new ArrayList();
+        return getManager().filter(container.getPredicats(), null , new HashSet<String>(), firstResult, maxResult);
+    }
+
+    @Override
+    public RSNumber count(HttpHeaders headers) {
+        //To change body of generated methods, choose Tools | Templates.
+         Gson gson =new Gson();
+        //Type predType = ;
+        List contraints = new ArrayList();
+        if(headers.getRequestHeader("predicats")!=null){
+            contraints = gson.fromJson(headers.getRequestHeader("predicats").get(0),new TypeToken<List<FilterPredicat>>(){}.getType());
+        }//end if(headers.getRequestHeader("predicats")!=null){        
+         String searchText = null;
+
+        String liveSearch = null;
+        if(headers.getRequestHeader("search_text")!=null && !headers.getRequestHeader("search_text").isEmpty()){
+            searchText = gson.fromJson(headers.getRequestHeader("search_text").get(0),String.class);
+        } //end if(headers.getRequestHeader("predicats")!=null){     
+        if(headers.getRequestHeader("live_search")!=null && !headers.getRequestHeader("live_search").isEmpty()){
+            liveSearch = gson.fromJson(headers.getRequestHeader("live_search").get(0),String.class);
+        } //end if(headers.getRequestHeader("predicats")!=null){     
+        RestrictionsContainer container = RestrictionsContainer.newInstance();  
+         if(contraints!=null&&!contraints.isEmpty()){
+            for(Object obj : contraints){
+                FilterPredicat filter = (FilterPredicat) obj ;
+                if(filter.getFieldName()!=null&&!filter.getFieldName().trim().isEmpty()
+                        &&filter.getValue()!=null&&!filter.getValue().isEmpty()){
+                      container = addPredicate(container, filter);
+                }//end if(filter.getFieldName()!=null&&!filter.getFieldName().trim().isEmpty()
+            }//end  for(Object obj : contraints)
+        }//end if(contraints!=null&&!contraints.isEmpty())
+         if(liveSearch!=null&&!liveSearch.trim().isEmpty()){
+            container.addLike("searchkeys", liveSearch);
+        }else if(searchText!=null&&!searchText.trim().isEmpty()){
+            container.addLike("searchkeys", searchText);
+        }//end if(searchText!=null&&!searchText.trim().isEmpty()){    
+        Long _dpid = null;
+         if(headers.getRequestHeader("commande")!=null&&!headers.getRequestHeader("commande").isEmpty()){
+             _dpid = gson.fromJson(headers.getRequestHeader("commande").get(0), Long.class);
+              container.addEq("commande.id", _dpid);        
+         }//end if(headers.getRequestHeader("commande")!=null&&!headers.getRequestHeader("commande").isEmpty()){
+         RSNumber number = new RSNumber(getManager().count(container.getPredicats()));
+//        System.out.println(AbstractGenericService.class.toString()+".count === "+" == "+number.getValue());
+        return number;
+    }
+
+    
     @Override
     protected void processBeforeUpdate(BonReception entity) {
         if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
             throw new KerenExecption("Veuillez saisir la reference");
-        }else if(entity.getDatecommande()==null){   
+        }else if(entity.getDate()==null){   
            throw new KerenExecption("Veuillez saisir la date de la commande");
-        }else if(entity.getFornisseur()==null){
+        }else if(entity.getFournisseur()==null){
             throw new KerenExecption("Veuillez saisir le fournisseur");
-        }else if(entity.getEmplacement()==null){
+        }else if(entity.getEntrepot()==null){
             throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
         }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
-            throw new KerenExecption("Veuillez saisir au moins un article");
+            throw new KerenExecption("Veuillez renseigner les Articles");
         }
-//        else if(entity.getState().equalsIgnoreCase("transfere")){
-//             throw new KerenExecption("Impossible de modifier un bon transféré");
-//        }else if(entity.getState().equalsIgnoreCase("confirme")){
-//             throw new KerenExecption("Impossible de modifier un bon contrôlé");
-//        }
-        validateLigneBR(entity, Boolean.FALSE);
+        for(LigneDocumentStock ligne : entity.getLignes()){
+            if(ligne.getId()<0) ligne.setId(-1L);
+        }//end for(LigneDocumentStock ligne : entity.getLignes()){
+        
+//        validateLigneBR(entity, Boolean.FALSE);
         super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -128,16 +225,19 @@ public class BonReceptionRSImpl
     protected void processBeforeSave(BonReception entity) {
         if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
             throw new KerenExecption("Veuillez saisir la reference");
-        }else if(entity.getDatecommande()==null){   
+        }else if(entity.getDate()==null){   
            throw new KerenExecption("Veuillez saisir la date de la commande");
-        }else if(entity.getFornisseur()==null){
+        }else if(entity.getFournisseur()==null){
             throw new KerenExecption("Veuillez saisir le fournisseur");
-        }else if(entity.getEmplacement()==null){
+        }else if(entity.getEntrepot()==null){
             throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
         }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
-            throw new KerenExecption("Veuillez saisir au moins un article");
+            throw new KerenExecption("Veuillez renseigner les Articles");
         }
-        validateLigneBR(entity, Boolean.FALSE);
+        for(LigneDocumentStock ligne : entity.getLignes()){
+            if(ligne.getId()<0) ligne.setId(-1L);
+        }//end for(LigneDocumentStock ligne : entity.getLignes()){
+//        validateLigneBR(entity, Boolean.FALSE);
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -145,46 +245,46 @@ public class BonReceptionRSImpl
 
     @Override
     public BonReception confirmer(HttpHeaders headers, BonReception entity) {
-        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
-            throw new KerenExecption("Veuillez saisir la reference");
-        }else if(entity.getDatecommande()==null){   
-           throw new KerenExecption("Veuillez saisir la date de la commande");
-        }else if(entity.getFornisseur()==null){
-            throw new KerenExecption("Veuillez saisir le fournisseur");
-        }else if(entity.getEmplacement()==null){
-            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
-        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
-            throw new KerenExecption("Veuillez saisir au moins un article");
-        }
-//        else if(entity.getState().equalsIgnoreCase("confirme")){
-//            throw new KerenExecption("Ce bon de reception est déjà confirmé");
-//        }else if(entity.getState().equalsIgnoreCase("transfere")){
-//            throw new KerenExecption("Impossible de confirmer un bon déja transféré");
-//        }else if(entity.getState().equalsIgnoreCase("annule")){
-//            throw new KerenExecption("Impossible de confirmer un bon annulé");
+//        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
+//            throw new KerenExecption("Veuillez saisir la reference");
+//        }else if(entity.getDatecommande()==null){   
+//           throw new KerenExecption("Veuillez saisir la date de la commande");
+//        }else if(entity.getFornisseur()==null){
+//            throw new KerenExecption("Veuillez saisir le fournisseur");
+//        }else if(entity.getEmplacement()==null){
+//            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
+//        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
+//            throw new KerenExecption("Veuillez saisir au moins un article");
 //        }
-        validateLigneBR(entity, Boolean.TRUE);
+//        else if(entity.getState().equalsIgnoreCase("confirme")){
+//            throw new KerenExecption("Ce bon de reception est dÃ©jÃ  confirmÃ©");
+//        }else if(entity.getState().equalsIgnoreCase("transfere")){
+//            throw new KerenExecption("Impossible de confirmer un bon dÃ©ja transfÃ©rÃ©");
+//        }else if(entity.getState().equalsIgnoreCase("annule")){
+//            throw new KerenExecption("Impossible de confirmer un bon annulÃ©");
+//        }
+//        validateLigneBR(entity, Boolean.TRUE);
         //To change body of generated methods, choose Tools | Templates.
         return manager.confirmer(entity);
     }
 
     @Override
     public BonReception rejeter(HttpHeaders headers, BonReception entity) {
-        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
-            throw new KerenExecption("Veuillez saisir la reference");
-        }else if(entity.getDatecommande()==null){   
-           throw new KerenExecption("Veuillez saisir la date de la commande");
-        }else if(entity.getFornisseur()==null){
-            throw new KerenExecption("Veuillez saisir le fournisseur");
-        }else if(entity.getEmplacement()==null){
-            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
-        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
-            throw new KerenExecption("Veuillez saisir au moins un article");
-        }
+//        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
+//            throw new KerenExecption("Veuillez saisir la reference");
+//        }else if(entity.getDatecommande()==null){   
+//           throw new KerenExecption("Veuillez saisir la date de la commande");
+//        }else if(entity.getFornisseur()==null){
+//            throw new KerenExecption("Veuillez saisir le fournisseur");
+//        }else if(entity.getEmplacement()==null){
+//            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
+//        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
+//            throw new KerenExecption("Veuillez saisir au moins un article");
+//        }
 //        else if(entity.getState().equalsIgnoreCase("transfere")){
-//            throw new KerenExecption("Impossible de rejeter un bon transféré");
+//            throw new KerenExecption("Impossible de rejeter un bon transfÃ©rÃ©");
 //        }else if(entity.getState().equalsIgnoreCase("annule")){
-//            throw new KerenExecption("Impossible de rejeter un bon annulé");
+//            throw new KerenExecption("Impossible de rejeter un bon annulÃ©");
 //        }
        //To change body of generated methods, choose Tools | Templates.
         return manager.rejeter(entity);
@@ -193,59 +293,38 @@ public class BonReceptionRSImpl
     @Override
     public BonReception transferer(HttpHeaders headers, BonReception entity) {
         //To change body of generated methods, choose Tools | Templates.
-        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
-            throw new KerenExecption("Veuillez saisir la reference");
-        }else if(entity.getDatecommande()==null){   
-           throw new KerenExecption("Veuillez saisir la date de la commande");
-        }else if(entity.getFornisseur()==null){
-            throw new KerenExecption("Veuillez saisir le fournisseur");
-        }else if(entity.getEmplacement()==null){
-            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
-        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
-            throw new KerenExecption("Veuillez saisir au moins un article");
-        }
-//        else if(entity.getState().equalsIgnoreCase("transfere")){
-//            throw new KerenExecption("ce bon a déja transféré");
-//        }else if(entity.getState().equalsIgnoreCase("annule")){
-//            throw new KerenExecption("Impossible de transférer un bon annulé");
-//        }else if(entity.getState().equalsIgnoreCase("rejete")){
-//            throw new KerenExecption("Impossible de transférer un bon rejeté <br/>Veuillez refaire le contrôle de la qualité");
-//        }
-        validateLigneBR(entity, Boolean.TRUE);
         return manager.transferer(entity);
     }
 
-    @Override
-    public Response imprimer(HttpHeaders headers, BonReception entity) {
-        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
-            throw new KerenExecption("Veuillez saisir la reference");
-        }else if(entity.getDatecommande()==null){   
-           throw new KerenExecption("Veuillez saisir la date de la commande");
-        }else if(entity.getFornisseur()==null){
-            throw new KerenExecption("Veuillez saisir le fournisseur");
-        }else if(entity.getEmplacement()==null){
-            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
-        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
-            throw new KerenExecption("Veuillez saisir au moins un article");
-        }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+//    @Override
+//    public Response imprimer(HttpHeaders headers, BonReception entity) {
+//        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
+//            throw new KerenExecption("Veuillez saisir la reference");
+//        }else if(entity.getDate()==null){   
+//           throw new KerenExecption("Veuillez saisir la date de la commande");
+//        }else if(entity.getFournisseur()==null){
+//            throw new KerenExecption("Veuillez saisir le fournisseur");
+//        }else if(entity.getEmplacement()==null){
+//            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
+//        }
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     @Override
     public BonReception annuler(HttpHeaders headers, BonReception entity) {
-        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
-            throw new KerenExecption("Veuillez saisir la reference");
-        }else if(entity.getDatecommande()==null){   
-           throw new KerenExecption("Veuillez saisir la date de la commande");
-        }else if(entity.getFornisseur()==null){
-            throw new KerenExecption("Veuillez saisir le fournisseur");
-        }else if(entity.getEmplacement()==null){
-            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
-        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
-            throw new KerenExecption("Veuillez saisir au moins un article");
-        }
+//        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
+//            throw new KerenExecption("Veuillez saisir la reference");
+//        }else if(entity.getDatecommande()==null){   
+//           throw new KerenExecption("Veuillez saisir la date de la commande");
+//        }else if(entity.getFornisseur()==null){
+//            throw new KerenExecption("Veuillez saisir le fournisseur");
+//        }else if(entity.getEmplacement()==null){
+//            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
+//        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
+//            throw new KerenExecption("Veuillez saisir au moins un article");
+//        }
 //        else if(entity.getState().equalsIgnoreCase("transfere")){
-//            throw new KerenExecption("Annulation impossible le bon à déja fait l'objet d'un transfert");
+//            throw new KerenExecption("Annulation impossible le bon Ã  dÃ©ja fait l'objet d'un transfert");
 //        }
         return manager.annuler(entity);
     }
@@ -254,25 +333,25 @@ public class BonReceptionRSImpl
      * Valide les lignes de la demandes de prix
      * @param entity 
      */
-    private void validateLigneBR(BonReception entity,Boolean strict){
-        for(LigneDocumentAchat lign:entity.getLignes()){
-            if(lign.getArticle()==null){
-                throw new KerenExecption("Veuillez fournir l'article pour toute les lignes");
-            }else if(lign.getPuht()==null||lign.getPuht()==0){
-                throw new KerenExecption("Veuillez fournir le puht");
-            }else if(lign.getQuantite()==null||lign.getQuantite()==0){
-                throw new KerenExecption("Veuillez fournir la quantité voulue");
-            }
-            if(strict==true){
-                if(lign.getArticle().getPolitiquestock().equalsIgnoreCase("1")||
-                        lign.getArticle().getPolitiquestock().equalsIgnoreCase("5")){
-                    if(lign.getCode()==null||lign.getCode().trim().isEmpty()){
-                        throw new KerenExecption("L'article "+lign.getArticle().getDesignation()+" est géré par lot ou par série");
-                    }//end if(lign.getCode()==null||lign.getCode().trim().isEmpty())
-                }//end if(lign.getArticle().getPolitiquestock().equalsIgnoreCase("1")
-            }//end vif(strict==true)
-        }//end for(LigneDocumentAchat lign:entity.getLignes())
-    }
+//    private void validateLigneBR(BonReception entity,Boolean strict){
+//        for(LigneDocumentStock lign:entity.getLignes()){
+//            if(lign.getArticle()==null){
+//                throw new KerenExecption("Veuillez fournir l'article pour toute les lignes");
+//            }else if(lign.getPuht()==null||lign.getPuht()==0){
+//                throw new KerenExecption("Veuillez fournir le puht");
+//            }else if(lign.getQuantite()==null||lign.getQuantite()==0){
+//                throw new KerenExecption("Veuillez fournir la quantitÃ© voulue");
+//            }
+//            if(strict==true){
+//                if(lign.getArticle().getPolitiquestock().equalsIgnoreCase("1")||
+//                        lign.getArticle().getPolitiquestock().equalsIgnoreCase("5")){
+//                    if(lign.getCode()==null||lign.getCode().trim().isEmpty()){
+//                        throw new KerenExecption("L'article "+lign.getArticle().getDesignation()+" est gÃ©rÃ© par lot ou par sÃ©rie");
+//                    }//end if(lign.getCode()==null||lign.getCode().trim().isEmpty())
+//                }//end if(lign.getArticle().getPolitiquestock().equalsIgnoreCase("1")
+//            }//end vif(strict==true)
+////        }//end for(LigneDocumentAchat lign:entity.getLignes())
+//    }
 
     /**
      * 
@@ -283,36 +362,59 @@ public class BonReceptionRSImpl
     @Override
     public BonReception facture(HttpHeaders headers, BonReception entity) {
         //To change body of generated methods, choose Tools | Templates.
-        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
-            throw new KerenExecption("Veuillez saisir la reference");
-        }else if(entity.getDatecommande()==null){   
-           throw new KerenExecption("Veuillez saisir la date de la commande");
-        }else if(entity.getFornisseur()==null){
-            throw new KerenExecption("Veuillez saisir le fournisseur");
-        }else if(entity.getEmplacement()==null){
-            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
-        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
-            throw new KerenExecption("Veuillez saisir au moins un article");
-        }
-//        else if(entity.getState().equalsIgnoreCase("annule")){
-//            throw new KerenExecption("Impossible de facturer un bon annulé");
-//        }else if(entity.getState().equalsIgnoreCase("rejete")){
-//            throw new KerenExecption("Impossible de transférer un bon rejeté <br/>Veuillez refaire le contrôle de la qualité");
+//        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
+//            throw new KerenExecption("Veuillez saisir la reference");
+//        }else if(entity.getDatecommande()==null){   
+//           throw new KerenExecption("Veuillez saisir la date de la commande");
+//        }else if(entity.getFornisseur()==null){
+//            throw new KerenExecption("Veuillez saisir le fournisseur");
+//        }else if(entity.getEmplacement()==null){
+//            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
+//        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
+//            throw new KerenExecption("Veuillez saisir au moins un article");
 //        }
-        validateLigneBR(entity, Boolean.TRUE);
-        if(!isValideBC(entity)){
-            throw new KerenExecption("Ce bon de reception a déjà fait l'objet d'une facturation");
-        }//end if(!isValideBC(entity))
+//        else if(entity.getState().equalsIgnoreCase("annule")){
+//            throw new KerenExecption("Impossible de facturer un bon annulÃ©");
+//        }else if(entity.getState().equalsIgnoreCase("rejete")){
+//            throw new KerenExecption("Impossible de transfÃ©rer un bon rejetÃ© <br/>Veuillez refaire le contrÃ´le de la qualitÃ©");
+//        }
+//        validateLigneBR(entity, Boolean.TRUE);
+//        if(!isValideBC(entity)){
+//            throw new KerenExecption("Ce bon de reception a dÃ©jÃ  fait l'objet d'une facturation");
+//        }//end if(!isValideBC(entity))
         return manager.facturer(entity); 
     }
 
      private boolean isValideBC(BonReception data){
 //       boolean result = false;
-       for(LigneDocumentAchat ligne:data.getLignes()){
-           if(ligne.qtenonfacturee()>0){
-               return true ;
-           }
-       }
+//       for(LigneDocumentAchat ligne:data.getLignes()){
+//           if(ligne.qtenonfacturee()>0){
+//               return true ;
+//           }
+//       }
        return false;
     }
+
+    @Override
+    public BonReception save(HttpHeaders headers, BonReception entity) {
+         Gson gson =new Gson();
+        Long _dpid = null;
+        if(headers.getRequestHeader("commande")!=null&&!headers.getRequestHeader("commande").isEmpty()){
+            _dpid = gson.fromJson(headers.getRequestHeader("commande").get(0), Long.class); 
+            BonCommande commande = bcmanager.find("id", _dpid);
+            entity.setCommande(commande);        
+        }//end if(headers.getRequestHeader("commande")!=null&&!headers.getRequestHeader("commande").isEmpty()){
+       entity.setState("etabli");
+        return super.save(headers, entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<BonReception> imprimer(HttpHeaders headers, BonReception entity) {
+        //To change body of generated methods, choose Tools | Templates.
+        List<BonReception> datas = new ArrayList<BonReception>();
+        datas.add(entity);
+        return datas;
+    }
+     
+     
 }

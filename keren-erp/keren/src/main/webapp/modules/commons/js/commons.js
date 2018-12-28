@@ -387,14 +387,16 @@ angular.module('keren.core.commons')
                     $('#'+target+'-'+fieldname+' .form-control').on('keyup',
                               function(event){
                                   var value =$('#'+target+'-'+fieldname+' input[class="form-control"]').val();
-//                                  console.log("commons.selectpickerKeyup ================  :::  === "+fieldname+" === "+value);
-                                  scope.keyupDataLoarder(model+'.'+fieldname,value);
+                                  var model_val = $('#select-'+fieldname).attr('ng-model');
+                                  console.log("commons.selectpickerKeyup ================  :::  === "+fieldname+" === "+value+"  == "+model_val);
+                                  scope.keyupDataLoarder(model_val,value);
                             });
                     $('#'+target+'-'+fieldname+' .form-control').on('show.bs.select',
                               function(event){
                                   var value =$('#'+target+'-'+fieldname+' input[class="form-control"]').val();
-//                                  console.log("commons.selectpickerKeyup ================  :::  === "+fieldname+" === "+value);
-                                  scope.keyupDataLoarder(model+'.'+fieldname,value);
+                                  var model_val = $('#select-'+fieldname).attr('ng-model');
+                                  console.log("commons.selectpickerKeyup ================  :::  ===fieldname :  "+fieldname+" ===  value : "+value+"     ==  target : "+target+" =  model : "+model_val);
+                                  scope.keyupDataLoarder(model_val,value);
                             });
                 },
                 searchkeyevent:function(id,scope){
@@ -1164,6 +1166,36 @@ angular.module('keren.core.commons')
             },
             /**
              * 
+             * @param {type} metaData
+             * @param {type} fieldName
+             * @returns {undefined}
+             */
+            getMetaData : function(metaData , fieldName){
+                //Traitement des columns
+                for(var i=0 ; i<metaData.columns.length;i++){
+                    var column = metaData.columns[i];
+                    if(column.fieldName==fieldName){
+                        return column.metaData;
+                    }//end if(column.fieldName==fieldName){
+                }//end  for(var i=0 ; i<metaData.columns.length;i++){
+                for(var i=0;i<metaData.groups.length;i++){
+                    var group = metaData.groups[i];
+                    if(group.metaArray){
+                        var meta = this.getMetaData(group.metaArray.metaData,fieldName);
+                        if(meta){
+                            return meta;
+                        }//end if(meta){
+                    }//end if(group.metaArray){
+                    for(var j=0 ; j< group.columns.length;j++){
+                        var column = group.columns[j];
+                        if(column.fieldName==fieldName){
+                            return column.metaData;
+                        }//end if(column.fieldName==fieldName){
+                    }//end for(var j=0 ; j< group.columns.length;j++){
+                }//end for(var i=0;i<metaData.groups.length;i++){
+            },
+            /**
+             * 
              * @param {type} template
              * @param {type} scope
              * @param {type} model
@@ -1678,7 +1710,10 @@ angular.module('keren.core.commons')
                                 var thelem = document.createElement('th');
                                 footerElem.appendChild(thelem);                            
 //                                console.log("commonsTool. sumFooterTableBuilder === "+model+"===="+sources[0]+"===="+angular.toJson(data));
-                                var total = this.sumTableField(fieldnames[i],data[sources[sources.length-1]]);
+                                var total = null;
+                                if(data){
+                                    total = this.sumTableField(fieldnames[i],data[sources[sources.length-1]]);
+                                }//end if(data){
                                 if(angular.isDefined(total)&&angular.isNumber(total)){
                                     thelem.appendChild(document.createTextNode(total));
                                     thelem.setAttribute('class','text-right');

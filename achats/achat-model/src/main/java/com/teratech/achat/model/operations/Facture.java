@@ -7,7 +7,8 @@ package com.teratech.achat.model.operations;
 
 import com.core.base.State;
 import com.megatim.common.annotations.Predicate;
-import com.teratech.achat.model.base.Emplacement;
+import com.megatim.common.annotations.TableFooter;
+import com.teratech.achat.model.base.Entrepot;
 import com.teratech.achat.model.base.Tier;
 import com.teratech.achat.model.comptabilite.Acompte;
 import com.teratech.achat.model.comptabilite.Compte;
@@ -33,12 +34,18 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("FA")
 public class Facture extends DocumentAchat implements Serializable{
 
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    @JoinColumn(name = "LIFAC_ID")
+    @Predicate(label = " ",type = LigneFacture.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "Articles",customfooter = true,edittable = true)
+    @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td'></td><td style='font-weight: bold;'>Total HT</td> <td class='text-center'>this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100</td><td></td></tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Taxes</td><td  class='text-center'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};/;100</td><td></td> </tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Total TTC</td><td  class='text-center'  style='font-weight: bold;'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;(;100;+;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};);/;100</td><td></td></tr>")
+    protected List<LigneFacture> lignes = new ArrayList<LigneFacture>();
+    
     @ManyToOne
     @JoinColumn(name = "DOAC_ID")
-    @Predicate(label = "Document source",type = BonCommande.class,target = "many-to-one")
+    @Predicate(label = "Document source",type = BonCommande.class,target = "many-to-one" ,hide = true)
     private BonCommande docachat;
     
-    @Predicate(label = "Document d'origine")
+    @Predicate(label = "Document d'origine" ,hide = true)
     private String source;
     
     @Predicate(label = "Escompte(%)",type = Double.class,group = true,groupName = "group2",groupLabel = "Valorisation/Comptabilité")
@@ -84,7 +91,7 @@ public class Facture extends DocumentAchat implements Serializable{
      * @param codefourni
      * @param emplacement 
      */
-    public Facture(String code, Date date, Tier fornisseur, Date datecommande, String codefourni, Emplacement emplacement) {
+    public Facture(String code, Date date, Tier fornisseur, Date datecommande, String codefourni, Entrepot emplacement) {
         super(code, date, fornisseur, datecommande, codefourni, emplacement);
         this.typedocument = DocumentAchatState.FACTURE;
 //        this.state = "etabli";
@@ -102,7 +109,7 @@ public class Facture extends DocumentAchat implements Serializable{
      * @param designation
      * @param moduleName 
      */
-    public Facture(String code, Date date, Tier fornisseur, Date datecommande, String codefourni, Emplacement emplacement, long id, String designation, String moduleName) {
+    public Facture(String code, Date date, Tier fornisseur, Date datecommande, String codefourni, Entrepot emplacement, long id, String designation, String moduleName) {
         super(code, date, fornisseur, datecommande, codefourni, emplacement, id, designation, moduleName);
         this.typedocument = DocumentAchatState.FACTURE;
 //        this.state = "etabli";
@@ -118,15 +125,15 @@ public class Facture extends DocumentAchat implements Serializable{
         this.docachat = new BonCommande(da);
         this.source = da.getCode();
         this.typedocument = DocumentAchatState.FACTURE;
-//        this.state = "etabli";
+//        this.state = "etabli";      
        
     }
 
 
     public Facture(BonReception da) {
-        super(da);
+        super();
         this.id = -1;
-        this.docachat = new BonCommande(da);
+//        this.docachat = new BonCommande(da);
         this.source = da.getCode();
         this.typedocument = DocumentAchatState.FACTURE;
 //        this.state = "etabli";       
@@ -210,6 +217,14 @@ public class Facture extends DocumentAchat implements Serializable{
 
     public void setCompte(Compte compte) {
         this.compte = compte;
+    }
+
+    public List<LigneFacture> getLignes() {
+        return lignes;
+    }
+
+    public void setLignes(List<LigneFacture> lignes) {
+        this.lignes = lignes;
     }
 
    

@@ -78,9 +78,9 @@ public class EntreeManagerImpl
     public Entree find(String propertyName, Long entityID) {
         Entree data = super.find(propertyName, entityID); //To change body of generated methods, choose Tools | Templates.
         Entree result = new Entree(data);
-        for(LigneDocumentStock lign:data.getLignes()){
-            result.getLignes().add(new LigneDocumentStock(lign));
-        }
+//        for(LigneDocumentStock lign:data.getLignes()){
+////            result.getLignes().add(new LigneDocumentStock(lign));
+//        }
         return result;
     }
 
@@ -149,19 +149,7 @@ public class EntreeManagerImpl
     public Entree confirmer(Entree obj) {
         //To change body of generated methods, choose Tools | Templates.
        //        EntreeV entree = new EntreeV(obj);
-//        entree.setId(-1);
-        //Copie des ligne
-        for(LigneDocumentStock lign:obj.getLignes()){
-//            LigneDocumentStock li = new LigneDocumentStock(lign);
-//            li.setId(-1);
-//            entree.getLignes().add(li);
-            //Mise a jour du stock en BD
-            computeLigne(lign, obj.getEmplacement());
-        }//end for(LigneDocumentStock lign:obj.getLignes())
-        //Suppression 
-//        dao.delete(obj.getId());
-        //Creation de l'entree valide
-//        dao2.save(entree);
+
         obj.setState("valider");
         dao.update(obj.getId(), obj);
         return obj;

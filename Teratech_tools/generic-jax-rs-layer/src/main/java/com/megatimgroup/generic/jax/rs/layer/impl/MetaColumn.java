@@ -75,6 +75,7 @@ public class MetaColumn implements Serializable,Comparable<MetaColumn>{
     
     private String frozen = null;
     
+    private boolean askcomfirm = false ;
     
     /**
      * 
@@ -131,6 +132,7 @@ public class MetaColumn implements Serializable,Comparable<MetaColumn>{
         this.method = column.method;
         this.frozen = column.frozen;
         this.importfield = column.importfield;
+        this.askcomfirm = column.askcomfirm;
     }
 
     public short getSequence() {
@@ -373,6 +375,15 @@ public class MetaColumn implements Serializable,Comparable<MetaColumn>{
         this.frozen = frozen;
     }
 
+    public boolean isAskcomfirm() {
+        return askcomfirm;
+    }
+
+    public void setAskcomfirm(boolean askcomfirm) {
+        this.askcomfirm = askcomfirm;
+    }
+
+    
     
    
     @Override

@@ -6,8 +6,11 @@
 package com.teratech.achat.model.operations;
 
 import com.core.base.BaseElement;
+import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.Predicate;
 import com.teratech.achat.model.base.Article;
+import com.teratech.achat.model.base.Emplacement;
+import com.teratech.achat.model.base.LienEmplacement;
 import com.teratech.achat.model.base.UniteGestion;
 import java.io.Serializable;
 import java.util.Date;
@@ -34,15 +37,21 @@ public class LigneDocumentStock extends BaseElement implements Serializable,Comp
     
     @ManyToOne
     @JoinColumn(name = "UNG_ID")
-    @Predicate(label = "Unité de gestion",type = UniteGestion.class,target = "many-to-one",editable = false,search = true)
+//    @Predicate(label = "Unité de gestion",type = UniteGestion.class,target = "many-to-one",editable = false,search = true)
     private UniteGestion unite ;
     
     
-    @Predicate(label = "PU HT",type = Double.class,optional = false,search = true)
+//    @Predicate(label = "PU HT",type = Double.class,optional = false,search = true)
     private Double puht ;
     
     @Predicate(label = "Quantité",type = Double.class,optional = false,search = true)
     private Double quantite ;
+    
+    @ManyToOne
+    @JoinColumn(name = "LIEMP_ID")
+    @Predicate(label = "Emplacement cible",type = LienEmplacement.class,target = "many-to-one",search = true,optional = false)
+    @Filter(value = "[{\"fieldName\":\"article\",\"value\":\"object.article\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner l'article\"},{\"fieldName\":\"entrpot\",\"value\":\"this.entrepot\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner le magasin\"}]")
+    private LienEmplacement emplacement ;
     
 //    @Predicate(label = "PU Net",type = Double.class,optional = false,editable = false)
     private Double punet ;
@@ -58,7 +67,7 @@ public class LigneDocumentStock extends BaseElement implements Serializable,Comp
     @Temporal(TemporalType.DATE)
     private Date fabrication ;
     
-    @Predicate(label = "Total HT",type = Double.class,optional = false,search = true,hide = true,compute = true,values ="this.puht,*,this.quantite" )
+//    @Predicate(label = "Total HT",type = Double.class,optional = false,search = true,hide = true,compute = true,values ="this.puht,*,this.quantite" )
     private Double totalht ;    
     
     @OneToOne
@@ -116,6 +125,9 @@ public LigneDocumentStock(LigneDocumentStock ligne) {
         this.peremption = ligne.peremption;
         this.fabrication = ligne.fabrication;
         this.totalht = ligne.totalht;
+        if(ligne.emplacement!=null){
+            this.emplacement = new LienEmplacement(ligne.emplacement);
+        }
     }
    
    public LigneDocumentStock(LigneDocumentAchat ligne) {
@@ -125,9 +137,9 @@ public LigneDocumentStock(LigneDocumentStock ligne) {
         this.puht = ligne.getPuht();
         this.quantite = ligne.getQuantite();
         this.punet = ligne.getPuht();
-        this.code = ligne.getCode();
-        this.peremption = ligne.getPeremption();
-        this.fabrication = ligne.getFabrication();
+//        this.code = ligne.getCode();
+//        this.peremption = ligne.getPeremption();
+//        this.fabrication = ligne.getFabrication();
         this.totalht = ligne.getTotalht();
     }
 
@@ -206,6 +218,14 @@ public LigneDocumentStock(LigneDocumentStock ligne) {
 
     public void setTotalht(Double totalht) {
         this.totalht = totalht;
+    }
+
+    public LienEmplacement getEmplacement() {
+        return emplacement;
+    }
+
+    public void setEmplacement(LienEmplacement emplacement) {
+        this.emplacement = emplacement;
     }
     
     
