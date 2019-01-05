@@ -105,29 +105,29 @@ public class EntreeManagerImpl
      * @param ligne
      * @param empl 
      */
-    private void computeLigne(LigneDocumentStock ligne , Emplacement empl){
-        Article article = articledao.findByPrimaryKey("id", ligne.getArticle().getId());
-        for(LienEmplacement lien : article.getStockages()){
-            if(lien.getEmplacement().compareTo(empl)==0){
-                if(article.getPolitiquestock()==null||article.getPolitiquestock().equalsIgnoreCase("0")){
-                    //Nothing to do
-                }else if(article.getPolitiquestock().equalsIgnoreCase("1")||article.getPolitiquestock().equalsIgnoreCase("5")){
-                    Lot lot = new Lot(ligne.getCode(), ligne.getQuantite(), ligne.getPeremption(), ligne.getFabrication());
-                    lot.setLien(lien);lot.getReference();
-                    lotdao.save(lot);
-                }else if(article.getPolitiquestock().equalsIgnoreCase("2")){
-                    
-                }else if(article.getPolitiquestock().equalsIgnoreCase("3")||article.getPolitiquestock().equalsIgnoreCase("4")){
-//                    Date date = new Date();
-//                    Lot lot = new Lot(Long.toString(date.getTime()), ligne.getQuantite(), ligne.getPeremption(), ligne.getFabrication());
-//                    lot.setLien(lien);
+//    private void computeLigne(LigneDocumentStock ligne , Emplacement empl){
+//        Article article = articledao.findByPrimaryKey("id", ligne.getArticle().getId());
+//        for(LienEmplacement lien : article.getStockages()){
+//            if(lien.getEmplacement().compareTo(empl)==0){
+//                if(article.getPolitiquestock()==null||article.getPolitiquestock().equalsIgnoreCase("0")){
+//                    //Nothing to do
+//                }else if(article.getPolitiquestock().equalsIgnoreCase("1")||article.getPolitiquestock().equalsIgnoreCase("5")){
+//                    Lot lot = new Lot(ligne.getCode(), ligne.getQuantite(), ligne.getPeremption(), ligne.getFabrication());
+//                    lot.setLien(lien);lot.getReference();
 //                    lotdao.save(lot);
-                }//end if(article.getPolitiquestock()==null||article.getPolitiquestock().equalsIgnoreCase("0"))
-                lien.addStock(ligne.getQuantite());
-            }//end if(lien.getEmplacement().compareTo(empl)==0){
-        }//end for(LienEmplacement lien : article.getStockages()){
-        articledao.update(article.getId(), article);
-    }//end private void computeLigne(LigneDocumentStock ligne , Emplacement empl){
+//                }else if(article.getPolitiquestock().equalsIgnoreCase("2")){
+//                    
+//                }else if(article.getPolitiquestock().equalsIgnoreCase("3")||article.getPolitiquestock().equalsIgnoreCase("4")){
+////                    Date date = new Date();
+////                    Lot lot = new Lot(Long.toString(date.getTime()), ligne.getQuantite(), ligne.getPeremption(), ligne.getFabrication());
+////                    lot.setLien(lien);
+////                    lotdao.save(lot);
+//                }//end if(article.getPolitiquestock()==null||article.getPolitiquestock().equalsIgnoreCase("0"))
+//                lien.addStock(ligne.getQuantite());
+//            }//end if(lien.getEmplacement().compareTo(empl)==0){
+//        }//end for(LienEmplacement lien : article.getStockages()){
+//        articledao.update(article.getId(), article);
+//    }//end private void computeLigne(LigneDocumentStock ligne , Emplacement empl){
     
     /**
      * 

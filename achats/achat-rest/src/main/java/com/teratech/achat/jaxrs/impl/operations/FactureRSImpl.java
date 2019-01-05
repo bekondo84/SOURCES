@@ -16,10 +16,15 @@ import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import com.megatimgroup.generic.jax.rs.layer.impl.MetaGroup;
 import com.megatimgroup.generic.jax.rs.layer.impl.RSNumber;
 import com.teratech.achat.core.ifaces.operations.BonCommandeManagerRemote;
+import com.teratech.achat.core.ifaces.operations.BonReceptionManagerRemote;
 import com.teratech.achat.core.ifaces.operations.FactureManagerRemote;
 import com.teratech.achat.jaxrs.ifaces.operations.FactureRS;
+import com.teratech.achat.model.comptabilite.Acompte;
+import com.teratech.achat.model.comptabilite.Taxe;
 import com.teratech.achat.model.operations.BonCommande;
+import com.teratech.achat.model.operations.BonReception;
 import com.teratech.achat.model.operations.Facture;
+import com.teratech.achat.model.operations.LigneFacture;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,7 +32,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
 
 
 /**
@@ -52,6 +56,9 @@ public class FactureRSImpl
     
     @Manager(application = "teratechachat", name = "BonCommandeManagerImpl", interf = BonCommandeManagerRemote.class)
     protected BonCommandeManagerRemote bcmanager;
+    
+    @Manager(application = "teratechachat", name = "BonReceptionManagerImpl", interf = BonReceptionManagerRemote.class)
+    protected BonReceptionManagerRemote brmanager;
 
     public FactureRSImpl() {
         super();
@@ -75,23 +82,23 @@ public class FactureRSImpl
         try {
             //To change body of generated methods, choose Tools | Templates.
             MetaData meta= MetaDataUtil.getMetaData(new Facture(), new HashMap<String, MetaData>(), new ArrayList<String>());
-            MetaColumn workbtn = new MetaColumn("button", "work1", "Imprimer la facture", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'envoyer'}");
-            workbtn.setStates(new String[]{"etabli"});
+            MetaColumn workbtn = new MetaColumn("button", "work1", "Imprimer la facture", false, "report", null);
+            workbtn.setValue("{'name':'factureach_report01','model':'teratechachat','entity':'facture','method':'imprime'}");
+            workbtn.setStates(new String[]{"etabli","confirme","transfere"});
             meta.getHeader().add(workbtn);
             workbtn = new MetaColumn("button", "work3", "Confirmer la facture", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'confirme'}");
+            workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'confirme','critical':true,'alert':'Voulez vous confirmer cette facture ?'}");
             workbtn.setStates(new String[]{"etabli"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
             workbtn = new MetaColumn("button", "work4", "Transférer en comptabilité", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'transfere'}");
-            workbtn.setStates(new String[]{"etabli"});
+            workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'transfere','critical':true,'alert':'Cette facture sera transferee en comptabilité\nVoulez vous continuer ?'}");
+            workbtn.setStates(new String[]{"confirme"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);           
             workbtn = new MetaColumn("button", "work5", "Annuler", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'annule'}");
-            workbtn.setStates(new String[]{"etabli"});
+            workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'annule','critical':true,'alert':'Voulez vous revenir au status précédent ?'}");
+            workbtn.setStates(new String[]{"confirme","transfere"});
             meta.getHeader().add(workbtn);
             MetaColumn stautsbar = new MetaColumn("workflow", "state", "State", false, "statusbar", null);
             meta.getHeader().add(stautsbar);
@@ -155,6 +162,11 @@ public class FactureRSImpl
              _dpid = gson.fromJson(headers.getRequestHeader("docachat").get(0), Long.class);
               container.addEq("docachat.id", _dpid);        
          }//end if(headers.getRequestHeader("commande")!=null&&!headers.getRequestHeader("commande").isEmpty()){
+        Long _brid = null;
+        if(headers.getRequestHeader("bonlivraison")!=null&&!headers.getRequestHeader("bonlivraison").isEmpty()){
+             _brid = gson.fromJson(headers.getRequestHeader("bonlivraison").get(0), Long.class);
+              container.addEq("bonlivraison.id", _brid);        
+         }//end if(headers.getRequestHeader("commande")!=null&&!headers.getRequestHeader("commande").isEmpty()){
         //List result = new ArrayList();
         return getManager().filter(container.getPredicats(), null , new HashSet<String>(), firstResult, maxResult);
     }
@@ -197,6 +209,11 @@ public class FactureRSImpl
              _dpid = gson.fromJson(headers.getRequestHeader("docachat").get(0), Long.class);
               container.addEq("docachat.id", _dpid);        
          }//end if(headers.getRequestHeader("commande")!=null&&!headers.getRequestHeader("commande").isEmpty()){
+         Long _brid = null;
+        if(headers.getRequestHeader("bonlivraison")!=null&&!headers.getRequestHeader("bonlivraison").isEmpty()){
+             _brid = gson.fromJson(headers.getRequestHeader("bonlivraison").get(0), Long.class);
+              container.addEq("bonlivraison.id", _brid);        
+         }//end if(headers.getRequestHeader("commande")!=null&&!headers.getRequestHeader("commande").isEmpty()){
          RSNumber number = new RSNumber(getManager().count(container.getPredicats()));
 //        System.out.println(AbstractGenericService.class.toString()+".count === "+" == "+number.getValue());
         return number;
@@ -211,11 +228,36 @@ public class FactureRSImpl
            throw new KerenExecption("Veuillez saisir la date de la commande");
         }else if(entity.getFournisseur()==null){
             throw new KerenExecption("Veuillez saisir le fournisseur");
-        }else if(entity.getEmplacement()==null){
-            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
         }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
             throw new KerenExecption("Veuillez saisir au moins un article");
         }
+        double totalht = 0.0;
+        double taxes = 0.0;
+        double escompte = 0.0;
+        double totalttc = 0.0;
+        double acomptes = 0.0;
+        double netapayer = 0.0;
+        for(LigneFacture ligne:entity.getLignes()){      
+            if(ligne.getId()<0){
+                ligne.setId(-1L);
+            }//end if(ligne.getId()<0){
+            totalht +=ligne.getQuantite()*ligne.getPuht();
+            for(Taxe taxe:ligne.getTaxes()){
+                taxes +=ligne.getQuantite()*ligne.getPuht()*taxe.getMontant()/100;
+            }//end for(Taxe taxe:ligne.getTaxes()){            
+        }//end for(LigneFacture ligne:entity.getLignes()){
+        escompte = totalht*(entity.getEscompte()==null ? 0.0 : entity.getEscompte())/100;
+        totalttc = totalht + taxes - escompte;
+        for(Acompte ligne:entity.getAcomptes()){
+            acomptes+=ligne.getMontant();
+        }//end for(Acompte ligne:entity.getAcomptes()){
+        netapayer = totalttc - acomptes;
+        entity.setTotalacompte(acomptes);
+        entity.setTotalescompte(escompte);
+        entity.setTotalht(totalht);
+        entity.setTotalttc(totalttc);
+        entity.setTaxes(taxes);
+        entity.setNetapayer(netapayer);        
         super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -227,11 +269,37 @@ public class FactureRSImpl
            throw new KerenExecption("Veuillez saisir la date de la commande");
         }else if(entity.getFournisseur()==null){
             throw new KerenExecption("Veuillez saisir le fournisseur");
-        }else if(entity.getEmplacement()==null){
-            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
         }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
             throw new KerenExecption("Veuillez saisir au moins un article");
         }
+        double totalht = 0.0;
+        double taxes = 0.0;
+        double escompte = 0.0;
+        double totalttc = 0.0;
+        double acomptes = 0.0;
+        double netapayer = 0.0;
+        for(LigneFacture ligne:entity.getLignes()){      
+            if(ligne.getId()<0){
+                ligne.setId(-1L);
+            }//end if(ligne.getId()<0){
+            totalht +=ligne.getQuantite()*ligne.getPuht();
+            for(Taxe taxe:ligne.getTaxes()){
+                taxes +=ligne.getQuantite()*ligne.getPuht()*taxe.getMontant()/100;
+            }//end for(Taxe taxe:ligne.getTaxes()){            
+        }//end for(LigneFacture ligne:entity.getLignes()){
+        escompte = totalht*(entity.getEscompte()==null ? 0.0 : entity.getEscompte())/100;
+        totalttc = totalht + taxes - escompte;
+        for(Acompte ligne:entity.getAcomptes()){
+            acomptes+=ligne.getMontant();
+        }//end for(Acompte ligne:entity.getAcomptes()){
+        netapayer = totalttc - acomptes;
+        entity.setTotalacompte(acomptes);
+        entity.setTotalescompte(escompte);
+        entity.setTotalht(totalht);
+        entity.setTotalttc(totalttc);
+        entity.setTaxes(taxes);
+        entity.setNetapayer(netapayer);        
+        entity.setState("etabli");
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -239,78 +307,49 @@ public class FactureRSImpl
 
     @Override
     public Facture confirmer(HttpHeaders headers, Facture entity) {
-//        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
-//            throw new KerenExecption("Veuillez saisir la reference");
-//        }else if(entity.getDatecommande()==null){   
-//           throw new KerenExecption("Veuillez saisir la date de la commande");
-//        }else if(entity.getFornisseur()==null){
-//            throw new KerenExecption("Veuillez saisir le fournisseur");
-//        }else if(entity.getEmplacement()==null){
-//            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
-//        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
-//            throw new KerenExecption("Veuillez saisir au moins un article");
-//        }
-//        else if(entity.getState().equalsIgnoreCase("confirme")){
-//            throw new KerenExecption("Cette facture a déjà fait l'objet <br/>d'un transfert en comptabilité");
-//        }
+        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
+            throw new KerenExecption("Veuillez saisir la reference");
+        }else if(entity.getDatecommande()==null){   
+           throw new KerenExecption("Veuillez saisir la date de la commande");
+        }else if(entity.getFournisseur()==null){
+            throw new KerenExecption("Veuillez saisir le fournisseur");
+        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
+            throw new KerenExecption("Veuillez saisir au moins un article");
+        }
+        else if(entity.getState().equalsIgnoreCase("confirme")){
+            throw new KerenExecption("Cette facture a déjà fait l'objet <br/>d'un transfert en comptabilit");
+        }//end if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
         //To change body of generated methods, choose Tools | Templates.
         return manager.confirmer(entity);
     }
 
     @Override
     public Facture transfert(HttpHeaders headers, Facture entity) {
-//        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
-//            throw new KerenExecption("Veuillez saisir la reference");
-//        }else if(entity.getDatecommande()==null){   
-//           throw new KerenExecption("Veuillez saisir la date de la commande");
-//        }else if(entity.getFornisseur()==null){
-//            throw new KerenExecption("Veuillez saisir le fournisseur");
-//        }else if(entity.getEmplacement()==null){
-//            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
-//        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
-//            throw new KerenExecption("Veuillez saisir au moins un article");
-//        }
-//        else if(entity.getState().equalsIgnoreCase("etabli")){
-//            throw new KerenExecption("Veuillez d'abord confirmer la facture");
-//        }
          //To change body of generated methods, choose Tools | Templates.
         return manager.transfert(entity);
     }
 
     @Override
     public Facture annule(HttpHeaders headers, Facture entity) {
-//        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
-//            throw new KerenExecption("Veuillez saisir la reference");
-//        }else if(entity.getDatecommande()==null){   
-//           throw new KerenExecption("Veuillez saisir la date de la commande");
-//        }else if(entity.getFornisseur()==null){
-//            throw new KerenExecption("Veuillez saisir le fournisseur");
-//        }else if(entity.getEmplacement()==null){
-//            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
-//        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
-//            throw new KerenExecption("Veuillez saisir au moins un article");
-//        }
-//        else if(entity.getState().equalsIgnoreCase("transfere")){
-//            throw new KerenExecption("Impossible d'annuler une facture <br/> transferée en comptabilité");
-//        }
        //To change body of generated methods, choose Tools | Templates.
         return manager.annule(entity);
     }
 
     @Override
-    public Response imprimer(HttpHeaders headers, Facture entity) {
-//        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
-//            throw new KerenExecption("Veuillez saisir la reference");
-//        }else if(entity.getDatecommande()==null){   
-//           throw new KerenExecption("Veuillez saisir la date de la commande");
-//        }else if(entity.getFornisseur()==null){
-//            throw new KerenExecption("Veuillez saisir le fournisseur");
-//        }else if(entity.getEmplacement()==null){
-//            throw new KerenExecption("Veuillez saisir l'emplacement de livraison");
-//        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
-//            throw new KerenExecption("Veuillez saisir au moins un article");
-//        }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Facture> imprimer(HttpHeaders headers, Facture entity) {
+        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
+            throw new KerenExecption("Veuillez saisir la reference");
+        }else if(entity.getDatecommande()==null){   
+           throw new KerenExecption("Veuillez saisir la date de la commande");
+        }else if(entity.getFournisseur()==null){
+            throw new KerenExecption("Veuillez saisir le fournisseur");
+        }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
+            throw new KerenExecption("Veuillez saisir au moins un article");
+        }
+         //To change body of generated methods, choose Tools | Templates.
+        List<Facture> factures = new ArrayList<Facture>();
+        factures.add(entity);
+        return factures;
     }
 
     @Override
@@ -321,6 +360,12 @@ public class FactureRSImpl
             BonCommande bon = bcmanager.find("id", _id);
             entity.setDocachat(bon);
         }//end if(headers.getRequestHeader("docachat")!=null && !headers.getRequestHeader("docachat").isEmpty()){
+        Long _brid = null;
+        if(headers.getRequestHeader("bonlivraison")!=null&&!headers.getRequestHeader("bonlivraison").isEmpty()){
+             _brid = gson.fromJson(headers.getRequestHeader("bonlivraison").get(0), Long.class);
+             BonReception bon =  brmanager.find("id", _brid);
+             entity.setBonlivraison(bon);
+         }//end if(headers.getRequestHeader("commande")!=null&&!headers.getRequestHeader("commande").isEmpty()){
         return super.save(headers, entity); //To change body of generated methods, choose Tools | Templates.
     }
     

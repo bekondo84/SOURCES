@@ -377,6 +377,7 @@ angular.module('keren.core.commons')
 //                                this.showMessageDialog(error); 
                             });                       
                 },
+               
                 /**
                  * 
                  * @param {type} model
@@ -388,14 +389,14 @@ angular.module('keren.core.commons')
                               function(event){
                                   var value =$('#'+target+'-'+fieldname+' input[class="form-control"]').val();
                                   var model_val = $('#select-'+fieldname).attr('ng-model');
-                                  console.log("commons.selectpickerKeyup ================  :::  === "+fieldname+" === "+value+"  == "+model_val);
+//                                  console.log("commons.selectpickerKeyup ================  :::  === "+fieldname+" === "+value+"  == "+model_val);
                                   scope.keyupDataLoarder(model_val,value);
                             });
                     $('#'+target+'-'+fieldname+' .form-control').on('show.bs.select',
                               function(event){
                                   var value =$('#'+target+'-'+fieldname+' input[class="form-control"]').val();
                                   var model_val = $('#select-'+fieldname).attr('ng-model');
-                                  console.log("commons.selectpickerKeyup ================  :::  ===fieldname :  "+fieldname+" ===  value : "+value+"     ==  target : "+target+" =  model : "+model_val);
+//                                  console.log("commons.selectpickerKeyup ================  :::  ===fieldname :  "+fieldname+" ===  value : "+value+"     ==  target : "+target+" =  model : "+model_val);
                                   scope.keyupDataLoarder(model_val,value);
                             });
                 },
@@ -1007,6 +1008,10 @@ angular.module('keren.core.commons')
                      }//end for(var i=0 ; i<metadata.length;i++)
                      //Traitement des groups
                      for(var i=0;i<metadata.groups.length;i++){
+                         if(metadata.groups[i].metaArray){
+                             var groupe = metadata.groups[i].metaArray;
+                             this.compteField(obj[groupe.fieldName],currentObject,currentUser,groupe.metaData);
+                         }//end if(metadata.groups[i].metaArray){
                          if(metadata.groups[i].columns){
                              for(var j=0;j<metadata.groups[i].columns.length;j++){
                                 if(metadata.groups[i].columns[j].compute==true&&metadata.groups[i].columns[j].type=='number'){                                

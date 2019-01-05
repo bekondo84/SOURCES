@@ -60,6 +60,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.teratech.achat.jaxrs.impl.operations.AppelOffreRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.BonCommandeRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.BonReceptionRSImpl.class);
+        resources.add(com.teratech.achat.jaxrs.impl.operations.BonRetourRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.CMDEFactureTMPRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.ControleQualiteRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.DemandePrixRSImpl.class);
@@ -70,6 +71,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.teratech.achat.jaxrs.impl.operations.LigneDocumentAchatRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.LigneDocumentStockRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.LigneReponseDPRSImpl.class);
+        resources.add(com.teratech.achat.jaxrs.impl.operations.LigneSortieRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.LotRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.operations.ReponseFournisseurRSImpl.class);
         resources.add(com.teratech.achat.jaxrs.impl.tools.DARejetRSImpl.class);

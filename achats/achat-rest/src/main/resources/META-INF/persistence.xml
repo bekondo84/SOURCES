@@ -54,6 +54,9 @@
     <class>com.teratech.achat.model.base.Controle</class>
     <class>com.teratech.achat.model.operations.ControleQualite</class>
     <class>com.teratech.achat.model.operations.LigneControleQualite</class>
+    <class>com.teratech.achat.model.operations.BonRetour</class>
+    <class>com.teratech.achat.model.operations.LigneSortie</class>
+    <class>com.teratech.achat.model.operations.LigneEntree</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="update"/>

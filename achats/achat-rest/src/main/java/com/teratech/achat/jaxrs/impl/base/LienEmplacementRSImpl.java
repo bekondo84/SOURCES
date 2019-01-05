@@ -18,7 +18,6 @@ import com.teratech.achat.core.ifaces.base.LienEmplacementManagerRemote;
 import com.teratech.achat.jaxrs.ifaces.base.LienEmplacementRS;
 import com.teratech.achat.model.base.Article;
 import com.teratech.achat.model.base.LienEmplacement;
-import com.teratech.achat.model.operations.ControleQualite;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

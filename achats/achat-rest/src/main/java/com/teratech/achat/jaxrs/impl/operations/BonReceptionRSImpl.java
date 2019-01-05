@@ -16,10 +16,14 @@ import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import com.megatimgroup.generic.jax.rs.layer.impl.RSNumber;
 import com.teratech.achat.core.ifaces.operations.BonCommandeManagerRemote;
 import com.teratech.achat.core.ifaces.operations.BonReceptionManagerRemote;
+import com.teratech.achat.core.ifaces.operations.LotManagerRemote;
 import com.teratech.achat.jaxrs.ifaces.operations.BonReceptionRS;
+import com.teratech.achat.model.base.Article;
 import com.teratech.achat.model.operations.BonCommande;
 import com.teratech.achat.model.operations.BonReception;
 import com.teratech.achat.model.operations.LigneDocumentStock;
+import com.teratech.achat.model.operations.LigneEntree;
+import com.teratech.achat.model.operations.Lot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,6 +54,9 @@ public class BonReceptionRSImpl
     
      @Manager(application = "teratechachat", name = "BonCommandeManagerImpl", interf = BonCommandeManagerRemote.class)
     protected BonCommandeManagerRemote bcmanager;
+     
+    @Manager(application = "teratechstock", name = "LotManagerImpl", interf = LotManagerRemote.class)
+    protected LotManagerRemote lotmanager;
 
     public BonReceptionRSImpl() {
         super();
@@ -74,8 +81,8 @@ public class BonReceptionRSImpl
             //To change body of generated methods, choose Tools | Templates.
             MetaData meta= MetaDataUtil.getMetaData(new BonReception(), new HashMap<String, MetaData>(), new ArrayList<String>());
             MetaColumn workbtn = new MetaColumn("button", "work2", "Imprimer le bon", false, "report", null);
-            workbtn.setValue("{'name':'bcach_report01','model':'teratechachat','entity':'bonreception','method':'imprime'}");
-            workbtn.setStates(new String[]{"etabli","qualite"});
+            workbtn.setValue("{'name':'breceptionach_report01','model':'teratechachat','entity':'bonreception','method':'imprime'}");
+            workbtn.setStates(new String[]{"etabli","qualite","disponible"});
             meta.getHeader().add(workbtn);
             workbtn = new MetaColumn("button", "work3", "Contrôler la qualité", false, "link", null);
             workbtn.setValue("{'name':'teratech_achat_ope_6_1',template:{'bonlivraison':'object','fournisseur':'object.fournisseur'},'header':['bonlivraison']}");
@@ -92,15 +99,20 @@ public class BonReceptionRSImpl
             workbtn.setStates(new String[]{"transfere"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work4", "Générer la facture", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'bonreception','method':'facture'}");
-            workbtn.setStates(new String[]{"etabli"});
+            workbtn = new MetaColumn("button", "work4", "Générer la facture", false, "link", null);
+            workbtn.setValue("{'name':'teratech_achat_ope_7',template:{'fournisseur':'object.fournisseur','bonlivraison':'object','docachat':'object.commande'},'header':['bonlivraison','commande']}");
+            workbtn.setStates(new String[]{"disponible"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work5", "Annuler", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'bonreception','method':'annule'}");
+             workbtn = new MetaColumn("button", "work4", "Retour fournisseur", false, "link", null);
+            workbtn.setValue("{'name':'teratech_achat_ope_6_2',template:{'fournisseur':'object.fournisseur','entrepot':'object.entrepot','bonlivraison':'object','reference':'object.reference'},'header':['bonlivraison','commande']}");
             workbtn.setStates(new String[]{"disponible"});
+//            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
+//            workbtn = new MetaColumn("button", "work5", "Annuler", false, "workflow", null);
+//            workbtn.setValue("{'model':'teratechachat','entity':'bonreception','method':'annule'}");
+//            workbtn.setStates(new String[]{"disponible"});
+//            meta.getHeader().add(workbtn);
             MetaColumn stautsbar = new MetaColumn("workflow", "state", "State", false, "statusbar", null);
             meta.getHeader().add(stautsbar);
             return meta;
@@ -293,6 +305,7 @@ public class BonReceptionRSImpl
     @Override
     public BonReception transferer(HttpHeaders headers, BonReception entity) {
         //To change body of generated methods, choose Tools | Templates.
+        validateInout(entity);
         return manager.transferer(entity);
     }
 
@@ -385,14 +398,45 @@ public class BonReceptionRSImpl
         return manager.facturer(entity); 
     }
 
-     private boolean isValideBC(BonReception data){
-//       boolean result = false;
-//       for(LigneDocumentAchat ligne:data.getLignes()){
-//           if(ligne.qtenonfacturee()>0){
-//               return true ;
-//           }
-//       }
-       return false;
+    /**
+     * 
+     * @param article
+     * @return 
+     */
+    private boolean stockable(Article article){
+        return article.getType()!=null && article.getType().equalsIgnoreCase("1");
+    }
+    
+   /**
+     * 
+     * @param entity 
+     */
+    private void validateInout(BonReception entity){
+        for(LigneEntree ligne:entity.getLignes()){
+           if(!stockable(ligne.getArticle())){
+               continue;
+           }//end if(!stockable(ligne.getArticle())){
+           if(ligne.getArticle().getPolitiquestock()!=null){
+               if(ligne.getArticle().getPolitiquestock().equalsIgnoreCase("1")||
+                       ligne.getArticle().getPolitiquestock().equalsIgnoreCase("5")){
+                   if(ligne.getCode()==null||ligne.getCode().trim().isEmpty()){
+                        throw new KerenExecption("Veuillez renseigner le numéro de lot/série article :"+ligne.getArticle().getDesignation()); 
+                   }else {
+                       RestrictionsContainer container = RestrictionsContainer.newInstance();
+                       container.addEq("lien.id", ligne.getEmplacement().getId());
+                       container.addEq("code", ligne.getCode());
+                       List<Lot> lots = lotmanager.filter(container.getPredicats(), null, null, 0, -1);
+                       if(!lots.isEmpty()){
+                           throw new KerenExecption("Un lot/serie de nom : "+ligne.getCode()+" existe déjà pour cette emplacement \nVeuillez saisir un nouveau numéro de lot/série"); 
+                       }//end if(!lots.isEmpty()){
+                   }//end if(ligne.getCode()==null||ligne.getCode().trim().isEmpty()){
+               }else if(ligne.getArticle().getPolitiquestock().equalsIgnoreCase("2")){
+                   if(ligne.getPuht()==null){
+                       throw new KerenExecption("Veuillez renseigner le PUHT pour l'article :"+ligne.getArticle().getDesignation()); 
+                   }
+               }//end  if(ligne.getArticle().getPolitiquestock().equalsIgnoreCase("1")||
+           }//end  if(ligne.getArticle().getPolitiquestock()!=null){
+        }//end for(LigneEntree ligne:entity.getLignes()){
     }
 
     @Override

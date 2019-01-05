@@ -26,6 +26,7 @@ import com.teratech.achat.model.operations.ControleQualite;
 import com.teratech.achat.model.operations.Entree;
 import com.teratech.achat.model.operations.Facture;
 import com.teratech.achat.model.operations.LigneDocumentStock;
+import com.teratech.achat.model.operations.LigneEntree;
 import com.teratech.achat.model.operations.Lot;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,9 +77,9 @@ public class BonReceptionManagerImpl
 
     @Override
     public List<BonReception> filter(List<Predicat> predicats, Map<String, OrderType> orders, Set<String> properties, int firstResult, int maxResult) {
-//        RestrictionsContainer container = RestrictionsContainer.newInstance();
-//        container.addEq("typedocument", DocumentAchatState.BONLIVRAISON);
-//        predicats.addAll(container.getPredicats());
+        RestrictionsContainer container = RestrictionsContainer.newInstance();
+        container.addEq("nature", "0");
+        predicats.addAll(container.getPredicats());
         List<BonReception> datas = super.filter(predicats, orders, properties, firstResult, maxResult); //To change body of generated methods, choose Tools | Templates.
         List<BonReception> result = new ArrayList<BonReception>();
         for(BonReception bon:datas){
@@ -86,6 +87,16 @@ public class BonReceptionManagerImpl
         }
         return result;
     }
+
+    @Override
+    public Long count(List<Predicat> predicats) {
+        RestrictionsContainer container = RestrictionsContainer.newInstance();
+        container.addEq("nature", "0");
+        predicats.addAll(container.getPredicats());
+        return super.count(predicats); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
     @Override
     public List<BonReception> findAll() {
@@ -101,8 +112,8 @@ public class BonReceptionManagerImpl
     public BonReception find(String propertyName, Long entityID) {
         BonReception data = super.find(propertyName, entityID); //To change body of generated methods, choose Tools | Templates.
         BonReception result = new BonReception(data);
-        for(LigneDocumentStock lign:data.getLignes()){
-            result.getLignes().add(new LigneDocumentStock(lign));
+        for(LigneEntree lign:data.getLignes()){
+            result.getLignes().add(new LigneEntree(lign));
         }
 //        for(Facture fac:data.getFactures()){
 //            result.getFactures().add(new Facture(fac));
@@ -138,6 +149,8 @@ public class BonReceptionManagerImpl
     public void processBeforeSave(BonReception entity) {
 //        Date today = new Date();
 //        entity.setCompareid(today.getTime());
+        entity.setState("transfere");
+        entity.setNature("0");
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -187,11 +200,12 @@ public class BonReceptionManagerImpl
         entity.setState("disponible");
         dao.update(entity.getId(), entity);
         //Traitement des lignes de BR
-        for(LigneDocumentStock ligne:entity.getLignes()){
-            LienEmplacement lien = ligne.getEmplacement();            
-            lien.addStock(entity.getTypebon().equalsIgnoreCase("0")? ligne.getQuantite(): ligne.getQuantite()*-1);
-            liendao.update(lien.getId(), lien);
-        }//end for(LigneDocumentStock ligne:entity.getLignes()){
+        compute(entity);
+//        for(LigneDocumentStock ligne:entity.getLignes()){
+//            LienEmplacement lien = ligne.getEmplacement();            
+//            lien.addStock(entity.getTypebon().equalsIgnoreCase("0")? ligne.getQuantite(): ligne.getQuantite()*-1);
+//            liendao.update(lien.getId(), lien);
+//        }//end for(LigneDocumentStock ligne:entity.getLignes()){
         return entity;
     }
 
@@ -208,28 +222,29 @@ public class BonReceptionManagerImpl
      * @param ligne
      * @param empl 
      */
-    private void computeLigne(LigneDocumentStock ligne , Emplacement empl){
-        Article article = articledao.findByPrimaryKey("id", ligne.getArticle().getId());
-        for(LienEmplacement lien : article.getStockages()){
-            if(lien.getEmplacement().compareTo(empl)==0){
-                if(article.getPolitiquestock()==null||article.getPolitiquestock().equalsIgnoreCase("0")){
+    private void compute(BonReception entity){
+       for(LigneEntree ligne:entity.getLignes()){
+                LienEmplacement lien = ligne.getEmplacement();
+                if(ligne.getArticle().getPolitiquestock()==null
+                        ||ligne.getArticle().getPolitiquestock().equalsIgnoreCase("0")){
                     //Nothing to do
-                }else if(article.getPolitiquestock().equalsIgnoreCase("1")||article.getPolitiquestock().equalsIgnoreCase("5")){
+                }else if(ligne.getArticle().getPolitiquestock().equalsIgnoreCase("1")
+                        ||ligne.getArticle().getPolitiquestock().equalsIgnoreCase("5")){
                     Lot lot = new Lot(ligne.getCode(), ligne.getQuantite(), ligne.getPeremption(), ligne.getFabrication());
                     lot.setLien(lien);lot.getReference();
                     lotdao.save(lot);
-                }else if(article.getPolitiquestock().equalsIgnoreCase("2")){
+                }else if(ligne.getArticle().getPolitiquestock().equalsIgnoreCase("2")){
                     
-                }else if(article.getPolitiquestock().equalsIgnoreCase("3")||article.getPolitiquestock().equalsIgnoreCase("4")){
+                }else if(ligne.getArticle().getPolitiquestock().equalsIgnoreCase("3")
+                        ||ligne.getArticle().getPolitiquestock().equalsIgnoreCase("4")){
 //                    Date date = new Date();
 //                    Lot lot = new Lot(Long.toString(date.getTime()), ligne.getQuantite(), ligne.getPeremption(), ligne.getFabrication());
 //                    lot.setLien(lien);
 //                    lotdao.save(lot);
                 }//end if(article.getPolitiquestock()==null||article.getPolitiquestock().equalsIgnoreCase("0"))
-                lien.addStock(ligne.getQuantite());
-            }//end if(lien.getEmplacement().compareTo(empl)==0){
-        }//end for(LienEmplacement lien : article.getStockages()){
-        articledao.update(article.getId(), article);
+                lien.addStock(ligne.getQuantite());     
+                liendao.update(lien.getId(), lien);
+       }//end for(LigneDocumentStock ligne:entity.getLignes()){
     }//end private void computeLigne(LigneDocumentStock ligne , Emplacement empl){
     
    

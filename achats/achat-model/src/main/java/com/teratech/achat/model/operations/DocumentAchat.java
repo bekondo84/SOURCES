@@ -8,7 +8,6 @@ package com.teratech.achat.model.operations;
 import com.core.base.BaseElement;
 import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.Predicate;
-import com.teratech.achat.model.base.Emplacement;
 import com.teratech.achat.model.base.Entrepot;
 import com.teratech.achat.model.base.Tier;
 import java.io.Serializable;
@@ -57,7 +56,7 @@ public class DocumentAchat extends BaseElement implements Serializable,Comparabl
     
     @ManyToOne
     @JoinColumn(name = "ENTR_ID")
-    @Predicate(label = "Entrepôt livraison",type = Emplacement.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "Entrepôt livraison",type = Entrepot.class,target = "many-to-one",optional = true,search = true)
     protected Entrepot emplacement;
     
 //    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)

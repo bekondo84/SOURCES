@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,16 +35,15 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("FA")
 public class Facture extends DocumentAchat implements Serializable{
 
+    @Predicate(label = "Type de facture",target = "combobox",values = "Facture Achats;Facture Avoirs;Facture Retour")
+    @Column(name = "TYPE_FACTURE")
+    private String type = "0";
+    
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
     @JoinColumn(name = "LIFAC_ID")
     @Predicate(label = " ",type = LigneFacture.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "Articles",customfooter = true,edittable = true)
     @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td'></td><td style='font-weight: bold;'>Total HT</td> <td class='text-center'>this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100</td><td></td></tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Taxes</td><td  class='text-center'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};/;100</td><td></td> </tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Total TTC</td><td  class='text-center'  style='font-weight: bold;'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;(;100;+;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};);/;100</td><td></td></tr>")
-    protected List<LigneFacture> lignes = new ArrayList<LigneFacture>();
-    
-    @ManyToOne
-    @JoinColumn(name = "DOAC_ID")
-    @Predicate(label = "Document source",type = BonCommande.class,target = "many-to-one" ,hide = true)
-    private BonCommande docachat;
+    protected List<LigneFacture> lignes = new ArrayList<LigneFacture>();    
     
     @Predicate(label = "Document d'origine" ,hide = true)
     private String source;
@@ -73,6 +73,27 @@ public class Facture extends DocumentAchat implements Serializable{
     @Predicate(label = "Echeances",type = EcheanceReglement.class,target = "one-to-many",group = true,groupName = "group4",groupLabel = "ECHEANCES",edittable = true)
     private List<EcheanceReglement> echeances = new ArrayList<EcheanceReglement>();
     
+    @ManyToOne
+    @JoinColumn(name = "DOAC_ID")
+    @Predicate(label = "Commande",type = BonCommande.class,target = "many-to-one" ,hide=true)
+    private BonCommande docachat;
+    
+    @ManyToOne
+    @JoinColumn(name = "BOLI_ID")
+    @Predicate(label = "Libraison",type = BonReception.class,target = "many-to-one" ,hide = true)
+    private BonReception bonlivraison ;
+    
+    private Double totalht = 0.0;
+    
+    private Double totalescompte = 0.0;
+    
+    private Double totalttc = 0.0;
+    
+    private Double totalacompte;
+    
+    private Double taxes = 0.0;
+    
+    private Double netapayer = 0.0;
     
     /**
      * 
@@ -125,7 +146,9 @@ public class Facture extends DocumentAchat implements Serializable{
         this.docachat = new BonCommande(da);
         this.source = da.getCode();
         this.typedocument = DocumentAchatState.FACTURE;
-//        this.state = "etabli";      
+        this.type = "0";
+//        this.state = "etabli";    
+        
        
     }
 
@@ -133,9 +156,10 @@ public class Facture extends DocumentAchat implements Serializable{
     public Facture(BonReception da) {
         super();
         this.id = -1;
-//        this.docachat = new BonCommande(da);
+        this.bonlivraison = new BonReception(da);
         this.source = da.getCode();
         this.typedocument = DocumentAchatState.FACTURE;
+        this.type = "0";
 //        this.state = "etabli";       
     }
 
@@ -146,6 +170,9 @@ public class Facture extends DocumentAchat implements Serializable{
         if(da.getDocachat()!=null){
             this.docachat = new BonCommande(da.getDocachat());
         }//end if(da.getDocachat()!=null)
+        if(da.bonlivraison!=null){
+            this.bonlivraison = new BonReception(da.bonlivraison);
+        }//end if(da.bonlivraison!=null){
         this.source = da.getCode();
         this.typedocument = DocumentAchatState.FACTURE;
         if(da.getCompte()!=null){
@@ -153,6 +180,13 @@ public class Facture extends DocumentAchat implements Serializable{
         }
         this.journal = da.getJournal();
         this.escompte = da.escompte;
+        this.type = da.type;
+        this.totalttc = da.totalttc;
+        this.totalht = da.totalht;
+        this.totalescompte = da.totalescompte;
+        this.totalacompte = da.totalacompte;
+        this.netapayer = da.netapayer;
+        this.taxes = da.taxes;
     }
 
     public String getSource() {
@@ -227,19 +261,95 @@ public class Facture extends DocumentAchat implements Serializable{
         this.lignes = lignes;
     }
 
+    public BonReception getBonlivraison() {
+        return bonlivraison;
+    }
+
+    public void setBonlivraison(BonReception bonlivraison) {
+        this.bonlivraison = bonlivraison;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Double getTotalht() {
+        return totalht;
+    }
+
+    public void setTotalht(Double totalht) {
+        this.totalht = totalht;
+    }
+
+    public Double getTotalescompte() {
+        return totalescompte;
+    }
+
+    public void setTotalescompte(Double totalescompte) {
+        this.totalescompte = totalescompte;
+    }
+
+    public Double getTotalttc() {
+        return totalttc;
+    }
+
+    public void setTotalttc(Double totalttc) {
+        this.totalttc = totalttc;
+    }
+
+    public Double getTotalacompte() {
+        return totalacompte;
+    }
+
+    public void setTotalacompte(Double totalacompte) {
+        this.totalacompte = totalacompte;
+    }
+
+    public Double getTaxes() {
+        return taxes;
+    }
+
+    public void setTaxes(Double taxes) {
+        this.taxes = taxes;
+    }
+
+    public Double getNetapayer() {
+        return netapayer;
+    }
+
+    public void setNetapayer(Double netapayer) {
+        this.netapayer = netapayer;
+    }
+
    
 
     @Override
     public List<State> getStates() {
          List<State> states = new ArrayList<State>();
-        State state = new State("etabli", "Broullion");
-        states.add(state);
-        state = new State("confirme", "Confirmé");
-        states.add(state);
-        state = new State("transfere", "Transfert en comptabilité");
-        states.add(state);
-        state = new State("annule", "Annulé");
-        states.add(state);
+        State state = null;
+        if(this.state.equalsIgnoreCase("etabli")){
+            state =new State("etabli", "Pro-forma");
+            states.add(state);
+            state = new State("confirme", "Confirmé");
+            states.add(state);
+        }else if(this.state.equalsIgnoreCase("confirme")){
+             state = new State("confirme", "Confirmé");
+            states.add(state);
+            state = new State("transfere", "Transféré en comptabilité");
+            states.add(state);
+        }else if(this.state.equalsIgnoreCase("transfere")){
+            state = new State("transfere", "Transféré en comptabilité");
+            states.add(state);
+            state = new State("reception", "Attente prise en compte");
+            states.add(state);
+        }        
+        
+//         state = new State("annule", "Annulé");
+//         states.add(state);
         return states; //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -257,6 +367,31 @@ public class Facture extends DocumentAchat implements Serializable{
     public boolean isCreateonfield() {
         return false; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public boolean isDesableupdate() {
+        return !this.state.equalsIgnoreCase("etabli"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getSerial() {
+        return "fa281220181602"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesabledelete() {
+        return !this.state.equalsIgnoreCase("etabli"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesablecreate() {
+        return super.isDesablecreate(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getSearchkeys() {
+        return super.getSearchkeys(); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     
@@ -269,5 +404,12 @@ public class Facture extends DocumentAchat implements Serializable{
     public String getEditTitle() {
         return "FACTURE FOURNISSEUR"; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public String getOwnermodule() {
+        return "teratechachat"; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     
 }

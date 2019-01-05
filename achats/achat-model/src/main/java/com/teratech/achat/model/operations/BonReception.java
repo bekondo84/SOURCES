@@ -34,16 +34,19 @@ public class BonReception extends DocumentStock implements Serializable{
     @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"1\"}]")
     protected Tier fournisseur ;
      
-     @Predicate(label = "Type de bon",target = "combobox",values = "Normal;Retour")
+     @Predicate(label = "Type de bon",target = "combobox",values = "Normal",editable = false)
      private String typebon = "0";
      
 //    @Predicate(label = "Document d'origine")
     private String origine ;    
     
+//    @Predicate(label = "Type document",target = "combobox",values = "Achats;Production;Retour location;Autres")
+    private String nature = "0";
+    
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "BR_ID")
-    @Predicate(label = " ",type = LigneDocumentStock.class,target = "one-to-many",group =true ,groupName = "group1",groupLabel = "Articles",edittable = true)
-    private List<LigneDocumentStock> lignes = new ArrayList<LigneDocumentStock>();
+    @Predicate(label = " ",type = LigneEntree.class,target = "one-to-many",group =true ,groupName = "group1",groupLabel = "Articles",edittable = true)
+    private List<LigneEntree> lignes = new ArrayList<LigneEntree>();
     
     @ManyToOne
     @JoinColumn(name = "CMDE_ID")
@@ -79,6 +82,7 @@ public class BonReception extends DocumentStock implements Serializable{
         }
         this.typebon = entity.typebon;
         this.state = entity.getState();
+        this.nature = entity.nature;
     }
 
     public BonReception() {
@@ -100,11 +104,11 @@ public class BonReception extends DocumentStock implements Serializable{
         this.origine = origine;
     }
 
-    public List<LigneDocumentStock> getLignes() {
+    public List<LigneEntree> getLignes() {
         return lignes;
     }
 
-    public void setLignes(List<LigneDocumentStock> lignes) {
+    public void setLignes(List<LigneEntree> lignes) {
         this.lignes = lignes;
     }
 
@@ -130,6 +134,14 @@ public class BonReception extends DocumentStock implements Serializable{
 
     public void setTypebon(String typebon) {
         this.typebon = typebon;
+    }
+
+    public String getNature() {
+        return nature;
+    }
+
+    public void setNature(String nature) {
+        this.nature = nature;
     }
     
     
