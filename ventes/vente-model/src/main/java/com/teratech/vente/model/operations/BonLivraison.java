@@ -35,10 +35,15 @@ public class BonLivraison extends DocumentStock implements Serializable{
    
     @ManyToOne
     @JoinColumn(name = "CMD_ID")
-    @Predicate(label = "Document source",type = Commande.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "Complément")
+    @Predicate(label = "Document source",type = Commande.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "Complément",hidden = "currentObject.commande==null")
     private Commande commande ;
     
-    @Predicate(label = "Total HT",type = Double.class,search = true)
+    @ManyToOne
+    @JoinColumn(name = "DVS_ID")
+    @Predicate(label = "Document source",type = Devis.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "Complément",hidden = "currentObject.devis==null")
+    private Devis devis ;
+    
+    @Predicate(label = "Total HT",type = Double.class,search = true,hide = true,editable = false)
     private Double totalht = 0.0;
     
     
@@ -86,6 +91,10 @@ public class BonLivraison extends DocumentStock implements Serializable{
         if(doc.commande!=null){
             this.commande = new Commande(doc.commande);
         }
+        if(doc.devis!=null){
+            this.devis = new Devis(doc.devis);
+        }
+        this.state = doc.state;
         this.totalht = doc.totalht;
     }
 
@@ -117,6 +126,14 @@ public class BonLivraison extends DocumentStock implements Serializable{
 
     public void setTotalht(Double totalht) {
         this.totalht = totalht;
+    }
+
+    public Devis getDevis() {
+        return devis;
+    }
+
+    public void setDevis(Devis devis) {
+        this.devis = devis;
     }
 
     

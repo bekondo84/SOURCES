@@ -32,7 +32,7 @@ public class Commande extends DocumentVente implements Serializable{
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "CMDE_ID")
     @Predicate(label = " ",type = LigneCommande.class,target = "one-to-many" ,group = true,groupName = "group1",groupLabel = "Articles",customfooter = true,edittable = true)
-    @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td></td><td'></td><td style='font-weight: bold;'>Total HT</td> <td class='text-center'>this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100</td><td></td></tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Taxes</td><td  class='text-center'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};/;100</td><td></td> </tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Total TTC</td><td  class='text-center'  style='font-weight: bold;'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;(;100;+;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};);/;100</td><td></td></tr>")
+    @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td></td><td'></td><td></td><td style='font-weight: bold;'>Total HT</td> <td class='text-center'>this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100</td></tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Taxes</td><td  class='text-center'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};/;100</td></tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Total TTC</td><td  class='text-center'  style='font-weight: bold;'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;(;100;+;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};);/;100</td></tr>")
     private List<LigneCommande> lignes = new ArrayList<LigneCommande>();
     
     @ManyToOne
@@ -40,6 +40,17 @@ public class Commande extends DocumentVente implements Serializable{
     @Predicate(label = "Document source",type = Devis.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "Complément" ,editable = false)
     private Devis devis ;
     
+    private Double totaltaxes = 0.0;
+    
+    @Predicate(label = "Total HT",type = Double.class,search = true,hide = true)
+    private Double totalht=0.0;
+    
+     @Predicate(label = "Total TTC",type = Double.class,search = true,hide = true)
+    private Double totalttc = 0.0;
+    
+     @Predicate(label = " ",target = "state",hide = true,search = true)
+     private String state ="etabli" ;
+     
     public Commande(String code, Date date, Tier fornisseur, Date datecommande, String codefourni) {
         super(code, date, fornisseur, datecommande, codefourni);
     }
@@ -50,6 +61,7 @@ public class Commande extends DocumentVente implements Serializable{
 
     public Commande(DocumentVente da) {
         super(da);
+        state ="etabli";
     }
     
     public Commande(Devis da) {
@@ -62,9 +74,14 @@ public class Commande extends DocumentVente implements Serializable{
         if(da.devis!=null){
             this.devis = new Devis(da.devis);
         }
+        this.totalht = da.totalht;
+        this.totalttc = da.totalttc;
+        this.totaltaxes = da.totaltaxes;
+        this.state = da.state;
     }
 
     public Commande() {
+        state ="etabli";
     }
 
     public List<LigneCommande> getLignes() {
@@ -81,6 +98,40 @@ public class Commande extends DocumentVente implements Serializable{
 
     public void setDevis(Devis devis) {
         this.devis = devis;
+    }
+
+    public Double getTotaltaxes() {
+        return totaltaxes;
+    }
+
+    public void setTotaltaxes(Double totaltaxes) {
+        this.totaltaxes = totaltaxes;
+    }
+
+    
+
+    public Double getTotalht() {
+        return totalht;
+    }
+
+    public void setTotalht(double totalht) {
+        this.totalht = totalht;
+    }
+
+    public Double getTotalttc() {
+        return totalttc;
+    }
+
+    public void setTotalttc(double totalttc) {
+        this.totalttc = totalttc;
+    }
+    
+     public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     @Override

@@ -37,7 +37,7 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue("TMP")
 public class DocumentVente extends BaseElement implements Serializable,Comparable<DocumentVente>{
 
-    @Predicate(label = "Reference",optional = false,search = true)
+    @Predicate(label = "N° de Pièce",optional = false,search = true)
     protected String code ;
     
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -63,8 +63,7 @@ public class DocumentVente extends BaseElement implements Serializable,Comparabl
     @Predicate(label = "Livraison",type = Date.class,target = "date",search = true)
     protected Date livraison ;
        
-    @Predicate(label = " ",target = "state",hide = true,search = true)
-     protected String state ="etabli" ;
+    
     
 
 //    protected DocumentAchatState typedocument ;
@@ -129,7 +128,7 @@ public class DocumentVente extends BaseElement implements Serializable,Comparabl
 //        if(da.emplacement!=null){
 //            this.emplacement = new Entrepot(da.emplacement);
 //        }
-        this.state = da.getState();
+//        this.state = da.getState();
 //        this.typedocument = da.typedocument;
     }
 
@@ -203,13 +202,7 @@ public class DocumentVente extends BaseElement implements Serializable,Comparabl
 //        this.lignes = lignes;
 //    }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
+   
 
 //    public DocumentAchatState getTypedocument() {
 //        return typedocument;

@@ -47,8 +47,8 @@ public class LigneDocumentAchat extends BaseElement implements Serializable,Comp
 //    @Predicate(label = "Date prévue",type = Date.class,target = "date",optional = false,search = true)
 //    private Date prevue ;
 //    
-//    @Predicate(label = "N° Lot/Serie",optional = true,search = true)
-//    private String code ;
+    @Predicate(label = "N° Lot/Serie",optional = true,search = true)
+    private String code ;
 //    
 //    @Predicate(label = "Péremption",type = Date.class,target = "date",search = false)
 //    @Temporal(TemporalType.DATE)
@@ -141,7 +141,7 @@ public class LigneDocumentAchat extends BaseElement implements Serializable,Comp
             }
         }
         this.remise = ligne.remise;
-//        this.code = ligne.code;
+        this.code = ligne.code;
 //        this.peremption = ligne.getPeremption();
 //        this.fabrication = ligne.getFabrication();
         this.qtefacturee = ligne.getQtefacturee();
@@ -259,6 +259,14 @@ public class LigneDocumentAchat extends BaseElement implements Serializable,Comp
 
     public void setLigneachat(LigneDocumentAchat ligneachat) {
         this.ligneachat = ligneachat;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
     
     

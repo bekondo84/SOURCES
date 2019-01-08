@@ -63,6 +63,31 @@ public class ArticleRSImpl
             workbtn.setValue("{'name':'teratech_vente_str_1_1',template:{'article':'object'},'header':['article']}");
 //            workbtn.setStates(new String[]{"etabli"});
             meta.getHeader().add(workbtn);
+            workbtn = new MetaColumn("header", "work1", "Publier sur le portail", false, "link", null);
+            workbtn.setValue("{'name':'teratech_vente_str_1_1',template:{'article':'object'},'header':['article'],'label':'puvente'}");
+            workbtn.setPattern("fa fa-envelope");workbtn.setLabel("puvente");
+//            workbtn.setStates(new String[]{"etabli"});
+            meta.getHeader().add(workbtn);
+            workbtn = new MetaColumn("header", "work1", "Stock disponible", false, "link", null);
+            workbtn.setValue("{'name':'teratech_vente_str_1_1',template:{'article':'object'},'header':['article'],'label':'puvente'}");
+            workbtn.setPattern("fa fa-envelope");workbtn.setLabel("puvente");
+//            workbtn.setStates(new String[]{"etabli"});
+            meta.getHeader().add(workbtn);
+            workbtn = new MetaColumn("header", "work1", "Statistiques", false, "link", null);
+            workbtn.setValue("{'name':'teratech_vente_str_1_1',template:{'article':'object'},'header':['article'],'label':'puvente'}");
+            workbtn.setPattern("fa fa-envelope");workbtn.setLabel("puvente");
+//            workbtn.setStates(new String[]{"etabli"});
+            meta.getHeader().add(workbtn);
+            workbtn = new MetaColumn("header", "work1", "Points de ventes", false, "link", null);
+            workbtn.setValue("{'name':'teratech_vente_str_1_1',template:{'article':'object'},'header':['article'],'label':'puvente'}");
+            workbtn.setPattern("fa fa-envelope");workbtn.setLabel("puvente");
+//            workbtn.setStates(new String[]{"etabli"});
+            meta.getHeader().add(workbtn);
+            workbtn = new MetaColumn("header", "work1", "Points de ventes", false, "link", null);
+            workbtn.setValue("{'name':'teratech_vente_str_1_1',template:{'article':'object'},'header':['article'],'label':'puvente'}");
+            workbtn.setPattern("fa fa-envelope");workbtn.setLabel("puvente");
+//            workbtn.setStates(new String[]{"etabli"});
+            meta.getHeader().add(workbtn);
         } catch (InstantiationException ex) {
             Logger.getLogger(ArticleRSImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {

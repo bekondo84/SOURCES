@@ -225,10 +225,12 @@ public class BonReceptionRSImpl
         }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
             throw new KerenExecption("Veuillez renseigner les Articles");
         }
+        double totalht = 0.0;
         for(LigneDocumentStock ligne : entity.getLignes()){
             if(ligne.getId()<0) ligne.setId(-1L);
+            totalht+=ligne.getQuantite()*ligne.getPuht();
         }//end for(LigneDocumentStock ligne : entity.getLignes()){
-        
+        entity.setTotalht(totalht);
 //        validateLigneBR(entity, Boolean.FALSE);
         super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
     }
@@ -246,9 +248,12 @@ public class BonReceptionRSImpl
         }else if(entity.getLignes()==null||entity.getLignes().isEmpty()){
             throw new KerenExecption("Veuillez renseigner les Articles");
         }
+        double totalht = 0.0;
         for(LigneDocumentStock ligne : entity.getLignes()){
             if(ligne.getId()<0) ligne.setId(-1L);
+            totalht+=ligne.getQuantite()*ligne.getPuht();
         }//end for(LigneDocumentStock ligne : entity.getLignes()){
+        entity.setTotalht(totalht);
 //        validateLigneBR(entity, Boolean.FALSE);
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
     }

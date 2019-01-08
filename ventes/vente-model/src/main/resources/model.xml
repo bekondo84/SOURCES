@@ -154,12 +154,12 @@ and open the template in the editor.
                 <role>ADMIN</role>
             </roles>           
         </element>
-        <element type="com.teratech.vente.model.operations.BonReception"  idclass="Long"  idname="id"   deseable="true">
+        <element type="com.teratech.vente.model.operations.RetourClient"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           
         </element>
-        <element type="com.teratech.vente.model.operations.Entree"  idclass="Long"  idname="id"   deseable="true">
+        <element type="com.teratech.vente.model.operations.LIgneRetourClient"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           
@@ -169,7 +169,7 @@ and open the template in the editor.
                 <role>ADMIN</role>
             </roles>           
         </element>
-        <element type="com.teratech.vente.model.operations.LigneDocumentAchat"  idclass="Long"  idname="id"   deseable="true">
+        <element type="com.teratech.vente.model.operations.Facture"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           

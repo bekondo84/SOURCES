@@ -83,17 +83,23 @@ public class Facture extends DocumentAchat implements Serializable{
     @Predicate(label = "Libraison",type = BonReception.class,target = "many-to-one" ,hide = true)
     private BonReception bonlivraison ;
     
+    @Predicate(label = "Total HT",type = Double.class,search = true,hide = true)
     private Double totalht = 0.0;
     
     private Double totalescompte = 0.0;
     
+    @Predicate(label = "Total TTC",type = Double.class,search = true,hide = true)
     private Double totalttc = 0.0;
     
     private Double totalacompte;
     
-    private Double taxes = 0.0;
+    private Double totaltaxes = 0.0;
     
-    private Double netapayer = 0.0;
+    @Predicate(label = "Net à payer",type = Double.class,search = true,hide = true)
+    private Double netapayer = 0.0;    
+          
+    @Predicate(label = " ",target = "state",hide = true,search = true)
+     protected String state ="etabli" ;
     
     /**
      * 
@@ -186,7 +192,7 @@ public class Facture extends DocumentAchat implements Serializable{
         this.totalescompte = da.totalescompte;
         this.totalacompte = da.totalacompte;
         this.netapayer = da.netapayer;
-        this.taxes = da.taxes;
+        this.totaltaxes = da.totaltaxes;
     }
 
     public String getSource() {
@@ -309,13 +315,15 @@ public class Facture extends DocumentAchat implements Serializable{
         this.totalacompte = totalacompte;
     }
 
-    public Double getTaxes() {
-        return taxes;
+    public Double getTotaltaxes() {
+        return totaltaxes;
     }
 
-    public void setTaxes(Double taxes) {
-        this.taxes = taxes;
+    public void setTotaltaxes(Double totaltaxes) {
+        this.totaltaxes = totaltaxes;
     }
+
+   
 
     public Double getNetapayer() {
         return netapayer;
@@ -324,8 +332,14 @@ public class Facture extends DocumentAchat implements Serializable{
     public void setNetapayer(Double netapayer) {
         this.netapayer = netapayer;
     }
+    
+    public String getState() {
+        return state;
+    }
 
-   
+    public void setState(String state) {
+        this.state = state;
+    }   
 
     @Override
     public List<State> getStates() {

@@ -28,6 +28,18 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("DEVIS")
 public class Devis extends DocumentVente implements Serializable{
 
+    
+    private Double totaltaxes = 0.0;
+    
+    @Predicate(label = "Total HT",type = Double.class,search = true,hide = true)
+    private Double totalht=0.0;
+    
+     @Predicate(label = "Total TTC",type = Double.class,search = true,hide = true)
+    private Double totalttc = 0.0;
+     
+     @Predicate(label = " ",target = "state",hide = true,search = true)
+     protected String state ="etabli" ;
+     
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "DEV_ID")
     @Predicate(label = " ",type = LigneDevis.class,target = "one-to-many" ,group = true,groupName = "group1",groupLabel = "Articles",customfooter = true,edittable = true)
@@ -47,6 +59,14 @@ public class Devis extends DocumentVente implements Serializable{
         super(da);
     }
 
+    public Devis(Devis da) {
+        super(da);
+        this.state = da.state;
+        this.totalht = da.totalht;
+        this.totalttc = da.totalttc;
+        this.totaltaxes = da.totaltaxes;
+    }
+    
     public Devis() {
     }
 
@@ -58,6 +78,39 @@ public class Devis extends DocumentVente implements Serializable{
         this.lignes = lignes;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public Double getTotaltaxes() {
+        return totaltaxes;
+    }
+
+    public void setTotaltaxes(Double totaltaxes) {
+        this.totaltaxes = totaltaxes;
+    }
+
+    public Double getTotalht() {
+        return totalht;
+    }
+
+    public void setTotalht(Double totalht) {
+        this.totalht = totalht;
+    }
+
+    public Double getTotalttc() {
+        return totalttc;
+    }
+
+    public void setTotalttc(Double totalttc) {
+        this.totalttc = totalttc;
+    }
+
+    
     @Override
     public boolean isDesableupdate() {
          return this.state.equalsIgnoreCase("accepte")

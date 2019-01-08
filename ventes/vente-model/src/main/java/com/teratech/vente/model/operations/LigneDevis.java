@@ -31,6 +31,11 @@ public class LigneDevis extends LigneDocumentVente implements Serializable{
         super(ligne);
     }
 
+    public LigneDevis(LigneDevis ligne) {
+        super(ligne);
+        this.totalht = ligne.getTotalht();
+    }
+    
     public LigneDevis() {
     }
     

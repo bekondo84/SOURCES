@@ -78,11 +78,11 @@ public class BonLivraisonRSImpl
             workbtn.setStates(new String[]{"etabli"});workbtn.setPattern("btn btn-danger");
             meta.getHeader().add(workbtn);
             workbtn = new MetaColumn("button", "work1", "Saisir les factures", false, "link", null);
-            workbtn.setValue("{'name':'livraisonvte_report01',template:{},'header':[]}");
+            workbtn.setValue("{'name':'teratech_vente_ope_4',template:{},'header':[]}");
             workbtn.setStates(new String[]{"confirme"});
             meta.getHeader().add(workbtn);
             workbtn = new MetaColumn("button", "work1", "Saisir les retours client", false, "link", null);
-            workbtn.setValue("{'name':'livraisonvte_report01',template:{},'header':[]}");
+            workbtn.setValue("{'name':'teratech_vente_ope_3_1',template:{'client':'object.client','data':'object.date','entrepot':'object.entrepot','lieu':'object.lieu','reference':'object.reference','livraison':'object'},'header':['livraison']}");
             workbtn.setStates(new String[]{"confirme"});
             meta.getHeader().add(workbtn);
             MetaColumn stautsbar = new MetaColumn("workflow", "state", "State", false, "statusbar", null);

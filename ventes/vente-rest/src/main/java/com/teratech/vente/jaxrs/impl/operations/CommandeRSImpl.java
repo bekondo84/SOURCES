@@ -16,6 +16,7 @@ import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import com.megatimgroup.generic.jax.rs.layer.impl.RSNumber;
 import com.teratech.vente.core.ifaces.operations.CommandeManagerRemote;
 import com.teratech.vente.jaxrs.ifaces.operations.CommandeRS;
+import com.teratech.vente.model.comptabilite.Taxe;
 import com.teratech.vente.model.operations.Commande;
 import com.teratech.vente.model.operations.LigneCommande;
 import java.util.ArrayList;
@@ -100,7 +101,10 @@ public class CommandeRSImpl
             if(ligne.getId()<=0){
                 ligne.setId(-1L);
             }//end if(ligne.getId()<=0){
-        }//end for(LigneDevis ligne:entity.getLignes()){
+            if(ligne.getQuantite()<=0){
+                throw new KerenExecption("Veuillez fournir la quantité commandée pour l'article "+ligne.getArticle().getDesignation());
+            }
+        }//end for(LigneDevis ligne:entity.getLignes()){      
     }
 
     @Override
@@ -121,7 +125,7 @@ public class CommandeRSImpl
             workbtn.setStates(new String[]{"confirme"});
             meta.getHeader().add(workbtn);
             workbtn = new MetaColumn("button", "work1", "Géréner les factures", false, "link", null);
-            workbtn.setValue("{'name':'teratech_vente_ope_4',template:{},'header':[]}");
+            workbtn.setValue("{'name':'teratech_vente_ope_4',template:{'client':'object.client','reference':'object.reference','lieu':'object.lieu','livraison':'object.livraison','commande':'object'},'header':['commande']}");
             workbtn.setStates(new String[]{"confirme"});
             meta.getHeader().add(workbtn);
             MetaColumn stautsbar = new MetaColumn("workflow", "state", "State", false, "statusbar", null);
@@ -225,6 +229,7 @@ public class CommandeRSImpl
             container.addLike("searchkeys", searchText);
         }//end if(searchText!=null&&!searchText.trim().isEmpty()){    
         Long _dpid = null;
+//        System.out.println(CommandeRSImpl.class.toString()+" ==================================================== "+headers.getRequestHeader("devis"));
         if(headers.getRequestHeader("devis")!=null&&!headers.getRequestHeader("devis").isEmpty()){
              _dpid = gson.fromJson(headers.getRequestHeader("devis").get(0), Long.class);
               container.addEq("devis.id", _dpid);        

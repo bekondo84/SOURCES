@@ -8,6 +8,7 @@ package com.teratech.vente.model.others;
 import com.core.base.BaseElement;
 import com.megatim.common.annotations.Predicate;
 import com.teratech.vente.model.operations.Devis;
+import com.teratech.vente.model.operations.Facture;
 import java.io.Serializable;
 import javax.persistence.Lob;
 
@@ -17,8 +18,11 @@ import javax.persistence.Lob;
  */
 public class SendDevisForm extends BaseElement implements Serializable,Comparable<SendDevisForm>{
 
-    @Predicate(label = "Devis",search = true,editable = false,type = Devis.class,target = "many-to-one")
+    @Predicate(label = "Devis",search = true,editable = false,type = Devis.class,target = "many-to-one",hidden = "temporalData.devis==null")
     private Devis devis ;
+    
+    @Predicate(label = "Facture Client",search = true,editable = false,type = Facture.class,target = "many-to-one",hidden = "temporalData.facture==null")
+    private Facture facture ;
     
     @Predicate(label = "Concerne",target = "richeditor",group = true,groupName = "group1",groupLabel = "MESSAGE")
     @Lob
@@ -36,6 +40,14 @@ public class SendDevisForm extends BaseElement implements Serializable,Comparabl
 
     public void setDevis(Devis devis) {
         this.devis = devis;
+    }
+
+    public Facture getFacture() {
+        return facture;
+    }
+
+    public void setFacture(Facture facture) {
+        this.facture = facture;
     }
 
   

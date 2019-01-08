@@ -44,6 +44,10 @@
     <class>com.teratech.vente.model.operations.DocumentStock</class>
     <class>com.teratech.vente.model.operations.LIgneBonLivraison</class>
     <class>com.teratech.vente.model.operations.LigneDocumentStock</class>
+    <class>com.teratech.vente.model.operations.LIgneRetourClient</class>
+    <class>com.teratech.vente.model.operations.RetourClient</class>
+    <class>com.teratech.vente.model.operations.Facture</class>
+    <class>com.teratech.vente.model.operations.LigneFacture</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="update"/>

@@ -57,6 +57,8 @@ public class BonReception extends DocumentStock implements Serializable{
 //    @Predicate(label = "Factures",type = Facture.class,target = "one-to-many",editable = false,group = true,groupName = "group4",groupLabel = "Factures")
     private List<Facture> factures = new ArrayList<Facture>();
     
+    @Predicate(label = "Total HT",type = Double.class,search = true,hide = true)
+    private Double totalht = 0.0;
     
 
     
@@ -83,6 +85,7 @@ public class BonReception extends DocumentStock implements Serializable{
         this.typebon = entity.typebon;
         this.state = entity.getState();
         this.nature = entity.nature;
+        this.totalht = entity.totalht;
     }
 
     public BonReception() {
@@ -142,6 +145,14 @@ public class BonReception extends DocumentStock implements Serializable{
 
     public void setNature(String nature) {
         this.nature = nature;
+    }
+
+    public Double getTotalht() {
+        return totalht;
+    }
+
+    public void setTotalht(Double totalht) {
+        this.totalht = totalht;
     }
     
     

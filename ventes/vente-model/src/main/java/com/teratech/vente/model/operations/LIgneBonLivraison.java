@@ -33,6 +33,9 @@ public class LIgneBonLivraison extends LigneDocumentStock implements Serializabl
     @Predicate(label = "Total HT",type = Double.class,search = true,hide = true,compute = true,values ="this.puht;*;this.quantite" )
     private Double totalht ;  
      
+    private Double retour=0.0;
+    
+    private Double disponile = 0.0;
     
     /**
      * 
@@ -76,6 +79,16 @@ public class LIgneBonLivraison extends LigneDocumentStock implements Serializabl
     public LIgneBonLivraison(LigneDocumentStock ligne) {
         super(ligne);
     }
+    
+    public LIgneBonLivraison(LIgneBonLivraison ligne) {
+        super(ligne);
+        if(ligne.getLot()!=null){
+            this.lot = new Lot(ligne.getLot());
+        }
+        this.totalht = ligne.getTotalht();
+        this.retour = ligne.retour;
+        this.disponile = ligne.disponile;
+    }
 
     /**
      * 
@@ -83,6 +96,7 @@ public class LIgneBonLivraison extends LigneDocumentStock implements Serializabl
      */
     public LIgneBonLivraison(LigneDocumentVente ligne) {
         super(ligne);
+        this.totalht = ligne.getTotalht();
     }
 
     public LIgneBonLivraison() {
@@ -103,6 +117,40 @@ public class LIgneBonLivraison extends LigneDocumentStock implements Serializabl
     public void setTotalht(Double totalht) {
         this.totalht = totalht;
     }
+
+    public Double getRetour() {
+        return retour;
+    }
+
+    public void setRetour(Double retour) {
+        this.retour = retour;
+    }
+
+    public Double getDisponile() {
+        return disponile;
+    }
+
+    public void setDisponile(Double disponile) {
+        this.disponile = disponile;
+    }
     
+    /**
+     * 
+     * @param qte
+     * @return 
+     */
+    public Double addRetour(Double qte){
+       this.retour = (this.retour!=null ? this.retour:0.0)+(qte);
+       disponible();
+       return retour;
+    }
     
+    /**
+     * 
+     * @return 
+     */
+    public Double disponible(){
+        disponile = this.quantite-(this.retour!=null? this.retour:0.0);
+        return disponile;
+    }
 }

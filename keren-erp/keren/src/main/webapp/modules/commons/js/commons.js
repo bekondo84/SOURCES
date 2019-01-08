@@ -399,6 +399,7 @@ angular.module('keren.core.commons')
 //                                  console.log("commons.selectpickerKeyup ================  :::  ===fieldname :  "+fieldname+" ===  value : "+value+"     ==  target : "+target+" =  model : "+model_val);
                                   scope.keyupDataLoarder(model_val,value);
                             });
+                   
                 },
                 searchkeyevent:function(id,scope){
 //                    console.log("commons.searchkeyevent ================  :::  === "+scope.searchCriteria+" === "+id);
@@ -998,7 +999,6 @@ angular.module('keren.core.commons')
                   * @returns {undefined}
                   */
              compteField:function(obj,currentObject,currentUser , metadata){
-//                 console.log("commonsTools.expeval  ====== "+angular.toJson(obj)+" ======  "+angular.toJson(metadata));
                  if(obj && metadata){
                      //Traitement des columns
                      for(var i=0 ; i<metadata.columns.length;i++){
@@ -1021,6 +1021,7 @@ angular.module('keren.core.commons')
                          }//end if(metadata.groups[i].columns){
                      }//end for(var i=0;i<metadata.groups.length;i++)
                  }//end if(obj && metadata)
+//                 console.log("commonsTools.expeval  ====== "+angular.toJson(obj)+" ======  "+angular.toJson(metadata));                 
              },
             
             /**

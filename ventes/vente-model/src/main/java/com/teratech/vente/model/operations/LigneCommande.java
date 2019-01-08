@@ -31,6 +31,10 @@ public class LigneCommande extends LigneDocumentVente implements Serializable{
         super(ligne);
     }
 
+    public LigneCommande(LigneCommande ligne) {
+        super(ligne);
+        this.totalht = ligne.getTotalht();
+    }
     public LigneCommande() {
     }
     

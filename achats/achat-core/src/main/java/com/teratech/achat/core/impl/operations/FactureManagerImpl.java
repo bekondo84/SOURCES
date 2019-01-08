@@ -16,7 +16,6 @@ import com.teratech.achat.model.comptabilite.Acompte;
 import com.teratech.achat.model.comptabilite.EcheanceReglement;
 import com.teratech.achat.model.operations.DocumentAchatState;
 import com.teratech.achat.model.operations.Facture;
-import com.teratech.achat.model.operations.LigneDocumentAchat;
 import com.teratech.achat.model.operations.LigneFacture;
 import java.util.ArrayList;
 import java.util.List;

@@ -60,8 +60,11 @@ public class ApplicationConfig extends Application {
         resources.add(com.teratech.vente.jaxrs.impl.operations.BonLivraisonRSImpl.class);
         resources.add(com.teratech.vente.jaxrs.impl.operations.CommandeRSImpl.class);
         resources.add(com.teratech.vente.jaxrs.impl.operations.DevisRSImpl.class);
+        resources.add(com.teratech.vente.jaxrs.impl.operations.FactureRSImpl.class);
+        resources.add(com.teratech.vente.jaxrs.impl.operations.LIgneRetourClientRSImpl.class);
         resources.add(com.teratech.vente.jaxrs.impl.operations.LigneCommandeRSImpl.class);
         resources.add(com.teratech.vente.jaxrs.impl.operations.LotRSImpl.class);
+        resources.add(com.teratech.vente.jaxrs.impl.operations.RetourClientRSImpl.class);
         resources.add(com.teratech.vente.jaxrs.impl.others.SendDevisFormRSImpl.class);
     }
     

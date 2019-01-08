@@ -11,6 +11,7 @@ import com.megatim.common.annotations.OrderType;
 import com.teratech.vente.core.ifaces.operations.CommandeManagerLocal;
 import com.teratech.vente.core.ifaces.operations.CommandeManagerRemote;
 import com.teratech.vente.dao.ifaces.operations.CommandeDAOLocal;
+import com.teratech.vente.model.comptabilite.Taxe;
 import com.teratech.vente.model.operations.Commande;
 import com.teratech.vente.model.operations.LigneCommande;
 import java.util.ArrayList;
@@ -68,7 +69,38 @@ public class CommandeManagerImpl
         Commande data = super.delete(id); //To change body of generated methods, choose Tools | Templates.
         return new Commande(data);
     }
+
+    @Override
+    public void processBeforeUpdate(Commande entity) {
+        compute(entity);
+        super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void processBeforeSave(Commande entity) {
+        compute(entity);
+        super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
+    }
     
-    
+    private void compute(Commande entity){
+        double totalht =0.0;
+        double totalttc = 0.0;
+        double taxes = 0.0;
+        for(LigneCommande ligne:entity.getLignes()){
+            if(ligne.getId()<=0){
+                ligne.setId(-1L);
+            }//end if(ligne.getId()<=0){
+            double remise = (ligne.getRemise()!=null ? ligne.getRemise():0.0)/100;
+            ligne.setTotalht(ligne.getQuantite()*ligne.getPuht()*(1-remise));
+            totalht+=ligne.getQuantite()*ligne.getPuht()*(1-remise);
+            for(Taxe taxe:ligne.getTaxes()){
+                taxes+=ligne.getQuantite()*ligne.getPuht()*(1-remise)*taxe.getMontant()/100;
+            }
+        }
+        totalttc = totalht+taxes;
+        entity.setTotalht(totalht);
+        entity.setTotaltaxes(taxes);
+        entity.setTotalttc(totalttc);
+    }
 
 }

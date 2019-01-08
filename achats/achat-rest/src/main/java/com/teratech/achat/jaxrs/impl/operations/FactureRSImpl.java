@@ -256,7 +256,7 @@ public class FactureRSImpl
         entity.setTotalescompte(escompte);
         entity.setTotalht(totalht);
         entity.setTotalttc(totalttc);
-        entity.setTaxes(taxes);
+        entity.setTotaltaxes(taxes);
         entity.setNetapayer(netapayer);        
         super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
     }
@@ -282,9 +282,10 @@ public class FactureRSImpl
             if(ligne.getId()<0){
                 ligne.setId(-1L);
             }//end if(ligne.getId()<0){
-            totalht +=ligne.getQuantite()*ligne.getPuht();
+            double remise = (ligne.getRemise()!=null ? ligne.getRemise():0.0)/100;
+            totalht +=ligne.getQuantite()*ligne.getPuht()*(1-remise);
             for(Taxe taxe:ligne.getTaxes()){
-                taxes +=ligne.getQuantite()*ligne.getPuht()*taxe.getMontant()/100;
+                taxes +=ligne.getQuantite()*ligne.getPuht()*(1-remise)*taxe.getMontant()/100;
             }//end for(Taxe taxe:ligne.getTaxes()){            
         }//end for(LigneFacture ligne:entity.getLignes()){
         escompte = totalht*(entity.getEscompte()==null ? 0.0 : entity.getEscompte())/100;
@@ -297,7 +298,7 @@ public class FactureRSImpl
         entity.setTotalescompte(escompte);
         entity.setTotalht(totalht);
         entity.setTotalttc(totalttc);
-        entity.setTaxes(taxes);
+        entity.setTotaltaxes(taxes);
         entity.setNetapayer(netapayer);        
         entity.setState("etabli");
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.

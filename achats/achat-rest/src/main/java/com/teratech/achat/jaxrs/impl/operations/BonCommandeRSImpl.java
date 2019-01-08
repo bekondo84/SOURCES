@@ -11,6 +11,7 @@ import com.megatimgroup.generic.jax.rs.layer.impl.MetaColumn;
 import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import com.teratech.achat.core.ifaces.operations.BonCommandeManagerRemote;
 import com.teratech.achat.jaxrs.ifaces.operations.BonCommandeRS;
+import com.teratech.achat.model.comptabilite.Taxe;
 import com.teratech.achat.model.operations.BonCommande;
 import com.teratech.achat.model.operations.BonReception;
 import com.teratech.achat.model.operations.LigneDocumentAchat;
@@ -232,6 +233,9 @@ public class BonCommandeRSImpl
      * @param entity 
      */
     private void validateLigneDP(BonCommande entity){
+        double totalht = 0.0;
+        double totalttc = 0.0;
+        double taxes = 0.0;
         for(LigneDocumentAchat lign:entity.getLignes()){
             if(lign.getArticle()==null){
                 throw new KerenExecption("Veuillez fournir l'article pour toute les lignes");
@@ -240,7 +244,17 @@ public class BonCommandeRSImpl
             }else if(lign.getQuantite()==null||lign.getQuantite()==0){
                 throw new KerenExecption("Veuillez fournir la quantité voulue");
             }
+            double remise = (lign.getRemise()==null ? 0.0:lign.getRemise())/100;
+            lign.setTotalht(lign.getQuantite()*lign.getPuht()*(1-remise));
+            totalht+=lign.getQuantite()*lign.getPuht()*(1-remise);
+            for(Taxe tax:lign.getTaxes()){
+                taxes+=lign.getQuantite()*lign.getPuht()*(1-remise)*tax.getMontant()/100;
+            }//end for(Taxe tax:lign.getTaxes()){
         }//end for(LigneDocumentAchat lign:entity.getLignes())
+        totalttc = totalht+taxes;
+        entity.setTotaltaxes(taxes);
+        entity.setTotalht(totalht);
+        entity.setTotalttc(totalttc);
     }
 
     @Override

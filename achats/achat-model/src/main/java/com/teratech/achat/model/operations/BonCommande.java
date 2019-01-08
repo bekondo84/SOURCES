@@ -9,7 +9,6 @@ import com.core.base.State;
 import com.megatim.common.annotations.Predicate;
 import com.megatim.common.annotations.TableFooter;
 import com.teratech.achat.model.base.ConditionPaiement;
-import com.teratech.achat.model.base.Emplacement;
 import com.teratech.achat.model.base.Entrepot;
 import com.teratech.achat.model.base.Tier;
 import com.teratech.achat.model.comptabilite.Taxe;
@@ -59,12 +58,16 @@ public class BonCommande extends DocumentAchat implements Serializable{
 //    @Predicate(label = "Factures",type = Facture.class,target = "one-to-many",editable = false,group = true,groupName = "group4",groupLabel = "Factures")
     private List<Facture> factures = new ArrayList<Facture>();    
     
-    private double taxes = 0.0;
+    private Double totaltaxes = 0.0;
     
-    private double totalht=0.0;
+    @Predicate(label = "Total HT",type = Double.class,search = true,hide = true)
+    private Double totalht=0.0;
     
-    private double totalttc = 0.0;
-    
+    @Predicate(label = "Total TTC",type = Double.class,search = true,hide = true)
+    private Double totalttc = 0.0;    
+          
+    @Predicate(label = " ",target = "state",hide = true,search = true)
+     protected String state ="etabli" ;
     
     /**
      * 
@@ -119,20 +122,20 @@ public class BonCommande extends DocumentAchat implements Serializable{
         this.typedocument = da.getTypedocument();
         this.totalht = da.totalht;
         this.totalttc = da.totalttc;
-        this.taxes = da.taxes;
+        this.totaltaxes = da.totaltaxes;
     }
      
    public BonCommande(ReponseFournisseur entity) {
         super(entity.getCode(),new Date(),entity.getFournisseur(),new Date(),null,null);
-        this.totalht=0.0;this.taxes=0.0;this.totalttc=0.0;
+        this.totalht=0.0;this.totaltaxes=0.0;this.totalttc=0.0;
         for(LigneReponseDP ligne:entity.getLignes()){
             this.lignes.add(new LigneCommande(ligne));
             this.totalht+=ligne.getTotalht();
             for(Taxe taxe:ligne.getTaxes()){
-                this.taxes+=ligne.getTotalht()*taxe.getMontant()/100;
+                this.totaltaxes+=ligne.getTotalht()*taxe.getMontant()/100;
             }//end for(Taxe taxe:ligne.getTaxes()){
         }//end for(LigneReponseDP ligne:entity.getLignes()){
-        this.totalttc = this.totalht+this.taxes;
+        this.totalttc = this.totalht+this.totaltaxes;
     }
     /**
      * 
@@ -181,13 +184,13 @@ public class BonCommande extends DocumentAchat implements Serializable{
         this.lignes = lignes;
     }
 
-    public double getTaxes() {
-        return taxes;
+    public Double getTotaltaxes() {
+        return totaltaxes;
     }
 
-    public void setTaxes(double taxes) {
-        this.taxes = taxes;
-    }
+    public void setTotaltaxes(Double totaltaxes) {
+        this.totaltaxes = totaltaxes;
+    }    
 
     public double getTotalht() {
         return totalht;
@@ -204,6 +207,15 @@ public class BonCommande extends DocumentAchat implements Serializable{
     public void setTotalttc(double totalttc) {
         this.totalttc = totalttc;
     }
+      
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
 
     @Override
     public String getOwnermodule() {

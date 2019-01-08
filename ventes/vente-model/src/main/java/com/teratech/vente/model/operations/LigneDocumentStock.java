@@ -240,7 +240,7 @@ public LigneDocumentStock(LigneDocumentStock ligne) {
 
     @Override
     public String getModuleName() {
-        return "teratechachat"; //To change body of generated methods, choose Tools | Templates.
+        return "teratechvente"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
