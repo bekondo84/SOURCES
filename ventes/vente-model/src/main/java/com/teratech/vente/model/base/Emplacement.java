@@ -6,6 +6,9 @@
 package com.teratech.vente.model.base;
 
 import com.core.base.BaseElement;
+import com.megatim.common.annotations.KHeader;
+import com.megatim.common.annotations.KHeaders;
+import com.megatim.common.annotations.KValue;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import javax.persistence.Entity;
@@ -19,6 +22,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "T_EMPL")
+@KHeaders({
+   @KHeader(type = "button",name = "work1",label = "Test Annotation",target = "action",roles = {"administrateur","gestionnaire"}
+       , value = @KValue("{'name':'teratech_vente_ope_1_1',template:{'devis':'object'}}")
+   )
+})
 public class Emplacement extends BaseElement implements Serializable,Comparable<Emplacement>{
 
     @Predicate(label = "Nom de l'emplacement",optional = false,unique = true,search = true)
