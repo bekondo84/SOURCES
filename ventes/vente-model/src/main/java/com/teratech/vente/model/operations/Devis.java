@@ -6,6 +6,8 @@
 package com.teratech.vente.model.operations;
 
 import com.core.base.State;
+import com.megatim.common.annotations.KHeader;
+import com.megatim.common.annotations.KHeaders;
 import com.megatim.common.annotations.Predicate;
 import com.megatim.common.annotations.TableFooter;
 import com.teratech.vente.model.base.Tier;
