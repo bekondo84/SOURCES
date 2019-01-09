@@ -512,7 +512,7 @@ angular.module("mainApp")
             }//end if(!$rootScope.globals.headers){
             for(var i=0;i<$rootScope.globals.headers.length;i++){
                 var prop = $rootScope.globals.headers[i];
-                console.log("$scope.resetHttp_commons ========= "+prop+" ===== "+$http.defaults.headers.common[prop]);
+//                console.log("$scope.resetHttp_commons ========= "+prop+" ===== "+$http.defaults.headers.common[prop]);
                 delete $http.defaults.headers.common[prop];
             }//end for(var i=0;i<$rootScope.globals.headers.length;i++){
             $rootScope.globals.headers = new Array();
@@ -4985,13 +4985,16 @@ $scope.gererChangementFichier3 = function(event,model){
          * @returns {Boolean}
          */
        $scope.showheaderwidget = function(roles ,role){
-           if(roles && role){
+           if(role && role=="administrateur" ){
+                return true;
+            }//end if(role=="administrateur" ){
+           if(roles && role){               
                 var array = role.split(';');
                 var contains = false ;
                 for(var i=0 ; i<array.length;i++){
-                    contains |=commonsTools.containsLiteral(roles,array[i]);
+                    contains |= commonsTools.containsLiteral(roles,array[i]);
                 }//end for(var i=0 ; i<array.length;i++){
-                return role=="administrateur" || contains;
+                return  contains;
             }else{
                 return false;
             }//end if(roles && role){
@@ -6434,39 +6437,38 @@ $scope.gererChangementFichier3 = function(event,model){
                         aElem.setAttribute('ng-click',"buttonAction("+act.value+" , '"+act.type+"',null,'"+index+"')");
                         aElem.appendChild(document.createTextNode(act.label)) ;
                         if(act.type!=='workflow'
-                                && $scope.showheaderwidget(act.roles,$scope.currentModule.role)){
+                                && $scope.showheaderwidget(act.roles,$scope.currentModule.roles)){
                             liElem.appendChild(aElem);
                         }else{
                             if(act.state  && $scope.currentObject && $scope.currentObject.state){
                                 var states = act.state.split(';');
                                 if(states.length>0 && $scope.currentObject.state 
                                         && commonsTools.containsLiteral(states,$scope.currentObject.state)
-                                        && $scope.showheaderwidget(act.roles,$scope.currentModule.role)){
+                                        && $scope.showheaderwidget(act.roles,$scope.currentModule.roles)){
                                     liElem.appendChild(aElem);
                                 }//end if(commonsTools.containsLiteral(states,$scope.currentUser.state)){
-                            }else if($scope.showheaderwidget(act.roles,$scope.currentModule.role)){
+                            }else if($scope.showheaderwidget(act.roles,$scope.currentModule.roles)){
                                 liElem.appendChild(aElem);
                             }//end if(act.state){
-                        }//end if(act.type!='workflow'){
-                        //console.log("$scope.buildPrintActionsMenu ================ "+angular.toJson(act));
+                        }//end if(act.type!='workflow'){                        
                 
                    }//end for(var i=0 ; i<$scope.currentAction.actions.length;i++){
-                   //console.log("========================  "+viewElem.innerHTML)
-                   if(type=='javascript'){
+                   //console.log("========================  "+viewElem.innerHTML)            
+               }//end if($scope.currentAction.actions && $scope.currentAction.actions.length>0)
+//               console.log("$scope.buildPrintActionsMenu ================ action menu ::: "+$scope.showheaderwidget(act.roles,$scope.currentModule.roles)+" ===== role : "+$scope.currentModule.roles+" === action type : "+act.type+" === ul id :"+type);
+               if(type=='javascript'){
                         var item = viewElem.getElementById('actions_menu');
                         if(item){
                             item.parentNode.replaceChild(item,ulElem);
                         }
-                   }else if(type=='angular'){
-                        var items = viewElem.find("ul");
-                        for(var i=0; i<items.length;i++){
-                             if(items.eq(i).attr("id")=="actions_menu"){
-                                   items.eq(i).replaceWith(ulElem);
-                             }//end if(items.eq(i).attr("id")=="actions_menu"){  
-                        }//end for(var i=0; i<items.length;i++){
-                   }//end if(type=='javascript'){
-                   
-               }//end if($scope.currentAction.actions && $scope.currentAction.actions.length>0)
+                }else if(type=='angular'){
+                    var items = viewElem.find("ul");
+                     for(var i=0; i<items.length;i++){
+                         if(items.eq(i).attr("id")=="actions_menu"){
+                              items.eq(i).replaceWith(ulElem);
+                          }//end if(items.eq(i).attr("id")=="actions_menu"){  
+                     }//end for(var i=0; i<items.length;i++){
+                }//end if(type=='javascript'){
                return viewElem;
           };
           /**
@@ -6645,13 +6647,13 @@ $scope.gererChangementFichier3 = function(event,model){
                }else if($scope.previousType && $scope.previousType=="kaban"){
                    $scope.windowType = 'kaban';               
                    var viewElem =  $scope.kabanPanelComponent(); 
-                    viewElem = $scope.buildActionsMenu(viewElem,'angular',0);  
+                    viewElem = $scope.buildActionsMenu(viewElem,null,0);  
                     viewElem = $scope.buildPrintActionsMenu(viewElem);
                }else{
                     $scope.windowType = 'list';               
                     var viewElem =  $scope.listPanelComponent($scope.metaData);  
                     //Construction Header
-                    viewElem = $scope.buildActionsMenu(viewElem,'angular',0);  
+                    viewElem = $scope.buildActionsMenu(viewElem,null,0);  
                     viewElem = $scope.buildPrintActionsMenu(viewElem);
                }//end if($scope.previousType && $scope.previousType=="calendar")
                var compileFn = $compile(viewElem);
@@ -10202,7 +10204,7 @@ $scope.gererChangementFichier3 = function(event,model){
             $scope.innerWindowType = false;            
              if(model){
                 var key = commonsTools.keygenerator(model);
-                var obj = {id:'load' , designation:'Charger les donnÃ©es ....'};
+                var obj = {id:'load' , designation:'Charger les données ....'};
                 $scope.dataCache[key] = new Array();
                 $scope.dataCache[key].push(obj);
 //                alert("Vous avez ferme la fenetre modal ::::: "+model+"===="+key+" === "+angular.toJson(data));
@@ -10246,7 +10248,7 @@ $scope.gererChangementFichier3 = function(event,model){
              //console.log("Vous avez cliquez sur annulerAction");
              commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
              $scope.enablefollowerpanel = false;           
-             try{                
+             //try{                
                  if(angular.isDefined($scope.currentObject)){
                     restService.cancel($scope.currentObject);                      
                  }
@@ -10259,9 +10261,10 @@ $scope.gererChangementFichier3 = function(event,model){
                  }//end if($scope.pagination.currentPage!=0){
                  $scope.displayListPanel();
 
-             }catch(ex){
+            /* }catch(ex){
+                 
                 $scope.notifyWindow("Une erreur est servenu pendant le traitement..." ,"<br/>"+ex.message,"danger");
-             }
+             }*/
             
           };
 
@@ -11206,6 +11209,9 @@ $scope.gererChangementFichier3 = function(event,model){
                            var template = $scope.templateDataBuilder(data['template'],extern);
 //                           $http.defaults.headers.common['states']=states;
                            for(var key in template){
+                               if(key=='linkfile'){
+                                    continue;
+                               }//end if(key=='linkfile'){
                                if(angular.isDate(template[key])){
                                    $http.defaults.headers.common[key]=angular.toJson(template[key]);
                                }else if(angular.isObject(template[key])){
@@ -11214,8 +11220,6 @@ $scope.gererChangementFichier3 = function(event,model){
                                    $http.defaults.headers.common[key]=angular.toJson(template[key]);
                                } 
                            }//end for(var key in template){
-//                           console.log("$scope.buttonAction = function(data,type,states,index,extern){ =============== extern : "+extern+"=== template : "+angular.toJson($http.defaults.headers.common));
-                            var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+data.model+"/"+data.entity+"/"+data.method;   
                              var parts = template.linkfile.split(".");
                              var type = "application/pdf";
                              var extension = parts[parts.length-1];
@@ -11251,15 +11255,15 @@ $scope.gererChangementFichier3 = function(event,model){
                              }else if(extension=='mdb'){
                                  type = "application/zip, application/octet-stream";
 //                                 url = url+'file/'+pj.filename+'/'+pj.attachename;
-                             }else if(extension=='txt'||extension=='sql'){
+                             }else {
 //                                 url = url+'text/'+pj.filename+'/'+pj.attachename;
                                  type = "text/plain";
-                             }else{
-                                 type = "";
                              }
-                           $http.get(url, {responseType: "arraybuffer"})
+                            var url=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+data.model+"/"+data.entity+"/"+data.method;   
+//                            console.log("$scope.buttonAction = function(data,type,states,index,extern){ =============== extern : "+url+"=== template : "+angular.toJson($http.defaults.headers.common));
+                            $http.get(url, {responseType: "arraybuffer"})
                                      .then(function(response){
-//                                         console.log("$scope.piecejointeviewAction  ============================================= "+angular.toJson(response));
+//                                         console.log("$scope.buttonAction download  ============================================= "+angular.toJson(response));
 //                                         var filename = response.headers['x-filename'];
 //                                         var contentType = response.headers['content-type'];
                                          var linkElement = document.createElement('a');
@@ -11285,6 +11289,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                      },function(error){
                                          commonsTools.hideDialogLoading();
                                          commonsTools.showMessageDialog(error);
+                                         console.log(error);
                                      });
                       }//end if(data.model&&data.entity&&data.method){
                   }//end  if(type=='action'){
@@ -13421,7 +13426,8 @@ $scope.gererChangementFichier3 = function(event,model){
              //Recuperation de la piece jointe
              var data = $scope.getParentModel(model);
              var pj = data[fieldName];
-//             console.log("$scope.downloadAction = function(model , fieldName) =================== model :"+model+" === fieldName :"+fieldName+" ==== pj:"+pj);
+//             console.log("$scope.buttonAction = function(data,type,states,index,extern){ =============== extern : "+url+"=== template : "+angular.toJson($http.defaults.headers.common));
+//        console.log("$scope.downloadAction = function(model , fieldName) =================== model :"+model+" === fieldName :"+fieldName+" ==== pj:"+pj);
              commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");   
                   if(pj){
                              var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/";

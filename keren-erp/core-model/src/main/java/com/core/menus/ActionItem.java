@@ -65,7 +65,7 @@ public class ActionItem extends  MenuAction implements Serializable{
         this.value = item.value;
         this.state = item.state;
         this.states = item.states;
-        this.roles = item.roles;
+//        this.roles = item.roles;
         this.setActions(null);
     }
     /**
