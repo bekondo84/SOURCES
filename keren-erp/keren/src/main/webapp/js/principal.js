@@ -5904,10 +5904,21 @@ $scope.gererChangementFichier3 = function(event,model){
               
           };
           /**
+           * Depreciate displayer
            * Construct the viewer of pdf report
            * @returns {undefined}
            */
-          $scope.displayer = function(report){                
+          $scope.displayer = function(){ 
+                commonsTools.printer('report_template');
+                return true;
+          };
+          
+          /**
+           * Depreciate displayer
+           * Construct the viewer of pdf report
+           * @returns {undefined}
+           */
+          $scope.displayer_old = function(report){                
                 var  contentElem = $scope.viewSelector('report') ;
                 var compileFn = $compile(contentElem);
                 compileFn($scope);  

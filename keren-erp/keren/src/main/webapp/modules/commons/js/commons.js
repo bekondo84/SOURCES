@@ -292,6 +292,23 @@ angular.module('keren.core.commons')
                     }
                     
                 },
+                /***
+                 * 
+                 * */
+                printer : function(report_id){
+                    var mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
+                    mywindow.document.write('<html><head>');
+                    mywindow.document.write('</head><body >');
+                    mywindow.document.write(document.getElementById(report_id).innerHTML);
+                    mywindow.document.write('</body></html>');
+
+                    mywindow.document.close(); // necessary for IE >= 10
+                    mywindow.focus(); // necessary for IE >= 10*/
+
+                    mywindow.print();
+                    mywindow.close();
+                    document.getElementById(report_id).innerHTML = "";
+                },
                 backtocore : function(scope){
                      var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren";
                      var key = $('#website_cache').attr('value');
