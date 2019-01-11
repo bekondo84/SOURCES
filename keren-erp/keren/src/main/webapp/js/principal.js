@@ -1,127 +1,128 @@
 
 angular.module("mainApp" , ["ngResource","ngSanitize","pascalprecht.translate","angularjs-datetime-picker","textAngular","keren.core.calendar","keren.core.discussion","keren.core.commons"]);        
 //Regle de traduction 
-angular.module("mainApp").config(['$translateProvider',
-    function($translateProvider){
-        
-        $translateProvider.translations('en',{
-            Creer:'Create',
-            Dupliquer:'Duplicate',
-            Importer:'Import',
-            Imprimer:'Print',
-            Filtres:'Filter',
-            Quitter:'Exit',
-            PJ:'Attachement(s)',
-            Actions:'Actions',
-            Enregistrer:'Save',
-            Ajouter:'Add',
-            Exporter:'Export',
-            Modifier:'Update',
-            Supprimer:'Delete',
-            Administration:'Administration',
-            Discussion:'Discuss',
-            Calendrier:'Calendar',
-            Applications:'Applications',
-            Configuration:'Configuration',
-            Documentation:'Documentation',
-            Assistance:'Assistance',
-            Préference:'Preference',
-            UPPWD:'Change the Password',
-            Déconnexion:'Log out',
-            MAIL:'Mailbox',
-            Conversation:'Tchat',
-            Administrateur:'Administrator',
-            EVENTTITLE:'Event Title',
-            Participants:'Participants',
-            EVENTDATE:'Event date',
-            Options:'Options',
-            Nom:'Name',
-            EMAIL:'Mail adrdress',
-            Socièté:'Partner',
-            Description:'Description',
-            BEGINDATETIME:'Start date and time',
-            Rappels:'Reminders',
-            Confidentialite:'Privacy',
-            ALLPEOPLE:'Everybody',
-            ONLYME:'Only me',
-            INNERONLY:'Internal user only',
-            SHOWHOURS:'Show time as',
-            Libre:'Free',
-            Occupé:'Occupied',
-            Duree:'Duration',
-            CALENDAROPTIONS:'Calendar options',
-            ADDELEMENT:'Add an element',
-            MISEAJOUR:'Update applcations list',
-            Utilisateurs:'Users',
-            Groupes:'Groups',
-            Societes:'Companies',
-            Pays:'Country',
-            Traductions:'Translations',
-            Langues:'Languages',
-            CANAUX:'Communication channels',
-            Technique:'Technical',
-            MENUGROUP:'Menu Elements',
-            MENUACTION:'Actions Menu',
-            FORMVIEW:'Form Views',
-            LISTVIEW:'List Views',
-            CALENDARVIEW:'Calendar Views',
-            DASHBORDVIEW:'Dashboards',
-            Editique:'Editique',
-            TERME:'Translated terms',
-            EXPORTBD:'Export schema',
-            DBSAVE:'Backup Data', 
-            CALENDAR_DESC:'Event Management',
-            APPLI_DESC:'Application Management',
-            CONFIG_DESC:'Platform Administration',
-            DISCUSION_DESC:'Collaborative platform',
-            IMPORTDATA:'Import data to CVS format',
-            Statut:'Status',
-            Champ:'Field',
-            Obligatoire:'Mandatory',
-            EXPORTDATA:'Data export',
-            Fermer:'Close',
-            VALIDATETITRE:'Validation report',
-            Ligne:'Line',
-            Valeur:'Value',
-            Valider:'Validate',
-            Impimer:'Print',
-            Annuler:'Cancel',
-            Voir:'Display'
-        });
-        $translateProvider.translations('fr',{
-            PJ:'Pièce(s) Jointe(s)',
-            UPPWD:'Modifier le Mot de passe',
-            MAIL:'Boîte de reception',
-            EVENTTITLE:'Titre evenement',
-            EVENTDATE:'Date evenement',
-            EMAIL:'Adresse mail',
-            BEGINDATETIME:'Date et heure de debut',
-            ALLPEOPLE:'Tout le monde',
-            ONLYME:'Moi seulement',
-            INNERONLY:'Utilisateur interne seulement',
-            SHOWHOURS:'Afficher heure comme',
-            CALENDAROPTIONS:'Options du calendrier',
-            ADDELEMENT:'Ajouter un element',
-            MISEAJOUR:'Mise à jour',
-            CANAUX:'Canaux de communication',
-            MENUGROUP:'Menu Elements',
-            MENUACTION:'Menus Action',
-            FORMVIEW:'Vues Formulaire',
-            LISTVIEW:'Vues Liste',
-            CALENDARVIEW:'Vues Calendaires',
-            DASHBORDVIEW:'Tableaux de bord',
-            TERME:'Termes traduits',
-            EXPORTBD:'Exporter le schema',
-            DBSAVE:'Sauvegarde Données' ,
-            CALENDAR_DESC:'Gestion des évènements',
-            APPLI_DESC:'Gestion des Applications',
-            CONFIG_DESC:'Administration de la plateforme',
-            DISCUSION_DESC:'Plateforme collaborative',
-            IMPORTDATA:'Importer les données au format CVS',
-            VALIDATETITRE:'Compte rendu validation'
-        });
-        $translateProvider.preferredLanguage('fr');
-    }]);
+//angular.module("mainApp")
+//        .config(['$translateProvider',
+//    function($translateProvider){        
+////        $translateProvider.translations('en',{
+////            Creer:'Create',
+////            Dupliquer:'Duplicate',
+////            Importer:'Import',
+////            Imprimer:'Print',
+////            Filtres:'Filter',
+////            Quitter:'Exit',
+////            PJ:'Attachement(s)',
+////            Actions:'Actions',
+////            Enregistrer:'Save',
+////            Ajouter:'Add',
+////            Exporter:'Export',
+////            Modifier:'Update',
+////            Supprimer:'Delete',
+////            Administration:'Administration',
+////            Discussion:'Discuss',
+////            Calendrier:'Calendar',
+////            Applications:'Applications',
+////            Configuration:'Configuration',
+////            Documentation:'Documentation',
+////            Assistance:'Assistance',
+////            Préference:'Preference',
+////            UPPWD:'Change the Password',
+////            Déconnexion:'Log out',
+////            MAIL:'Mailbox',
+////            Conversation:'Tchat',
+////            Administrateur:'Administrator',
+////            EVENTTITLE:'Event Title',
+////            Participants:'Participants',
+////            EVENTDATE:'Event date',
+////            Options:'Options',
+////            Nom:'Name',
+////            EMAIL:'Mail adrdress',
+////            Socièté:'Partner',
+////            Description:'Description',
+////            BEGINDATETIME:'Start date and time',
+////            Rappels:'Reminders',
+////            Confidentialite:'Privacy',
+////            ALLPEOPLE:'Everybody',
+////            ONLYME:'Only me',
+////            INNERONLY:'Internal user only',
+////            SHOWHOURS:'Show time as',
+////            Libre:'Free',
+////            Occupé:'Occupied',
+////            Duree:'Duration',
+////            CALENDAROPTIONS:'Calendar options',
+////            ADDELEMENT:'Add an element',
+////            MISEAJOUR:'Update applcations list',
+////            Utilisateurs:'Users',
+////            Groupes:'Groups',
+////            Societes:'Companies',
+////            Pays:'Country',
+////            Traductions:'Translations',
+////            Langues:'Languages',
+////            CANAUX:'Communication channels',
+////            Technique:'Technical',
+////            MENUGROUP:'Menu Elements',
+////            MENUACTION:'Actions Menu',
+////            FORMVIEW:'Form Views',
+////            LISTVIEW:'List Views',
+////            CALENDARVIEW:'Calendar Views',
+////            DASHBORDVIEW:'Dashboards',
+////            Editique:'Editique',
+////            TERME:'Translated terms',
+////            EXPORTBD:'Export schema',
+////            DBSAVE:'Backup Data', 
+////            CALENDAR_DESC:'Event Management',
+////            APPLI_DESC:'Application Management',
+////            CONFIG_DESC:'Platform Administration',
+////            DISCUSION_DESC:'Collaborative platform',
+////            IMPORTDATA:'Import data to CVS format',
+////            Statut:'Status',
+////            Champ:'Field',
+////            Obligatoire:'Mandatory',
+////            EXPORTDATA:'Data export',
+////            Fermer:'Close',
+////            VALIDATETITRE:'Validation report',
+////            Ligne:'Line',
+////            Valeur:'Value',
+////            Valider:'Validate',
+////            Impimer:'Print',
+////            Annuler:'Cancel',
+////            Voir:'Display'
+////        });
+////        $translateProvider.translations('fr',{
+////            PJ:'Pièce(s) Jointe(s)',
+////            UPPWD:'Modifier le Mot de passe',
+////            MAIL:'Boîte de reception',
+////            EVENTTITLE:'Titre evenement',
+////            EVENTDATE:'Date evenement',
+////            EMAIL:'Adresse mail',
+////            BEGINDATETIME:'Date et heure de debut',
+////            ALLPEOPLE:'Tout le monde',
+////            ONLYME:'Moi seulement',
+////            INNERONLY:'Utilisateur interne seulement',
+////            SHOWHOURS:'Afficher heure comme',
+////            CALENDAROPTIONS:'Options du calendrier',
+////            ADDELEMENT:'Ajouter un element',
+////            MISEAJOUR:'Mise à jour',
+////            CANAUX:'Canaux de communication',
+////            MENUGROUP:'Menu Elements',
+////            MENUACTION:'Menus Action',
+////            FORMVIEW:'Vues Formulaire',
+////            LISTVIEW:'Vues Liste',
+////            CALENDARVIEW:'Vues Calendaires',
+////            DASHBORDVIEW:'Tableaux de bord',
+////            TERME:'Termes traduits',
+////            EXPORTBD:'Exporter le schema',
+////            DBSAVE:'Sauvegarde Données' ,
+////            CALENDAR_DESC:'Gestion des évènements',
+////            APPLI_DESC:'Gestion des Applications',
+////            CONFIG_DESC:'Administration de la plateforme',
+////            DISCUSION_DESC:'Plateforme collaborative',
+////            IMPORTDATA:'Importer les données au format CVS',
+////            VALIDATETITRE:'Compte rendu validation'
+////        });
+//        $translateProvider.useUrlLoader("http://localhost:8080/keren/auth/resource/translate");
+//        $translateProvider.preferredLanguage("en");        
+//    }]);
 //Creation du controleur
 angular.module("mainApp")
 .controller("mainCtrl" , function($scope ,$rootScope,$translate,$http,$location,$filter, $compile,$timeout,commonsTools,restService){
@@ -328,18 +329,20 @@ angular.module("mainApp")
                                 $http.defaults.headers.common['userid']=angular.toJson(data[0].id);
                                 $rootScope.globals.company = $rootScope.globals.user.societeCourante;
                                 $scope.company = $rootScope.globals.company;
-                                $translate.use('fr');
+//                                $translate.use('fr');
                                 //Conservation de la langue si existe
                                 if(data[0].langue){
                                     $rootScope.globals.langue = data[0].langue;
+                                    $translate.use(data[0].langue.codeISO);
+//                                    $translate.refresh();
+//                                     console.log("principal.getModulesForCurrentUser ====== "+angular.toJson(data[0].langue));
                                 }//end if(data[0].langue)
-                                if(data[0].langue && data[0].langue.codeISO=="en"){
-                                    $translate.use('en');
-                                }//end if(data[0].langue.codeISO=="fr_FR"){
-//                                console.log("principal.getModulesForCurrentUser ====== "+angular.toJson(data[0]))
+//                                if(data[0].langue && data[0].langue.codeISO=="en"){
+//                                    $translate.use('en');
+//                                }//end if(data[0].langue.codeISO=="fr_FR"){                            
 //                                $http.defaults.headers.common['user']= angular.toJson(data[0]);           
                                 //Chargement  des modules
-                                var url = 'http://'+$location.host()+':'+$location.port()+'/kerencore/utilisateur/application';
+                                var url = $location.protocol()+'://'+$location.host()+':'+$location.port()+'/kerencore/utilisateur/application';
                                 $http.get(url).then(
                                         function(response){
                                             $scope.modules = response.data;

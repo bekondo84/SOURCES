@@ -296,8 +296,8 @@ angular.module('keren.core.commons')
                  * 
                  * */
                 printer : function(report_id){
-                    var mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
-                    mywindow.document.write('<html><head>');
+                    var mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=100');
+                    mywindow.document.write('<html><head><style>@media print {footer {page-break-after: always;}}</style>');
                     mywindow.document.write('</head><body >');
                     mywindow.document.write(document.getElementById(report_id).innerHTML);
                     mywindow.document.write('</body></html>');
