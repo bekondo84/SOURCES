@@ -1946,7 +1946,7 @@ angular.module('keren.core.commons')
                     var headElem = document.createElement("div");
                     divElem.appendChild(headElem);
                     headElem.setAttribute("class","panel-heading col-sm-12 col-md-12 dashboard-header");
-                    headElem.appendChild(document.createTextNode(data.label));
+                    headElem.appendChild(document.createTextNode("{{'"+data.label+"' | translate}}"));
                     var actionElem = document.createElement("div");
                     headElem.appendChild(actionElem);
                     actionElem.setAttribute("class","btn-group  dropdown pull-right");
@@ -1980,7 +1980,7 @@ angular.module('keren.core.commons')
                         aElem.setAttribute("tabindex","1");
                         aElem.setAttribute("href","#");
                         aElem.setAttribute("ng-click","showEntrypanel('"+data.code+"','"+entry.code+"')");
-                        aElem.appendChild(document.createTextNode(entry.label));
+                        aElem.appendChild(document.createTextNode("{{'"+entry.label+"' | translate}}"));
                     }//end entries
                     //Body of the dashboard
                     var bodyElem = document.createElement("div");

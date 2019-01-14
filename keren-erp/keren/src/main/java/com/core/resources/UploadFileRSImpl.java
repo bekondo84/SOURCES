@@ -133,10 +133,10 @@ public class UploadFileRSImpl  implements UploadFileRS{
     public Response translate(HttpHeaders headers, String lang) {
         //To change body of generated methods, choose Tools | Templates.
         try{
-               System.out.println(UploadFileRSImpl.class.toString()+".translate(HttpHeaders headers, String lang) ========================================= language : "+lang);
+//               System.out.println(UploadFileRSImpl.class.toString()+".translate(HttpHeaders headers, String lang) ========================================= language : "+lang);
                 Gson gson = new Gson();
                 FileHelper.setCurrentModule(null);
-                String resourceDir = FileHelper.getStaticDirectory()+File.separator+lang+".json";
+                String resourceDir = FileHelper.getConfigDirectory()+File.separator+lang+".json";
                 File file = new File(resourceDir);
                 if(file.exists()){
                     return CommonTools.getText(file,file.getName());
