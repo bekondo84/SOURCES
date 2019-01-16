@@ -43,7 +43,7 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
      @Predicate(label = "Article acheté?",type = Boolean.class,search = true)
     private Boolean achete = Boolean.FALSE;
     
-    @Predicate(label = "Type d'article",target = "combobox",values = "Article stockable;Utilisation directe;Service;Immobilisation",group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "Type article",target = "combobox",values = "Article stockable;Utilisation directe;Service;Immobilisation",group =true,groupName = "group1",groupLabel = "Informations générales")
     private String type = "0";    
     
     @Predicate(label = "Actif",type = Boolean.class,group =true,groupName = "group1",groupLabel = "Informations générales")
@@ -58,32 +58,32 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
     @Predicate(label = "Code barre EAN13",group =true,groupName = "group1",groupLabel = "Informations générales")
     private String codebarre ;
     
-    @Predicate(label = "Prix d'achat (HT)",type = Double.class,group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "Prix achat (HT)",type = Double.class,group =true,groupName = "group1",groupLabel = "Informations générales")
     private Double puachat ;
     
     @ManyToOne
     @JoinColumn(name = "UNAC_ID")
-    @Predicate(label = "Unité d'achat",type = UniteAchat.class,target = "many-to-one",search = true)
+    @Predicate(label = "Unité achat",type = UniteAchat.class,target = "many-to-one",search = true)
     private UniteAchat uniteachat ;
     
-    @Predicate(label = "Prix de vente (HT)",type = Double.class,group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "Prix vente (HT)",type = Double.class,group =true,groupName = "group1",groupLabel = "Informations générales")
     private Double puvente ;
     
     @ManyToOne
     @JoinColumn(name = "UNGE_ID")
-    @Predicate(label = "Unité de vente",type = UniteGestion.class,target = "many-to-one",search = true)
+    @Predicate(label = "Unité vente",type = UniteGestion.class,target = "many-to-one",search = true)
     private UniteGestion unitevente ;
     
-   @Predicate(label = "Réference du fabriquant",group =true,groupName = "group1",groupLabel = "Informations générales")
+   @Predicate(label = "Réference fabriquant",group =true,groupName = "group1",groupLabel = "Informations générales")
     private String reference ;  
     
    @Predicate(label = "Suivi stock",updatable = false,target = "combobox",values = "Aucune;Sérialisé;CMUP;FIFO;LIFO;Par lot",group = true,groupName = "group2",groupLabel = "Complément")
    private String politiquestock = "0" ;
    
-   @Predicate(label = "Coût de stockage",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "Coût stockage",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
    private Double coutstockage =0.0;
    
-   @Predicate(label = "Coût de transport",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "Coût transport",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
    private Double couttransp=0.0;
 
    @ManyToOne
@@ -91,7 +91,7 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
    @Predicate(label = "Substitution",type = Article.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "Complément")
    private Article substitut ;
    
-   @Predicate(label = "Unité de poid",target = "combobox",values = "Tonne;Quintal;Kilogramme;Gramme;Milligramme",group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "Unité poid",target = "combobox",values = "Tonne;Quintal;Kilogramme;Gramme;Milligramme",group = true,groupName = "group2",groupLabel = "Complément")
    private String unitepoid ="0";
    
    @Predicate(label = "Poid Net",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
@@ -100,7 +100,7 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
    @Predicate(label = "Poid Brut",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
    private Double poidbrut ;
    
-   @Predicate(label = "Délai de livraison(jour)",type = Short.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "Délai livraison(jour)",type = Short.class,group = true,groupName = "group2",groupLabel = "Complément")
    private Short delaiL = 0;
    
    @Predicate(label = "Garantie(jour)",type = Short.class,group = true,groupName = "group2",groupLabel = "Complément")

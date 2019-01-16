@@ -141,8 +141,8 @@
 					  </a> 
 					  <ul class="dropdown-menu"  role="menu"  aria-labelledby="Administration">
 						 <li role="presentation" ng-repeat="item in menu.actions"   ng-hide="item.securitylevel==3" ng-if="item.hide==false" ng-class="getMenuClass(item)">
-						   <a role="menuitem"   tabindex="-1" href="#" ng-click="getSelectAction(item)"  ng-class="{'activemenu-color':item.name==currentAction.name}">{{item.label | translate}}</a>
-						 </li>                     
+						   <a ng-if="item.viewMode!='none'" role="menuitem"   tabindex="-1" href="#" ng-click="getSelectAction(item)"  ng-class="{'activemenu-color':item.name==currentAction.name}">{{item.label | translate}}</a>
+						 </li>						 					 
 					  </ul>                                     
 				  </li>
 			</ul>								

@@ -29,7 +29,7 @@ import javax.persistence.Table;
 })
 public class Emplacement extends BaseElement implements Serializable,Comparable<Emplacement>{
 
-    @Predicate(label = "Nom de l'emplacement",optional = false,unique = true,search = true)
+    @Predicate(label = "Nom emplacement",optional = false,unique = true,search = true)
     private String code ;
     
     @ManyToOne
@@ -43,7 +43,7 @@ public class Emplacement extends BaseElement implements Serializable,Comparable<
     private Emplacement parent ;
     
     
-    @Predicate(label = "Type d'emplacement",target = "combobox",values = "Emplacement fournisseur;Vue;Emplacement interne;Emplacement client;Inventaire;Approvisionnement;Production;Emplacement de transit")
+    @Predicate(label = "Type emplacement",target = "combobox",values = "Emplacement fournisseur;Vue;Emplacement interne;Emplacement client;Inventaire;Approvisionnement;Production;Emplacement de transit")
     private String type = "0";
     
     @ManyToOne
@@ -60,10 +60,10 @@ public class Emplacement extends BaseElement implements Serializable,Comparable<
     @Predicate(label = "Hauteur(X)",group = true,groupName = "group1",groupLabel = "Complement")
     private String hauteur  ;
     
-    @Predicate(label = "Code barre de l'emplacement",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "Code barre",group = true,groupName = "group1",groupLabel = "Complement")
     private String codebarre ;
     
-    @Predicate(label = "Emplacement de rebus?",type = Boolean.class,group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "Emplacement rebus?",type = Boolean.class,group = true,groupName = "group1",groupLabel = "Complement")
     private Boolean rebus = Boolean.FALSE;
     
     @Predicate(label = "Actif?",type = Boolean.class,group = true,groupName = "group1",groupLabel = "Complement")

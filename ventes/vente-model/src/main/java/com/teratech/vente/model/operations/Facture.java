@@ -8,6 +8,7 @@ package com.teratech.vente.model.operations;
 import com.core.base.State;
 import com.megatim.common.annotations.Predicate;
 import com.megatim.common.annotations.TableFooter;
+import com.teratech.vente.model.base.DocumentVenteState;
 import com.teratech.vente.model.comptabilite.Acompte;
 import com.teratech.vente.model.comptabilite.Compte;
 import com.teratech.vente.model.comptabilite.EcheanceReglement;
@@ -101,6 +102,8 @@ public class Facture extends DocumentVente implements Serializable{
     
      @Predicate(label = " ",target = "state",hide = true,search = true)
      protected String state ="etabli" ;
+     
+     private DocumentVenteState typedocument = DocumentVenteState.FACTURE;
     /**
      * 
      */
@@ -132,6 +135,7 @@ public class Facture extends DocumentVente implements Serializable{
         this.bonlivraison = new BonLivraison(da);
         this.source = da.getCode();
         this.type = "0";
+        this.typedocument = DocumentVenteState.FACTURE;
 //        this.state = "etabli";       
     }
 
@@ -161,6 +165,8 @@ public class Facture extends DocumentVente implements Serializable{
         this.totalacompte = da.totalacompte;
         this.netapayer = da.netapayer;
         this.taxes = da.taxes;
+        this.typedocument = da.typedocument;
+        this.state = da.state;
     }
 
     public String getSource() {
@@ -202,6 +208,14 @@ public class Facture extends DocumentVente implements Serializable{
 
     public void setDevis(Devis devis) {
         this.devis = devis;
+    }
+
+    public DocumentVenteState getTypedocument() {
+        return typedocument;
+    }
+
+    public void setTypedocument(DocumentVenteState typedocument) {
+        this.typedocument = typedocument;
     }
     
     
@@ -374,7 +388,7 @@ public class Facture extends DocumentVente implements Serializable{
 
     @Override
     public boolean isDesabledelete() {
-        return !this.state.equalsIgnoreCase("etabli"); //To change body of generated methods, choose Tools | Templates.
+        return true; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

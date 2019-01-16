@@ -5,8 +5,6 @@
  */
 package com.basaccount.jaxrs;
 
-import com.basaccount.jaxrs.impl.dashboard.ComptaDashboardRSImpl;
-import com.basaccount.jaxrs.impl.search.EcritureSearchRSImpl;
 import java.util.Set;
 import javax.ws.rs.core.Application;
 
@@ -33,6 +31,7 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(com.basaccount.jaxrs.impl.achats.FactureRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.achats.NoteFraisRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.achats.ReglementFournisseurRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.banques.BanqueRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.banques.CompteBancaireRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.comptabilite.CompteAnalytiqueRSImpl.class);
@@ -46,15 +45,20 @@ public class ApplicationConfig extends Application {
         resources.add(com.basaccount.jaxrs.impl.operations.ClotureExerciceComptableRSImpl.class);  
         resources.add(com.basaccount.jaxrs.impl.operations.ClotureJournalRSImpl.class);  
         resources.add(com.basaccount.jaxrs.impl.operations.EcritureAnalytiqueRSImpl.class);
-        resources.add(com.basaccount.jaxrs.impl.operations.EcritureComptableRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.operations.EcritureBanqueRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.operations.EcritureComptableRSImpl.class);  
         resources.add(com.basaccount.jaxrs.impl.operations.EcritureTierRSImpl.class);  
         resources.add(com.basaccount.jaxrs.impl.operations.JournalSaisieRSImpl.class);  
+        resources.add(com.basaccount.jaxrs.impl.operations.OperationBancaireRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.operations.PieceComptableRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.search.EcritureSearchRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.CiviliteRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.ConditionPaiementRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.ContactRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.TierRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.ventes.FactureVenteRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.ventes.NoteFraisVenteRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.ventes.ReglementClientRSImpl.class);
     }
     
 }

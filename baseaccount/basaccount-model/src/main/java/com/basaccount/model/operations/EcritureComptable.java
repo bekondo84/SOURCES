@@ -10,6 +10,7 @@ import com.basaccount.model.comptabilite.ExerciceComptable;
 import com.basaccount.model.comptabilite.JournalComptable;
 import com.basaccount.model.tiers.Tier;
 import com.core.base.BaseElement;
+import com.core.base.State;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -32,40 +33,40 @@ import javax.persistence.TemporalType;
  * @author Commercial_2
  */
 @Entity
-@Table(name = "T_ECRITURE")
+@Table(name = "T_ECRCO_COM")
 public class EcritureComptable extends BaseElement implements Serializable,Comparable<EcritureComptable>{
 
     
     @Temporal(TemporalType.DATE)
-    @Predicate(label = "DATE ECRITURE",target = "date",optional = false,updatable = false,type = Date.class,search = true,colsequence = 1,sequence = 0)
+    @Predicate(label = "date",target = "date",optional = false,updatable = false,type = Date.class,search = true,colsequence = 1,sequence = 0)
     private Date dateEcriture ;
     
-    @Predicate(label = "REFERENCE",search = true,colsequence = 2,sequence = 2)
+    @Predicate(label = "numero.piece",search = true,colsequence = 2,sequence = 2)
     private String refPiece ;
     
-    @Predicate(label = "LIBELLE",search = true,colsequence = 3,sequence = 3)
+    @Predicate(label = "libelle",search = true,colsequence = 3,sequence = 3)
     private String libelle ;
     
     @ManyToOne
     @JoinColumn(name = "JRN_ID")
-    @Predicate(label = "JOURNAL COMPTABLE" , type = JournalComptable.class,sequence = 3,colsequence = 3,target = "many-to-one",optional = false,updatable = false)
+    @Predicate(label = "journal.comptable" , type = JournalComptable.class,sequence = 3,colsequence = 3,target = "many-to-one",optional = false,updatable = false)
     private JournalComptable journal ;    
     
     @ManyToOne
     @JoinColumn(name = "CPTE_ID")
-    @Predicate(label = "COMPTE",type = Compte.class,updatable = false,optional = false,target = "many-to-one",search = true,colsequence = 4,sequence = 4,searchfields = "code,libelle")
+    @Predicate(label = "compte",type = Compte.class,updatable = false,optional = false,target = "many-to-one",search = true,colsequence = 4,sequence = 4,searchfields = "code,libelle")
     private Compte compte ;
     
     @ManyToOne
     @JoinColumn(name = "TIER_ID")
-    @Predicate(label = "COMPTE TIER",type = Tier.class,target = "many-to-one",colsequence = 5,sequence = 5,search = true)
+    @Predicate(label = "compte.tier",type = Tier.class,target = "many-to-one",colsequence = 5,sequence = 5,search = true)
     private Tier tier ;
     
     
-    @Predicate(label = "DEBIT",type = BigDecimal.class,search = true,colsequence = 6,sequence = 6,updatable = false,optional = false)
+    @Predicate(label = "debit",type = BigDecimal.class,search = true,colsequence = 6,sequence = 6,updatable = false,optional = false)
     private BigDecimal debit =BigDecimal.ZERO;
     
-    @Predicate(label = "CREDIT",type = BigDecimal.class,search = true,colsequence = 7,sequence = 7,updatable = false,optional = false)
+    @Predicate(label = "credit",type = BigDecimal.class,search = true,colsequence = 7,sequence = 7,updatable = false,optional = false)
     private BigDecimal credit = BigDecimal.ZERO;
     
     @ManyToOne
@@ -276,12 +277,12 @@ public class EcritureComptable extends BaseElement implements Serializable,Compa
 
     @Override
     public String getListTitle() {
-        return "ECRITURES COMPTABLE"; //To change body of generated methods, choose Tools | Templates.
+        return "ecriture.comptable.list"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "ECRITURE COMPTABLE"; //To change body of generated methods, choose Tools | Templates.
+        return "ecriture.comptable.detail"; //To change body of generated methods, choose Tools | Templates.
     }
 
 //    public PieceComptable getPiece() {
@@ -300,6 +301,51 @@ public class EcritureComptable extends BaseElement implements Serializable,Compa
     @Override
     public String getSerial() {
         return "baseaccount_00120"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getOwnermodule() {
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesableupdate() {
+        return super.isDesableupdate(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isActivatefollower() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<State> getStates() {
+        return super.getStates(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesabledelete() {
+        return super.isDesabledelete(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesablecreate() {
+        return super.isDesablecreate(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isCreateonfield() {
+        return super.isCreateonfield(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getModuleName() {
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getSearchkeys() {
+        return super.getSearchkeys(); //To change body of generated methods, choose Tools | Templates.
     }
     
     

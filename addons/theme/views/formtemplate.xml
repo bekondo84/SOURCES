@@ -107,20 +107,20 @@
 				   <div class="panel-heading">
 						<div class="btn-group"  role="group"  aria-label="group 1">
 						  <button type="button"  class="btn btn-primary btn-sm" ng-click ="messagesAction()">
-								Nouveau Message
+								{{'NEWMESSAGE' | translate}}
 						  </button>                    
 					   </div>
 					   <div class="btn-group"  role="group"  aria-label="group 1" style="margin-left: 10px;">
-						  <a href="#"  class="a-sm" style="border:none;text-decoration: none;" ng-click ="notesInterneAction()">Enregistrer une note interne</a>                    
+						  <a href="#"  class="a-sm" style="border:none;text-decoration: none;" ng-click ="notesInterneAction()">{{'ADDINNERNOTE' | translate}}</a>                    
 					   </div>
 					  <span class="pull-right">
 							 <div class="btn-group"  role="group"  aria-label="group 1" style="right: 150px;">
 								<button type="button"  class="btn btn-default btn-sm" ng-click ="suivreAction()" ng-if="activefollower==false">
-									 Ne pas suivre
+									 {{'NOTFOLLOW' | translate}}
 									 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 								</button> 
 								<button type="button"  class="btn btn-default btn-sm" ng-click ="suivreAction()" ng-if="activefollower==true">
-									 Abonnée(s) <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+									 {{'ABONE' | translate}} <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 								</button>                    
 							 </div>
 							<div class="btn-group  dropdown"    role="group"  aria-label="group 2"  style="right: 120px;">                     
@@ -132,12 +132,12 @@
 								<ul class="dropdown-menu"  role="menu"  aria-labelledby="followerbtn" id="followermenuid">  
 								   <li role="presentation">
 									  <a role="menuitem" tabindex="-1" href="#"  ng-click="editPanelAjoutAborne()">
-										 Ajouter des abonnées
+										 {{'ADDABONE' | translate}}
 									  </a>                            
 								   </li>      
 								   <li role="presentation">
 									  <a role="menuitem" tabindex="-1" href="#"  ng-click="editPanelAjoutCanaux()">
-										 Ajouter des canaux
+										 {{'ADDCHANNEL'}}
 									  </a>                            
 								   </li>    
 								   <li class="dropdown-divider"></li>                  

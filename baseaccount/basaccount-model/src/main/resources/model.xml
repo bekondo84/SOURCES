@@ -79,7 +79,17 @@ and open the template in the editor.
                 <role>ADMIN</role>
             </roles>           
         </element> 
+        <element type="com.basaccount.model.operations.OperationBancaire"  idclass="Long"  idname="id"   deseable="true">
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element> 
         <element type="com.basaccount.model.operations.EcritureComptable"  idclass="Long"  idname="id"   deseable="true">
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element> 
+        <element type="com.basaccount.model.operations.EcritureBanque"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           
@@ -119,7 +129,27 @@ and open the template in the editor.
                 <role>ADMIN</role>
             </roles>           
         </element>
-         <element type="com.basaccount.model.achats.NoteFrais"  idclass="Long"  idname="id"   deseable="true">
+        <element type="com.basaccount.model.achats.NoteFrais"  idclass="Long"  idname="id"   deseable="true">
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        <element type="com.basaccount.model.ventes.FactureVente"  idclass="Long"  idname="id"   deseable="true">
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        <element type="com.basaccount.model.ventes.NoteFraisVente"  idclass="Long"  idname="id"   deseable="true">
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        <element type="com.basaccount.model.achats.ReglementFournisseur"  idclass="Long"  idname="id"   deseable="true">
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        <element type="com.basaccount.model.ventes.ReglementClient"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           

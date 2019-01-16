@@ -8,6 +8,7 @@ package com.basaccount.model.operations;
 import com.basaccount.model.comptabilite.ExerciceComptable;
 import com.basaccount.model.comptabilite.JournalComptable;
 import com.core.base.BaseElement;
+import com.core.base.State;
 import com.megatim.common.annotations.Predicate;
 import com.megatim.common.annotations.TableFooter;
 import java.io.Serializable;
@@ -31,33 +32,33 @@ import javax.persistence.TemporalType;
  * @author Commercial_2
  */
 @Entity
-@Table(name = "T_PIECECMLE")
+@Table(name = "T_PICO_COM")
 public class PieceComptable extends BaseElement implements Serializable,Comparable<PieceComptable>{
     @ManyToOne
     @JoinColumn(name = "JRN_ID")
-    @Predicate(label = "JOURNAL COMPTABLE",type = JournalComptable.class,target = "many-to-one",optional = false,updatable = false,search = true)
+    @Predicate(label = "jouranl.comptable",type = JournalComptable.class,target = "many-to-one",optional = false,updatable = false,search = true)
     private JournalComptable journal;
     
     @Temporal(TemporalType.DATE)
-    @Predicate(label = "DATE PIECE",type = Date.class,target = "date",optional = false,search = true)
+    @Predicate(label = "date",type = Date.class,target = "date",optional = false,search = true)
     private Date datePiece ;
    
-    @Predicate(label = "N° DE PIECE" ,optional = false,updatable = false,search = true,unique = true)
+    @Predicate(label = "numero.piece" ,optional = false,updatable = false,search = true,unique = true)
     @Column(unique = true)
     private String code ;
     
-    @Predicate(label = "LIBELLE",search = true)
+    @Predicate(label = "libelle",search = true)
     private String libelle ;
     
-    @Predicate(label = "DEBIT",type = BigDecimal.class,updatable = false,search = true,editable = false,hide = true)
+    @Predicate(label = "debit",type = BigDecimal.class,updatable = false,search = true,editable = false,hide = true)
     private BigDecimal debit = BigDecimal.ZERO;
     
-    @Predicate(label = "CREDIT",type = BigDecimal.class,updatable = false , search = true,editable = false,hide = true)
+    @Predicate(label = "credit",type = BigDecimal.class,updatable = false , search = true,editable = false,hide = true)
     private BigDecimal credit = BigDecimal.ZERO;
     
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "PIEC_ID")
-    @Predicate(label="Ecritures",group = true,groupLabel = "ECRITURES",groupName = "group1",type = EcritureComptable.class,target = "one-to-many",customfooter = true)
+    @Predicate(label=" ",group = true,groupLabel = "ecritures.comptable",groupName = "group1",type = EcritureComptable.class,target = "one-to-many",customfooter = true,edittable = true)
     @TableFooter(value = "<tr style='border:none;'> <td></td><td></td><td></td><td></td><td>Total Debit</td><td></td> <td>this.debit</td> </tr> <tr style='border:none;'> <td></td><td></td><td></td><td></td><td>Total Credit</td><td></td> <td>this.credit</td> </tr> <tr style='border:none;'> <td></td><td></td><td></td><td></td><td>Solde</td><td></td><td>this.debit;-;this.credit</td> </tr>")
     private List<EcritureComptable> ecritures = new ArrayList<EcritureComptable>();
     
@@ -162,13 +163,55 @@ public class PieceComptable extends BaseElement implements Serializable,Comparab
 
     @Override
     public String getListTitle() {
-        return "PIECES COMPTABLES"; //To change body of generated methods, choose Tools | Templates.
+        return "piece.comptable.list"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "PIECE COMPTABLE"; //To change body of generated methods, choose Tools | Templates.
+        return "piece.comptable.detail"; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public String getOwnermodule() {
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesableupdate() {
+        return super.isDesableupdate(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<State> getStates() {
+        return super.getStates(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesabledelete() {
+        return super.isDesabledelete(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesablecreate() {
+        return super.isDesablecreate(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isCreateonfield() {
+        return false; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getModuleName() {
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getSearchkeys() {
+        return super.getSearchkeys(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
     public String getCode() {
         return code;

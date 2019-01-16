@@ -40,7 +40,7 @@ public class FamilleArticle extends BaseElement implements Serializable,Comparab
     
     @ManyToOne
     @JoinColumn(name = "UNAC_ID")
-    @Predicate(label = "Unité d'achat",type=UniteAchat.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complément")
+    @Predicate(label = "Unité achat",type=UniteAchat.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complément")
     private UniteAchat unitevente ;
     
     @ManyToOne
@@ -61,7 +61,7 @@ public class FamilleArticle extends BaseElement implements Serializable,Comparab
     @Predicate(label = "Coût de transport(/unite de gestion)",type = Double.class,group = true,groupName = "group1",groupLabel = "Complément")
     private Double couttransport = 0.0;
     
-    @Predicate(label = "Délai de livraison",type = Short.class,group = true,groupName = "group1",groupLabel = "Complément")
+    @Predicate(label = "Délai livraison",type = Short.class,group = true,groupName = "group1",groupLabel = "Complément")
     private Short delailivraison =0 ;
     
     @ManyToOne
@@ -71,7 +71,7 @@ public class FamilleArticle extends BaseElement implements Serializable,Comparab
     
     @ManyToOne
     @JoinColumn(name = "PAYS_ID")
-    @Predicate(label = "Pays d'origine",type = Pays.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complément")
+    @Predicate(label = "Pays origine",type = Pays.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complément")
     private Pays pays ;
     
     @Predicate(label = "Code fiscal",search = true)

@@ -6,11 +6,13 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import com.bekosoftware.genericdaolayer.dao.ifaces.GenericDAO;
 import com.bekosoftware.genericdaolayer.dao.tools.Predicat;
+import com.bekosoftware.genericdaolayer.dao.tools.RestrictionsContainer;
 import com.bekosoftware.genericmanagerlayer.core.impl.AbstractGenericManager;
 import com.megatim.common.annotations.OrderType;
 import com.teratech.vente.core.ifaces.operations.FactureManagerLocal;
 import com.teratech.vente.core.ifaces.operations.FactureManagerRemote;
 import com.teratech.vente.dao.ifaces.operations.FactureDAOLocal;
+import com.teratech.vente.model.base.DocumentVenteState;
 import com.teratech.vente.model.comptabilite.Acompte;
 import com.teratech.vente.model.comptabilite.EcheanceReglement;
 import com.teratech.vente.model.operations.Facture;
@@ -50,11 +52,15 @@ public class FactureManagerImpl
 
     @Override
     public void processBeforeSave(Facture entity) {
+        entity.setTypedocument(DocumentVenteState.FACTURE);
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List<Facture> filter(List<Predicat> predicats, Map<String, OrderType> orders, Set<String> properties, int firstResult, int maxResult) {
+        RestrictionsContainer container = RestrictionsContainer.newInstance();
+        container.addEq("typedocument", DocumentVenteState.FACTURE);
+        predicats.addAll(container.getPredicats());
         List<Facture> datas = super.filter(predicats, orders, properties, firstResult, maxResult); //To change body of generated methods, choose Tools | Templates.
         List<Facture> result = new ArrayList<Facture>();
         for(Facture data:datas){
@@ -84,6 +90,8 @@ public class FactureManagerImpl
         Facture data = super.delete(id); //To change body of generated methods, choose Tools | Templates.
         return new Facture(data);
     }
+    
+    
 
     @Override
     public Facture confirmer(Facture entity) {
@@ -102,7 +110,7 @@ public class FactureManagerImpl
          //To change body of generated methods, choose Tools | Templates.
         if(entity.getState().equalsIgnoreCase("confirme")){
             entity.setState("transfere");
-//            entity.setTypedocument(DocumentAchatState.COMPTABILITE);
+            entity.setTypedocument(DocumentVenteState.COMPTABILITE);
         }
         dao.update(entity.getId(), entity);
         return entity;
