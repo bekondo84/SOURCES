@@ -7,7 +7,10 @@ import javax.persistence.PersistenceContext;
 import com.basaccount.dao.ifaces.comptabilite.ExerciceComptableDAOLocal;
 import com.basaccount.dao.ifaces.comptabilite.ExerciceComptableDAORemote;
 import com.basaccount.model.comptabilite.ExerciceComptable;
+import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.bekosoftware.genericdaolayer.dao.impl.AbstractGenericDAO;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Stateless(mappedName = "ExerciceComptableDAO")
 public class ExerciceComptableDAOImpl
@@ -42,5 +45,6 @@ public class ExerciceComptableDAOImpl
             return null;
         }
     }
+
 
 }

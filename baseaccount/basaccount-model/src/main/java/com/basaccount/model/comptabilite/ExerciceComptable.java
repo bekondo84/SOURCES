@@ -31,14 +31,14 @@ import javax.persistence.TemporalType;
 @Table(name = "T_EXCO_COM")
 @KHeaders(statubar = true,
           value= { @KHeader(type = "button",name = "work1",label = "button.mensual.period",target = "workflow",roles = {"administrateur","gestionnaire"}
-                ,states = {"etabli"}, value = @KValue("{'model':'baseaccount','entity':'exercicecomptable','method':'mensuelle'}"),pattern = "btn btn-danger"
+                ,states = {"etabli"}, value = @KValue("{'model':'baseaccount','entity':'exercicecomptable','method':'mensuelle','critical':true,'alert':'baseaccount.mensuelle.alert'}"),pattern = "btn btn-danger"
             ),
               @KHeader(type = "button",name = "work2",label = "button.trimester.period",target = "workflow",roles = {"administrateur","gestionnaire"}
-                ,states = {"etabli"}, value = @KValue("{'model':'baseaccount','entity':'exercicecomptable','method':'trimestrielles'}"),pattern = "btn btn-danger"),
+                ,states = {"etabli"}, value = @KValue("{'model':'baseaccount','entity':'exercicecomptable','method':'trimestrielle','critical':true,'alert':'baseaccount.mensuelle.alert'}"),pattern = "btn btn-danger"),
               @KHeader(type = "button",name = "work3",label = "button.open.exercice",target = "workflow",roles = {"administrateur","gestionnaire"}
-                ,states = {"open","close"}, value = @KValue("{'model':'baseaccount','entity':'exercicecomptable','method':'open'}")),
+                ,states = {"close"}, value = @KValue("{'model':'baseaccount','entity':'exercicecomptable','method':'open','critical':true,'alert':'baseaccount.open.alert'}")),
               @KHeader(type = "button",name = "work4",label = "button.close.exercice",target = "workflow",roles = {"administrateur","gestionnaire"}
-                ,states = {"open","close"}, value = @KValue("{'model':'baseaccount','entity':'exercicecomptable','method':'close'}"))
+                ,states = {"open"}, value = @KValue("{'model':'baseaccount','entity':'exercicecomptable','method':'close','critical':true,'alert':'baseaccount.close.alert'}"))
         })
 public class ExerciceComptable extends BaseElement implements Serializable,Comparable<ExerciceComptable>{
 
@@ -64,9 +64,10 @@ public class ExerciceComptable extends BaseElement implements Serializable,Compa
     
     @Predicate(label = "state",search = true,hide = true)
     private String state = "etabli";
-
+    
+    
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "exercice")
-    @Predicate(label = " ",type = PeriodeComptable.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "periodes.comptable")
+    @Predicate(label = " ",type = PeriodeComptable.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "periodes.comptable",edittable = true)
     private List<PeriodeComptable> periodes = new ArrayList<PeriodeComptable>();
     /**
      * 
@@ -149,13 +150,7 @@ public class ExerciceComptable extends BaseElement implements Serializable,Compa
         this.ouvert = ouvert;
     }
 
-    public Boolean getOuvert() {
-        return ouvert;
-    }
-
-    public void setOuvert(Boolean ouvert) {
-        this.ouvert = ouvert;
-    }
+  
 
     public String getState() {
         return state;
@@ -199,7 +194,7 @@ public class ExerciceComptable extends BaseElement implements Serializable,Compa
             statess.add(new State("open", "open"));
             statess.add(new State("close", "close"));
         }
-        return states; //To change body of generated methods, choose Tools | Templates.
+        return statess; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -243,4 +238,5 @@ public class ExerciceComptable extends BaseElement implements Serializable,Compa
         return "ExerciceComptable{" + "code=" + code + ", ouvert=" + ouvert + ", debut=" + debut + ", fin=" + fin + ", active=" + active + '}';
     }
     
+   
 }

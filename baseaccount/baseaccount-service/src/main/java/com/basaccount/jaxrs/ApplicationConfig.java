@@ -39,6 +39,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.basaccount.jaxrs.impl.comptabilite.ExerciceComptableRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.comptabilite.JournalComptableRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.comptabilite.NiveauAnalyseRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.comptabilite.PeriodeComptableRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.comptabilite.SectionAnalytiqueRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.comptabilite.TaxeRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.dashboard.ComptaDashboardRSImpl.class);  
@@ -52,6 +53,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.basaccount.jaxrs.impl.operations.OperationBancaireRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.operations.PieceComptableRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.search.EcritureSearchRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.search.JournalSaisieViewRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.CiviliteRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.ConditionPaiementRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.ContactRSImpl.class);

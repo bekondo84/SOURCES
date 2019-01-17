@@ -3,10 +3,12 @@ package com.basaccount.jaxrs.impl.comptabilite;
 
 import javax.ws.rs.Path;
 import com.basaccount.core.ifaces.comptabilite.ExerciceComptableManagerRemote;
+import com.basaccount.core.ifaces.comptabilite.PeriodeComptableManagerRemote;
 import com.basaccount.jaxrs.ifaces.comptabilite.ExerciceComptableRS;
 import com.basaccount.model.comptabilite.ExerciceComptable;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
 import com.kerem.commons.DateHelper;
+import com.kerem.core.KerenExecption;
 import com.kerem.core.MetaDataUtil;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
@@ -16,9 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
 
 
 /**
@@ -39,6 +39,9 @@ public class ExerciceComptableRSImpl
      */
     @Manager(application = "baseaccount", name = "ExerciceComptableManagerImpl", interf = ExerciceComptableManagerRemote.class)
     protected ExerciceComptableManagerRemote manager;
+    
+    @Manager(application = "baseaccount", name = "PeriodeComptableManagerImpl", interf = PeriodeComptableManagerRemote.class)
+    protected PeriodeComptableManagerRemote periodemanager;
 
     public ExerciceComptableRSImpl() {
         super();
@@ -79,14 +82,14 @@ public class ExerciceComptableRSImpl
 
     @Override
     protected void processBeforeUpdate(ExerciceComptable data) {
-        System.out.println(ExerciceComptableRSImpl.class.getName()+" ================"+data);
+//        System.out.println(ExerciceComptableRSImpl.class.getName()+" ================"+data);
         ExerciceComptable entity = (ExerciceComptable) data;
-        if(entity.getDebut()==null||entity.getFin()==null){
-            RuntimeException excep = new RuntimeException("La date de debut et de fin ne peut être null");
-            throw new WebApplicationException(excep,Response.Status.NOT_MODIFIED);
+          if(entity.getDebut()==null){
+            throw new KerenExecption("Le champ date de debut est obligatoire");
+        }else if(entity.getFin()==null){
+            throw new KerenExecption("Le champ date de fin est obligatoire");
         }else if(DateHelper.numberOfMonth(entity.getDebut(), entity.getFin())<12){
-            RuntimeException excep = new RuntimeException("Un exercice comptable doit contenir 12 Mois");
-            throw new WebApplicationException(excep,Response.Status.NOT_MODIFIED);
+            throw new KerenExecption("Un exercice comptable doit contenir 12 Mois");            
         }
         super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
     }
@@ -94,14 +97,40 @@ public class ExerciceComptableRSImpl
     @Override
     protected void processBeforeSave(ExerciceComptable data) {
          ExerciceComptable entity = (ExerciceComptable) data;
-        if(entity.getDebut()==null||entity.getFin()==null){
-            RuntimeException excep = new RuntimeException("La date de debut et de fin ne peut être null");
-            throw new WebApplicationException(excep,Response.Status.NOT_MODIFIED);
+        if(entity.getDebut()==null){
+            throw new KerenExecption("Le champ date de debut est obligatoire");
+        }else if(entity.getFin()==null){
+            throw new KerenExecption("Le champ date de fin est obligatoire");
         }else if(DateHelper.numberOfMonth(entity.getDebut(), entity.getFin())<12){
-            RuntimeException excep = new RuntimeException("Un exercice comptable doit contenir 12 Mois");
-            throw new WebApplicationException(excep,Response.Status.NOT_MODIFIED);
+            throw new KerenExecption("Un exercice comptable doit contenir 12 Mois");            
         }
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ExerciceComptable mensuelle(HttpHeaders headers, ExerciceComptable entity) {
+         //To change body of generated methods, choose Tools | Templates.        
+        return manager.mensuelle(entity);
+    }
+
+    @Override
+    public ExerciceComptable trimestrielle(HttpHeaders headers, ExerciceComptable entity) {
+        //To change body of generated methods, choose Tools | Templates.
+        return manager.trimestrielle(entity);
+    }
+
+    @Override
+    public ExerciceComptable open(HttpHeaders headers, ExerciceComptable entity) {
+        entity.setState("open");
+        manager.update(entity.getId(), entity);
+        return entity;
+    }
+
+    @Override
+    public ExerciceComptable close(HttpHeaders headers, ExerciceComptable entity) {
+        entity.setState("close");
+        manager.update(entity.getId(), entity);
+        return entity;
     }
 
     

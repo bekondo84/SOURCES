@@ -13,7 +13,6 @@ import com.core.discussions.SMessage;
 import com.core.discussions.SMessageDAOLocal;
 import com.core.email.Email;
 import com.core.email.EmailDAOLocal;
-import com.core.securites.Utilisateur;
 import java.util.Date;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;

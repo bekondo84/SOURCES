@@ -6,9 +6,15 @@
 package com.basaccount.model.comptabilite;
 
 import com.core.base.BaseElement;
+import com.core.base.State;
+import com.megatim.common.annotations.KHeader;
+import com.megatim.common.annotations.KHeaders;
+import com.megatim.common.annotations.KValue;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,6 +27,13 @@ import javax.persistence.Temporal;
  */
 @Entity
 @Table(name = "T_PECO_COM")
+@KHeaders(statubar = true,
+          value= {
+              @KHeader(type = "button",name = "work3",label = "button.open.periode",target = "workflow",roles = {"administrateur","gestionnaire"}
+                ,states = {"close"}, value = @KValue("{'model':'baseaccount','entity':'periodecomptable','method':'open','critical':true,'alert':'baseaccount.open.alert'}")),
+              @KHeader(type = "button",name = "work4",label = "button.close.periode",target = "workflow",roles = {"administrateur","gestionnaire"}
+                ,states = {"open"}, value = @KValue("{'model':'baseaccount','entity':'periodecomptable','method':'close','critical':true,'alert':'baseaccount.close.alert'}"))
+        })
 public class PeriodeComptable extends BaseElement implements Serializable,Comparable<PeriodeComptable>{
 
     @Predicate(label = "reference",search = true,optional = false,unique = true,editable = false)
@@ -42,6 +55,7 @@ public class PeriodeComptable extends BaseElement implements Serializable,Compar
     
     @ManyToOne
     @JoinColumn(name = "EXER_ID")
+    @Predicate(label = "Exercice",type = ExerciceComptable.class,target = "many-to-one",hide = true)
     private ExerciceComptable exercice ;
 
     public PeriodeComptable() {
@@ -74,7 +88,9 @@ public class PeriodeComptable extends BaseElement implements Serializable,Compar
         this.debut = entity.debut;
         this.fin = entity.fin;
         this.state = entity.state;
-        this.exercice = entity.exercice ;
+        if(entity.exercice!=null){
+            this.exercice = new ExerciceComptable(entity.exercice) ;
+        }
     }
 
     public String getCode() {
@@ -134,7 +150,7 @@ public class PeriodeComptable extends BaseElement implements Serializable,Compar
 
     @Override
     public boolean isDesableupdate() {
-        return super.isDesableupdate(); //To change body of generated methods, choose Tools | Templates.
+        return true; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -190,6 +206,14 @@ public class PeriodeComptable extends BaseElement implements Serializable,Compar
     @Override
     public String getSearchkeys() {
         return super.getSearchkeys(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<State> getStates() {
+        List<State> statess = new ArrayList<State>();
+        statess.add(new State("open", "open"));
+        statess.add(new State("close", "close"));
+        return statess; //To change body of generated methods, choose Tools | Templates.
     }
     
     

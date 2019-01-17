@@ -6,7 +6,8 @@ import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
 
 
 /**
- * Interface etendue par les interfaces locale et remote du manager
+ * Interface etendue par les interfaces locale et remote du manager
+
  * @since Sun Dec 24 09:57:47 WAT 2017
  * 
  */
@@ -15,5 +16,14 @@ public interface ExerciceComptableManager
 {
 
     public final static String SERVICE_NAME = "ExerciceComptableManager";
+    
+    public ExerciceComptable mensuelle(ExerciceComptable entity);
+    
+    public ExerciceComptable trimestrielle(ExerciceComptable entity);
+    
+    public ExerciceComptable open(ExerciceComptable entity);
+    
+    public ExerciceComptable close(ExerciceComptable entity);
+    
 
 }

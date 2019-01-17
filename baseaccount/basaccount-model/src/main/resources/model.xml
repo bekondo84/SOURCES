@@ -99,6 +99,11 @@ and open the template in the editor.
                 <role>ADMIN</role>
             </roles>           
         </element> 
+        <element type="com.basaccount.model.comptabilite.PeriodeComptable"  idclass="Long"  idname="id"   deseable="true">
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element> 
         <element type="com.basaccount.model.operations.JournalSaisie"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
@@ -150,6 +155,11 @@ and open the template in the editor.
             </roles>           
         </element>
         <element type="com.basaccount.model.ventes.ReglementClient"  idclass="Long"  idname="id"   deseable="true">
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        <element type="com.basaccount.model.search.JournalSaisieView"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           

@@ -22,4 +22,6 @@ public interface ExerciceComptableDAO
     public final static String SERVICE_NAME = "ExerciceComptableDAO";
 
     public ExerciceComptable getOpenExercice() ;
+    
+    
 }
