@@ -31,7 +31,8 @@ import javax.jms.TextMessage;
     @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/kerencore/coremdb"),
     @ActivationConfigProperty(propertyName = "destinationType",propertyValue = "javax.jms.Topic"),
      @ActivationConfigProperty(propertyName = "acknowledgeMode",propertyValue = "Auto-acknowledge")
-})
+},
+ mappedName = "java:/kerencore/coremdb")
 public class CoreMBD implements  MessageListener{
 
     @EJB(name = "SMessageDAO")

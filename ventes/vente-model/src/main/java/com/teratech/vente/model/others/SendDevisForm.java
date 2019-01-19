@@ -65,12 +65,12 @@ public class SendDevisForm extends BaseElement implements Serializable,Comparabl
 
     @Override
     public String getOwnermodule() {
-        return "teratechachat"; //To change body of generated methods, choose Tools | Templates.
+        return "teratechvente"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getModuleName() {
-        return "teratechachat"; //To change body of generated methods, choose Tools | Templates.
+        return "teratechvente"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

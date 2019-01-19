@@ -76,6 +76,7 @@ public class SendDevisFormRSImpl
         Devis devis = devismanager.find("id", entity.getDevis().getId());
         devis.setState("transmi");
         devismanager.update(devis.getId(), devis);
+        manager.sendMail(entity);
         return entity; //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -6,7 +6,8 @@ import com.teratech.vente.model.others.SendDevisForm;
 
 
 /**
- * Interface etendue par les interfaces locale et remote du manager
+ * Interface etendue par les interfaces locale et remote du manager
+
  * @since Fri Jan 04 11:26:18 WAT 2019
  * 
  */
@@ -15,5 +16,7 @@ public interface SendDevisFormManager
 {
 
     public final static String SERVICE_NAME = "SendDevisFormManager";
+    
+    public void sendMail(SendDevisForm entity);
 
 }
