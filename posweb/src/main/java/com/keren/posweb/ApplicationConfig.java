@@ -31,6 +31,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(com.keren.posweb.jaxrs.impl.ArticleRSImpl.class);
+        resources.add(com.keren.posweb.jaxrs.impl.CaissierRSImpl.class);
         resources.add(com.keren.posweb.jaxrs.impl.ClientRSImpl.class);
         resources.add(com.keren.posweb.jaxrs.impl.CommandeRSImpl.class);
         resources.add(com.keren.posweb.jaxrs.impl.CompteRSImpl.class);

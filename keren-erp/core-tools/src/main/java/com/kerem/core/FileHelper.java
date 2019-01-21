@@ -710,17 +710,21 @@ public class FileHelper {
             xmlString = xmlString.replaceAll("&gt;", ">");
             return xmlString;
         } catch (ParserConfigurationException | SAXException ex) {
-            Logger.getLogger(FileHelper.class.getName()).log(Level.SEVERE, null, ex);
+           Logger.getLogger(FileHelper.class.getName()).log(Level.SEVERE, null, ex);
+            throw new JAXBException(ex.getMessage());
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(FileHelper.class.getName()).log(Level.SEVERE, null, ex);
+            throw new JAXBException(ex.getMessage());
         } catch (TransformerConfigurationException ex) {
             Logger.getLogger(FileHelper.class.getName()).log(Level.SEVERE, null, ex);
+            throw new JAXBException(ex.getMessage());
         } catch (TransformerException ex) {
             Logger.getLogger(FileHelper.class.getName()).log(Level.SEVERE, null, ex);
+            throw new JAXBException(ex.getMessage());
         } catch (IOException ex) {
             Logger.getLogger(FileHelper.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
+            throw new JAXBException(ex.getMessage());
+        }        
     }
    /**
     * 

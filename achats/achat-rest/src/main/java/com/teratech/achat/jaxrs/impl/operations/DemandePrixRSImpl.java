@@ -113,7 +113,7 @@ public class DemandePrixRSImpl
 
     @Override
     protected void processBeforeUpdate(DemandePrix entity) {
-        try {
+//        try {
             if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
                 throw new KerenExecption("Veuillez saisir la reference");
             }else if(entity.getDate()==null){
@@ -123,11 +123,11 @@ public class DemandePrixRSImpl
             }else if(entity.getArticles()==null || entity.getArticles().isEmpty()){
                 throw new KerenExecption("Veuillez saisir les Articles concernés");
             }
-            KerenCoreMDBHelper.textMessageProducer("Hello I am the new MDB", connectionFactory, destination);
+//            KerenCoreMDBHelper.textMessageProducer("Hello I am the new MDB", connectionFactory, destination);
             super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
-        } catch (JMSException ex) {
-            Logger.getLogger(DemandePrixRSImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        } catch (JMSException ex) {
+//            Logger.getLogger(DemandePrixRSImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     @Override

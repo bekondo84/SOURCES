@@ -287,6 +287,7 @@ angular.module('keren.core.commons')
                                 var webcontext = angular.fromJson(sessionStorage.getItem(key));
                                 scope.currentuser = webcontext.currentuser;
                                 scope.website = webcontext.website;
+//                                scope.company = scope.currentuser.company;
                                 $http.defaults.headers.common['Authorization']='Basic '+scope.currentuser.authdata;
                                 scope.ready(webcontext);
 //                                console.log("Hello ce fichier est execute : "+key+" ====== "+angular.toJson(webcontext));

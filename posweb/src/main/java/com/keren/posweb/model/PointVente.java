@@ -8,8 +8,12 @@ package com.keren.posweb.model;
 import com.core.base.BaseElement;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -34,6 +38,13 @@ public class PointVente extends BaseElement implements Serializable,Comparable<P
     
     @Predicate(label = "Actif",type = Boolean.class)
     private Boolean actif =Boolean.TRUE;
+    
+    @Predicate(label = "cashiers",type = Caissier.class,target = "many-to-many-list",search = true,edittable = true,group = true,groupName = "group1",groupLabel = "cashiers")
+    @ManyToMany
+    @JoinTable(name = "T_POS_CASHIER_POS"
+            ,joinColumns = @JoinColumn(name = "POS_ID")
+            ,inverseJoinColumns = @JoinColumn(name = "CASHIER_ID"))
+    private List<Caissier> cashiers = new ArrayList<Caissier>();
 
     public PointVente() {
         
@@ -94,6 +105,14 @@ public class PointVente extends BaseElement implements Serializable,Comparable<P
 
     public void setSociete(Structure societe) {
         this.societe = societe;
+    }
+
+    public List<Caissier> getCashiers() {
+        return cashiers;
+    }
+
+    public void setCashiers(List<Caissier> cashiers) {
+        this.cashiers = cashiers;
     }
     
     

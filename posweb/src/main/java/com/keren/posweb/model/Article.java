@@ -29,95 +29,95 @@ import javax.persistence.Table;
 @Table(name = "T_ART")
 public class Article extends BaseElement implements Serializable,Comparable<Article>{
 
-    @Predicate(label = "Photo",target = "image")
+    @Predicate(label = "image",target = "image")
     private String image ;
     
-    @Predicate(label = "Reference interne",optional = false,unique = true,search = true)
+    @Predicate(label = "reference.interne",optional = false,unique = true,search = true)
     private String code ;
     
-    @Predicate(label = "Intitulé",search = true)
+    @Predicate(label = "intitule",search = true)
     private String intitule ;
     
-    @Predicate(label = "Article vendu?",type = Boolean.class,search = true)
+    @Predicate(label = "article.vendu",type = Boolean.class,search = true)
     private Boolean vendu = Boolean.FALSE;
     
-     @Predicate(label = "Article acheté?",type = Boolean.class,search = true)
+     @Predicate(label = "article.achete",type = Boolean.class,search = true)
     private Boolean achete = Boolean.FALSE;
     
-    @Predicate(label = "Type d'article",target = "combobox",values = "Article stockable;Utilisation directe;Service;Immobilisation",group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "type.article",target = "combobox",values = "Article stockable;Utilisation directe;Service;Immobilisation",group =true,groupName = "group1",groupLabel = "Informations générales")
     private String type = "0";    
     
-    @Predicate(label = "Actif",type = Boolean.class,group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "actif",type = Boolean.class,group =true,groupName = "group1",groupLabel = "Informations générales")
     private Boolean actif = Boolean.TRUE;    
     
     @ManyToOne
     @JoinColumn(name = "FAAR_ID")
-    @Predicate(label = "Famille articles",type = FamilleArticle.class,target = "many-to-one",group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "famille.article",type = FamilleArticle.class,target = "many-to-one",group =true,groupName = "group1",groupLabel = "information.general")
     @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"0\"}]")
     private FamilleArticle famille ;
     
-    @Predicate(label = "Code barre EAN13",group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "code.barre.ean13",group =true,groupName = "group1",groupLabel = "information.general")
     private String codebarre ;
     
-    @Predicate(label = "Prix d'achat (HT)",type = Double.class,group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "prix.achat",type = Double.class,group =true,groupName = "group1",groupLabel = "information.general")
     private Double puachat ;
     
     @ManyToOne
     @JoinColumn(name = "UNAC_ID")
-    @Predicate(label = "Unité d'achat",type = UniteAchat.class,target = "many-to-one",search = true)
+    @Predicate(label = "unite.achat",type = UniteAchat.class,target = "many-to-one",search = true)
     private UniteAchat uniteachat ;
     
-    @Predicate(label = "Prix de vente (HT)",type = Double.class,group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "prix.vente",type = Double.class,group =true,groupName = "group1",groupLabel = "Informations générales")
     private Double puvente ;
     
     @ManyToOne
     @JoinColumn(name = "UNGE_ID")
-    @Predicate(label = "Unité de vente",type = UniteGestion.class,target = "many-to-one",search = true)
+    @Predicate(label = "unite.vente",type = UniteGestion.class,target = "many-to-one",search = true)
     private UniteGestion unitevente ;
     
-   @Predicate(label = "Réference du fabriquant",group =true,groupName = "group1",groupLabel = "Informations générales")
+   @Predicate(label = "reference.fabriquant",group =true,groupName = "group1",groupLabel = "Informations générales")
     private String reference ;  
     
-   @Predicate(label = "Suivi stock",updatable = false,target = "combobox",values = "Aucune;Sérialisé;CMUP;FIFO;LIFO;Par lot",group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "suivi.stock",updatable = false,target = "combobox",values = "Aucune;Sérialisé;CMUP;FIFO;LIFO;Par lot",group = true,groupName = "group2",groupLabel = "Complément")
    private String politiquestock = "0" ;
    
-   @Predicate(label = "Coût de stockage",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "cout.stockage",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
    private Double coutstockage =0.0;
    
-   @Predicate(label = "Coût de transport",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "cout.transport",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
    private Double couttransp=0.0;
 
    @ManyToOne
    @JoinColumn(name = "ART_ID")
-   @Predicate(label = "Substitution",type = Article.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "article.substitution",type = Article.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "Complément")
    private Article substitut ;
    
-   @Predicate(label = "Unité de poid",target = "combobox",values = "Tonne;Quintal;Kilogramme;Gramme;Milligramme",group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "unite.poid",target = "combobox",values = "Tonne;Quintal;Kilogramme;Gramme;Milligramme",group = true,groupName = "group2",groupLabel = "Complément")
    private String unitepoid ="0";
    
-   @Predicate(label = "Poid Net",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "poid.net",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
    private Double poidnet ;
    
-   @Predicate(label = "Poid Brut",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "poid.brut",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
    private Double poidbrut ;
    
-   @Predicate(label = "Délai de livraison(jour)",type = Short.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "delai.livraison",type = Short.class,group = true,groupName = "group2",groupLabel = "Complément")
    private Short delaiL = 0;
    
-   @Predicate(label = "Garantie(jour)",type = Short.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "jour.garantie",type = Short.class,group = true,groupName = "group2",groupLabel = "Complément")
    private Short garantie = 0;
    
    @ManyToMany(fetch = FetchType.LAZY)
    @JoinTable(name = "T_ART_TAXE_VE",joinColumns = @JoinColumn(name = "ART_ID"),inverseJoinColumns = @JoinColumn(name = "TAX_ID"))
-   @Predicate(label = "Taxes ventes" ,type = Taxe.class,target = "many-to-many",group = true,groupName = "group3",groupLabel = "Facturation")
+   @Predicate(label = "taxes.ventes" ,type = Taxe.class,target = "many-to-many",group = true,groupName = "group3",groupLabel = "Facturation")
    private List<Taxe> taxesventes = new ArrayList<Taxe>();
   
-   @Predicate(label = "Politique facturation",target = "combobox",values ="Qté commandées;Qté livrées",group = true,groupName = "group3",groupLabel = "Facturation")
+   @Predicate(label = "politique.facturation",target = "combobox",values ="Qté commandées;Qté livrées",group = true,groupName = "group3",groupLabel = "Facturation")
    private String politique ="0";
      
    @ManyToMany(fetch = FetchType.LAZY)
    @JoinTable(name = "T_ART_TAXE_ACH",joinColumns = @JoinColumn(name = "ART_ID"),inverseJoinColumns = @JoinColumn(name = "TAX_ID"))
-   @Predicate(label = "Taxes fournisseurs" ,type = Taxe.class,target = "many-to-many",group = true,groupName = "group3",groupLabel = "Facturation")
+   @Predicate(label = "taxes.fournisseurs" ,type = Taxe.class,target = "many-to-many",group = true,groupName = "group3",groupLabel = "Facturation")
    private List<Taxe> taxesachats = new ArrayList<Taxe>();
    
    /**
@@ -336,6 +336,13 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
     public String getModuleName() {
         return "posweb"; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public String getOwnermodule() {
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
     @Override
     public String getListTitle() {

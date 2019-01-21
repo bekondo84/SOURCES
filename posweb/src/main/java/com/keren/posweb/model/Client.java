@@ -9,14 +9,9 @@ package com.keren.posweb.model;
 import com.core.base.BaseElement;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -30,48 +25,48 @@ public class Client extends BaseElement implements Serializable,Comparable<Clien
     @Predicate(label = "image",target = "image")
     private String image ;
     
-    @Predicate(label = "Actif",type = Boolean.class,search = false)
+    @Predicate(label = "actif",type = Boolean.class,search = false)
     private Boolean active = true;
      
-    @Predicate(label = "N° de compte",unique = true,optional = false,updatable = false,search = true)
+    @Predicate(label = "numero.compte",unique = true,optional = false,updatable = false,search = true)
     private String code ;
     
-    @Predicate(label = "Type",unique = true,optional = false,updatable = false,target = "combobox",values = "Client;Fournisseur;Salarié;Autre",search = false)
+    @Predicate(label = "type",unique = true,optional = false,updatable = false,target = "combobox",values = "Client;Fournisseur;Salarié;Autre",search = false)
     private String type ;
     
-    @Predicate(label = "Intitulé",search = true)
+    @Predicate(label = "intitule",search = true)
     private String label ;
    
-    @Predicate(label = "Classement",group = true,groupName = "group1",groupLabel = "Identification",search = false,sequence = 1)
+    @Predicate(label = "classement",group = true,groupName = "group1",groupLabel = "Identification",search = false,sequence = 1)
     private String classe;
     
-    @Predicate(label = "Adresse",group = true,groupName = "group1",groupLabel = "Identification",search = false,sequence = 1)
+    @Predicate(label = "adresse",group = true,groupName = "group1",groupLabel = "Identification",search = false,sequence = 1)
     private String adresse;
     
-    @Predicate(label = "Poste Occupé",group = true,groupName = "group1",groupLabel = "Identification",search = false,sequence = 1)
+    @Predicate(label = "poste.occupe",group = true,groupName = "group1",groupLabel = "Identification",search = false,sequence = 1)
     private String poste;
     
-    @Predicate(label = "Téléphone",group = true,groupName = "group1",groupLabel = "Identification",target = "tel",sequence = 1,search = true)
+    @Predicate(label = "telephone",group = true,groupName = "group1",groupLabel = "Identification",target = "tel",sequence = 1,search = true)
     private String tel;
     
-    @Predicate(label = "Mobile",group = true,groupName = "group1",groupLabel = "Identification",target = "tel",sequence = 1)
+    @Predicate(label = "mobile",group = true,groupName = "group1",groupLabel = "Identification",target = "tel",sequence = 1)
     private String mobile;
     
-    @Predicate(label = "Fax",group = true,groupName = "group1",groupLabel = "Identification",sequence = 1)
+    @Predicate(label = "fax",group = true,groupName = "group1",groupLabel = "Identification",sequence = 1)
     private String fax;
     
-    @Predicate(label = "Courriel",group = true,groupName = "group1",groupLabel = "Identification",target = "email",sequence = 1,search = true)
+    @Predicate(label = "courriel",group = true,groupName = "group1",groupLabel = "Identification",target = "email",sequence = 1,search = true)
     private String courriel;
     
-    @Predicate(label = "Civilité",target = "many-to-one",type = Civilite.class,values = "",group = true,groupName = "group1",groupLabel = "Identification",sequence = 1,search = true)
+    @Predicate(label = "civilite",target = "many-to-one",type = Civilite.class,values = "",group = true,groupName = "group1",groupLabel = "Identification",sequence = 1,search = true)
     @ManyToOne
     @JoinColumn(name = "CV_ID")
     private Civilite civilite;    
     
-    @Predicate(label = "Niveau de confiance",target = "combobox",values = "Bon débiteur;Débiteur normal;Mauvais débiteur",group = true,groupName = "group2",groupLabel = "Comptabilité",search = false,sequence = 2)
+    @Predicate(label = "niveau.confiance",target = "combobox",values = "Bon débiteur;Débiteur normal;Mauvais débiteur",group = true,groupName = "group2",groupLabel = "Comptabilité",search = false,sequence = 2)
     private String confiance ="0";
     
-    @Predicate(label = "Notes internes",group = true,groupName = "group5",groupLabel = "Notes internes",target = "textarea",search = false,sequence = 5)
+    @Predicate(label = "notes.internes",group = true,groupName = "group5",groupLabel = "Notes internes",target = "textarea",search = false,sequence = 5)
     private String note;
     
 

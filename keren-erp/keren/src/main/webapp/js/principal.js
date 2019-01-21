@@ -464,7 +464,7 @@ angular.module("mainApp")
             $http.defaults.headers.common['moduleid']= $scope.currentModule.id;
             $http.defaults.headers.common['modulename']= $scope.currentModule.name;                  
             //Notification du changement du module
-            $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu});
+            $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu,user:$scope.currentUser});
             if(angular.isDefined(module.groups) && (module.groups.length > 0)){
                //Chargement de l'action par defaut
                 $scope.enabledVerticalMenu = true;
@@ -613,7 +613,7 @@ angular.module("mainApp")
       $http.defaults.headers.common['moduleid']= null;
       $http.defaults.headers.common['modulename']= null;                  
       //Notification du changement du module
-      $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu});
+      $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu,user:$scope.currentUser});
       if(angular.isDefined($scope.currentModule.groups) && ($scope.currentModule.groups.length > 0)){
             $scope.enabledVerticalMenu = true;
             //var module = $scope.currentModule;
@@ -642,7 +642,7 @@ angular.module("mainApp")
         $http.defaults.headers.common['moduleid']= null;
         $http.defaults.headers.common['modulename']= null;                  
         //Notification du changement du module
-        $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu});
+        $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu,user:$scope.currentUser});
         if(angular.isDefined($scope.currentModule.groups) && ($scope.currentModule.groups.length > 0)){
                 $scope.enabledVerticalMenu = true;
                 //var module = $scope.currentModule;
@@ -680,7 +680,7 @@ angular.module("mainApp")
         //Chargement du logo de l'application
         restService.downloadPNG($rootScope.globals.user.image,"mail_user_id");        
         //console.log("Vous avez cliquer sur le module ::: Discussion");
-        $rootScope.$broadcast("discussionmodule" , {verticalMenu:$scope.enabledVerticalMenu});
+        $rootScope.$broadcast("discussionmodule" , {verticalMenu:$scope.enabledVerticalMenu,user:$scope.currentUser});
 //        $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:false});
     };
     
@@ -935,7 +935,7 @@ angular.module("mainApp")
               var filter = args.restriction;
               $scope.enabledVerticalMenu = false;
               $scope.moduleValue = "others";
-              $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu});
+              $rootScope.$broadcast("currentModule" , {module:$scope.currentModule , verticalMenu:$scope.enabledVerticalMenu,user:$scope.currentUser});
               //Notification du changement du module
                $rootScope.$broadcast("currentActionUpdate" ,{
                   item:entity, action:$scope.currentAction , verticalMenu:$scope.enabledVerticalMenu,restriction:filter});   
@@ -5008,7 +5008,7 @@ $scope.gererChangementFichier3 = function(event,model){
          * @returns {Boolean}
          */
        $scope.showheaderwidget = function(roles ,role){
-           if(role && role=="administrateur" ){
+           if((role && role=="administrateur")||$scope.currentUser.intitule=='Administrateur'){
                 return true;
             }//end if(role=="administrateur" ){
            if(roles && role){               
@@ -5018,7 +5018,7 @@ $scope.gererChangementFichier3 = function(event,model){
                     contains |= commonsTools.containsLiteral(roles,array[i]);
                 }//end for(var i=0 ; i<array.length;i++){
                 return  contains;
-            }else{
+            }else {
                 return false;
             }//end if(roles && role){
        }
@@ -12971,7 +12971,10 @@ $scope.gererChangementFichier3 = function(event,model){
           **/
           $scope.$on("currentModule" , function(event , args){
                   $scope.currentModule = args.module;
+                  $http.defaults.headers.common['moduleid']= $scope.currentModule.id;
+                  $http.defaults.headers.common['modulename']= $scope.currentModule.name;  
                   $scope.company = $rootScope.globals.company;
+                  $scope.currentUser = args.user;
                   if($scope.currentModule.hasmenu==true){
                         $scope.enabledVerticalMenu = args.verticalMenu;
                         $scope.exportbtnlabel = 'Exporter';    
@@ -13416,7 +13419,7 @@ $scope.gererChangementFichier3 = function(event,model){
           $scope.$on("currentActionUpdate" , function(event , args){
                var session = commonsTools.readCookie("session_"+$rootScope.globals.user.id);
                if(session==null){
-                   alert('Votre session est expirÃ©e \n Cliquez sur OK et reconnectez vous');
+                   alert('Votre session est expirée \n Cliquez sur OK et reconnectez vous');
                    $scope.deconnexion();
                    return;
                }//end if(session==null){

@@ -325,7 +325,7 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
 
     @Override
     public String getOwnermodule() {
-        return "achats"; //To change body of generated methods, choose Tools | Templates.
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
     }
     
     
