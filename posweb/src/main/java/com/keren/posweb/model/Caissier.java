@@ -7,7 +7,9 @@ package com.keren.posweb.model;
 
 import com.core.base.BaseElement;
 import com.core.base.State;
-import com.core.securites.Utilisateur;
+import com.megatim.common.annotations.KHeader;
+import com.megatim.common.annotations.KHeaders;
+import com.megatim.common.annotations.KValue;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,26 +24,32 @@ import javax.persistence.Table;
  *
  * @author BEKO
  */
+@KHeaders(value={
+   @KHeader(type = "button",name = "work1",label = "enable",target = "workflow",roles = {"administrateur","gestionnaire"},states = {"desable"},pattern = "btn btn-success"
+       , value = @KValue("{'model':'posweb','entity':'caissier','method':'enable'}")
+   ),@KHeader(type = "button",name = "work1",label = "desable",target = "workflow",roles = {"administrateur","gestionnaire"},states = {"enable"},pattern = "btn btn-danger"
+       , value = @KValue("{'model':'posweb','entity':'caissier','method':'desable'}")
+   )
+},statubar = true)
 @Entity
 @Table(name = "T_CASHIER_POS")
 public class Caissier extends  BaseElement implements Serializable,Comparable<Caissier>{
 
+    @Predicate(label = "img",target = "image")
+    private String image ="avatar.png";
+    
     @Predicate(label = "reference",optional = false,unique = true,search = true)
     private String code;
     
     @Predicate(label = "nnom.prenom",optional = false,search = true)
     private String intitule ;
     
-    @Predicate(label = "link.account",type = Utilisateur.class,target = "many-to-one",unique = true,optional = false,search = true)
+    @Predicate(label = "link.account",type = UserAccount.class,target = "many-to-one",unique = true,optional = false,search = true)
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private Utilisateur compte ;
+    private UserAccount compte ;
     
-    @ManyToMany(mappedBy = "cashiers")
-    @Predicate(label = " ",type = PointVente.class,target = "many-to-many-list",group = true,groupLabel = "points.of.sales",groupName = "group1",edittable = true,editable = false)
-    private List<PointVente> pointsofsales = new ArrayList<PointVente>() ;
-    
-    @Predicate(label = "classement",group = true,groupName = "group1",groupLabel = "identification",search = false,sequence = 1)
+     @Predicate(label = "classement",group = true,groupName = "group1",groupLabel = "identification",search = false,sequence = 1)
     private String classe;
     
     @Predicate(label = "adresse",group = true,groupName = "group1",groupLabel = "identification",search = false,sequence = 1)
@@ -67,6 +75,13 @@ public class Caissier extends  BaseElement implements Serializable,Comparable<Ca
     @JoinColumn(name = "CV_ID")
     private Civilite civilite;    
 
+    @ManyToMany(mappedBy = "cashiers")
+    @Predicate(label = " ",type = PointVente.class,target = "many-to-many-list",group = true,groupLabel = "points.of.sales",groupName = "group2",edittable = true,editable = false)
+    private List<PointVente> pointsofsales = new ArrayList<PointVente>() ;
+    
+    @Predicate(label = " ",search = true,hide=true)
+    private String state ="enable";
+    
     public Caissier() {
     }
 
@@ -89,7 +104,7 @@ public class Caissier extends  BaseElement implements Serializable,Comparable<Ca
      * @param moduleName
      * @param comparedid 
      */
-    public Caissier(String code, String intitule, Utilisateur compte, PointVente pos, String classe, String adresse, String poste, String tel, String mobile, String fax, String courriel, Civilite civilite, long id, String designation, String moduleName, long comparedid) {
+    public Caissier(String code, String intitule, UserAccount compte, PointVente pos, String classe, String adresse, String poste, String tel, String mobile, String fax, String courriel, Civilite civilite, long id, String designation, String moduleName, long comparedid) {
         super(id, designation, moduleName, comparedid);
         this.code = code;
         this.intitule = intitule;
@@ -114,8 +129,9 @@ public class Caissier extends  BaseElement implements Serializable,Comparable<Ca
         this.code = entity.code;
         this.intitule = entity.intitule;
         if(entity.compte!=null){
-            this.compte = new Utilisateur(entity.compte);
+            this.compte = entity.compte;
         }       
+        this.image = entity.image;
         this.classe = entity.classe;
         this.adresse = entity.adresse;
         this.poste = entity.poste;
@@ -124,6 +140,7 @@ public class Caissier extends  BaseElement implements Serializable,Comparable<Ca
         this.fax = entity.fax;
         this.courriel = entity.courriel;
         this.civilite = entity.civilite;
+        this.state = entity.state;
     }
 
     public String getCode() {
@@ -142,11 +159,11 @@ public class Caissier extends  BaseElement implements Serializable,Comparable<Ca
         this.intitule = intitule;
     }
 
-    public Utilisateur getCompte() {
+    public UserAccount getCompte() {
         return compte;
     }
 
-    public void setCompte(Utilisateur compte) {
+    public void setCompte(UserAccount compte) {
         this.compte = compte;
     }
 
@@ -223,9 +240,27 @@ public class Caissier extends  BaseElement implements Serializable,Comparable<Ca
         this.civilite = civilite;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+    
+    
+
     @Override
     public String getOwnermodule() {
-        return super.getOwnermodule(); //To change body of generated methods, choose Tools | Templates.
+        return "posweb"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -235,22 +270,25 @@ public class Caissier extends  BaseElement implements Serializable,Comparable<Ca
 
     @Override
     public boolean isActivatefollower() {
-        return super.isActivatefollower(); //To change body of generated methods, choose Tools | Templates.
+        return true; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List<State> getStates() {
-        return super.getStates(); //To change body of generated methods, choose Tools | Templates.
+        states = new ArrayList<State>();
+        states.add(new State("enable", "enable"));
+        states.add(new State("desable", "desable"));
+        return states; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean isActivefilelien() {
-        return super.isActivefilelien(); //To change body of generated methods, choose Tools | Templates.
+        return true; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getSerial() {
-        return super.getSerial(); //To change body of generated methods, choose Tools | Templates.
+        return "210120191425cashier"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -270,22 +308,22 @@ public class Caissier extends  BaseElement implements Serializable,Comparable<Ca
 
     @Override
     public String getDesignation() {
-        return super.getDesignation(); //To change body of generated methods, choose Tools | Templates.
+        return intitule; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getModuleName() {
-        return super.getModuleName(); //To change body of generated methods, choose Tools | Templates.
+        return "posweb"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getListTitle() {
-        return super.getListTitle(); //To change body of generated methods, choose Tools | Templates.
+        return "caissiers"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return super.getEditTitle(); //To change body of generated methods, choose Tools | Templates.
+        return "caissier"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

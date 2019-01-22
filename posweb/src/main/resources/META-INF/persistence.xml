@@ -19,6 +19,7 @@
     <class>com.keren.posweb.model.Commande</class>
     <class>com.keren.posweb.model.LigneCommande</class>
     <class>com.keren.posweb.model.Caissier</class>
+    <class>com.keren.posweb.model.UserAccount</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="update"/>

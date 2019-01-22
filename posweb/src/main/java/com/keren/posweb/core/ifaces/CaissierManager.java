@@ -6,7 +6,8 @@ import com.keren.posweb.model.Caissier;
 
 
 /**
- * Interface etendue par les interfaces locale et remote du manager
+ * Interface etendue par les interfaces locale et remote du manager
+
  * @since Mon Jan 21 13:47:30 WAT 2019
  * 
  */
@@ -15,5 +16,9 @@ public interface CaissierManager
 {
 
     public final static String SERVICE_NAME = "CaissierManager";
+    
+    public Caissier getCassierWithAccount(Long userid);
+    
+    public Caissier getCassierWithAccount(String email);
 
 }

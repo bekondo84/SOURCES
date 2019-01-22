@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import com.bekosoftware.genericdaolayer.dao.ifaces.GenericDAO;
 import com.bekosoftware.genericdaolayer.dao.tools.Predicat;
+import com.bekosoftware.genericdaolayer.dao.tools.RestrictionsContainer;
 import com.bekosoftware.genericmanagerlayer.core.impl.AbstractGenericManager;
 import com.keren.posweb.core.ifaces.CaissierManagerLocal;
 import com.keren.posweb.core.ifaces.CaissierManagerRemote;
@@ -65,6 +66,42 @@ public class CaissierManagerImpl
     public Caissier delete(Long id) {
         Caissier data = super.delete(id); //To change body of generated methods, choose Tools | Templates.
         return new Caissier(data);
+    }
+
+    @Override
+    public Caissier getCassierWithAccount(Long userid) {
+        //To change body of generated methods, choose Tools | Templates.
+        RestrictionsContainer container = RestrictionsContainer.newInstance();
+        container.addEq("compte.id", userid);
+        container.addEq("state", "enable");
+        List<Caissier> cashers = dao.filter(container.getPredicats(), null, null, 0, -1);
+        if(cashers.isEmpty()){
+            return null;
+        }else{
+            Caissier casher = new Caissier(cashers.get(0));
+            for(PointVente pos : cashers.get(0).getPointsofsales()){
+                casher.getPointsofsales().add(new PointVente(pos));
+            }
+            return casher;
+        }
+    }
+
+    @Override
+    public Caissier getCassierWithAccount(String email) {
+        //To change body of generated methods, choose Tools | Templates.
+         RestrictionsContainer container = RestrictionsContainer.newInstance();
+        container.addEq("compte.courriel", email);
+        container.addEq("state", "enable");
+        List<Caissier> cashers = dao.filter(container.getPredicats(), null, null, 0, -1);
+        if(cashers.isEmpty()){
+            return null;
+        }else{
+            Caissier casher = new Caissier(cashers.get(0));
+            for(PointVente pos : cashers.get(0).getPointsofsales()){
+                casher.getPointsofsales().add(new PointVente(pos));
+            }
+            return casher;
+        }
     }
     
     

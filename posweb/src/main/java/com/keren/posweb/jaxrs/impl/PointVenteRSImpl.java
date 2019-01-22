@@ -66,6 +66,19 @@ public class PointVenteRSImpl
         return meta; //To change body of generated methods, choose Tools | Templates.
     }
     
-    
+    @Override
+    public PointVente enable(HttpHeaders headers, PointVente entity) {
+         //To change body of generated methods, choose Tools | Templates.
+        entity.setState("enable");
+        manager.update(entity.getId(), entity);
+        return entity;
+    }
+
+    @Override
+    public PointVente desable(HttpHeaders headers, PointVente entity) {
+        entity.setState("desable");
+        manager.update(entity.getId(), entity);
+        return entity;
+    }
 
 }

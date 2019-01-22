@@ -44,6 +44,31 @@ public class UploadFileRSImpl  implements UploadFileRS{
         return Response.noContent().build();
     }
     
+    
+    @Override
+    public Response downloadImageFileFreeForModule(HttpHeaders headers, String entity, String module, String filename) {
+        String storefile = "avatar.png";// getStorefile(filename, entity, module);
+         try {
+            Gson gson = new Gson();
+            String _module = module;
+            if(_module!=null && !_module.trim().equalsIgnoreCase("kerencore")){
+                FileHelper.setCurrentModule(module);
+            }//end if(_module!=null && !_module.trim().equalsIgnoreCase("kerencore")){
+            //To change body of generated methods, choose Tools | Templates.
+            File fichier = new File(FileHelper.getStaticDirectory()+File.separator+storefile);
+//            System.out.println(UploadFileRSImpl.class.toString()+" ==== "+fichier.getAbsolutePath()+"   module ==== "+_module+" ============= inject EJB : ");
+            if(!fichier.exists()||!fichier.isFile()){
+                FileHelper.setCurrentModule(null);
+                fichier = new File(FileHelper.getStaticDirectory()+File.separator+"avatar.png");
+            }
+            return CommonTools.getImage(fichier,filename);
+        } catch (IOException ex) {
+             Response.serverError().build();
+        }
+        return Response.noContent().build();
+    }
+
+    
      @Override
     public Response downloadImageFileFree(@Context HttpHeaders headers ,String filename) {
         //To change body of generated methods, choose Tools | Templates.
@@ -168,5 +193,37 @@ public class UploadFileRSImpl  implements UploadFileRS{
             throw new WebApplicationException(ex, Response.serverError().build());
         }
     }
+    
+//    /**
+//     * 
+//     * @param filename
+//     * @param entity
+//     * @param modele
+//     * @return 
+//     */
+//    private String getStorefile(String filename , String entity , String modele){
+//        StringBuilder builder = new StringBuilder("SELECT STORE FROM T_RESREG r WHERE r.SRC ='"+filename+"'");
+//        builder.append("  AND  r.ENTITY = '"+entity+"'");
+//        if(!modele.trim().equalsIgnoreCase("kerencore")){
+//            builder.append("  AND  r.MODELE = '"+modele+"'");
+//        }//end if(!modele.trim().equalsIgnoreCase("kerencore")){
+//        try {
+//            javax.naming.Context ic = new javax.naming.InitialContext();
+//            ds = (DataSource) ic.lookup("java:/KEREN");
+//            Connection connection = ds.getConnection();
+//            Statement statement = connection.createStatement();
+//            ResultSet resultset = statement.executeQuery(builder.toString());
+//            String store = null;
+//            while(resultset.next()){
+//                store = resultset.getString("STORE");
+//            }//end while(resultset.next()){
+//            return store;
+//        } catch (SQLException ex) {
+//            Logger.getLogger(UploadFileRSImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (NamingException ex) {
+//            Logger.getLogger(UploadFileRSImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
 
 }

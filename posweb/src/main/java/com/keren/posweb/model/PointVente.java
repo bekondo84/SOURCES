@@ -6,6 +6,10 @@
 package com.keren.posweb.model;
 
 import com.core.base.BaseElement;
+import com.core.base.State;
+import com.megatim.common.annotations.KHeader;
+import com.megatim.common.annotations.KHeaders;
+import com.megatim.common.annotations.KValue;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,6 +27,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "T_POS")
+@KHeaders(value={
+   @KHeader(type = "button",name = "work1",label = "enable",target = "workflow",roles = {"administrateur","gestionnaire"},states = {"desable"},pattern = "btn btn-success"
+       , value = @KValue("{'model':'posweb','entity':'pointvente','method':'enable'}")
+   ),@KHeader(type = "button",name = "work1",label = "desable",target = "workflow",roles = {"administrateur","gestionnaire"},states = {"enable"},pattern = "btn btn-danger"
+       , value = @KValue("{'model':'posweb','entity':'pointvente','method':'desable'}")
+   )
+},statubar = true)
 public class PointVente extends BaseElement implements Serializable,Comparable<PointVente>{
 
     @Predicate(label = "Reference ",optional = false,unique = true,search = true)
@@ -45,6 +56,9 @@ public class PointVente extends BaseElement implements Serializable,Comparable<P
             ,joinColumns = @JoinColumn(name = "POS_ID")
             ,inverseJoinColumns = @JoinColumn(name = "CASHIER_ID"))
     private List<Caissier> cashiers = new ArrayList<Caissier>();
+    
+    @Predicate(label = " ",hide = true)
+    private String state ="enable";
 
     public PointVente() {
         
@@ -114,6 +128,14 @@ public class PointVente extends BaseElement implements Serializable,Comparable<P
     public void setCashiers(List<Caissier> cashiers) {
         this.cashiers = cashiers;
     }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
     
     
 
@@ -124,18 +146,66 @@ public class PointVente extends BaseElement implements Serializable,Comparable<P
 
     @Override
     public String getListTitle() {
-        return "Points de Vente"; //To change body of generated methods, choose Tools | Templates.
+        return "points.of.sales"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Point de vente"; //To change body of generated methods, choose Tools | Templates.
+        return "point.of.sale"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getSearchkeys() {
         setSearchkeys(code);
         return super.getSearchkeys(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getOwnermodule() {
+        return "posweb"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesableupdate() {
+        return super.isDesableupdate(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isActivatefollower() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<State> getStates() {
+        states = new ArrayList<State>();
+        states.add(new State("enable", "enable"));
+        states.add(new State("desable", "desable"));
+        return states; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isActivefilelien() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getSerial() {
+        return "210120191436pos"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesabledelete() {
+        return super.isDesabledelete(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesablecreate() {
+        return super.isDesablecreate(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isCreateonfield() {
+        return false; //To change body of generated methods, choose Tools | Templates.
     }
     
     

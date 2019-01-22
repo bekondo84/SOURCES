@@ -65,6 +65,27 @@ public class CaissierRSImpl
         }
         return meta; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Caissier enable(HttpHeaders headers, Caissier entity) {
+         //To change body of generated methods, choose Tools | Templates.
+        entity.setState("enable");
+        manager.update(entity.getId(), entity);
+        return entity;
+    }
+
+    @Override
+    public Caissier desable(HttpHeaders headers, Caissier entity) {
+        entity.setState("desable");
+        manager.update(entity.getId(), entity);
+        return entity;
+    }
+
+    @Override
+    public Caissier getCasherByMail(HttpHeaders headers, String mail) {
+         //To change body of generated methods, choose Tools | Templates.
+        return manager.getCassierWithAccount(mail);
+    }
     
     
 

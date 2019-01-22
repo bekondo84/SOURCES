@@ -38,6 +38,11 @@ public interface UploadFileRS {
     @Produces("image/png")
     public Response downloadImageFileFreeForModule(@Context HttpHeaders headers,@PathParam("modulename") String module ,@PathParam("filename") String filename);
     
+     @GET
+    @Path("entity/{entityname}/{modulename}/{filename}")
+    @Produces("image/png")
+    public Response downloadImageFileFreeForModule(@Context HttpHeaders headers,@PathParam("entityname") String entity ,@PathParam("modulename") String module ,@PathParam("filename") String filename);
+    
     @GET
     @Path("text/{filename}")
     @Produces("text/plain")

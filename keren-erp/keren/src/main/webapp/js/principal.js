@@ -179,7 +179,7 @@ angular.module("mainApp")
                       {id:-1 , name:"utilisateurs",label:"Utilisateurs",icon:"glyphicon glyphicon-user" ,showmenu:true,
                        actions:[
                           {id:-1,name:"utilisateur" , label:"Utilisateurs",icon:"glyphicon glyphicon-user",entityName:"Utilisateur",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',hide:false,viewMode:'kaban,tree,form'
-                              ,kaban:{code:"application_001",script:"<div class='col-md-12 col-sm-12' id='detail-panel-body-header'> <div class='col-md-3 col-sm-4'> <div id='imageContent'  style='float: left;margin-left: -20px;'> <img id='apercuImageContent' src='http://{{hostname}}:{{portvalue}}/keren/auth/resource/static/{{item.image }}' alt='Image ' ng-click='imageClick()' height='70' width='75'></div> </div> <div  class='col-md-8 col-sm-7'> <div style='font-weight: bold;'>{{item.designation}}</div> <div>{{item.courriel | cut:true:50:'...'}}</div> <div> <div class='col-sm-6 col-md-6 pull-left' >{{item.societe.designation}}</div></div> </div> </div>"}},
+                              ,kaban:{code:"application_001",script:"<div class='col-md-12 col-sm-12' id='detail-panel-body-header'> <div class='col-md-3 col-sm-4'> <div id='imageContent'  style='float: left;margin-left: -20px;'> <img id='apercuImageContent' ng-src='http://{{hostname}}:{{portvalue}}/keren/auth/resource/entity/utilisateur/kerencore/{{item.image }}' alt='Image ' ng-click='imageClick()' height='70' width='75'></div> </div> <div  class='col-md-8 col-sm-7'> <div style='font-weight: bold;'>{{item.designation}}</div> <div>{{item.courriel | cut:true:50:'...'}}</div> <div> <div class='col-sm-6 col-md-6 pull-left' >{{item.societe.designation}}</div></div> </div> </div>"}},
                           {id:-2,name:"groupes" , label:"Groupes",icon:"glyphicon glyphicon-list-alt",entityName:"Groupe",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',hide:false},
                           {id:-3,name:"societe" , label:"Societes",icon:"glyphicon glyphicon-home",entityName:"Societe",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',hide:false},
                           {id:-4,name:"pays" , label:"Pays",icon:"glyphicon glyphicon-flag",entityName:"pays",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',hide:false}
@@ -2666,6 +2666,24 @@ angular.module("mainApp")
              restService.downloadPNG(filename,position);
              return "img\\photo.png";
          };
+         /**
+          * 
+          * @param {type} filename
+          * @param {type} entity
+          * @param {type} modele
+          * @returns {undefined}
+          */
+         $scope.srcFn = function(filename,entity,modele){
+             var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/";
+             if(filename==null || !angular.isDefined(filename)||filename==''){
+                 return url+"static/avatar.png";
+             }//end if(filename==null || !angular.isDefined(filename)){
+             if(entity==null){
+                 return url+"module/"+modele+"/"+filename;
+             }else{
+                 return url+"entity/"+entity+"/"+modele+"/"+filename;
+             }//end if(entity==null){
+         };         
         /**
          * 
          * @param {type} model
@@ -8424,6 +8442,9 @@ $scope.gererChangementFichier3 = function(event,model){
              var today = new Date();
              $scope.currentObject['compareid'] = today.getTime();
              $scope.currentObject['id'] = -1;
+             $scope.currentObject['ownermodule'] = metaData.ownermodule;
+             $scope.currentObject['moduleName'] = metaData.moduleName;
+//             $scope.currentObject['entityName'] = metaData.entityName;
          };
          /**
           * 
@@ -8458,6 +8479,10 @@ $scope.gererChangementFichier3 = function(event,model){
              }//end if(metaData){ 
              var today = new Date();
              entity['compareid'] = today.getTime();
+             entity['id'] = -1;
+             entity['ownermodule'] = metaData.ownermodule;
+             entity['moduleName'] = metaData.moduleName;
+//             $scope.entity['entityName'] = metaData.entityName;
             return entity ;
          };
          /**
@@ -8541,7 +8566,10 @@ $scope.gererChangementFichier3 = function(event,model){
                          }//end if(metaData.groups[i].metaArray){
                      }
                 }
-
+                 $scope.temporalData['id'] = -1;
+                $scope.temporalData['ownermodule'] = metaData.ownermodule;
+                $scope.temporalData['moduleName'] = metaData.moduleName;
+//                $scope.temporalData['entityName'] = metaData.entityName;
              } 
             
          };
@@ -9356,9 +9384,34 @@ $scope.gererChangementFichier3 = function(event,model){
 
           /**
                  Enregistrement en BD
-
+          if(commonsTools.isexternemodule($scope.currentModule.name)){
+                    if(item.ownermodule && item.ownermodule!= $scope.currentModule.name){
+                        $http.defaults.headers.common['modulename']= item.ownermodule;       
+                    }else{
+                        $http.defaults.headers.common['modulename']= $scope.currentModule.name;       
+                    }//end if($scope.item.ownermodule){
+                }else{
+                    $http.defaults.headers.common['modulename']= null;
+                }//end if(commonsTools.isexternemodule($scope.currentModule.name)){
+                $http.defaults.headers.common['entity']= angular.lowercase($scope.metaData.entityName); 
+                
           **/
-          $scope.saveOrUpdate = function(){
+          $scope.saveOrUpdate = function(){  
+              if(commonsTools.isexternemodule($scope.currentModule.name)){
+                    if($scope.metaData.ownermodule!= $scope.currentModule.name){
+                        $http.defaults.headers.common['modulename']= $scope.metaData.ownermodule;       
+                    }else{
+                        $http.defaults.headers.common['modulename']= $scope.currentModule.name;       
+                    }//end if($scope.item.ownermodule){
+                }else{
+                    $http.defaults.headers.common['modulename']= null;
+                }//end if(commonsTools.isexternemodule($scope.currentModule.name)){
+               if(commonsTools.isexternemodule($scope.currentModule.name)){
+                    $http.defaults.headers.common['modulename']= $scope.currentModule.name;  
+                }else{
+                    $http.defaults.headers.common['modulename']= null;
+                }//end if(commonsTools.isexternemodule($scope.currentModule.name)){
+                $http.defaults.headers.common['entity']= angular.lowercase($scope.metaData.entityName); 
                //On affiche le dialog
                commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
                var session = commonsTools.readCookie("session_"+$rootScope.globals.user.id);
@@ -9407,7 +9460,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                         }//end if($scope.showApplication==true){                                       
     //                                    $scope.loadData();
                                         commonsTools.hideDialogLoading();
-                                        $scope.notifyWindow("Status Operation" ,"L'opÃ©ration s'est dÃ©roulÃ©e avec sucess","success");
+                                        $scope.notifyWindow("Status Operation" ,"L'opération s'est déroulée avec sucess","success");
                                         if($scope.dataCache['resources']&&$scope.dataCache['resources'].length>0){
                                             for(var i=0 ; i<$scope.dataCache['resources'].length;i++){
                                                 var arrayR = $scope.dataCache['resources'];
@@ -9417,6 +9470,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                                 resource.push(arrayR[i]);
                                                 name.push(arrayN[i]);
                                                 $http.defaults.headers.common['names']= angular.toJson(name); 
+                                                $http.defaults.headers.common['entity']= angular.lowercase($scope.metaData.entityName); 
                                                 restService.uploadFile(resource)
                                                     .then(function(response){
 //                                                        alert(angular.toJson(response))
@@ -9667,7 +9721,7 @@ $scope.gererChangementFichier3 = function(event,model){
            * @returns {undefined}
            */
           $scope.viewAction = function(item){
-//                console.log("$scope.viewAction ============== "+angular.toJson(item));
+//                console.log("$scope.viewAction ============== "+angular.toJson($scope.metaData));
                var session = commonsTools.readCookie("session_"+$rootScope.globals.user.id);
                if(session==null){
                    $scope.deconnexion();
@@ -9702,6 +9756,7 @@ $scope.gererChangementFichier3 = function(event,model){
                 }else{
                     $http.defaults.headers.common['modulename']= null;
                 }//end if(commonsTools.isexternemodule($scope.currentModule.name)){
+                $http.defaults.headers.common['entity']= angular.lowercase($scope.metaData.entityName); 
                 restService.findById(item.id).$promise
                         .then(function(data){
                             $scope.currentObject = data;
@@ -10742,6 +10797,22 @@ $scope.gererChangementFichier3 = function(event,model){
              //Recuperation de la piece jointe
              var url =$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe/byid/id/"+id;
              commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");   
+             if(commonsTools.isexternemodule($scope.currentModule.name)){
+                    if($scope.metaData.ownermodule!= $scope.currentModule.name){
+                        $http.defaults.headers.common['modulename']= $scope.metaData.ownermodule;       
+                    }else{
+                        $http.defaults.headers.common['modulename']= $scope.currentModule.name;       
+                    }//end if($scope.item.ownermodule){
+                }else{
+                    $http.defaults.headers.common['modulename']= null;
+                }//end if(commonsTools.isexternemodule($scope.currentModule.name)){
+               if(commonsTools.isexternemodule($scope.currentModule.name)){
+                    $http.defaults.headers.common['modulename']= $scope.currentModule.name;  
+                }else{
+                    $http.defaults.headers.common['modulename']= null;
+                }//end if(commonsTools.isexternemodule($scope.currentModule.name)){
+                $http.defaults.headers.common['entity']= angular.lowercase($scope.metaData.entityName); 
+             $http.defaults.headers.common['entity']= angular.lowercase($scope.metaData.entityName);                              
              $http.get(url)
                      .then(function(response){
                          var pj = response.data;
@@ -10752,7 +10823,7 @@ $scope.gererChangementFichier3 = function(event,model){
                              var extension = parts[parts.length-1];
                              if(extension=='pdf'){
                                  url = url+'pdf/'+pj.filename+'/'+pj.attachename;
-                             }else if(extension=='png'||extension=='jpeg'){
+                             }else if(extension=='png'||extension=='jpeg'||extension=='jpg'){
                                  type = "image/png";
                                  url = url+'img/'+pj.filename+'/'+pj.attachename;
                              }else if(extension=='doc'||extension=='dot'){
@@ -10786,9 +10857,9 @@ $scope.gererChangementFichier3 = function(event,model){
                                  url = url+'text/'+pj.filename+'/'+pj.attachename;
                                  type = "text/plain";
                              }//end if(extension=='pdf')
+//                             console.log("$scope.piecejointeviewAction  ============================================= "+$scope.currentModule.name+"    ===  url : "+url);
                              $http.get(url, {responseType: "arraybuffer"})
-                                     .then(function(response){
-//                                         console.log("$scope.piecejointeviewAction  ============================================= "+angular.toJson(response));
+                                     .then(function(response){                                         
 //                                         var filename = response.headers['x-filename'];
 //                                         var contentType = response.headers['content-type'];
                                          var linkElement = document.createElement('a');
@@ -13320,7 +13391,8 @@ $scope.gererChangementFichier3 = function(event,model){
                                                    $scope.navigatorcontainer.addRule(action.name,null,action.label);
                                                    
                                                    $scope.searchCriteria = new String();               
-//                                                    console.log("principal.initAction_11090 ================= : "+mode[0]);
+//                                                    console.log("principal.initAction_11090 ================= : "+mode[0]);                                                    
+                                                    $http.defaults.headers.common['entity']= angular.lowercase($scope.metaData.entityName); 
                                                     //Liaison du search pour la recherche automatique
                                                     if(mode && mode[0]=="calendar"){
                                                        $scope.calendarFramePanelBuilder(metaData);
@@ -13473,7 +13545,10 @@ $scope.gererChangementFichier3 = function(event,model){
                    $("#myModal").modal("show");
                }//end if(args.report.ignore){               
           });
-          
+          /**
+           * 
+           * @returns {Array}
+           */
           $scope.getSelectLines = function(){
               var values = new Array();
               for(var i=0 ; i<$scope.datas.length;i++){

@@ -5,10 +5,17 @@
  */
 package com.core.files;
 
+import com.core.application.ResourceRegistry;
+import com.core.application.ResourceRegistryDAOLocal;
+import com.core.application.ResourceRegistryManagerLocal;
+import com.core.application.ResourceRegistryManagerRemote;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kerem.core.CommonTools;
 import com.kerem.core.FileHelper;
+import com.megatimgroup.generic.jax.rs.layer.annot.AnnotationsProcessor;
+import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
+import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
 import com.megatimgroup.mgt.commons.command.MysqlBDWinExporter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,11 +23,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.naming.NamingException;
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -38,6 +48,26 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 @Path("/resource")
 public class UploadFileRSImpl  implements UploadFileRS{
 
+     @EJB(name = "ResourceRegistryManager")
+     protected ResourceRegistryManagerRemote registry;
+
+    public UploadFileRSImpl() {
+        try {
+            AnnotationsProcessor processor = new AnnotationsProcessor();
+            processor.process(this);
+        } catch (NamingException ex) {
+            Logger.getLogger(UploadFileRSImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(UploadFileRSImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(UploadFileRSImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    
+    
+    
     @Override
     public Response uploadFiletemporal(MultipartFormDataInput input, HttpHeaders headers) {
          //To change body of generated methods, choose Tools | Templates.
@@ -93,7 +123,11 @@ public class UploadFileRSImpl  implements UploadFileRS{
          if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
              modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
-//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
+         String entityname = null ;
+         if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
+             entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//         System.out.println(UploadFileRSImpl.class.toString()+".uploadFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
          FileHelper.setCurrentModule(modulename);
         String fileName = "";//
 		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
@@ -111,9 +145,17 @@ public class UploadFileRSImpl  implements UploadFileRS{
 
 			if(names!=null&&names.size()>index){
 //                            System.out.println(UploadFileRSImpl.class.toString()+" ======================== "+bytes+" ===== "+names.get(index));
+                            //Creation d'une entree dans le registre des resources
+                            Date today = new Date();
+                            String storename = Long.toString(today.getTime()+index);
+                            ResourceRegistry resource = new ResourceRegistry(names.get(index), storename, entityname, modulename);
+                            resource.setCompareid(today.getTime());
+                            //Renommer le fichier en storename
                             //constructs upload file path
-                            fileName = FileHelper.getStaticDirectory()+File.separator+names.get(index);
-                            writeFile(bytes,fileName);                        
+                            fileName = FileHelper.getStaticDirectory()+File.separator+storename;
+                            writeFile(bytes,fileName);    
+                            //Mise a jour du resourceregisty
+                            registry.save(resource);
                         }			
 			index++;
 //			System.out.println("Done");
@@ -135,17 +177,31 @@ public class UploadFileRSImpl  implements UploadFileRS{
          if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
              modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+         String entityname = null ;
+         if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
+             entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
 //         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
          FileHelper.setCurrentModule(modulename);
         try {
-            //To change body of generated methods, choose Tools | Templates.
+            //Chargement du resourceregistry correspondant au fichier
+            ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename);
+//             System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile2(@Context HttpHeaders headers,String filename) ==== "+modulename+" ==== "+resource);
+           //To change body of generated methods, choose Tools | Templates.
             File fichier = new File(FileHelper.getStaticDirectory()+File.separator+filename);
+            if(resource!=null){
+                fichier = new File(FileHelper.getStaticDirectory()+File.separator+resource.getStorename());
+            }//end if(resource!=null){
 //            System.out.println(UploadFileRSImpl.class.toString()+" ==== "+fichier.getAbsolutePath());
             if(!fichier.exists()||!fichier.isFile()){
                 FileHelper.setCurrentModule(null);
                 fichier = new File(FileHelper.getStaticDirectory()+File.separator+"avatar.png");
             }
-            return CommonTools.getImage(fichier);
+            if(resource!=null){
+                return CommonTools.getImage(fichier,resource.getSrcname());
+            }else{
+                return CommonTools.getImage(fichier);
+            }//end if(resource!=null){
         } catch (IOException ex) {
              Response.serverError().build();
         }
@@ -159,11 +215,20 @@ public class UploadFileRSImpl  implements UploadFileRS{
          if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
              modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
-//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
+         String entityname = null ;
+         if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
+             entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
          FileHelper.setCurrentModule(modulename);
          try {
-            //To change body of generated methods, choose Tools | Templates.
+             //Chargement du registre des resource
+             ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename);
+//             System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile2(@Context HttpHeaders headers,String filename) ==== "+modulename+" ==== "+resource);
+           //To change body of generated methods, choose Tools | Templates.
             File fichier = new File(FileHelper.getStaticDirectory()+File.separator+filename);
+            if(resource!=null){
+                fichier = new File(FileHelper.getStaticDirectory()+File.separator+resource.getStorename());
+            }//end  if(resource!=null){
 //            System.out.println(UploadFileRSImpl.class.toString()+" ==== "+fichier.getAbsolutePath());
             if(!fichier.exists()||!fichier.isFile()){
                 FileHelper.setCurrentModule(null);
@@ -185,10 +250,20 @@ public class UploadFileRSImpl  implements UploadFileRS{
          if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
              modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+         String entityname = null ;
+         if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
+             entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
 //         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
          FileHelper.setCurrentModule(modulename);
         try{
+               //Chargement du registre des resource
+                ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename);
+//                 System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile2(@Context HttpHeaders headers,String filename) ==== "+modulename+" ==== "+resource);
                 String resourceDir = FileHelper.getStaticDirectory()+File.separator+filename;
+                if(resource!=null){
+                    resourceDir = FileHelper.getStaticDirectory()+File.separator+resource.getStorename();
+                }//end if(resource!=null){
                 File file = new File(resourceDir);
                 if(file.exists()){
                     return CommonTools.getPdf(file,name);
@@ -208,10 +283,20 @@ public class UploadFileRSImpl  implements UploadFileRS{
          if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
              modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+         String entityname = null ;
+         if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
+             entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
 //         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
          FileHelper.setCurrentModule(modulename);
          try{
+                //Chargement du registre des resource
+                ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename);
+//                System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile2(@Context HttpHeaders headers,String filename) ==== "+modulename+" ==== "+resource);
                 String resourceDir = FileHelper.getStaticDirectory()+File.separator+filename;
+                if(resource!=null){
+                    resourceDir = FileHelper.getStaticDirectory()+File.separator+resource.getStorename();
+                }//end if(resource!=null){
                 File file = new File(resourceDir);
                 if(file.exists()){
                     return CommonTools.getText(file,name);
@@ -238,10 +323,20 @@ public class UploadFileRSImpl  implements UploadFileRS{
             if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
                 modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
             }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+            String entityname = null ;
+            if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
+                entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
+            }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
 //         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
            FileHelper.setCurrentModule(modulename);
             try{
+                  //Chargement du registre des resource
+                  ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename);
+//                   System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile2(@Context HttpHeaders headers,String filename) ==== "+modulename+" ==== "+resource);
                   String resourceDir = FileHelper.getStaticDirectory()+File.separator+filename;
+                  if(resource!=null){
+                     resourceDir = FileHelper.getStaticDirectory()+File.separator+resource.getStorename();
+                  }//end if(resource!=null){
                   File file = new File(resourceDir);
                   if(file.exists()){
                       return CommonTools.getStream(file,name);
@@ -380,13 +475,23 @@ public class UploadFileRSImpl  implements UploadFileRS{
          if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
              modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+         String entityname = null ;
+         if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
+            entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
 //         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
          FileHelper.setCurrentModule(modulename);
-        File fichier = new File(FileHelper.getStaticDirectory()+File.separator+filename);
+         //Chargement du registre des resource
+         ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename);
+         File fichier = new File(FileHelper.getStaticDirectory()+File.separator+filename);
+         if(resource!=null){
+             fichier = new File(FileHelper.getStaticDirectory()+File.separator+resource.getStorename());
+             registry.delete(resource.getId());
+         }//end if(resource!=null){
 //            System.out.println(UploadFileRSImpl.class.toString()+" ==== "+fichier.getAbsolutePath());
         if(fichier.exists()&&fichier.isFile()){
-            fichier.delete();
-        }
+            fichier.delete();            
+        }//end if(fichier.exists()&&fichier.isFile()){
     }
 
     @Override

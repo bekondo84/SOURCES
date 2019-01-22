@@ -251,6 +251,7 @@ angular.module("mainApp")
                                 if(img){
                                     img.src = imageUrl;
                                 }
+                                return imageUrl;
                        },function(error){
                            
                        });

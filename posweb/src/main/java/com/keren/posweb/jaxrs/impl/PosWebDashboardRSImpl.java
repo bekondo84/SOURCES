@@ -7,11 +7,14 @@ import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
 import com.core.dashboard.DashboardContainer;
 import com.core.views.DashboardRecord;
 import com.core.views.DashboardRecordManagerRemote;
+import com.google.gson.Gson;
 import com.kerem.core.DashboardUtil;
 import com.kerem.core.KerenExecption;
+import com.keren.posweb.core.ifaces.CaissierManagerRemote;
 import com.keren.posweb.core.ifaces.PointVenteManagerRemote;
 import com.keren.posweb.core.ifaces.PosWebDashboardManagerRemote;
 import com.keren.posweb.jaxrs.ifaces.PosWebDashboardRS;
+import com.keren.posweb.model.Caissier;
 import com.keren.posweb.model.PosWebDashboard;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
@@ -44,6 +47,10 @@ public class PosWebDashboardRSImpl
 
      @Manager(application = "posweb", name = "PointVenteManagerImpl", interf = PointVenteManagerRemote.class)
     protected PointVenteManagerRemote posmanager;
+     
+     @Manager(application = "posweb", name = "CaissierManagerImpl", interf = CaissierManagerRemote.class)
+    protected CaissierManagerRemote cashiermanager;
+     
 
     public PosWebDashboardRSImpl() {
         super();
@@ -81,11 +88,19 @@ public class PosWebDashboardRSImpl
 
     @Override
     public PosWebDashboard dashboard(HttpHeaders headers) {
-        //To change body of generated methods, choose Tools | Templates.
+        Gson gson = new Gson();
+        //To change body of generated methods, choose Tools | Templates.        
         RestrictionsContainer container =  RestrictionsContainer.newInstance();
         container.addEq("actif", Boolean.TRUE);
+        Long userid = gson.fromJson(headers.getRequestHeader("userid").get(0), Long.class);
+        //Chargement du caissier lie au compte
+        Caissier casher = cashiermanager.getCassierWithAccount(userid);
+        if(casher==null){
+            throw new KerenExecption("cashier.unkown.account");
+        }//end if(casher==null){
+//        System.out.println(PosWebDashboardRSImpl.class.toString()+" ============================================== "+casher.getPointsofsales().size());
         PosWebDashboard entity = new PosWebDashboard();
-        entity.setPostes(posmanager.filter(container.getPredicats(), null, null, 0, -1));
+        entity.setPostes(casher.getPointsofsales());
         return entity;
     }
 

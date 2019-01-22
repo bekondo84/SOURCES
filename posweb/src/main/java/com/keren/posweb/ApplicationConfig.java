@@ -44,6 +44,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.keren.posweb.jaxrs.impl.TaxeRSImpl.class);
         resources.add(com.keren.posweb.jaxrs.impl.UniteAchatRSImpl.class);
         resources.add(com.keren.posweb.jaxrs.impl.UniteGestionRSImpl.class);
+        resources.add(com.keren.posweb.jaxrs.impl.UserAccountRSImpl.class);
         resources.add(com.keren.posweb.jaxrs.impl.UserRSImpl.class);
     }
     

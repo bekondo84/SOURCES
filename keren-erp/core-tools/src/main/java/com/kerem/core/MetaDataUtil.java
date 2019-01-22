@@ -93,6 +93,7 @@ public class MetaDataUtil {
         metaData.setActivatefollower(meta.isActivatefollower());
         metaData.setSearchfields(meta.getSearchfields());
         metaData.setClassName(meta.getClassName());
+        metaData.setOwnermodule(meta.getOwnermodule());
 //        metaData.setCustomfooter(meta.isCustomfooter());
         metaData.setFooterScript(meta.getFooterScript());
         HashMap<String,com.kerem.genarated.Field> map = new HashMap<String,com.kerem.genarated.Field>();
@@ -181,6 +182,11 @@ public class MetaDataUtil {
         metaData.setActivatefollower(((BaseElement)obj).isActivatefollower());
         metaData.setSearchfields(((BaseElement)obj).searchFields());
         metaData.setClassName(obj.getClass().getName());
+        if(((BaseElement)obj).getOwnermodule()==null){
+             metaData.setOwnermodule(metaData.getModuleName());
+        }else{
+            metaData.setOwnermodule(((BaseElement)obj).getOwnermodule());
+        }
         //Creation des etates
         List<com.megatimgroup.generic.jax.rs.layer.impl.State> states = new ArrayList<>();
         for(State state : ((BaseElement)obj).getStates()){
@@ -710,6 +716,11 @@ public class MetaDataUtil {
         metaData.setActivatefollower(((BaseElement)obj).isActivatefollower());
         metaData.setSearchfields(((BaseElement)obj).searchFields());
         metaData.setClassName(obj.getClass().getName());
+        if(((BaseElement)obj).getOwnermodule()==null){
+             metaData.setOwnermodule(metaData.getModuleName());
+        }else{
+            metaData.setOwnermodule(((BaseElement)obj).getOwnermodule());
+        }//end  if(((BaseElement)obj).getOwnermodule()==null){
         //Creation des etates
         List<com.megatimgroup.generic.jax.rs.layer.impl.State> states = new ArrayList<>();
         for(State state : ((BaseElement)obj).getStates()){
