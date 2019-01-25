@@ -134,12 +134,12 @@ public class Contact extends BaseElement implements Serializable,Comparable<Cont
 
     @Override
     public String getListTitle() {
-        return "Contacts"; //To change body of generated methods, choose Tools | Templates.
+        return "contacts"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Contact"; //To change body of generated methods, choose Tools | Templates.
+        return "contact"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

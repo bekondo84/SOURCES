@@ -5,7 +5,6 @@
  */
 package com.teratech.achat.model.operations;
 
-import com.teratech.achat.model.base.Emplacement;
 import com.teratech.achat.model.base.Entrepot;
 import java.io.Serializable;
 import java.util.Date;

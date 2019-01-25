@@ -31,4 +31,36 @@ public class ArticleDAOImpl
         return (Article.class);
     }
 
+    @Override
+    public void processAfterUpdate(Article entity) {
+//        String srcname = FileHelper.getTemporalDirectory().toString()+"/"+entity.getDoc();
+//        String ciblename = FileHelper.getStaticDirectory()+"/ventes/"+entity.getDoc();
+//        File srcFile = new File(srcname);
+//        if(srcFile.exists() && srcFile.isFile()){
+//            try {
+//                FileHelper.moveFile(srcFile, new File(ciblename));
+//            } catch (IOException ex) {
+//               throw new RuntimeException(ex);
+//            }
+//        }//end if(srcFile.exists() && srcFile.isFile()){
+        super.processAfterUpdate(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void processAfterSave(Article entity) {
+//         String srcname = FileHelper.getTemporalDirectory().toString()+"/"+entity.getDoc();
+//        String ciblename = FileHelper.getStaticDirectory()+"/ventes/"+entity.getDoc();
+//        File srcFile = new File(srcname);
+//        if(srcFile.exists() && srcFile.isFile()){
+//            try {
+//                FileHelper.moveFile(srcFile, new File(ciblename));
+//            } catch (IOException ex) {
+//               throw new RuntimeException(ex);
+//            }
+//        }//end if(srcFile.exists() && srcFile.isFile()){
+        super.processAfterSave(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+
 }

@@ -61,17 +61,17 @@ public class ExprBesionRSImpl
         try {
             //To change body of generated methods, choose Tools | Templates.
             MetaData meta = MetaDataUtil.getMetaData(new ExprBesion(), new HashMap<String, MetaData>(), new ArrayList<String>());
-            MetaColumn workbtn = new MetaColumn("button", "work1", "Valider la demande", false, "workflow", null);
+            MetaColumn workbtn = new MetaColumn("button", "work1", "valider.demande", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'exprbesion','method':'valider','critical':true}");
             workbtn.setStates(new String[]{"etabli"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
             //Buton de validation
-            workbtn = new MetaColumn("button", "work2", "Rejeter la demande", false, "action", null);
+            workbtn = new MetaColumn("button", "work2", "rejeter.demande", false, "action", null);
             workbtn.setValue("{'name':'teratech_achat_bes_1_1','template':{'demande':'object','emetteur':'object.utilisateur'} }");
             workbtn.setStates(new String[]{"etabli"});
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work2", "Annuler la validation", false, "workflow", null);
+            workbtn = new MetaColumn("button", "work2", "annuler.validation", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'exprbesion','method':'annule','critical':true}");
             workbtn.setStates(new String[]{"valide"});
             meta.getHeader().add(workbtn);

@@ -23,7 +23,7 @@ import javax.persistence.ManyToOne;
 @DiscriminatorValue("OUT")
 public class LigneSortie extends LigneDocumentStock implements Serializable{
 
-    @Predicate(label = "N° Série/Lot",search = true,editable = false)
+    @Predicate(label = "numero.serie.or.lot",search = true,editable = false)
     private String code ;
 //    @Predicate(label = "N° lot/série",type = Lot.class,target = "many-to-one",optional = true,unique = true,search = true)
     @ManyToOne

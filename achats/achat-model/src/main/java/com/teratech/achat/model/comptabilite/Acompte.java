@@ -25,28 +25,28 @@ import javax.persistence.TemporalType;
 public class Acompte extends BaseElement implements Serializable,Comparable<Acompte>{
 
     @Temporal(TemporalType.DATE)
-    @Predicate(label = "Date",type = Date.class,target = "date",search = true)
+    @Predicate(label = "date",type = Date.class,target = "date",search = true)
     private Date date ;
     
-    @Predicate(label = "N° Pièce",optional = false,search = true)
+    @Predicate(label = "numero.piece",optional = false,search = true)
     private String code ;
     
     @ManyToOne
     @JoinColumn(name = "COMP_ID")
-    @Predicate(label = "Compte",type = Compte.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "compte",type = Compte.class,target = "many-to-one",optional = false,search = true)
     private Compte compte;
     
     @ManyToOne
     @JoinColumn(name = "JOCO_ID")
-     @Predicate(label = "Journal",type = JournalComptable.class,target = "many-to-one",optional = false,search = true)
+     @Predicate(label = "journal.comptable",type = JournalComptable.class,target = "many-to-one",optional = false,search = true)
     private JournalComptable journal;
     
-    @Predicate(label = "Montant",type = Double.class,optional = false,search = true)
+    @Predicate(label = "montant",type = Double.class,optional = false,search = true)
     private Double montant = 0.0;
     
     @ManyToOne
     @JoinColumn(name = "MORE_ID")
-    @Predicate(label = "Mode de règlement",type = ModeReglement.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "mode.reglement",type = ModeReglement.class,target = "many-to-one",optional = false,search = true)
     private ModeReglement mode ;
 
     
@@ -161,12 +161,12 @@ public class Acompte extends BaseElement implements Serializable,Comparable<Acom
 
     @Override
     public String getListTitle() {
-        return "Acomptes"; //To change body of generated methods, choose Tools | Templates.
+        return "acomptes"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Acompte"; //To change body of generated methods, choose Tools | Templates.
+        return "acompte"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

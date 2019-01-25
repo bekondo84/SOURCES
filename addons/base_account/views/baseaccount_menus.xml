@@ -14,7 +14,7 @@
 	 <menu id="base_account_operations" label="Traitements" parent="base_account" gyphycon="glyphicon glyphicon-pencil"/>
 	 <menuitem id="base_account_07" label="Saisie par pièce" parent_ref="base_account_operations" entity_ref="PieceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
 	 <menuitem id="base_account_08" label="Saisie des opérations bancaire" parent_ref="base_account_operations" entity_ref="OperationBancaire" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="base_account_09" label="Saisie des écritures" parent_ref="base_account_operations" entity_ref="PieceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="base_account_09" label="Saisie des écritures" parent_ref="base_account_operations" entity_ref="JournalSaisieView" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="true" />
 	 <menuitem id="base_account_10" label="Separateur"  parent_ref="base_account_operations"  view_type="none" />
 	 <menuitem id="base_account_11" label="Journaux de saisie" parent_ref="base_account_operations" entity_ref="JournalSaisie" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
 	 <menuitem id="base_account_12" label="Cloture des Journaux" parent_ref="base_account_operations" entity_ref="ClotureJournal" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" modal="true"  />
@@ -26,8 +26,9 @@
 	 <menuitem id="base_account_18" label="Rapprochements bancaires" parent_ref="base_account_operations" entity_ref="EcritureTier" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
 	 <menuitem id="base_account_19" label="Separateur"  parent_ref="base_account_operations"  view_type="none" />
 	 <menuitem id="base_account_20" label="Exercices Comptable" parent_ref="base_account_operations" entity_ref="ExerciceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
-	 <menuitem id="base_account_21" label="Cloture d'un exercice" parent_ref="base_account_operations" entity_ref="ClotureExerciceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" modal="true" />
-	 <menuitem id="base_account_22" label="Cloture d'une période" parent_ref="base_account_operations" entity_ref="ClotureExerciceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" modal="true" />
+	 <menuitem id="base_account_21" label="Periodes Comptable" parent_ref="base_account_operations" entity_ref="PeriodeComptable" model_ref="baseaccount" method_ref="exercice" gyphycon="glyphicon glyphicon-list-alt" />
+	 <menuitem id="base_account_22" label="Cloture d'un exercice" parent_ref="base_account_operations" entity_ref="ClotureExerciceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" modal="true" />
+	 <menuitem id="base_account_23" label="Cloture d'une période" parent_ref="base_account_operations" entity_ref="ClotureExerciceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" modal="true" />
 	 <menu id="base_account_compta" label="Comptabilité" parent="base_account" gyphycon="glyphicon glyphicon-plus"/>
 	 <menuitem id="base_account_01" label="Plan Comptable" parent_ref="base_account_compta" entity_ref="Compte" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th">
 	      <action id="plc_01" type="action" name="plc_name01" label="Action 1" value="{'name':'update_pwd'}" roles="comptable"/>
@@ -38,6 +39,15 @@
 	 <menuitem id="base_account_04" label="Code Journaux" parent_ref="base_account_compta" entity_ref="JournalComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt"/>
 	 <menuitem id="base_account_05" label="Banques" parent_ref="base_account_compta" entity_ref="Banque" model_ref="baseaccount" gyphycon="glyphicon glyphicon-user"/>
 	 <menuitem id="base_account_06" label="Plan tiers" parent_ref="base_account_compta" entity_ref="Tier" model_ref="baseaccount" gyphycon="glyphicon glyphicon-user"/>
+	 <treeRecord  id="baseaccount_periode" label="Liste groupe des periodes" action_ref="base_account_21">
+	      <template>
+		     <![CDATA[
+			    <div>
+		           <ng-template src='base_account/views/periodetemplate.xml'></ng-template>
+				</div>
+			   ]]>
+		  </template>
+	 </treeRecord>
 	 <formRecord id="base_account_form01" label="Banque" action_ref="base_account_05">
 	    <header>
 		     <button type="action" name="un button" label="Contact banque" value="{'name':'base_account_07'}" class="btn btn-primary" />

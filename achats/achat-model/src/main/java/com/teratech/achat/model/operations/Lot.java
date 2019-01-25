@@ -27,21 +27,21 @@ import javax.persistence.TemporalType;
 @Table(name = "T_LOT")
 public class Lot extends BaseElement implements Serializable,Comparable<Lot>{
 
-    @Predicate(label = "Numéro",optional = false,unique = true,search = true)
+    @Predicate(label = "numero",optional = false,unique = true,search = true)
     private String code ;
     
-    @Predicate(label = "Quantite",type = Double.class,optional = false,search = true)
+    @Predicate(label = "quantite",type = Double.class,optional = false,search = true)
     private Double quantite ;
     
     private Double sorties = 0.0;
     
     private Double encours = 0.0;
     
-    @Predicate(label = "Péremption",type = Date.class,target = "date",search = true)
+    @Predicate(label = "peremption",type = Date.class,target = "date",search = true)
     @Temporal(TemporalType.DATE)
     private Date peremption ;
     
-    @Predicate(label = "Fabrication",type = Date.class,target = "date",search = true)
+    @Predicate(label = "fabrication",type = Date.class,target = "date",search = true)
     @Temporal(TemporalType.DATE)
     private Date fabrication ;
     

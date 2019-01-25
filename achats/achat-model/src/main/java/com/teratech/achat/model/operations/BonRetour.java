@@ -30,11 +30,11 @@ public class BonRetour extends DocumentStock implements Serializable{
 
      @ManyToOne
     @JoinColumn(name = "FOUR_ID")
-    @Predicate(label = "Fournisseur",type = Tier.class,target = "many-to-one",optional = false,search = true,editable = false)
+    @Predicate(label = "fournisseur",type = Tier.class,target = "many-to-one",optional = false,search = true,editable = false)
     @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"1\"}]")
     protected Tier fournisseur ;
      
-     @Predicate(label = "Type de bon",target = "combobox",values = "Normal",editable = false)
+     @Predicate(label = "type.bon",target = "combobox",values = "Normal",editable = false)
      private String typebon = "0";
      
 //    @Predicate(label = "Document d'origine")
@@ -45,12 +45,12 @@ public class BonRetour extends DocumentStock implements Serializable{
     
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "BT_ID")
-    @Predicate(label = " ",type = LigneSortie.class,target = "many-to-many-list",group =true ,groupName = "group1",groupLabel = "Articles",edittable = true)
+    @Predicate(label = " ",type = LigneSortie.class,target = "many-to-many-list",group =true ,groupName = "group1",groupLabel = "articles",edittable = true)
     private List<LigneSortie> lignes = new ArrayList<LigneSortie>();
     
     @ManyToOne
     @JoinColumn(name = "BR_ID")
-    @Predicate(label = "Bon Reception",type = BonReception.class,target = "many-to-one",search = true,hide = true)
+    @Predicate(label = "bon.reception",type = BonReception.class,target = "many-to-one",search = true,hide = true)
     private BonReception bonlivraison ;
     
     @OneToMany(mappedBy = "docachat",fetch = FetchType.LAZY)
@@ -202,24 +202,24 @@ public class BonRetour extends DocumentStock implements Serializable{
         List<State> states = new ArrayList<State>();
         State state = null;
         if(this.state.equalsIgnoreCase("etabli")){
-             state = new State("etabli", "Brouillon");
+             state = new State("etabli", "brouillon");
              states.add(state);
-            state = new State("transfere", "Disponible");
+            state = new State("transfere", "disponible");
             states.add(state);        
         }else if(this.state.equalsIgnoreCase("qualite")){
-            state = new State("qualite", "Brouillon");
+            state = new State("qualite", "brouillon");
             states.add(state);
-            state = new State("controle", "Qualité controlée");
+            state = new State("controle", "qualite.controlee");
             states.add(state);
         }else if(this.state.equalsIgnoreCase("transfere")){
-             state = new State("transfere", "Attente de transfert");
+             state = new State("transfere", "attente.de.transfert");
             states.add(state);
-            state = new State("disponible", "Disponible en stock");
+            state = new State("disponible", "disponible.en.stock");
             states.add(state);
 //            state = new State("annule", "Annulé");
 //            states.add(state);
         }else if(this.state.equalsIgnoreCase("disponible")){
-            state = new State("disponible", "Disponible en stock");
+            state = new State("disponible", "disponible.en.stock");
             states.add(state);
         }      
         return states; //To change body of generated methods, choose Tools | Templates.
@@ -228,12 +228,12 @@ public class BonRetour extends DocumentStock implements Serializable{
 
     @Override
     public String getListTitle() {
-        return "BONS DE RECEPTIONS"; //To change body of generated methods, choose Tools | Templates.
+        return "bons.de.retour"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "BON DE RECEPTION"; //To change body of generated methods, choose Tools | Templates.
+        return "bon.de.retour"; //To change body of generated methods, choose Tools | Templates.
     }
 
     public List<Facture> getFactures() {

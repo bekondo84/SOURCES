@@ -40,14 +40,14 @@ public class LigneDocumentAchat extends BaseElement implements Serializable,Comp
 
     @ManyToOne
     @JoinColumn(name = "ART_ID")
-    @Predicate(label = "Article",type = Article.class,target = "many-to-one",optional = false,search = true,observable = true)
+    @Predicate(label = "article",type = Article.class,target = "many-to-one",optional = false,search = true,observable = true)
     protected Article article ;    
     
 //    @Temporal(TemporalType.DATE)
 //    @Predicate(label = "Date prévue",type = Date.class,target = "date",optional = false,search = true)
 //    private Date prevue ;
 //    
-    @Predicate(label = "N° Lot/Serie",optional = true,search = true)
+    @Predicate(label = "numero.serie.or.lot",optional = true,search = true)
     private String code ;
 //    
 //    @Predicate(label = "Péremption",type = Date.class,target = "date",search = false)
@@ -58,23 +58,23 @@ public class LigneDocumentAchat extends BaseElement implements Serializable,Comp
 //    @Temporal(TemporalType.DATE)
 //    private Date fabrication ;
     
-    @Predicate(label = "Quantité",type = Double.class,optional = false,search = true)
+    @Predicate(label = "quantite",type = Double.class,optional = false,search = true)
     protected Double quantite ;
     
-    @Predicate(label = "Prix HT",type = Double.class,search = true)
+    @Predicate(label = "pu.ht",type = Double.class,search = true)
     @Observer(observable = "article",source = "field:puachat")
     protected Double puht ;
     
     @ManyToMany
     @JoinTable(name = "T_LIDOAC_TA",joinColumns = @JoinColumn(name = "LIDOAC_ID")
             ,inverseJoinColumns = @JoinColumn(name = "TAXE_ID"))    
-    @Predicate(label = "Taxes",type = Taxe.class,target = "many-to-many",optional = false,search = true)
+    @Predicate(label = "taxes",type = Taxe.class,target = "many-to-many",optional = false,search = true)
     protected List<Taxe> taxes =new ArrayList<Taxe>();
     
-    @Predicate(label = "Remise(%)",type = Double.class,search = true)
+    @Predicate(label = "remise.pourcent",type = Double.class,search = true)
     protected Double remise = 0.0;
     
-    @Predicate(label = "Sous-total",type = Double.class,compute = true,values = "this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100",hide =true ,search = true)
+    @Predicate(label = "sous.total",type = Double.class,compute = true,values = "this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100",hide =true ,search = true)
     protected Double totalht ;
     
     protected Double qtefacturee = 0.0;

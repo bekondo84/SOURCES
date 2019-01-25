@@ -29,18 +29,18 @@ public class Pays extends BaseElement implements Serializable,Comparable<Pays>{
      @Predicate(label = "image",target = "image",search = false)
      private String image ="avatar.png";
      
-    @Predicate(label = "Nom du pays" ,optional = false,unique = true,search = true)
+    @Predicate(label = "nom.pays" ,optional = false,unique = true,search = true)
     private String intitule ;
     
-    @Predicate(label = "Code du pays" ,optional = false,updatable = false,unique = true,search = true)
+    @Predicate(label = "code.pays" ,optional = false,updatable = false,unique = true,search = true)
     private String code;
     
     @ManyToOne
     @JoinColumn(name = "DEVISE_ID")
-    @Predicate(label = "Dévise",type = Devise.class,target="many-to-one",search = true)
+    @Predicate(label = "devise",type = Devise.class,target="many-to-one",search = true)
     private Devise devise ;
     
-    @Predicate(label = "Regions / Etats" , type = Region.class,target = "one-to-many" ,group = true,groupName = "regions",groupLabel = "Régions", edittable = true)
+    @Predicate(label = "regions" , type = Region.class,target = "one-to-many" ,group = true,groupName = "regions",groupLabel = "Régions", edittable = true)
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "PAYS_ID")
     private List<Region> etats = new ArrayList<Region>();
@@ -99,12 +99,12 @@ public class Pays extends BaseElement implements Serializable,Comparable<Pays>{
 
     @Override
     public String getListTitle() {
-        return "PAYS"; //To change body of generated methods, choose Tools | Templates.
+        return "pays"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "PAYS"; //To change body of generated methods, choose Tools | Templates.
+        return "pays"; //To change body of generated methods, choose Tools | Templates.
     }
 
     

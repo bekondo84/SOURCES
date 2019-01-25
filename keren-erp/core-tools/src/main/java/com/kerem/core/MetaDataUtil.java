@@ -94,6 +94,7 @@ public class MetaDataUtil {
         metaData.setSearchfields(meta.getSearchfields());
         metaData.setClassName(meta.getClassName());
         metaData.setOwnermodule(meta.getOwnermodule());
+        metaData.setOwnerentity(meta.getOwnerentity());
 //        metaData.setCustomfooter(meta.isCustomfooter());
         metaData.setFooterScript(meta.getFooterScript());
         HashMap<String,com.kerem.genarated.Field> map = new HashMap<String,com.kerem.genarated.Field>();
@@ -187,6 +188,12 @@ public class MetaDataUtil {
         }else{
             metaData.setOwnermodule(((BaseElement)obj).getOwnermodule());
         }
+        if(((BaseElement)obj).getOwnerentity()==null){
+             metaData.setOwnerentity(metaData.getEntityName());
+        }else{
+            metaData.setOwnerentity(((BaseElement)obj).getOwnerentity());
+        }
+        
         //Creation des etates
         List<com.megatimgroup.generic.jax.rs.layer.impl.State> states = new ArrayList<>();
         for(State state : ((BaseElement)obj).getStates()){
@@ -721,6 +728,11 @@ public class MetaDataUtil {
         }else{
             metaData.setOwnermodule(((BaseElement)obj).getOwnermodule());
         }//end  if(((BaseElement)obj).getOwnermodule()==null){
+        if(((BaseElement)obj).getOwnerentity()==null){
+             metaData.setOwnerentity(metaData.getEntityName());
+        }else{
+            metaData.setOwnerentity(((BaseElement)obj).getOwnerentity());
+        }
         //Creation des etates
         List<com.megatimgroup.generic.jax.rs.layer.impl.State> states = new ArrayList<>();
         for(State state : ((BaseElement)obj).getStates()){

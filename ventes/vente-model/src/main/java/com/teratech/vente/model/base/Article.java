@@ -49,6 +49,9 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
     @Predicate(label = "Actif",type = Boolean.class,group =true,groupName = "group1",groupLabel = "Informations générales")
     private Boolean actif = Boolean.TRUE;    
     
+    @Predicate(label = "document.fabriquant",target = "file",group =true,groupName = "group1",groupLabel = "Informations générales")
+    private String doc ;
+    
     @ManyToOne
     @JoinColumn(name = "FAAR_ID")
     @Predicate(label = "Famille articles",type = FamilleArticle.class,target = "many-to-one",group =true,groupName = "group1",groupLabel = "Informations générales")
@@ -181,6 +184,7 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
         this.achete = art.getAchete();
         this.vendu = art.getVendu();
         this.setOwnermodule(art.getOwnermodule());
+        this.doc = art.doc;
     }
 
     public String getCode() {
@@ -309,6 +313,14 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
 
     public void setControles(List<Controle> controles) {
         this.controles = controles;
+    }
+
+    public String getDoc() {
+        return doc;
+    }
+
+    public void setDoc(String doc) {
+        this.doc = doc;
     }
     
     

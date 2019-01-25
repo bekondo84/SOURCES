@@ -21,47 +21,47 @@ import javax.persistence.Table;
 @Table(name = "T_EMPL")
 public class Emplacement extends BaseElement implements Serializable,Comparable<Emplacement>{
 
-    @Predicate(label = "Nom de l'emplacement",optional = false,unique = true,search = true)
+    @Predicate(label = "nom.emplacement",optional = false,unique = true,search = true)
     private String code ;
     
     @ManyToOne
     @JoinColumn(name = "ENTR_ID")
-    @Predicate(label = "Entrepôt parent",type = Entrepot.class,target = "many-to-one",search = true)
+    @Predicate(label = "entrepot.parent",type = Entrepot.class,target = "many-to-one",search = true)
     private Entrepot edepot ;
     
     @ManyToOne
     @JoinColumn(name = "EMP_ID")
-    @Predicate(label = "Emplacement parent",type = Emplacement.class,target = "many-to-one",search = true)
+    @Predicate(label = "emplacement.parent",type = Emplacement.class,target = "many-to-one",search = true)
     private Emplacement parent ;
     
     
-    @Predicate(label = "Type d'emplacement",target = "combobox",values = "Emplacement fournisseur;Vue;Emplacement interne;Emplacement client;Inventaire;Approvisionnement;Production;Emplacement de transit")
+    @Predicate(label = "type.emplacement",target = "combobox",values = "Emplacement fournisseur;Vue;Emplacement interne;Emplacement client;Inventaire;Approvisionnement;Production;Emplacement de transit")
     private String type = "0";
     
     @ManyToOne
     @JoinColumn(name = "TIER_ID")
-    @Predicate(label = "Responsable",type = Tier.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complement",search = true)
+    @Predicate(label = "responsable",type = Tier.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "complement",search = true)
     private Tier proprio ;
     
-    @Predicate(label = "Couloir(X)",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "couloir",group = true,groupName = "group1",groupLabel = "complement")
     private String couloir ;
     
-    @Predicate(label = "Rayon(Y)",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "rayon",group = true,groupName = "group1",groupLabel = "complement")
     private String rayon  ;
     
-    @Predicate(label = "Hauteur(X)",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "hauteur",group = true,groupName = "group1",groupLabel = "complement")
     private String hauteur  ;
     
-    @Predicate(label = "Code barre de l'emplacement",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "code.barre",group = true,groupName = "group1",groupLabel = "complement")
     private String codebarre ;
     
-    @Predicate(label = "Emplacement de rebus?",type = Boolean.class,group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "emplacement.rebus",type = Boolean.class,group = true,groupName = "group1",groupLabel = "complement")
     private Boolean rebus = Boolean.FALSE;
     
-    @Predicate(label = "Actif?",type = Boolean.class,group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "actif",type = Boolean.class,group = true,groupName = "group1",groupLabel = "complement")
     private Boolean actif =Boolean.TRUE;
     
-    @Predicate(label = "Commentaire",target = "textarea",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "commentaire",target = "textarea",group = true,groupName = "group1",groupLabel = "complement")
     private String commentaire ;
 
     /**
@@ -254,12 +254,12 @@ public class Emplacement extends BaseElement implements Serializable,Comparable<
 
     @Override
     public String getListTitle() {
-        return "EMPLACEMENTS"; //To change body of generated methods, choose Tools | Templates.
+        return "emplacements"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "EMPLACEMENT";  //To change body of generated methods, choose Tools | Templates.
+        return "emplacement";  //To change body of generated methods, choose Tools | Templates.
     }
     
     

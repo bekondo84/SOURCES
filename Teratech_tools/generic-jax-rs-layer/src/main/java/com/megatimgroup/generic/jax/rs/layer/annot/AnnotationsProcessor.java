@@ -52,7 +52,7 @@ public class AnnotationsProcessor {
 
             String jndiName = jndi.build(annot);
             
-            System.out.println("::::::::::::::::::::::::::: "+jndiName);
+//            System.out.println("::::::::::::::::::::::::::: "+jndiName);
             
             field.setAccessible(true);
 

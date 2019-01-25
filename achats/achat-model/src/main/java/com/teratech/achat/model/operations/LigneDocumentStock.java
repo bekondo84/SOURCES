@@ -21,10 +21,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
@@ -39,7 +36,7 @@ public class LigneDocumentStock extends BaseElement implements Serializable,Comp
 
     @ManyToOne
     @JoinColumn(name = "ART_ID")
-    @Predicate(label = "Article concerné",type = Article.class,target = "many-to-one",optional = false,nullable = true,search = true)
+    @Predicate(label = "article.concerne",type = Article.class,target = "many-to-one",optional = false,nullable = true,search = true)
     protected Article article ;
     
     @ManyToOne
@@ -47,15 +44,15 @@ public class LigneDocumentStock extends BaseElement implements Serializable,Comp
 //    @Predicate(label = "Unité de gestion",type = UniteGestion.class,target = "many-to-one",editable = false,search = true)
     protected UniteGestion unite ;    
     
-    @Predicate(label = "Quantité",type = Double.class,optional = false,search = true)
+    @Predicate(label = "quantite",type = Double.class,optional = false,search = true)
     protected Double quantite ;    
     
-    @Predicate(label = "PU HT",type = Double.class,optional = false,search = true)
+    @Predicate(label = "pu.ht",type = Double.class,optional = false,search = true)
     protected Double puht ;
     
     @ManyToOne
     @JoinColumn(name = "LIEMP_ID")
-    @Predicate(label = "Emplacement cible",type = LienEmplacement.class,target = "many-to-one",search = true,optional = false)
+    @Predicate(label = "emplacement.cible",type = LienEmplacement.class,target = "many-to-one",search = true,optional = false)
     @Filter(value = "[{\"fieldName\":\"article\",\"value\":\"object.article\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner l'article\"},{\"fieldName\":\"entrpot\",\"value\":\"this.entrepot\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner le magasin\"}]")
     protected LienEmplacement emplacement ;
     
@@ -248,7 +245,7 @@ public LigneDocumentStock(LigneDocumentStock ligne) {
 
     @Override
     public String getEditTitle() {
-        return "Ligne Stock"; //To change body of generated methods, choose Tools | Templates.
+        return "articles"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

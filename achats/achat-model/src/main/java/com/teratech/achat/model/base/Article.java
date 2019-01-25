@@ -31,79 +31,79 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
     @Predicate(label = "Photo",target = "image")
     private String image ;
     
-    @Predicate(label = "Reference interne",optional = false,unique = true,search = true)
+    @Predicate(label = "reference.interne",optional = false,unique = true,search = true)
     private String code ;
     
-    @Predicate(label = "Intitulé",search = true)
+    @Predicate(label = "intitule",search = true)
     private String intitule ;
     
-    @Predicate(label = "Article vendu?",type = Boolean.class,search = true)
+    @Predicate(label = "article.vendu",type = Boolean.class,search = true)
     private Boolean vendu = Boolean.FALSE;
     
-     @Predicate(label = "Article acheté?",type = Boolean.class,search = true)
+     @Predicate(label = "article.acheté",type = Boolean.class,search = true)
     private Boolean achete = Boolean.FALSE;
     
-    @Predicate(label = "Type d'article",target = "combobox",values = "Article stockable;Utilisation directe;Service;Immobilisation",group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "type.article",target = "combobox",values = "Article stockable;Utilisation directe;Service;Immobilisation",group =true,groupName = "group1",groupLabel = "informations.generales")
     private String type = "0";    
     
-    @Predicate(label = "Actif",type = Boolean.class,group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "Actif",type = Boolean.class,group =true,groupName = "group1",groupLabel = "informations.generales")
     private Boolean actif = Boolean.TRUE;    
     
     @ManyToOne
     @JoinColumn(name = "FAAR_ID")
-    @Predicate(label = "Famille articles",type = FamilleArticle.class,target = "many-to-one",group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "Famille.articles",type = FamilleArticle.class,target = "many-to-one",group =true,groupName = "group1",groupLabel = "informations.generales")
     @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"0\"}]")
     private FamilleArticle famille ;
     
-    @Predicate(label = "Code barre EAN13",group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "code.barre.ean13",group =true,groupName = "group1",groupLabel = "informations.generales")
     private String codebarre ;
     
-    @Predicate(label = "Prix d'achat (HT)",type = Double.class,group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "prix.achat.ht",type = Double.class,group =true,groupName = "group1",groupLabel = "informations.generales")
     private Double puachat ;
     
     @ManyToOne
     @JoinColumn(name = "UNAC_ID")
-    @Predicate(label = "Unité d'achat",type = UniteAchat.class,target = "many-to-one",search = true)
+    @Predicate(label = "unite.achat",type = UniteAchat.class,target = "many-to-one",search = true)
     private UniteAchat uniteachat ;
     
-    @Predicate(label = "Prix de vente (HT)",type = Double.class,group =true,groupName = "group1",groupLabel = "Informations générales")
+    @Predicate(label = "prix.vente.ht",type = Double.class,group =true,groupName = "group1",groupLabel = "informations.generales")
     private Double puvente ;
     
     @ManyToOne
     @JoinColumn(name = "UNGE_ID")
-    @Predicate(label = "Unité de vente",type = UniteGestion.class,target = "many-to-one",search = true)
+    @Predicate(label = "unite.vente",type = UniteGestion.class,target = "many-to-one",search = true)
     private UniteGestion unitevente ;
     
-   @Predicate(label = "Réference du fabriquant",group =true,groupName = "group1",groupLabel = "Informations générales")
+   @Predicate(label = "reference.fabriquant",group =true,groupName = "group1",groupLabel = "informations.generales")
     private String reference ;  
     
-   @Predicate(label = "Suivi stock",updatable = false,target = "combobox",values = "Aucune;Sérialisé;CMUP;FIFO;LIFO;Par lot",group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "suivi.stock",updatable = false,target = "combobox",values = "Aucune;Sérialisé;CMUP;FIFO;LIFO;Par lot",group = true,groupName = "group2",groupLabel = "complement")
    private String politiquestock = "0" ;
    
-   @Predicate(label = "Coût de stockage",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "cout.stockage",type = Double.class,group = true,groupName = "group2",groupLabel = "complement")
    private Double coutstockage =0.0;
    
-   @Predicate(label = "Coût de transport",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "cout.transport",type = Double.class,group = true,groupName = "group2",groupLabel = "complement")
    private Double couttransp=0.0;
 
    @ManyToOne
    @JoinColumn(name = "ART_ID")
-   @Predicate(label = "Substitution",type = Article.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "substitution",type = Article.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "complement")
    private Article substitut ;
    
-   @Predicate(label = "Unité de poid",target = "combobox",values = "Tonne;Quintal;Kilogramme;Gramme;Milligramme",group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "unite.poid",target = "combobox",values = "Tonne;Quintal;Kilogramme;Gramme;Milligramme",group = true,groupName = "group2",groupLabel = "complement")
    private String unitepoid ="0";
    
-   @Predicate(label = "Poid Net",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "poid.net",type = Double.class,group = true,groupName = "group2",groupLabel = "complement")
    private Double poidnet ;
    
-   @Predicate(label = "Poid Brut",type = Double.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "poid.brut",type = Double.class,group = true,groupName = "group2",groupLabel = "complement")
    private Double poidbrut ;
    
-   @Predicate(label = "Délai de livraison(jour)",type = Short.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "delai.livraison.jour",type = Short.class,group = true,groupName = "group2",groupLabel = "complement")
    private Short delaiL = 0;
    
-   @Predicate(label = "Garantie(jour)",type = Short.class,group = true,groupName = "group2",groupLabel = "Complément")
+   @Predicate(label = "garantie.jour",type = Short.class,group = true,groupName = "group2",groupLabel = "complement")
    private Short garantie = 0;
    
    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "article")
@@ -112,7 +112,7 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
    
    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
    @JoinColumn(name = "ART_ID")
-   @Predicate(label = " ",type = Controle.class,target = "one-to-many",group = true,groupName = "group4",groupLabel = "Contrôle Qualité",edittable = true)
+   @Predicate(label = " ",type = Controle.class,target = "one-to-many",group = true,groupName = "group4",groupLabel = "controle.qualite",edittable = true)
    private List<Controle> controles = new ArrayList<Controle>();
     /**
      * 
@@ -332,12 +332,12 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
 
     @Override
     public String getListTitle() {
-        return "ARTICLES"; //To change body of generated methods, choose Tools | Templates.
+        return "articles"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "ARTICLE"; //To change body of generated methods, choose Tools | Templates.
+        return "article"; //To change body of generated methods, choose Tools | Templates.
     }
 
     public String getPolitiquestock() {

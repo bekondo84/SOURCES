@@ -36,12 +36,12 @@ import javax.persistence.Table;
 public class Caissier extends  BaseElement implements Serializable,Comparable<Caissier>{
 
     @Predicate(label = "img",target = "image")
-    private String image ="avatar.png";
+    private String image ;
     
     @Predicate(label = "reference",optional = false,unique = true,search = true)
     private String code;
     
-    @Predicate(label = "nnom.prenom",optional = false,search = true)
+    @Predicate(label = "nom.prenom",optional = false,search = true)
     private String intitule ;
     
     @Predicate(label = "link.account",type = UserAccount.class,target = "many-to-one",unique = true,optional = false,search = true)

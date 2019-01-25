@@ -19,22 +19,22 @@ import javax.persistence.Table;
 @Table(name = "T_CONTR_ACH")
 public class Controle extends BaseElement implements Serializable,Comparable<Controle>{
 
-    @Predicate(label = "Code Analyse",optional = false,search = true)
+    @Predicate(label = "code.analyse",optional = false,search = true)
     private String code ;
     
-    @Predicate(label = "Libelle Analyse",optional = false,search = true)
+    @Predicate(label = "libelle.analyse",optional = false,search = true)
     private String libelle ;
     
-    @Predicate(label = "Type resultat",target = "combobox",optional = false,values = "Numéric;Liste de valeurs",search = true)
+    @Predicate(label = "type.resultat",target = "combobox",optional = false,values = "Numéric;Liste de valeurs",search = true)
     private String type ="0" ;
     
-    @Predicate(label = "Valeurs",search = true)
+    @Predicate(label = "valeurs",search = true)
     private String valeur ;
     
-    @Predicate(label = "Valeur Min",type = Double.class,search = true)
+    @Predicate(label = "valeur.min",type = Double.class,search = true)
     private Double valMin ;
     
-    @Predicate(label = "Valeur Max",type = Double.class,search = true)
+    @Predicate(label = "valeur.max",type = Double.class,search = true)
     private Double valMax ; 
 
     public Controle() {
@@ -147,7 +147,7 @@ public class Controle extends BaseElement implements Serializable,Comparable<Con
 
     @Override
     public String getEditTitle() {
-        return "Contrôle qualité"; //To change body of generated methods, choose Tools | Templates.
+        return "controle.qualite"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

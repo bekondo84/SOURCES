@@ -27,13 +27,13 @@ public class LigneDemandePrix extends BaseElement implements Serializable,Compar
 
     @ManyToOne
     @JoinColumn(name = "ART_ID")
-    @Predicate(label = "Article",type = Article.class,target = "many-to-one",optional = false,nullable = false,search = true)
+    @Predicate(label = "article",type = Article.class,target = "many-to-one",optional = false,nullable = false,search = true)
     private Article article ;
     
-    @Predicate(label = "Quantité",type = Double.class,optional = false,search = true)
+    @Predicate(label = "quantite",type = Double.class,optional = false,search = true)
     private Double quantite ;
     
-    @Predicate(label = "Date prévu",type = Date.class,target = "date",search = true)
+    @Predicate(label = "date.prevu",type = Date.class,target = "date",search = true)
     @Temporal(TemporalType.DATE)
     private Date prevu;
 

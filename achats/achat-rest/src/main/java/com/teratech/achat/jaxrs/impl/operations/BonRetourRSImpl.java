@@ -80,7 +80,7 @@ public class BonRetourRSImpl
         MetaData meta = null;
         try {
             meta = MetaDataUtil.getMetaData(new BonRetour(), new HashMap<String, MetaData>(), new ArrayList<String>());
-            MetaColumn workbtn = new MetaColumn("button", "work2", "Imprimer le bon", false, "report", null);
+            MetaColumn workbtn = new MetaColumn("button", "work2", "imprimer.le.bon", false, "report", null);
             workbtn.setValue("{'name':'bretourach_report01','model':'teratechachat','entity':'bonretour','method':'imprime'}");
             workbtn.setStates(new String[]{"etabli"});
             meta.getHeader().add(workbtn);

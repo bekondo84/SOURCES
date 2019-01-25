@@ -31,22 +31,22 @@ import javax.persistence.Temporal;
 @Table(name = "T_REFO_ACH")
 public class ReponseFournisseur extends BaseElement implements Serializable,Comparable<ReponseFournisseur>{
 
-    @Predicate(label = "Reference",optional = false,unique = true,search = true)
+    @Predicate(label = "reference",optional = false,unique = true,search = true)
     private String code;
     
     @Temporal(javax.persistence.TemporalType.DATE)
-    @Predicate(label = "Date",type = Date.class,target = "date",search = true)
+    @Predicate(label = "date",type = Date.class,target = "date",search = true)
     private Date dreponse ;
     
     @ManyToOne
     @JoinColumn(name = "TIER_ID")
-    @Predicate(label = "Fournisseur",type = Tier.class,target = "many-to-one",search = true,optional = false)
+    @Predicate(label = "fournisseur",type = Tier.class,target = "many-to-one",search = true,optional = false)
     @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"1\"}]")
     private Tier fournisseur ;
     
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "LIREP_ID")
-    @Predicate(label = " ",type = LigneReponseDP.class,target = "one-to-many",edittable = true,group = true,groupName = "group1",groupLabel = "LIGNES",customfooter = true)
+    @Predicate(label = " ",type = LigneReponseDP.class,target = "one-to-many",edittable = true,group = true,groupName = "group1",groupLabel = "lignes",customfooter = true)
     @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td></td><td style='font-weight: bold;'>Total HT</td> <td class='text-center'>this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100</td> </tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Taxes</td> <td  class='text-center'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};/;100</td> </tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Total TTC</td><td  class='text-center'  style='font-weight: bold;'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;(;100;+;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};);/;100</td> </tr>")
     private List<LigneReponseDP> lignes = new ArrayList<LigneReponseDP>();
 
@@ -55,7 +55,7 @@ public class ReponseFournisseur extends BaseElement implements Serializable,Comp
 //    @Predicate(label = "Demande",type = DemandePrix.class,target = "many-to-one",search = true,optional = false)
     private DemandePrix demande ;
     
-    @Predicate(label = "ETAT",target = "state",hide = true,search = true)
+    @Predicate(label = "etat",target = "state",hide = true,search = true)
     private String state = "etabli";
     
     private double taxes = 0.0;
@@ -209,12 +209,12 @@ public class ReponseFournisseur extends BaseElement implements Serializable,Comp
 
     @Override
     public String getListTitle() {
-        return "REPONSEFOURL"; //To change body of generated methods, choose Tools | Templates.
+        return "reponses.fournisseurs"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "REPONSEFOURD"; //To change body of generated methods, choose Tools | Templates.
+        return "reponse.fournisseur"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

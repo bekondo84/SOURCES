@@ -80,31 +80,31 @@ public class BonReceptionRSImpl
          try {
             //To change body of generated methods, choose Tools | Templates.
             MetaData meta= MetaDataUtil.getMetaData(new BonReception(), new HashMap<String, MetaData>(), new ArrayList<String>());
-            MetaColumn workbtn = new MetaColumn("button", "work2", "Imprimer le bon", false, "report", null);
+            MetaColumn workbtn = new MetaColumn("button", "work2", "imprimer.le.bon", false, "report", null);
             workbtn.setValue("{'name':'breceptionach_report01','model':'teratechachat','entity':'bonreception','method':'imprime'}");
             workbtn.setStates(new String[]{"etabli","qualite","disponible"});
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work3", "Contrôler la qualité", false, "link", null);
+            workbtn = new MetaColumn("button", "work3", "controler.la.qualite", false, "link", null);
             workbtn.setValue("{'name':'teratech_achat_ope_6_1',template:{'bonlivraison':'object','fournisseur':'object.fournisseur'},'header':['bonlivraison']}");
             workbtn.setStates(new String[]{"etabli","qualite"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
-             workbtn = new MetaColumn("button", "work4", "Rejeter", false, "workflow", null);
+             workbtn = new MetaColumn("button", "work4", "rejeter", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'bonreception','method':'rejete'}");
             workbtn.setStates(new String[]{"etabli"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work4", "Transferer en stock", false, "workflow", null);
+            workbtn = new MetaColumn("button", "work4", "transferer.en.stock", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'bonreception','method':'transfere','critical':true,'alert':'Cette action va modifier le stock \nVoulez vous continuer ?'}");
             workbtn.setStates(new String[]{"transfere"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work4", "Générer la facture", false, "link", null);
+            workbtn = new MetaColumn("button", "work4", "generer.la.facture", false, "link", null);
             workbtn.setValue("{'name':'teratech_achat_ope_7',template:{'fournisseur':'object.fournisseur','bonlivraison':'object','docachat':'object.commande'},'header':['bonlivraison','commande']}");
             workbtn.setStates(new String[]{"disponible"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
-             workbtn = new MetaColumn("button", "work4", "Retour fournisseur", false, "link", null);
+             workbtn = new MetaColumn("button", "work4", "retour.fournisseur", false, "link", null);
             workbtn.setValue("{'name':'teratech_achat_ope_6_2',template:{'fournisseur':'object.fournisseur','entrepot':'object.entrepot','bonlivraison':'object','reference':'object.reference'},'header':['bonlivraison','commande']}");
             workbtn.setStates(new String[]{"disponible"});
 //            workbtn.setPattern("btn btn-primary");

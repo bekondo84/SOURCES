@@ -27,40 +27,40 @@ import javax.persistence.Table;
 @Table(name = "T_COMPTE")
 public class Compte extends BaseElement implements Serializable,Comparable<Compte>{
 
-    @Predicate(label = "N° de compte",unique = true,optional = false,updatable = false,search = true)
+    @Predicate(label = "numero.compte",unique = true,optional = false,updatable = false,search = true)
     private String code ;
     
-    @Predicate(label = "Intitulé",search = true)
+    @Predicate(label = "intitule",search = true)
     private String libele ;
     
-    @Predicate(label = "Type de Compte",target = "combobox",values = "Detail;Total",search = false)
+    @Predicate(label = "type.compte",target = "combobox",values = "Detail;Total",search = false)
     private String type ="0";
     
-    @Predicate(label = "Nature de compte",target = "combobox",values = "Aucune;Client;Fournisseur;Salarié;Banque;Caisse;Amorts/Provision;Resultat de gestion;Immobilisation;Capitaux;Stock;Titre",search = false)
+    @Predicate(label = "nature.compte",target = "combobox",values = "Aucune;Client;Fournisseur;Salarié;Banque;Caisse;Amorts/Provision;Resultat de gestion;Immobilisation;Capitaux;Stock;Titre",search = false)
     private String nature ="0";
     
     @ManyToOne
     @JoinColumn(name = "SOC_ID")
-    @Predicate(label = "Socièté",type = Societe.class,target = "many-to-one",search = true,searchfields = "intitule,code,adresse,telephone")
+    @Predicate(label = "societe",type = Societe.class,target = "many-to-one",search = true,searchfields = "intitule,code,adresse,telephone")
     private Societe societe ;
     
-    @Predicate(label = "Code Taxe" ,target = "many-to-one",type = Taxe.class,search = false)
+    @Predicate(label = "code.taxe" ,target = "many-to-one",type = Taxe.class,search = false)
     @ManyToOne
     @JoinColumn(name = "TAXE_ID")
     private Taxe taxe ;
     
-   @Predicate(label = "Report-à-nouveau",target = "combobox",values = "Aucune;Solde;Detail",search = false)
+   @Predicate(label = "report.anouveau",target = "combobox",values = "Aucune;Solde;Detail",search = false)
     private String reportdesanouveau = "0";
    
-    @Predicate(label = "Lettrage",target = "combobox",values = "Automatique;Manuel")
+    @Predicate(label = "lettrage",target = "combobox",values = "Automatique;Manuel")
     private String lettrage = "0";
    
-    @Predicate(label = "Analytique" ,group = true,groupLabel = "Analytique",groupName = "group1",type = SectionAnalytique.class,target = "one-to-many",optional = true,edittable = true)
+    @Predicate(label = "analytique" ,group = true,groupLabel = "Analytique",groupName = "group1",type = SectionAnalytique.class,target = "one-to-many",optional = true,edittable = true)
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "CPTE_ID")
     private List<SectionAnalytique> analytiques = new ArrayList<SectionAnalytique>();
    
-    @Predicate(label = "Bloc-notes",group = true,groupLabel = "Bloc-notes",groupName = "group2",target = "textarea",search = false)
+    @Predicate(label = " ",group = true,groupLabel = "bloc.notes",groupName = "group2",target = "textarea",search = false)
     private String note ;
 
     /**
@@ -203,12 +203,12 @@ public class Compte extends BaseElement implements Serializable,Comparable<Compt
 
     @Override
     public String getListTitle() {
-        return "Plan Comptable"; //To change body of generated methods, choose Tools | Templates.
+        return "plan.comptable"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Compte"; //To change body of generated methods, choose Tools | Templates.
+        return "compte"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

@@ -50,6 +50,11 @@ public class MetaData implements Serializable,Comparable<MetaData>{
     private String[] searchfields = null;
     
     private String className ;
+    
+    private String ownermodule ;
+    
+    private String ownerentity ;
+    
 
     /**
      * 
@@ -86,6 +91,8 @@ public class MetaData implements Serializable,Comparable<MetaData>{
         this.footerScript = meta.footerScript;
         this.searchfields = meta.searchfields;
         this.className = meta.className;
+        this.ownermodule = meta.ownermodule;
+        this.ownerentity = meta.ownerentity;
         if(meta.states!=null){
             for(State state:meta.states){
                 states.add(new State(state));
@@ -238,6 +245,22 @@ public class MetaData implements Serializable,Comparable<MetaData>{
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public String getOwnermodule() {
+        return ownermodule;
+    }
+
+    public void setOwnermodule(String ownermodule) {
+        this.ownermodule = ownermodule;
+    }
+
+    public String getOwnerentity() {
+        return ownerentity;
+    }
+
+    public void setOwnerentity(String ownerentity) {
+        this.ownerentity = ownerentity;
     }
     
     

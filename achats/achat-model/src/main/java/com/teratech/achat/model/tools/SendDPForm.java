@@ -17,10 +17,10 @@ import javax.persistence.Lob;
  */
 public class SendDPForm extends BaseElement implements Serializable,Comparable<SendDPForm>{
 
-    @Predicate(label = "DEMANDEPR",search = true,editable = false,type = DemandePrix.class,target = "many-to-one")
+    @Predicate(label = "demande.prix",search = true,editable = false,type = DemandePrix.class,target = "many-to-one")
     private DemandePrix demande ;
     
-    @Predicate(label = "Concerne",target = "richeditor",group = true,groupName = "group1",groupLabel = "MESSAGE")
+    @Predicate(label = " ",target = "richeditor",group = true,groupName = "group1",groupLabel = "message")
     @Lob
     private String message ;
     
@@ -62,7 +62,7 @@ public class SendDPForm extends BaseElement implements Serializable,Comparable<S
 
     @Override
     public String getEditTitle() {
-        return "SENDMAIL"; //To change body of generated methods, choose Tools | Templates.
+        return "send.mail"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

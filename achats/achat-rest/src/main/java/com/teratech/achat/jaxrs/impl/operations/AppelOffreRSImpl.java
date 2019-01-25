@@ -61,12 +61,12 @@ public class AppelOffreRSImpl
         try {
             //To change body of generated methods, choose Tools | Templates.
             MetaData meta =  MetaDataUtil.getMetaData(new AppelOffre(), new HashMap<String, MetaData>(), new ArrayList<String>());
-            MetaColumn workbtn = new MetaColumn("button", "work1", "Confirmer", false, "workflow", null);
+            MetaColumn workbtn = new MetaColumn("button", "work1", "confirmer", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'appeloffre','method':'confirme'}");
             workbtn.setStates(new String[]{"etabli"});
 //            workbtn.setPattern("btn btn-primary");
              meta.getHeader().add(workbtn);
-             workbtn = new MetaColumn("button", "work1", "Selection de(s) offre(s)", false, "workflow", null);
+             workbtn = new MetaColumn("button", "work1", "selection.appel.offre", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'appeloffre','method':'selection'}");
             workbtn.setStates(new String[]{"etabli"});
 //            workbtn.setPattern("btn btn-primary");
@@ -76,7 +76,7 @@ public class AppelOffreRSImpl
 //            workbtn.setStates(new String[]{"etabli"});
 //            workbtn.setPattern("btn btn-primary");
 //             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work2", "Annuler", false, "workflow", null);
+            workbtn = new MetaColumn("button", "work2", "annuler", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'appeloffre','method':'annule'}");
             workbtn.setStates(new String[]{"etabli"});
             meta.getHeader().add(workbtn);

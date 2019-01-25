@@ -23,30 +23,30 @@ import javax.persistence.ManyToOne;
  */
 public class ReponseToCommande extends BaseElement implements Serializable,Comparable<ReponseToCommande>{
 
-    @Predicate(label = "Date Commande",type = Date.class,target = "date",search = true)
+    @Predicate(label = "date.commande",type = Date.class,target = "date",search = true)
     private Date date ;
     
     @ManyToOne
-    @Predicate(label = "Fournisseur",type = Tier.class,target = "many-to-one",editable = false)
+    @Predicate(label = "fournisseur",type = Tier.class,target = "many-to-one",editable = false)
     private Tier fournisseur ;
     @ManyToOne
-    @Predicate(label = "Entrepôt de Livraison",type = Entrepot.class,target = "many-to-one")
+    @Predicate(label = "entrepot.livraison",type = Entrepot.class,target = "many-to-one")
     private Entrepot entrepot;
     
     @ManyToOne
-    @Predicate(label = "Lieu livraison",type = Emplacement.class,target = "many-to-one")
+    @Predicate(label = "lieu.livraison",type = Emplacement.class,target = "many-to-one")
     private Emplacement emplacement ;
     
-   @Predicate(label = "Méthode de facturation",target = "combobox",values = "Basé sur le bon de commande;Basé sur les receptions",group = true,groupName = "group3",groupLabel = "Livraison&Factures")
+   @Predicate(label = "methode.facturation",target = "combobox",values = "Basé sur le bon de commande;Basé sur les receptions",group = true,groupName = "group3",groupLabel = "livraisons.et.factures")
     private String method="0";
    
     @ManyToOne
     @JoinColumn(name = "CORE_ID")
-    @Predicate(label = "Condition règlement",type = ConditionPaiement.class,target = "many-to-one",group = true,groupName = "group3",groupLabel = "Livraison&Factures")
+    @Predicate(label = "condition.reglement",type = ConditionPaiement.class,target = "many-to-one",group = true,groupName = "group3",groupLabel = "livraisons.et.factures")
     private ConditionPaiement condreglement ;
     
     @ManyToOne
-    @Predicate(label = "Reponse Fournisseur",type = ReponseFournisseur.class,target = "many-to-one",editable = false)
+    @Predicate(label = "reponse.fournisseur",type = ReponseFournisseur.class,target = "many-to-one",editable = false)
     private ReponseFournisseur reponse ;
 
     public ReponseToCommande() {
@@ -127,7 +127,7 @@ public class ReponseToCommande extends BaseElement implements Serializable,Compa
 
     @Override
     public String getEditTitle() {
-        return "Generation Commande"; //To change body of generated methods, choose Tools | Templates.
+        return "generation.commande"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

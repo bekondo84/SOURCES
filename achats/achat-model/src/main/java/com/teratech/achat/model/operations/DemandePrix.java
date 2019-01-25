@@ -34,11 +34,11 @@ import javax.persistence.TemporalType;
 @Table(name = "T_DP_ACH")
 public class DemandePrix extends BaseElement implements Serializable{
 
-    @Predicate(label = "Reference",optional = false,unique = true,search = true)
+    @Predicate(label = "reference",optional = false,unique = true,search = true)
     private String code ;
     
     @Temporal(TemporalType.DATE)
-    @Predicate(label = "Date",type = Date.class,target = "date",search = true)
+    @Predicate(label = "date",type = Date.class,target = "date",search = true)
     private Date date ;   
     
     
@@ -47,17 +47,17 @@ public class DemandePrix extends BaseElement implements Serializable{
 //    @Predicate(label = "Conditions de règlement",type = ConditionPaiement.class,target = "many-to-one",group = true,groupName = "group3",groupLabel = "Livraison&Factures")
 //    private ConditionPaiement condreglement ;
    
-    @Predicate(label = "STATE",search = true,hide = true)
+    @Predicate(label = " ",search = true,hide = true,target = "state")
     private String state="etabli";
     
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "DP_ID")
-    @Predicate(label = "ARTICLES " ,type = LigneDemandePrix.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = " ",edittable = true)
+    @Predicate(label = "  " ,type = LigneDemandePrix.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "articles",edittable = true)
     private List<LigneDemandePrix> articles = new ArrayList<LigneDemandePrix>();
     
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "T_TIER_DP_ACH",joinColumns = @JoinColumn(name = "DP_ID"),inverseJoinColumns = @JoinColumn(name = "TIER_ID"))
-    @Predicate(label = "FOURNISSEURS",type = Tier.class,target = "many-to-many-list",group = true,groupName = "group1",groupLabel = " ")
+    @Predicate(label = " ",type = Tier.class,target = "many-to-many-list",group = true,groupName = "group1",groupLabel = "fournisseurs")
     @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"1\"}]")
     private List<Tier> fournisseurs = new ArrayList<Tier>();
     
@@ -150,17 +150,17 @@ public class DemandePrix extends BaseElement implements Serializable{
     @Override
     public List<State> getStates() {
         List<State> s = new ArrayList<>();
-        State stat = new State("etabli", "Edité");
+        State stat = new State("etabli", "edite");
         stat.setIcone("fa fa-circle");
         stat.setCouleur("#d9534f");
         s.add(stat);
 //        state = new State("envoye", "Envoyée au fornisseur");
 //        states.add(state);
-        stat = new State("transmi", "Transmi");
+        stat = new State("transmi", "transmi");
         stat.setIcone("fa fa-circle");
         stat.setCouleur("#008b8b");
         s.add(stat);
-        stat = new State("cloture", "Terminé");
+        stat = new State("cloture", "termine");
         stat.setIcone("fa fa-circle");
         stat.setCouleur("#d5575e");
         s.add(stat);
@@ -230,12 +230,12 @@ public class DemandePrix extends BaseElement implements Serializable{
 
     @Override
     public String getListTitle() {
-        return "DEMANDEPRIXL"; //To change body of generated methods, choose Tools | Templates.
+        return "demandes.prix"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "DEMANDEPRIXD"; //To change body of generated methods, choose Tools | Templates.
+        return "demande.prix"; //To change body of generated methods, choose Tools | Templates.
     }
      
      

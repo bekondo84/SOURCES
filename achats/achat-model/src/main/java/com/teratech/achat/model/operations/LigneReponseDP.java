@@ -31,26 +31,26 @@ public class LigneReponseDP extends BaseElement implements Serializable,Comparab
 
     @ManyToOne
     @JoinColumn(name = "ART_ID")
-    @Predicate(label = "Article",type = Article.class,target = "many-to-one",optional = false,search = true,observable = true)
+    @Predicate(label = "article",type = Article.class,target = "many-to-one",optional = false,search = true,observable = true)
     private Article article ;   
     
-    @Predicate(label = "Quantité",type = Double.class,optional = false,search = true)
+    @Predicate(label = "quantite",type = Double.class,optional = false,search = true)
     private Double quantite ;
     
-    @Predicate(label = "Prix HT",type = Double.class,search = true)
+    @Predicate(label = "prix.ht",type = Double.class,search = true)
     @Observer(observable = "article",source = "field:puachat")
     private Double puht ;
     
     @ManyToMany
     @JoinTable(name = "T_REDPTA_ACH",joinColumns = @JoinColumn(name = "REDP_ID")
             ,inverseJoinColumns = @JoinColumn(name = "TAXE_ID"))    
-    @Predicate(label = "Taxes",type = Taxe.class,target = "many-to-many",optional = false,search = true)
+    @Predicate(label = "taxes",type = Taxe.class,target = "many-to-many",optional = false,search = true)
     private List<Taxe> taxes = new ArrayList<Taxe>();
     
-    @Predicate(label = "Remise(%)",type = Double.class,search = true)
+    @Predicate(label = "remise.pourcent",type = Double.class,search = true)
     private Double remise = 0.0;
      
-    @Predicate(label = "Sous-total",type = Double.class,compute = true,values = "this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100",hide =true ,search = true)
+    @Predicate(label = "sous.total",type = Double.class,compute = true,values = "this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100",hide =true ,search = true)
     private Double totalht ;
     
       
@@ -179,7 +179,7 @@ public class LigneReponseDP extends BaseElement implements Serializable,Comparab
 
     @Override
     public String getListTitle() {
-        return "LIGNES ACHATS"; //To change body of generated methods, choose Tools | Templates.
+        return "articles"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

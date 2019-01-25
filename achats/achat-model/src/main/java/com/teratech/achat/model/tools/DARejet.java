@@ -20,14 +20,14 @@ import javax.persistence.ManyToOne;
 public class DARejet extends BaseElement implements Serializable,Comparable<DARejet>{
 
     @ManyToOne
-    @Predicate(label = "DEMANDE",type = ExprBesion.class,target = "many-to-one",search = true,editable = false)
+    @Predicate(label = "demande",type = ExprBesion.class,target = "many-to-one",search = true,editable = false)
     private ExprBesion demande ;
     
     @ManyToOne
-    @Predicate(label = "DEMANDEUR",type = Tier.class,target = "many-to-one",editable = false)
+    @Predicate(label = "demandeur",type = Tier.class,target = "many-to-one",editable = false)
     private Tier emetteur;
     @Lob
-    @Predicate(label = " " , target = "richeditor" ,group = true,groupName = "group1",groupLabel = "MOTIVATION")
+    @Predicate(label = " " , target = "richeditor" ,group = true,groupName = "group1",groupLabel = "motivation")
     private String motif ;
 
     public DARejet() {
@@ -64,7 +64,7 @@ public class DARejet extends BaseElement implements Serializable,Comparable<DARe
 
     @Override
     public String getEditTitle() {
-        return "REJETDA"; //To change body of generated methods, choose Tools | Templates.
+        return "rejet.da"; //To change body of generated methods, choose Tools | Templates.
     }
 
    @Override

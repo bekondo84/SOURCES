@@ -35,67 +35,67 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("FA")
 public class Facture extends DocumentAchat implements Serializable{
 
-    @Predicate(label = "Type de facture",target = "combobox",values = "Facture Achats;Facture Avoirs;Facture Retour")
+    @Predicate(label = "type.facture",target = "combobox",values = "Facture Achats;Facture Avoirs;Facture Retour")
     @Column(name = "TYPE_FACTURE")
     private String type = "0";
     
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
     @JoinColumn(name = "LIFAC_ID")
-    @Predicate(label = " ",type = LigneFacture.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "Articles",customfooter = true,edittable = true)
+    @Predicate(label = " ",type = LigneFacture.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "articles",customfooter = true,edittable = true)
     @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td'></td><td style='font-weight: bold;'>Total HT</td> <td class='text-center'>this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100</td><td></td></tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Taxes</td><td  class='text-center'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};/;100</td><td></td> </tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Total TTC</td><td  class='text-center'  style='font-weight: bold;'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;(;100;+;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};);/;100</td><td></td></tr>")
     protected List<LigneFacture> lignes = new ArrayList<LigneFacture>();    
     
-    @Predicate(label = "Document origine")
+    @Predicate(label = "document.origine")
     private String source;
     
-    @Predicate(label = "Escompte(%)",type = Double.class,group = true,groupName = "group2",groupLabel = "Valorisation/Comptabilité")
+    @Predicate(label = "escompte.pourcent",type = Double.class,group = true,groupName = "group2",groupLabel = "Valorisation/Comptabilité")
     private Double escompte =0.0;
     
     @ManyToOne
     @JoinColumn(name = "JOCO_ID")
-    @Predicate(label = "Journal Comptable",type = JournalComptable.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "Valorisation/Comptabilité")
+    @Predicate(label = "journal.comptable",type = JournalComptable.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "Valorisation/Comptabilité")
     private JournalComptable journal ;
     
     @ManyToOne
     @JoinColumn(name = "COMP_ID")
-    @Predicate(label = "Compte",type = Compte.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "Valorisation/Comptabilité")
+    @Predicate(label = "compte",type = Compte.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "Valorisation/Comptabilité")
     private Compte compte ;
     
     private Double transport=0.0;
     
-    @Predicate(label = "Acomptes",type = Acompte.class,target = "one-to-many",group = true,groupName = "group3",groupLabel = "ACOMPTES",edittable = true)
+    @Predicate(label = " ",type = Acompte.class,target = "one-to-many",group = true,groupName = "group3",groupLabel = "acomptes",edittable = true)
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     @JoinColumn(name = "FAC_ID")
     private List<Acompte> acomptes = new ArrayList<Acompte>();
     
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     @JoinColumn(name = "ECRE_ID")
-    @Predicate(label = "Echeances",type = EcheanceReglement.class,target = "one-to-many",group = true,groupName = "group4",groupLabel = "ECHEANCES",edittable = true)
+    @Predicate(label = " ",type = EcheanceReglement.class,target = "one-to-many",group = true,groupName = "group4",groupLabel = "echeances",edittable = true)
     private List<EcheanceReglement> echeances = new ArrayList<EcheanceReglement>();
     
     @ManyToOne
     @JoinColumn(name = "DOAC_ID")
-    @Predicate(label = "Commande",type = BonCommande.class,target = "many-to-one" ,hide=true)
+    @Predicate(label = "commande",type = BonCommande.class,target = "many-to-one" ,hide=true)
     private BonCommande docachat;
     
     @ManyToOne
     @JoinColumn(name = "BOLI_ID")
-    @Predicate(label = "Libraison",type = BonReception.class,target = "many-to-one" ,hide = true)
+    @Predicate(label = "livraison",type = BonReception.class,target = "many-to-one" ,hide = true)
     private BonReception bonlivraison ;
     
-    @Predicate(label = "Total HT",type = Double.class,search = true,hide = true)
+    @Predicate(label = "total.ht",type = Double.class,search = true,hide = true)
     private Double totalht = 0.0;
     
     private Double totalescompte = 0.0;
     
-    @Predicate(label = "Total TTC",type = Double.class,search = true,hide = true)
+    @Predicate(label = "total.ttc",type = Double.class,search = true,hide = true)
     private Double totalttc = 0.0;
     
     private Double totalacompte;
     
     private Double totaltaxes = 0.0;
     
-    @Predicate(label = "Net à payer",type = Double.class,search = true,hide = true)
+    @Predicate(label = "net.a.payer",type = Double.class,search = true,hide = true)
     private Double netapayer = 0.0;    
           
     @Predicate(label = " ",target = "state",hide = true,search = true)
@@ -347,19 +347,19 @@ public class Facture extends DocumentAchat implements Serializable{
          List<State> states = new ArrayList<State>();
         State state = null;
         if(this.state.equalsIgnoreCase("etabli")){
-            state =new State("etabli", "Pro-forma");
+            state =new State("etabli", "pro-forma");
             states.add(state);
-            state = new State("confirme", "Confirmé");
+            state = new State("confirme", "confirme");
             states.add(state);
         }else if(this.state.equalsIgnoreCase("confirme")){
-             state = new State("confirme", "Confirmé");
+             state = new State("confirme", "confirme");
             states.add(state);
-            state = new State("transfere", "Transféré en comptabilité");
+            state = new State("transfere", "transfere.en.comptabilite");
             states.add(state);
         }else if(this.state.equalsIgnoreCase("transfere")){
-            state = new State("transfere", "Transféré en comptabilité");
+            state = new State("transfere", "transfere.en.comptabilite");
             states.add(state);
-            state = new State("reception", "Attente prise en compte");
+            state = new State("reception", "attente.prise.en.compte");
             states.add(state);
         }        
         
@@ -412,12 +412,12 @@ public class Facture extends DocumentAchat implements Serializable{
     
      @Override
     public String getListTitle() {
-        return "FACTURES FOURNISSEURS"; //To change body of generated methods, choose Tools | Templates.
+        return "factures.fournisseurs"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "FACTURE FOURNISSEUR"; //To change body of generated methods, choose Tools | Templates.
+        return "facture.fournisseur"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

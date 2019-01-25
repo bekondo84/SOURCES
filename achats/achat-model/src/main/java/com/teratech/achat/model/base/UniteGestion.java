@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Table(name = "T_UNGE")
 public class UniteGestion extends BaseElement implements Serializable,Comparable<UniteGestion>{
 
-    @Predicate(label = "Intitulé",optional = false,unique = true,search = true)
+    @Predicate(label = "intitule",optional = false,unique = true,search = true)
     private String code ;
     
     private boolean actif = Boolean.TRUE;
@@ -58,12 +58,12 @@ public class UniteGestion extends BaseElement implements Serializable,Comparable
 
     @Override
     public String getListTitle() {
-        return "Unités de gestion"; //To change body of generated methods, choose Tools | Templates.
+        return "unites.de.gestion"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Unité de gestion"; //To change body of generated methods, choose Tools | Templates.
+        return "unite.de.gestion"; //To change body of generated methods, choose Tools | Templates.
     }
 
     public boolean isActif() {

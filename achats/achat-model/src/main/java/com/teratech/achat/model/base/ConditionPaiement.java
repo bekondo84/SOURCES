@@ -19,16 +19,16 @@ import javax.persistence.Table;
 @Table(name = "T_CPAYMENT")
 public class ConditionPaiement extends BaseElement implements Serializable,Comparable<ConditionPaiement>{
 
-    @Predicate(label = "Code",unique = true,optional = false)
+    @Predicate(label = "code",unique = true,optional = false)
     private String code ;
     
-    @Predicate(label = "Intitulé")
+    @Predicate(label = "intitule")
     private String label ;
     
-    @Predicate(label = "Durée(jours)",optional = false,type = Short.class)
+    @Predicate(label = "duree.jours",optional = false,type = Short.class)
     private Short jours = 0;
     
-    @Predicate(label = "Actif" ,type = Boolean.class)
+    @Predicate(label = "actif" ,type = Boolean.class)
     private Boolean active = true;
 
     /**
@@ -90,12 +90,12 @@ public class ConditionPaiement extends BaseElement implements Serializable,Compa
 
     @Override
     public String getListTitle() {
-        return "Conditions de paiements";  //To change body of generated methods, choose Tools | Templates.
+        return "conditions.de.paiements";  //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Condition de paiement"; //To change body of generated methods, choose Tools | Templates.
+        return "condition.de.paiement"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

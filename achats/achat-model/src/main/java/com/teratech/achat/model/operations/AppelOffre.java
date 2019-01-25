@@ -7,7 +7,6 @@ package com.teratech.achat.model.operations;
 
 import com.core.base.BaseElement;
 import com.core.base.State;
-import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.Predicate;
 import com.teratech.achat.model.base.Tier;
 import java.io.Serializable;
@@ -32,36 +31,36 @@ import javax.persistence.TemporalType;
 @Table(name = "T_APOF")
 public class AppelOffre extends BaseElement implements Serializable,Comparable<AppelOffre>{
 
-    @Predicate(label = "Réference de l'appel",optional = false,search = true)
+    @Predicate(label = "reference.appel",optional = false,search = true)
     private String code ;
     
-    @Predicate(label = "Document  d'origine",optional = false,search = true)
+    @Predicate(label = "document.origine",optional = false,search = true)
     private String reference;
     
     @ManyToOne
     @JoinColumn(name = "UTIL_ID")
-    @Predicate(label = "Responsable",type = Tier.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "responsable",type = Tier.class,target = "many-to-one",optional = false,search = true)
     private Tier responsable ;
     
     @Temporal(TemporalType.DATE)
-    @Predicate(label = "Date limite de soumission",type = Date.class,target = "date",search = true)
+    @Predicate(label = "date.limite.soumission",type = Date.class,target = "date",search = true)
     private Date deadline ;
     
-    @Predicate(label = "Type de sélection",target = "combobox" ,updatable = false,values = "Choisir une seule demande de prix(exclusive);Choisir plusieurs demandes de prix")
+    @Predicate(label = "type.selection",target = "combobox" ,updatable = false,values = "Choisir une seule demande de prix(exclusive);Choisir plusieurs demandes de prix")
     private String typeselection = "0";
     
     @Temporal(TemporalType.DATE)
-    @Predicate(label = "Date de commande prevue",type = Date.class,target = "date",search = true)
+    @Predicate(label = "date.commande.prevue",type = Date.class,target = "date",search = true)
     private Date datecommande ;
     
 //    private String typepreparation = "0";
     
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     @JoinColumn(name = "APOF_ID")
-    @Predicate(label = "AP",type = LigneAppeloffre.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "Produits",edittable = true)
+    @Predicate(label = " ",type = LigneAppeloffre.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "articles",edittable = true)
     private List<LigneAppeloffre> lignes = new ArrayList<LigneAppeloffre>();
     
-    @Predicate(label = "COND",target = "textarea",group = true,groupName = "group3",groupLabel = "Conditions générales")
+    @Predicate(label = " ",target = "textarea",group = true,groupName = "group3",groupLabel = "conditions.generales")
     private String commentaire ;
     
 //    @ManyToOne
@@ -240,17 +239,17 @@ public class AppelOffre extends BaseElement implements Serializable,Comparable<A
     @Override
     public List<State> getStates() {
         List<State> states = new ArrayList<State>();
-        State state = new State("etabli", "Broullion");
+        State state = new State("etabli", "broullion");
         states.add(state);
 //        state = new State("etabli", "Broullion");
 //        states.add(state);
-        state = new State("confirme", "Confirmé");
+        state = new State("confirme", "confirme");
         states.add(state);
-        state = new State("selection", "Sélection des offres");
+        state = new State("selection", "selection.des.offres");
         states.add(state);
-        state = new State("boncommande", "Bon commande crée");
+        state = new State("boncommande", "bon.de.commande.cree");
         states.add(state);
-        state = new State("annule", "Annuler");
+        state = new State("annule", "annule");
         states.add(state);
         return states; //To change body of generated methods, choose Tools | Templates.
     }

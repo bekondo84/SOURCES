@@ -75,7 +75,7 @@ public class ControleQualiteRSImpl
         MetaData meta = null;
         try {
             meta = MetaDataUtil.getMetaData(new ControleQualite(), new HashMap<String, MetaData>(), new ArrayList<String>());
-            MetaColumn workbtn = new MetaColumn("button", "work1", "Marquer comme traiter", false, "workflow", null);
+            MetaColumn workbtn = new MetaColumn("button", "work1", "marquer.comme.traiter", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'controlequalite','method':'traiter',template:{'commande':'object'},'critical':true,alert:'Êtes vous sur de vouloir continuer ?'}");
             workbtn.setStates(new String[]{"etabli"});
             meta.getHeader().add(workbtn);

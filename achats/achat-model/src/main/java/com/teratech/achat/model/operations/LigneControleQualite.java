@@ -20,22 +20,22 @@ import javax.persistence.Table;
 @Table(name = "T_LICOQU_ACH")
 public class LigneControleQualite extends BaseElement implements Serializable,Comparable<LigneControleQualite>{
 
-    @Predicate(label = "Code ",search = true,optional = false,nullable = false)
+    @Predicate(label = "code ",search = true,optional = false,nullable = false)
     private String code;
     
-    @Predicate(label = "Intitulé ",search = true,optional = false,nullable = false)
+    @Predicate(label = "intitule ",search = true,optional = false,nullable = false)
     private String intitule;
     
-    @Predicate(label = "Type resultat",target = "combobox",optional = false,values = "Numéric;Liste de valeurs",search = true)
+    @Predicate(label = "type.resultat",target = "combobox",optional = false,values = "Numéric;Liste de valeurs",search = true)
     private String type ="0" ;
     
-    @Predicate(label = "Resultat",search = true)
+    @Predicate(label = "resultat",search = true)
     private String valeur ;
     
-    @Predicate(label = "Avis",target = "combobox",values = "Excellent;Bon;Moyen;Passable;Mauvais")
+    @Predicate(label = "avis",target = "combobox",values = "Excellent;Bon;Moyen;Passable;Mauvais")
     private String avis ="0";
     
-    @Predicate(label = "Couleur",optional = false,search = true,target = "color")
+    @Predicate(label = "couleur",optional = false,search = true,target = "color")
     private String color ;
    
     

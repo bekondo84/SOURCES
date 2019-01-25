@@ -5,15 +5,19 @@
  */
 package com.core.files;
 
+import com.bekosoftware.genericdaolayer.dao.tools.RestrictionsContainer;
+import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
 import com.core.application.ResourceRegistry;
-import com.core.application.ResourceRegistryDAOLocal;
-import com.core.application.ResourceRegistryManagerLocal;
 import com.core.application.ResourceRegistryManagerRemote;
+import com.core.base.BaseElement;
+import com.core.discussions.Follower;
+import com.core.discussions.FollowerManagerRemote;
+import com.core.referentiels.PieceJointe;
+import com.core.referentiels.PieceJointeManagerRemote;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kerem.core.CommonTools;
 import com.kerem.core.FileHelper;
-import com.megatimgroup.generic.jax.rs.layer.annot.AnnotationsProcessor;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
 import com.megatimgroup.mgt.commons.command.MysqlBDWinExporter;
@@ -29,8 +33,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
-import javax.naming.NamingException;
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -46,23 +48,20 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
  * @author Commercial_2
  */
 @Path("/resource")
-public class UploadFileRSImpl  implements UploadFileRS{
+public class UploadFileRSImpl 
+      extends AbstractGenericService<BaseElement, Long>   implements UploadFileRS{
 
-     @EJB(name = "ResourceRegistryManager")
+      @Manager(application = "kerencore", name = "ResourceRegistryManagerImpl", interf = ResourceRegistryManagerRemote.class)
      protected ResourceRegistryManagerRemote registry;
+      
+     @Manager(application = "kerencore", name = "PieceJointeManagerImpl", interf = PieceJointeManagerRemote.class)
+     protected PieceJointeManagerRemote pjmanager;
+     
+     @Manager(application = "kerencore", name = "FollowerManagerImpl", interf = FollowerManagerRemote.class)
+     protected FollowerManagerRemote followermanager;
 
-    public UploadFileRSImpl() {
-        try {
-            AnnotationsProcessor processor = new AnnotationsProcessor();
-            processor.process(this);
-        } catch (NamingException ex) {
-            Logger.getLogger(UploadFileRSImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(UploadFileRSImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(UploadFileRSImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+    public UploadFileRSImpl() {        
+        super();
     }
     
     
@@ -116,7 +115,11 @@ public class UploadFileRSImpl  implements UploadFileRS{
         Gson gson =new Gson();
         //Type predType = ;
         List<String> names = new ArrayList<String>();
-        if(headers.getRequestHeader("names")!=null){
+        List<Boolean> rules = new ArrayList<Boolean>();
+        if(headers.getRequestHeader("criticity")!=null &&!headers.getRequestHeader("criticity").isEmpty()){
+            rules = gson.fromJson(headers.getRequestHeader("criticity").get(0),new TypeToken<List<Boolean>>(){}.getType());
+        }//end if(headers.getRequestHeader("names")!=null){
+        if(headers.getRequestHeader("names")!=null && !headers.getRequestHeader("names").isEmpty()){
             names = gson.fromJson(headers.getRequestHeader("names").get(0),new TypeToken<List<String>>(){}.getType());
         }//end if(headers.getRequestHeader("names")!=null){
         String modulename = null ;
@@ -127,7 +130,11 @@ public class UploadFileRSImpl  implements UploadFileRS{
          if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
              entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
-//         System.out.println(UploadFileRSImpl.class.toString()+".uploadFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
+         Long _instance = null;
+         if(headers.getRequestHeader("entityid")!=null && !headers.getRequestHeader("entityid").isEmpty()){
+             _instance = gson.fromJson(headers.getRequestHeader("entityid").get(0), Long.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//         System.out.println(UploadFileRSImpl.class.toString()+".uploadFile(@Context HttpHeaders headers,String filename) ==== "+modulename+" ===== rules : = "+rules+" ===== _instance = "+_instance);
          FileHelper.setCurrentModule(modulename);
         String fileName = "";//
 		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
@@ -148,11 +155,15 @@ public class UploadFileRSImpl  implements UploadFileRS{
                             //Creation d'une entree dans le registre des resources
                             Date today = new Date();
                             String storename = Long.toString(today.getTime()+index);
-                            ResourceRegistry resource = new ResourceRegistry(names.get(index), storename, entityname, modulename);
+                            ResourceRegistry resource = new ResourceRegistry(names.get(index), names.get(index), entityname, modulename,_instance);
                             resource.setCompareid(today.getTime());
                             //Renommer le fichier en storename
                             //constructs upload file path
-                            fileName = FileHelper.getStaticDirectory()+File.separator+storename;
+                            fileName = FileHelper.getStaticDirectory()+File.separator+names.get(index);
+                            if(!rules.isEmpty() && rules.get(index).equals(Boolean.TRUE)){
+                                fileName = FileHelper.getStaticDirectory()+File.separator+storename;
+                                resource.setStorename(storename);
+                            }//end if(rules.get(index).equals(Boolean.TRUE)){                            
                             writeFile(bytes,fileName);    
                             //Mise a jour du resourceregisty
                             registry.save(resource);
@@ -181,13 +192,20 @@ public class UploadFileRSImpl  implements UploadFileRS{
          if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
              entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
-//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
+         Long _instance = null;
+         if(headers.getRequestHeader("entityid")!=null && !headers.getRequestHeader("entityid").isEmpty()){
+             _instance = gson.fromJson(headers.getRequestHeader("entityid").get(0), Long.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename+" === _instance : "+_instance);
          FileHelper.setCurrentModule(modulename);
         try {
             //Chargement du resourceregistry correspondant au fichier
-            ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename);
-//             System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile2(@Context HttpHeaders headers,String filename) ==== "+modulename+" ==== "+resource);
-           //To change body of generated methods, choose Tools | Templates.
+//             System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile2(@Context HttpHeaders headers,String filename) ==== "+modulename+" ===== entity : ==== "+entityname+"===== entityid"+_instance+" ==== "+registry);
+             ResourceRegistry resource = null;
+            if(entityname!=null && _instance!=null){
+                resource = registry.getRegistryEntry(filename, entityname, modulename,_instance);
+            }//end if(registry!=null){
+            //To change body of generated methods, choose Tools | Templates.
             File fichier = new File(FileHelper.getStaticDirectory()+File.separator+filename);
             if(resource!=null){
                 fichier = new File(FileHelper.getStaticDirectory()+File.separator+resource.getStorename());
@@ -219,10 +237,15 @@ public class UploadFileRSImpl  implements UploadFileRS{
          if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
              entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+          Long _instance = null;
+         if(headers.getRequestHeader("entityid")!=null && !headers.getRequestHeader("entityid").isEmpty()){
+             _instance = gson.fromJson(headers.getRequestHeader("entityid").get(0), Long.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename+" === _instance : "+_instance);
          FileHelper.setCurrentModule(modulename);
          try {
              //Chargement du registre des resource
-             ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename);
+             ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename,_instance);
 //             System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile2(@Context HttpHeaders headers,String filename) ==== "+modulename+" ==== "+resource);
            //To change body of generated methods, choose Tools | Templates.
             File fichier = new File(FileHelper.getStaticDirectory()+File.separator+filename);
@@ -253,18 +276,23 @@ public class UploadFileRSImpl  implements UploadFileRS{
          String entityname = null ;
          if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
              entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){         
+          Long _instance = null;
+         if(headers.getRequestHeader("entityid")!=null && !headers.getRequestHeader("entityid").isEmpty()){
+             _instance = gson.fromJson(headers.getRequestHeader("entityid").get(0), Long.class);
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
-//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
+//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename+" === _instance : "+_instance);
          FileHelper.setCurrentModule(modulename);
         try{
                //Chargement du registre des resource
-                ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename);
+                ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename,_instance);
 //                 System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile2(@Context HttpHeaders headers,String filename) ==== "+modulename+" ==== "+resource);
                 String resourceDir = FileHelper.getStaticDirectory()+File.separator+filename;
                 if(resource!=null){
                     resourceDir = FileHelper.getStaticDirectory()+File.separator+resource.getStorename();
                 }//end if(resource!=null){
                 File file = new File(resourceDir);
+//                System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename+" === fichier : "+file.getAbsolutePath());
                 if(file.exists()){
                     return CommonTools.getPdf(file,name);
                 }else{
@@ -287,11 +315,16 @@ public class UploadFileRSImpl  implements UploadFileRS{
          if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
              entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+          Long _instance = null;
+         if(headers.getRequestHeader("entityid")!=null && !headers.getRequestHeader("entityid").isEmpty()){
+             _instance = gson.fromJson(headers.getRequestHeader("entityid").get(0), Long.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename+" === _instance : "+_instance);
 //         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
          FileHelper.setCurrentModule(modulename);
          try{
                 //Chargement du registre des resource
-                ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename);
+                ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename,_instance);
 //                System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile2(@Context HttpHeaders headers,String filename) ==== "+modulename+" ==== "+resource);
                 String resourceDir = FileHelper.getStaticDirectory()+File.separator+filename;
                 if(resource!=null){
@@ -327,11 +360,16 @@ public class UploadFileRSImpl  implements UploadFileRS{
             if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
                 entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
             }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+             Long _instance = null;
+            if(headers.getRequestHeader("entityid")!=null && !headers.getRequestHeader("entityid").isEmpty()){
+                _instance = gson.fromJson(headers.getRequestHeader("entityid").get(0), Long.class);
+            }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//            System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename+" === _instance : "+_instance);
 //         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
            FileHelper.setCurrentModule(modulename);
             try{
                   //Chargement du registre des resource
-                  ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename);
+                  ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename,_instance);
 //                   System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile2(@Context HttpHeaders headers,String filename) ==== "+modulename+" ==== "+resource);
                   String resourceDir = FileHelper.getStaticDirectory()+File.separator+filename;
                   if(resource!=null){
@@ -479,10 +517,15 @@ public class UploadFileRSImpl  implements UploadFileRS{
          if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
             entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+          Long _instance = null;
+         if(headers.getRequestHeader("entityid")!=null && !headers.getRequestHeader("entityid").isEmpty()){
+             _instance = gson.fromJson(headers.getRequestHeader("entityid").get(0), Long.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+//         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename+" === _instance : "+_instance);
 //         System.out.println(UploadFileRSImpl.class.toString()+".downloadImageFile(@Context HttpHeaders headers,String filename) ==== "+modulename);
          FileHelper.setCurrentModule(modulename);
          //Chargement du registre des resource
-         ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename);
+         ResourceRegistry resource = registry.getRegistryEntry(filename, entityname, modulename,_instance);
          File fichier = new File(FileHelper.getStaticDirectory()+File.separator+filename);
          if(resource!=null){
              fichier = new File(FileHelper.getStaticDirectory()+File.separator+resource.getStorename());
@@ -519,6 +562,78 @@ public class UploadFileRSImpl  implements UploadFileRS{
              Response.serverError().build();
         }
         return Response.noContent().build();
+    }
+
+    @Override
+    public GenericManager<BaseElement, Long> getManager() {
+        return null; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String nothing(HttpHeaders headers) {
+         //To change body of generated methods, choose Tools | Templates.
+        return "Just for usage";
+    }
+
+    @Override
+    public Boolean cleanFiles(HttpHeaders headers) {
+        //To change body of generated methods, choose Tools | Templates.
+         Gson gson = new Gson();
+         String modulename = null ;
+         if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+             modulename = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+         String entityname = null ;
+         if(headers.getRequestHeader("entity")!=null && !headers.getRequestHeader("entity").isEmpty()){
+            entityname = gson.fromJson(headers.getRequestHeader("entity").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+          Long _instance = null;
+         if(headers.getRequestHeader("entityid")!=null && !headers.getRequestHeader("entityid").isEmpty()){
+             _instance = gson.fromJson(headers.getRequestHeader("entityid").get(0), Long.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+         String serial = null;
+         if(headers.getRequestHeader("entityserial")!=null && !headers.getRequestHeader("entityserial").isEmpty()){
+             serial = gson.fromJson(headers.getRequestHeader("entityserial").get(0), String.class);
+         }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+         //Chargement de tous les ficiers de cette instances
+         RestrictionsContainer container = RestrictionsContainer.newInstance();
+         container.addEq("ownerentity", entityname);
+         container.addEq("_instance", _instance);
+         if(modulename!=null){
+            container.addEq("ownermodele", modulename);
+         }//end if(modele!=null){
+         List<ResourceRegistry> resources = registry.filter(container.getPredicats(), null, null, 0, -1);
+         for(ResourceRegistry resource : resources){
+             StringBuilder builder = new StringBuilder(FileHelper.getStaticDirectory().getPath());
+             builder.append(File.separator).append(resource.getStorename());
+             File fichier = new File(builder.toString());
+             if(fichier.isFile() && fichier.exists()){
+                 try {
+                     FileHelper.deleteFile(fichier);
+                 } catch (IOException ex) {
+                     Logger.getLogger(UploadFileRSImpl.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }//end if(fichier.isFile() && fichier.exists()){
+             registry.delete(resource.getId());
+         }//end  for(ResourceRegistry resource : resources){
+         //Suppression des pieces jointe
+         if(serial!=null){
+             container = RestrictionsContainer.newInstance();
+             container.addEq("entityserial", serial);
+             container.addEq("entityid", _instance);
+             List<PieceJointe> pieces = pjmanager.filter(container.getPredicats(), null, null, 0, -1);
+             for(PieceJointe pj:pieces){
+                 pjmanager.delete(pj.getId());
+             }//end for(PieceJointe pj:pieces){
+             //Suppression des follwer generées
+             List<Follower> followers = followermanager.filter(container.getPredicats(), null, null, 0, -1);
+             for(Follower follower:followers){
+                 followermanager.delete(follower.getId());
+             }
+         }//end  if(serial!=null){
+         
+         
+         return true;
     }
 
     

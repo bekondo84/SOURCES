@@ -8,6 +8,7 @@ import com.bekosoftware.genericdaolayer.dao.ifaces.GenericDAO;
 import com.bekosoftware.genericdaolayer.dao.tools.Predicat;
 import com.bekosoftware.genericdaolayer.dao.tools.RestrictionsContainer;
 import com.bekosoftware.genericmanagerlayer.core.impl.AbstractGenericManager;
+import com.kerem.commons.KerenCoreMDBHelper;
 import com.megatim.common.annotations.OrderType;
 import com.teratech.vente.core.ifaces.base.ArticleManagerLocal;
 import com.teratech.vente.core.ifaces.base.ArticleManagerRemote;
@@ -16,9 +17,14 @@ import com.teratech.vente.model.base.Article;
 import com.teratech.vente.model.base.Controle;
 import com.teratech.vente.model.base.LienEmplacement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.jms.JMSException;
+import javax.naming.NamingException;
 
 @TransactionAttribute
 @Stateless(mappedName = "ArticleManager")
@@ -99,5 +105,68 @@ public class ArticleManagerImpl
         Article data = super.delete(id); //To change body of generated methods, choose Tools | Templates.
         return new Article(data);
     }
+
+    @Override
+    public void processBeforeSave(Article entity) {
+//        Date today = new Date();
+//        entity.setCompareid(today.getTime());
+        super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+
+    @Override
+    public void processAfterDelete(Article entity) {
+//        if(entity.getDoc()!=null && !entity.getDoc().trim().isEmpty()){
+//            try {
+//                Date today = new Date();
+//                String storename = Long.toString(today.getTime()+Math.round(Math.random()));
+//                KerenCoreMDBHelper.updateResourceRegistry(null, storename, "article", entity.getOwnermodule(),entity.getId());
+//            } //end if(entity.getDoc()!=null && !entity.getDoc().trim().isEmpty()){
+//            catch (NamingException ex) {
+//                throw new RuntimeException(ex);
+//            } catch (JMSException ex) {
+//               throw new RuntimeException(ex);
+//            }
+//        }
+        super.processAfterDelete(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void processAfterUpdate(Article entity) {
+//        if(entity.getDoc()!=null && !entity.getDoc().trim().isEmpty()){
+//            try {
+//                Date today = new Date();
+//                String storename = Long.toString(today.getTime()+Math.round(Math.random()));
+//                KerenCoreMDBHelper.updateResourceRegistry(entity.getDoc(), storename, "article", entity.getOwnermodule(),entity.getId());
+//            } //end if(entity.getDoc()!=null && !entity.getDoc().trim().isEmpty()){
+//            catch (NamingException ex) {
+//                throw new RuntimeException(ex);
+//            } catch (JMSException ex) {
+//               throw new RuntimeException(ex);
+//            }
+//        }
+        super.processAfterUpdate(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void processAfterSave(Article entity) {
+//        entity = dao.findByPrimaryKey("compareid", entity.getCompareid());
+//        if(entity.getDoc()!=null && !entity.getDoc().trim().isEmpty()){
+//            try {
+//                Date today = new Date();
+//                String storename = Long.toString(today.getTime()+Math.round(Math.random()));
+//                KerenCoreMDBHelper.updateResourceRegistry(entity.getDoc(), storename, "article", entity.getOwnermodule(),entity.getId());
+//            } //end if(entity.getDoc()!=null && !entity.getDoc().trim().isEmpty()){
+//            catch (NamingException ex) {
+//                throw new RuntimeException(ex);
+//            } catch (JMSException ex) {
+//               throw new RuntimeException(ex);
+//            }
+//        }
+        super.processAfterSave(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
 }

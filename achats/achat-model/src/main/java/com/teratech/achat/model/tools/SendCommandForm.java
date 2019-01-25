@@ -18,10 +18,10 @@ import javax.persistence.Lob;
  */
 public class SendCommandForm extends BaseElement implements Serializable,Comparable<SendCommandForm>{
 
-    @Predicate(label = "DEMANDEPR",search = true,editable = false,type = BonCommande.class,target = "many-to-one")
+    @Predicate(label = "demande.prix",search = true,editable = false,type = BonCommande.class,target = "many-to-one")
     private BonCommande commande ;
     
-    @Predicate(label = "Concerne",target = "richeditor",group = true,groupName = "group1",groupLabel = "MESSAGE")
+    @Predicate(label = " ",target = "richeditor",group = true,groupName = "group1",groupLabel = "message")
     @Lob
     private String message ;
     
@@ -62,7 +62,7 @@ public class SendCommandForm extends BaseElement implements Serializable,Compara
 
     @Override
     public String getEditTitle() {
-        return "SENDMAIL"; //To change body of generated methods, choose Tools | Templates.
+        return "send.mail"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

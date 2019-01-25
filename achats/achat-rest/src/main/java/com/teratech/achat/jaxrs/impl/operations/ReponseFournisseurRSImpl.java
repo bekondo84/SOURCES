@@ -73,7 +73,7 @@ public class ReponseFournisseurRSImpl
         MetaData meta = null;
         try {
             meta = MetaDataUtil.getMetaData(new ReponseFournisseur(), new HashMap<String, MetaData>(), new ArrayList<String>());
-            MetaColumn workbtn = new MetaColumn("button", "work1", "Emettre un commande", false, "report", null);
+            MetaColumn workbtn = new MetaColumn("button", "work1", "emettre.une.commande", false, "report", null);
             workbtn.setValue("{'name':'reponse_report01','model':'teratechachat','entity':'reponsefournisseur','method':'imprime',template:{'reponse':'object','fournisseur':'object.fournisseur'}}");
             workbtn.setStates(new String[]{"etabli"});
             meta.getHeader().add(workbtn);

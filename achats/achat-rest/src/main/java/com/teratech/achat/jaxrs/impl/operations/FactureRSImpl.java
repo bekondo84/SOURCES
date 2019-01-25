@@ -82,21 +82,21 @@ public class FactureRSImpl
         try {
             //To change body of generated methods, choose Tools | Templates.
             MetaData meta= MetaDataUtil.getMetaData(new Facture(), new HashMap<String, MetaData>(), new ArrayList<String>());
-            MetaColumn workbtn = new MetaColumn("button", "work1", "Imprimer la facture", false, "report", null);
+            MetaColumn workbtn = new MetaColumn("button", "work1", "imprimer.la.facture", false, "report", null);
             workbtn.setValue("{'name':'factureach_report01','model':'teratechachat','entity':'facture','method':'imprime'}");
             workbtn.setStates(new String[]{"etabli","confirme","transfere"});
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work3", "Confirmer la facture", false, "workflow", null);
+            workbtn = new MetaColumn("button", "work3", "confirmer.la.facture", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'confirme','critical':true,'alert':'Voulez vous confirmer cette facture ?'}");
             workbtn.setStates(new String[]{"etabli"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work4", "Transférer en comptabilité", false, "workflow", null);
+            workbtn = new MetaColumn("button", "work4", "transferer.en.comptabilite", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'transfere','critical':true,'alert':'Cette facture sera transferee en comptabilité\nVoulez vous continuer ?'}");
             workbtn.setStates(new String[]{"confirme"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);           
-            workbtn = new MetaColumn("button", "work5", "Annuler", false, "workflow", null);
+            workbtn = new MetaColumn("button", "work5", "annuler", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'annule','critical':true,'alert':'Voulez vous revenir au status précédent ?'}");
             workbtn.setStates(new String[]{"confirme"});
             meta.getHeader().add(workbtn);

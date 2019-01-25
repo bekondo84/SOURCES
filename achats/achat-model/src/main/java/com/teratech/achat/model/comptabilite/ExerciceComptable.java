@@ -23,18 +23,18 @@ import javax.persistence.TemporalType;
 @Table(name = "T_EXERCMBLE")
 public class ExerciceComptable extends BaseElement implements Serializable,Comparable<ExerciceComptable>{
 
-    @Predicate(label = "CODE",optional = false,updatable = false,search = true,colsequence = 1)
+    @Predicate(label = "code",optional = false,updatable = false,search = true,colsequence = 1)
     @Column(unique = true,nullable = false)
     private String code ;
     
-    @Predicate(label = "EXERCICE OUVERT",search = true,colsequence = 2,type = Boolean.class)
+    @Predicate(label = "exercice.ouvert",search = true,colsequence = 2,type = Boolean.class)
     private Boolean  ouvert = false ;
     
-    @Predicate(label = "DATE DE DEBUT",type = Date.class,target = "date",optional = false,updatable = false,search = true,colsequence = 3)
+    @Predicate(label = "date.debut",type = Date.class,target = "date",optional = false,updatable = false,search = true,colsequence = 3)
     @Temporal(TemporalType.DATE)
     private Date debut ;
     
-    @Predicate(label = "DATE DE FIN",type = Date.class,target = "date",optional = false,updatable = false,search = true,colsequence = 4)
+    @Predicate(label = "date.fin",type = Date.class,target = "date",optional = false,updatable = false,search = true,colsequence = 4)
     @Temporal(TemporalType.DATE)
     private Date fin ;
     
@@ -120,13 +120,13 @@ public class ExerciceComptable extends BaseElement implements Serializable,Compa
     @Override
     public String getListTitle() {
         //To change body of generated methods, choose Tools | Templates.
-        return "EXERCICES COMPTABLE";
+        return "exercices.comptable";
     }
 
     @Override
     public String getEditTitle() {
         //To change body of generated methods, choose Tools | Templates.
-        return "EXERCICE COMPTABLE";
+        return "exercice.comptable";
     }
     
      @Override

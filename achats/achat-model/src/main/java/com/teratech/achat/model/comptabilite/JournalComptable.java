@@ -22,24 +22,24 @@ import javax.persistence.Table;
 @Table(name = "T_JCOMPTABLE")
 public class JournalComptable extends BaseElement implements Serializable,Comparable<JournalComptable>{
 
-    @Predicate(label = "Code",unique = true,optional = false,updatable = false,search = true)
+    @Predicate(label = "code",unique = true,optional = false,updatable = false,search = true)
     private String code;
     
-    @Predicate(label = "Type",target = "combobox",values = "Ventes;Achats;Trésorerie;Général;Situation")
+    @Predicate(label = "type",target = "combobox",values = "Ventes;Achats;Trésorerie;Général;Situation")
     private String type ="0";
     
-    @Predicate(label = "Intitulé",search = true)
+    @Predicate(label = "intitule",search = true)
     private String label ;
     
-    @Predicate(label = "Saisie analytique",type = Boolean.class)
+    @Predicate(label = "saisie.analytique",type = Boolean.class)
     private Boolean analytique = false;
     
     @ManyToOne
     @JoinColumn(name = "SOC_ID")
-    @Predicate(label = "Socièté",updatable = false,type = Societe.class,target = "many-to-one",search = true)
+    @Predicate(label = "societe",updatable = false,type = Societe.class,target = "many-to-one",search = true)
     private Societe societe ;
     
-    @Predicate(label = "Actif",type = Boolean.class)
+    @Predicate(label = "actif",type = Boolean.class)
     private Boolean active = true;
 
     /**
@@ -122,12 +122,12 @@ public class JournalComptable extends BaseElement implements Serializable,Compar
 
     @Override
     public String getListTitle() {
-        return "Journaux comptable"; //To change body of generated methods, choose Tools | Templates.
+        return "journaux.comptable"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Journal comptable"; //To change body of generated methods, choose Tools | Templates.
+        return "journal.comptable"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

@@ -81,21 +81,21 @@ public class DemandePrixRSImpl
         try {
             //To change body of generated methods, choose Tools | Templates.
             MetaData meta = MetaDataUtil.getMetaData(new DemandePrix(), new HashMap<String, MetaData>(), new ArrayList<String>());
-            MetaColumn workbtn = new MetaColumn("button", "work1", "Envoyé une demande par e-mail", false, "action", null);
+            MetaColumn workbtn = new MetaColumn("button", "work1", "envoyer.une.demande.par.email", false, "action", null);
             workbtn.setValue("{'name':'teratech_achat_ope_2_1',template:{'demande':'object'}}");
             workbtn.setStates(new String[]{"etabli","transmi"});
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work2", "Imprimer la demande", false, "report", null);
+            workbtn = new MetaColumn("button", "work2", "imprimer.la.demande", false, "report", null);
             workbtn.setValue("{'name':'demandeprix_report01','model':'teratechachat','entity':'demandeprix','method':'imprime'}");
             workbtn.setStates(new String[]{"etabli","transmi","cloture"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work3", "Reponses fournisseurs", false, "link", null);
+            workbtn = new MetaColumn("button", "work3", "reponses.fournisseurs", false, "link", null);
             workbtn.setValue("{'name':'teratech_achat_ope_2_2',template:{'demande':'object','lignes':'object.articles'},'header':['demande']}");
             workbtn.setStates(new String[]{"transmi","cloture"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work4", "Clôturer la demande", false, "workflow", null);
+            workbtn = new MetaColumn("button", "work4", "cloturer.la.demande", false, "workflow", null);
             workbtn.setValue("{'model':'teratechachat','entity':'demandeprix','method':'engage'}");
             workbtn.setStates(new String[]{"transmi"});
 //            workbtn.setPattern("btn btn-primary");

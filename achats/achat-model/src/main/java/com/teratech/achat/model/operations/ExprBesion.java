@@ -10,7 +10,6 @@ import com.core.base.State;
 import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.Predicate;
 import com.teratech.achat.model.base.Tier;
-import com.teratech.achat.model.base.Utilisateur;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,20 +33,20 @@ import javax.persistence.TemporalType;
 @Table(name = "T_EXBE")
 public class ExprBesion extends BaseElement implements Serializable,Comparable<ExprBesion>{
 
-   @Predicate(label = "REFERENCE",optional = false,nullable = false,search = true)
+   @Predicate(label = "reference",optional = false,nullable = false,search = true)
    private String code ;
     
    @ManyToOne
    @JoinColumn(name = "UTIL_ID")
-   @Predicate(label = "DEMANDEUR",type = Tier.class,target = "many-to-one",optional = false,nullable = false,search = true)
+   @Predicate(label = "demandeur",type = Tier.class,target = "many-to-one",optional = false,nullable = false,search = true)
    @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"1\"}]")
    private Tier utilisateur ;
    
    @Temporal(TemporalType.DATE)
-   @Predicate(label = "EXPIREDATE",type = Date.class,target = "date",optional = false,search = true)
+   @Predicate(label = "date.expiration",type = Date.class,target = "date",optional = false,search = true)
    private Date dateExpr;
    
-   @Predicate(label = " ",target = "textarea" , group = true,groupName = "group2",groupLabel = "MOTIVATION")
+   @Predicate(label = " ",target = "textarea" , group = true,groupName = "group2",groupLabel = "motivation")
    private String motivation ;
    
    @Lob
@@ -55,10 +54,10 @@ public class ExprBesion extends BaseElement implements Serializable,Comparable<E
    
    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
    @JoinColumn(name = "EXBE_ID")
-   @Predicate(label = " ",target = "one-to-many" ,type = LigneExprBesion.class, group = true,groupName = "group1",groupLabel = "BESIONS",edittable = true)
+   @Predicate(label = " ",target = "one-to-many" ,type = LigneExprBesion.class, group = true,groupName = "group1",groupLabel = "besions",edittable = true)
    private List<LigneExprBesion> besions = new ArrayList<LigneExprBesion>();
    
-   @Predicate(label = "STATE" ,search = true,editable = false,hide = true)
+   @Predicate(label = " " ,search = true,target = "state",hide = true)
    private String state = "etabli";
 
    /**
@@ -177,12 +176,12 @@ public class ExprBesion extends BaseElement implements Serializable,Comparable<E
 
     @Override
     public String getListTitle() {
-        return "EXPRESSIONS DES BESIONS";  //To change body of generated methods, choose Tools | Templates.
+        return "expressions.des.besions";  //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "EXPRESSIONS DES BESIONS"; //To change body of generated methods, choose Tools | Templates.
+        return "expression.des.besions"; //To change body of generated methods, choose Tools | Templates.
     }
 
     public String getState() {
@@ -204,23 +203,23 @@ public class ExprBesion extends BaseElement implements Serializable,Comparable<E
     public List<State> getStates() {
         states = new ArrayList<State>();
         if("etabli".equals(state)){
-            State state = new State("etabli", "Broullion");
+            State state = new State("etabli", "broullion");
             states.add(state);
-             state = new State("rejete", "Refuse");
+             state = new State("rejete", "refuse");
             states.add(state);
-            state = new State("valide", "Valider");
+            state = new State("valide", "valide");
             states.add(state);
 //            return states ;
         }else if("rejete".equals(state)){
-            State state = new State("rejete", "Rejete");
+            State state = new State("rejete", "rejete");
             states.add(state);           
         }else if("valide".equals(state)){
-            State state = new State("valide", "Validé");
+            State state = new State("valide", "valide");
             states.add(state);
-            state = new State("execute", "Exécuter");
+            state = new State("execute", "execute");
             states.add(state);            
         }else if("execute".equals(state)){
-            State state = new State("execute", "Exécuté");
+            State state = new State("execute", "execute");
             states.add(state);            
         }//end if(state=="etabli"){
         return states; //To change body of generated methods, choose Tools | Templates.

@@ -36,13 +36,13 @@ public class Utilisateur extends BaseElement implements Serializable,Comparable<
     @Predicate(label = "image",target = "image",sequence = 1)
     private String image ="img\\photo.png";  
     
-    @Predicate(label = "ACTIF",colsequence = 100,sequence = 2)
+    @Predicate(label = "actif",colsequence = 100,sequence = 2)
     private Boolean actif = Boolean.FALSE; 
     
-    @Predicate(label = "NOM" ,nullable = false ,optional = false,min = 4,unique = true,updatable = false,search = true,sequence = 3)
+    @Predicate(label = "nom" ,nullable = false ,optional = false,min = 4,unique = true,updatable = false,search = true,sequence = 3)
     private String intitule ;     
     
-    @Predicate(label = "ADRESSE ELECTRONIQUE",target = "email",unique = false,optional = false,search = true,sequence = 4)
+    @Predicate(label = "courriel",target = "email",unique = false,optional = false,search = true,sequence = 4)
     private String courriel ;
     
     //@Predicate(label = "MOT DE PASSE",target = "password" ,optional = false,search = false)
@@ -53,19 +53,19 @@ public class Utilisateur extends BaseElement implements Serializable,Comparable<
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastconfirme = null;
     
-    @Predicate(label = "SOCIETE COURANTE" , type = Societe.class,optional = false,sequence = 5,search = true)
+    @Predicate(label = "societe.courante" , type = Societe.class,optional = false,sequence = 5,search = true)
     @ManyToOne
     @JoinColumn(name = "SC_ID")
     private Societe societeCourante ;
     
-    @Predicate(label = "SOCIETES AUTORISEES" ,type = Societe.class,sequence = 6)
+    @Predicate(label = "societes.autorisees" ,type = Societe.class,sequence = 6)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "T_USER_SCT",
             joinColumns = @JoinColumn(name = "USER_ID"),
             inverseJoinColumns = @JoinColumn(name = "SCT_ID"))
     private List<Societe> societeAutorisees = new ArrayList<Societe>();
     
-    @Predicate(label = "NIVEAU ADMINISTRATION" ,target = "combobox" ,values = "Aucun;Applications;Configuration;Applications & Configuration",search = false,sequence = 7)
+    @Predicate(label = "niveau.administration" ,target = "combobox" ,values = "Aucun;Applications;Configuration;Applications & Configuration",search = false,sequence = 7)
     private String adminlevel = "0" ;   
     
 //    @Predicate(label = "PROFIL UTILISATEUR" ,type = Groupe.class,group = true,groupName = "group1",groupLabel = "PROFIL UTILISATEUR",target = "many-to-many-list",searchfields = "code")
@@ -214,12 +214,12 @@ public class Utilisateur extends BaseElement implements Serializable,Comparable<
 
     @Override
     public String getListTitle() {
-        return "UTILISATEURS"; //To change body of generated methods, choose Tools | Templates.
+        return "utilisateurs"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "UTILISATEUR"; //To change body of generated methods, choose Tools | Templates.
+        return "utilisateur"; //To change body of generated methods, choose Tools | Templates.
     }
 
     public Date getLastconfirme() {
@@ -241,9 +241,9 @@ public class Utilisateur extends BaseElement implements Serializable,Comparable<
     public List<State> getStates() {
         //To change body of generated methods, choose Tools | Templates.
         List<State> etats = new ArrayList<State>();
-        State etat = new State("etabli", "Non Confirmé");
+        State etat = new State("etabli", "non.confirme");
         etats.add(etat);
-        etat = new State("confirme", "Confirmé");
+        etat = new State("confirme", "confirme");
         etats.add(etat);
         return etats; 
     }

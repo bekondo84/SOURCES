@@ -25,18 +25,18 @@ import javax.persistence.TemporalType;
 public class EcheanceReglement extends BaseElement implements Serializable,Comparable<EcheanceReglement>{
 
     @Temporal(TemporalType.DATE)
-    @Predicate(label = "Echéance",target = "date",type = Date.class,optional = false,search = true)
+    @Predicate(label = "echeance",target = "date",type = Date.class,optional = false,search = true)
     private Date date ;
     
-    @Predicate(label = "Montant",type = Double.class,optional = false,search = true)
+    @Predicate(label = "montant",type = Double.class,optional = false,search = true)
     private Double montant = 0.0;
     
    @ManyToOne
     @JoinColumn(name = "MORE_ID")
-    @Predicate(label = "Mode de règlement",type = ModeReglement.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "mode.reglement",type = ModeReglement.class,target = "many-to-one",optional = false,search = true)
     private ModeReglement mode ;
 
-    @Predicate(label = "Etat",type = Boolean.class,updatable = false,editable = true,search = true)
+    @Predicate(label = "etat",type = Boolean.class,updatable = false,editable = true,search = true)
     private Boolean etat =Boolean.FALSE;
     
     
@@ -106,12 +106,12 @@ public class EcheanceReglement extends BaseElement implements Serializable,Compa
 
     @Override
     public String getListTitle() {
-        return "Echéances de règlement"; //To change body of generated methods, choose Tools | Templates.
+        return "echeances.de.reglement"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-         return "Echéance de règlement"; //To change body of generated methods, choose Tools | Templates.
+         return "echeance.de.reglement"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

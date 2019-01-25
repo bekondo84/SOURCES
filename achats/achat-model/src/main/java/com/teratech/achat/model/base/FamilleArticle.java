@@ -22,59 +22,59 @@ import javax.persistence.Table;
 @Table(name = "T_FAAR")
 public class FamilleArticle extends BaseElement implements Serializable,Comparable<FamilleArticle>{
 
-    @Predicate(label = "Reference",optional = false,unique = true,search = true)
+    @Predicate(label = "reference",optional = false,unique = true,search = true)
     private String code ;
     
-    @Predicate(label = "Intitulé",search = true)
+    @Predicate(label = "intitule",search = true)
     private String intitule ;
     
-    @Predicate(label = "Type de Famille",target = "combobox",values = "Détail;Total;Centralisateur",search = true)
+    @Predicate(label = "type.famille",target = "combobox",values = "Détail;Total;Centralisateur",search = true)
     private String type ="0";
      
      @ManyToOne
     @JoinColumn(name = "FAAR_ID")
-    @Predicate(label = "Centralisation",type = FamilleArticle.class,target = "many-to-one",search = true)
+    @Predicate(label = "centralisation",type = FamilleArticle.class,target = "many-to-one",search = true)
     @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"1\"}]")
     private FamilleArticle centralisateur ;    
    
     
     @ManyToOne
     @JoinColumn(name = "UNAC_ID")
-    @Predicate(label = "Unité d'achat",type=UniteAchat.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complément")
+    @Predicate(label = "unite.achat",type=UniteAchat.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complément")
     private UniteAchat unitevente ;
     
     @ManyToOne
     @JoinColumn(name = "UNGE_ID")
-    @Predicate(label = "Unité de gestion",type = UniteGestion.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complément")
+    @Predicate(label = "unite.gestion",type = UniteGestion.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complément")
     private UniteGestion unite ;    
    
     
-    @Predicate(label = "Suivi stock" ,target = "combobox",values = "Aucun;Sérialisé;CMUP;FIFO;LIFO;Par lot",search = true)
+    @Predicate(label = "suivi.stock" ,target = "combobox",values = "Aucun;Sérialisé;CMUP;FIFO;LIFO;Par lot",search = true)
     private String suivistock = "0"; 
     
-    @Predicate(label = "Garantie (mois)",type = Short.class,search = true)
+    @Predicate(label = "garantie",type = Short.class,search = true)
     private Short garantie = 0 ;
     
-    @Predicate(label = "Coût de stockage(/unite de gestion)",type = Double.class,group = true,groupName = "group1",groupLabel = "Complément")
+    @Predicate(label = "cout.stockage",type = Double.class,group = true,groupName = "group1",groupLabel = "Complément")
     private Double coutstockage = 0.0;
     
-    @Predicate(label = "Coût de transport(/unite de gestion)",type = Double.class,group = true,groupName = "group1",groupLabel = "Complément")
+    @Predicate(label = "cout.transport",type = Double.class,group = true,groupName = "group1",groupLabel = "Complément")
     private Double couttransport = 0.0;
     
-    @Predicate(label = "Délai de livraison",type = Short.class,group = true,groupName = "group1",groupLabel = "Complément")
+    @Predicate(label = "delai.livraison",type = Short.class,group = true,groupName = "group1",groupLabel = "Complément")
     private Short delailivraison =0 ;
     
     @ManyToOne
     @JoinColumn(name = "CAPR_ID")
-    @Predicate(label = "Catégorie produit",type = CategorieProduit.class,target = "many-to-one",search = true)
+    @Predicate(label = "categorie.produit",type = CategorieProduit.class,target = "many-to-one",search = true)
     private CategorieProduit categorie ;
     
     @ManyToOne
     @JoinColumn(name = "PAYS_ID")
-    @Predicate(label = "Pays d'origine",type = Pays.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complément")
+    @Predicate(label = "pays.origine",type = Pays.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complément")
     private Pays pays ;
     
-    @Predicate(label = "Code fiscal",search = true)
+    @Predicate(label = "code.fiscal",search = true)
     private String codefiscal ;
 
     /**
@@ -252,12 +252,12 @@ public class FamilleArticle extends BaseElement implements Serializable,Comparab
 
     @Override
     public String getListTitle() {
-        return "FAMILLES ARTICLES"; //To change body of generated methods, choose Tools | Templates.
+        return "familles.articles"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-       return "FAMILLE ARTICLES"; //To change body of generated methods, choose Tools | Templates.
+       return "famille.articles"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

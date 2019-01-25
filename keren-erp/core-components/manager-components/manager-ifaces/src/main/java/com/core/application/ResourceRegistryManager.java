@@ -23,6 +23,6 @@ public interface ResourceRegistryManager
     * @param modele
     * @return 
     */
-    public ResourceRegistry getRegistryEntry(String srcnmae,String entity,String modele);
+    public ResourceRegistry getRegistryEntry(String srcnmae,String entity,String modele,long _instance);
 
 }

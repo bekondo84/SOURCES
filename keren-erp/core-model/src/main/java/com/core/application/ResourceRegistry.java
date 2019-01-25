@@ -30,6 +30,9 @@ public class ResourceRegistry extends BaseElement implements Serializable,Compar
     
     @Column(name = "MODELE")
     private String ownermodele;
+    
+    @Column(name = "instance")
+    private Long _instance ;
 
     public ResourceRegistry() {
     }
@@ -53,12 +56,13 @@ public class ResourceRegistry extends BaseElement implements Serializable,Compar
         this.ownermodele = ownermodele;
     }
 
-    public ResourceRegistry(String srcname, String storename, String ownerentity, String ownermodele) {
+    public ResourceRegistry(String srcname, String storename, String ownerentity, String ownermodele,long _instance) {
         super(-1, null, null, -1);
         this.srcname = srcname;
         this.storename = storename;
         this.ownerentity = ownerentity;
         this.ownermodele = ownermodele;
+        this._instance = _instance;
     }
     public ResourceRegistry(ResourceRegistry entity) {
         super(entity.id, entity.designation, entity.moduleName, entity.compareid);
@@ -66,6 +70,7 @@ public class ResourceRegistry extends BaseElement implements Serializable,Compar
         this.storename = entity.storename;
         this.ownerentity = entity.ownerentity;
         this.ownermodele = entity.ownermodele;
+        this._instance = entity._instance;
     }
     
     public String getSrcname() {
@@ -99,6 +104,16 @@ public class ResourceRegistry extends BaseElement implements Serializable,Compar
     public void setOwnermodele(String ownermodele) {
         this.ownermodele = ownermodele;
     }
+
+    public Long getInstance() {
+        return _instance;
+    }
+
+    public void setInstance(Long _instance) {
+        this._instance = _instance;
+    }
+    
+    
 
     @Override
     public String getOwnermodule() {

@@ -59,7 +59,7 @@ public class ArticleRSImpl
         MetaData meta = null;
         try {
             meta = MetaDataUtil.getMetaData(new Article(), new HashMap<String, MetaData>(), new ArrayList<String>()); //To change body of generated methods, choose Tools | Templates.
-            MetaColumn workbtn = new MetaColumn("button", "work1", "Emplacements de stockage", false, "link", null);
+            MetaColumn workbtn = new MetaColumn("button", "work1", "emplacements.de.stockage", false, "link", null);
             workbtn.setValue("{'name':'teratech_achat_str_1_1',template:{'article':'object'},'header':['article']}");
 //            workbtn.setStates(new String[]{"etabli"});
             meta.getHeader().add(workbtn);

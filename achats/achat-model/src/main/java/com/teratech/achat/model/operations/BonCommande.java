@@ -34,24 +34,24 @@ public class BonCommande extends DocumentAchat implements Serializable{
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
     @JoinColumn(name = "LIDOAC_ID")
-    @Predicate(label = " ",type = LigneDocumentAchat.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "Articles",customfooter = true,edittable = true)
+    @Predicate(label = " ",type = LigneDocumentAchat.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "articles",customfooter = true,edittable = true)
     @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td></td><td'></td><td style='font-weight: bold;'>Total HT</td> <td class='text-center'>this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100</td><td></td></tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Taxes</td><td  class='text-center'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};/;100</td><td></td> </tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td  style='font-weight: bold;'>Total TTC</td><td  class='text-center'  style='font-weight: bold;'>(;this.quantite;*;this.puht;*;(;100;-;this.remise;);/;100;);*;(;100;+;{\"op\":\"sum\",\"source\":\"this\",\"data\":\"taxes\",\"field\":\"montant\"};);/;100</td><td></td></tr>")
     protected List<LigneCommande> lignes = new ArrayList<LigneCommande>();
     
-    @Predicate(label = "Méthode de facturation",target = "combobox",values = "Basé sur le bon de commande;Basé sur les receptions",group = true,groupName = "group3",groupLabel = "Livraison&Factures")
+    @Predicate(label = "methode.acturation",target = "combobox",values = "Basé sur le bon de commande;Basé sur les receptions",group = true,groupName = "group3",groupLabel = "livraisons.et.factures")
     private String method="0";
     
-    @Predicate(label = "Facture recue",type = Boolean.class,editable = false,group = true,groupName = "group3",groupLabel = "Livraison&Factures")
+    @Predicate(label = "facture.recue",type = Boolean.class,editable = false,group = true,groupName = "group3",groupLabel = "livraisons.et.factures")
     private Boolean facturerecue = false;
     
 //    @ManyToOne
 //    @JoinColumn(name = "APOF_ID")
-//    @Predicate(label = "Appel d'offres",type = AppelOffre.class,target = "many-to-one",group = true,groupName = "group3",groupLabel = "Livraison&Factures")
+//    @Predicate(label = "Appel d'offres",type = AppelOffre.class,target = "many-to-one",group = true,groupName = "group3",groupLabel = "livraisons.et.factures")
 //    private AppelOffre appeloffre ;
     
     @ManyToOne
     @JoinColumn(name = "CORE_ID")
-    @Predicate(label = "Conditions de règlement",type = ConditionPaiement.class,target = "many-to-one",group = true,groupName = "group3",groupLabel = "Livraison&Factures")
+    @Predicate(label = "condition.reglement",type = ConditionPaiement.class,target = "many-to-one",group = true,groupName = "group3",groupLabel = "livraisons.et.factures")
     private ConditionPaiement condreglement ;
     
     @OneToMany(mappedBy = "docachat",fetch = FetchType.LAZY)
@@ -60,10 +60,10 @@ public class BonCommande extends DocumentAchat implements Serializable{
     
     private Double totaltaxes = 0.0;
     
-    @Predicate(label = "Total HT",type = Double.class,search = true,hide = true)
+    @Predicate(label = "total.ht",type = Double.class,search = true,hide = true)
     private Double totalht=0.0;
     
-    @Predicate(label = "Total TTC",type = Double.class,search = true,hide = true)
+    @Predicate(label = "total.ttc",type = Double.class,search = true,hide = true)
     private Double totalttc = 0.0;    
           
     @Predicate(label = " ",target = "state",hide = true,search = true)
@@ -252,11 +252,11 @@ public class BonCommande extends DocumentAchat implements Serializable{
     @Override
     public List<State> getStates() {
          List<State> states = new ArrayList<State>();
-        State state = new State("etabli", "Broullion");
+        State state = new State("etabli", "broullion");
         states.add(state);
-        state = new State("transmi", "Transmi");
+        state = new State("transmi", "transmi");
         states.add(state);
-        state = new State("annule", "Annulé");
+        state = new State("annule", "annule");
         states.add(state);
         return states; //To change body of generated methods, choose Tools | Templates.
     }
@@ -278,12 +278,12 @@ public class BonCommande extends DocumentAchat implements Serializable{
 
     @Override
     public String getListTitle() {
-        return "COMMANDEL"; //To change body of generated methods, choose Tools | Templates.
+        return "commandes"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "COMMANDED"; //To change body of generated methods, choose Tools | Templates.
+        return "commande"; //To change body of generated methods, choose Tools | Templates.
     }
 
     

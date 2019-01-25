@@ -33,11 +33,12 @@ public class ResourceRegistryManagerImpl
     }
 
     @Override
-    public ResourceRegistry getRegistryEntry(String srcnmae, String entity, String modele) {
+    public ResourceRegistry getRegistryEntry(String srcnmae, String entity, String modele,long _instance) {
         //To change body of generated methods, choose Tools | Templates.
         RestrictionsContainer container = RestrictionsContainer.newInstance();
         container.addEq("srcname", srcnmae);
         container.addEq("ownerentity", entity);
+        container.addEq("_instance", _instance);
         if(modele!=null){
             container.addEq("ownermodele", modele);
         }//end if(modele!=null){

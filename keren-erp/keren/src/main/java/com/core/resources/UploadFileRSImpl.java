@@ -33,7 +33,7 @@ public class UploadFileRSImpl  implements UploadFileRS{
             //To change body of generated methods, choose Tools | Templates.
             File fichier = new File(FileHelper.getStaticDirectory()+File.separator+filename);
 //            System.out.println(UploadFileRSImpl.class.toString()+" ==== "+fichier.getAbsolutePath()+"   module ==== "+_module);
-            if(!fichier.exists()||!fichier.isFile() || filename.trim().equalsIgnoreCase("avatar.png")){
+            if(!fichier.exists()||!fichier.isFile()){
                 FileHelper.setCurrentModule(null);
                 fichier = new File(FileHelper.getStaticDirectory()+File.separator+"avatar.png");
             }
@@ -47,7 +47,6 @@ public class UploadFileRSImpl  implements UploadFileRS{
     
     @Override
     public Response downloadImageFileFreeForModule(HttpHeaders headers, String entity, String module, String filename) {
-        String storefile = "avatar.png";// getStorefile(filename, entity, module);
          try {
             Gson gson = new Gson();
             String _module = module;
@@ -55,7 +54,7 @@ public class UploadFileRSImpl  implements UploadFileRS{
                 FileHelper.setCurrentModule(module);
             }//end if(_module!=null && !_module.trim().equalsIgnoreCase("kerencore")){
             //To change body of generated methods, choose Tools | Templates.
-            File fichier = new File(FileHelper.getStaticDirectory()+File.separator+storefile);
+            File fichier = new File(FileHelper.getStaticDirectory()+File.separator+filename);
 //            System.out.println(UploadFileRSImpl.class.toString()+" ==== "+fichier.getAbsolutePath()+"   module ==== "+_module+" ============= inject EJB : ");
             if(!fichier.exists()||!fichier.isFile()){
                 FileHelper.setCurrentModule(null);

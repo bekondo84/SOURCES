@@ -21,10 +21,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Region extends BaseElement implements Serializable,Comparable<Region>{
 
-    @Predicate(label = "Code de la Region" ,optional = false,unique = true,search = true)
+    @Predicate(label = "code.region" ,optional = false,unique = true,search = true)
      private String code ;
     
-    @Predicate(label = "Nom de la Region" ,optional = false,unique = true,search = true)
+    @Predicate(label = "nom.region" ,optional = false,unique = true,search = true)
      private String intitule ;
 
     /**
@@ -67,12 +67,12 @@ public class Region extends BaseElement implements Serializable,Comparable<Regio
     
     @Override
     public String getListTitle() {
-        return "ETATS";//To change body of generated methods, choose Tools | Templates.
+        return "regions";//To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "ETAT"; //To change body of generated methods, choose Tools | Templates.
+        return "region"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

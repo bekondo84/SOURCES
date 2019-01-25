@@ -37,20 +37,20 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue("DC")
 public class DocumentStock extends BaseElement implements Serializable,Comparable<DocumentStock>{
 
-    @Predicate(label = "N° de pièce",optional = false,unique = true,search = true)
+    @Predicate(label = "numero.piece",optional = false,unique = true,search = true)
     @Column(unique = true,nullable = false)
     protected String code ;
     
-    @Predicate(label = "Date document",type = Date.class,target = "date",search = true)
+    @Predicate(label = "date.document",type = Date.class,target = "date",search = true)
     @Temporal(TemporalType.DATE)
     protected Date date ;
     
     @ManyToOne
     @JoinColumn(name = "ENTR_ID")
-    @Predicate(label = "Entrepôt cible ",type = Entrepot.class,target = "many-to-one",optional = false,nullable = false,search = true)
+    @Predicate(label = "entrepot.cible ",type = Entrepot.class,target = "many-to-one",optional = false,nullable = false,search = true)
     protected Entrepot entrepot ;
     
-    @Predicate(label = "Référence",search = true)
+    @Predicate(label = "reference",search = true)
     protected String reference ;    
     
 //    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
@@ -58,7 +58,7 @@ public class DocumentStock extends BaseElement implements Serializable,Comparabl
 //    @Predicate(label = "Ligne Doc",type = LigneDocumentStock.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "Détails opération")
 //    protected List<LigneDocumentStock> lignes = new ArrayList<LigneDocumentStock>();
     
-    @Predicate(label = "Commentaire",target = "textarea",group = true,groupName = "group2",groupLabel = "Commentaire")
+    @Predicate(label = " ",target = "textarea",group = true,groupName = "group2",groupLabel = "commentaire")
     protected String commentaire ;
     
     protected String state ="etabli";

@@ -64,11 +64,11 @@ public class BonCommandeRSImpl
         try {
             //To change body of generated methods, choose Tools | Templates.
             MetaData meta= MetaDataUtil.getMetaData(new BonCommande(), new HashMap<String, MetaData>(), new ArrayList<String>());
-            MetaColumn workbtn = new MetaColumn("button", "work1", "Envoyé le bon par e-mail", false, "action", null);
+            MetaColumn workbtn = new MetaColumn("button", "work1", "envoye.le.bon.par.email", false, "action", null);
             workbtn.setValue("{'name':'teratech_achat_ope_5_1',template:{'commande':'object'}}");
             workbtn.setStates(new String[]{"etabli"});
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work2", "Imprimer le bon", false, "report", null);
+            workbtn = new MetaColumn("button", "work2", "imprimer.le.bon", false, "report", null);
             workbtn.setValue("{'name':'cmdeach_report01','model':'teratechachat','entity':'boncommande','method':'imprime'}");
             workbtn.setStates(new String[]{"etabli","transmi"});
              meta.getHeader().add(workbtn);
@@ -77,17 +77,17 @@ public class BonCommandeRSImpl
 //            workbtn.setStates(new String[]{"etabli"});
 ////            workbtn.setPattern("btn btn-primary");
 //            meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work4", "Receptionner la commande", false, "link", null);
+            workbtn = new MetaColumn("button", "work4", "receptionner.la.commande", false, "link", null);
             workbtn.setValue("{'name':'teratech_achat_ope_6',template:{'fournisseur':'object.fournisseur','commande':'object','emplacement':'object.emplacement','reference':'object.codefourni'},'header':['commande']}");
             workbtn.setStates(new String[]{"transmi"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
-             workbtn = new MetaColumn("button", "work4", "Générer la facture", false, "link", null);
+             workbtn = new MetaColumn("button", "work4", "generer.la.facture", false, "link", null);
             workbtn.setValue("{'name':'teratech_achat_ope_7',template:{'fournisseur':'object.fournisseur','docachat':'object','emplacement':'object.emplacement','codefourni':'object.codefourni'},'header':['docachat']}");
             workbtn.setStates(new String[]{"transmi"});
 //            workbtn.setPattern("btn btn-primary");
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work5", "Annuler", false, "action", null);
+            workbtn = new MetaColumn("button", "work5", "annuler", false, "action", null);
             workbtn.setValue("{'model':'teratechachat','entity':'boncommande','method':'annule'}");
             workbtn.setStates(new String[]{"transmi"});
             meta.getHeader().add(workbtn);

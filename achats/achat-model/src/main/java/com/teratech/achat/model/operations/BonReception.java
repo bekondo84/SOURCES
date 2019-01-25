@@ -30,11 +30,11 @@ public class BonReception extends DocumentStock implements Serializable{
 
      @ManyToOne
     @JoinColumn(name = "FOUR_ID")
-    @Predicate(label = "Fournisseur",type = Tier.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "fournisseur",type = Tier.class,target = "many-to-one",optional = false,search = true)
     @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"1\"}]")
     protected Tier fournisseur ;
      
-     @Predicate(label = "Type de bon",target = "combobox",values = "Normal",editable = false)
+     @Predicate(label = "type.bon",target = "combobox",values = "Normal",editable = false)
      private String typebon = "0";
      
 //    @Predicate(label = "Document d'origine")
@@ -45,19 +45,19 @@ public class BonReception extends DocumentStock implements Serializable{
     
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "BR_ID")
-    @Predicate(label = " ",type = LigneEntree.class,target = "one-to-many",group =true ,groupName = "group1",groupLabel = "Articles",edittable = true)
+    @Predicate(label = " ",type = LigneEntree.class,target = "one-to-many",group =true ,groupName = "group1",groupLabel = "articles",edittable = true)
     private List<LigneEntree> lignes = new ArrayList<LigneEntree>();
     
     @ManyToOne
     @JoinColumn(name = "CMDE_ID")
-    @Predicate(label = "Bon commande",type = BonCommande.class,target = "many-to-one",search = true,hide = true)
+    @Predicate(label = "bon.commande",type = BonCommande.class,target = "many-to-one",search = true,hide = true)
     private BonCommande commande ;
     
     @OneToMany(mappedBy = "docachat",fetch = FetchType.LAZY)
 //    @Predicate(label = "Factures",type = Facture.class,target = "one-to-many",editable = false,group = true,groupName = "group4",groupLabel = "Factures")
     private List<Facture> factures = new ArrayList<Facture>();
     
-    @Predicate(label = "Total HT",type = Double.class,search = true,hide = true)
+    @Predicate(label = "total.ht",type = Double.class,search = true,hide = true)
     private Double totalht = 0.0;
     
 
@@ -213,24 +213,24 @@ public class BonReception extends DocumentStock implements Serializable{
         List<State> states = new ArrayList<State>();
         State state = null;
         if(this.state.equalsIgnoreCase("etabli")){
-             state = new State("etabli", "Brouillon");
+             state = new State("etabli", "brouillon");
              states.add(state);
-            state = new State("transfere", "Disponible");
+            state = new State("transfere", "disponible");
             states.add(state);        
         }else if(this.state.equalsIgnoreCase("qualite")){
-            state = new State("qualite", "Brouillon");
+            state = new State("qualite", "brouillon");
             states.add(state);
-            state = new State("controle", "Qualité controlée");
+            state = new State("controle", "qualite.controlee");
             states.add(state);
         }else if(this.state.equalsIgnoreCase("transfere")){
-             state = new State("transfere", "Attente de transfert");
+             state = new State("transfere", "attente.de.transfert");
             states.add(state);
-            state = new State("disponible", "Disponible en stock");
+            state = new State("disponible", "disponible.en.stock");
             states.add(state);
 //            state = new State("annule", "Annulé");
 //            states.add(state);
         }else if(this.state.equalsIgnoreCase("disponible")){
-            state = new State("disponible", "Disponible en stock");
+            state = new State("disponible", "disponible.en.stock");
             states.add(state);
         }      
         return states; //To change body of generated methods, choose Tools | Templates.
@@ -239,12 +239,12 @@ public class BonReception extends DocumentStock implements Serializable{
 
     @Override
     public String getListTitle() {
-        return "BONS DE RECEPTIONS"; //To change body of generated methods, choose Tools | Templates.
+        return "bons.de.reception"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "BON DE RECEPTION"; //To change body of generated methods, choose Tools | Templates.
+        return "bon.de.reception"; //To change body of generated methods, choose Tools | Templates.
     }
 
     public List<Facture> getFactures() {

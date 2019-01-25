@@ -221,7 +221,7 @@ public class DocumentVente extends BaseElement implements Serializable,Comparabl
 
     @Override
     public String getOwnermodule() {
-        return "teratechvente"; //To change body of generated methods, choose Tools | Templates.
+        return "ventes"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
