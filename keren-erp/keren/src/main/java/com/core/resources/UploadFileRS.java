@@ -54,6 +54,11 @@ public interface UploadFileRS {
     public String getTextFileContaint(@Context HttpHeaders headers ,@PathParam("filename") String filename);
     
     @GET
+    @Path("stream/{filename}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getFile(@Context HttpHeaders headers ,@PathParam("filename") String filename);
+    
+    @GET
     @Path("json/{filename}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response downloadJsonFile(@Context HttpHeaders headers ,@PathParam("filename") String filename);

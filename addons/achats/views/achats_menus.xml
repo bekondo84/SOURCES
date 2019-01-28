@@ -17,7 +17,7 @@
 	 <menu id="teratech_achat_structure" label="structures" parent="teratech_achat" gyphycon="glyphicon glyphicon-pencil"/>
 	 <menuitem id="teratech_achat_str_1" label="articles" parent_ref="teratech_achat_structure" entity_ref="Article" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false"  view_type="kaban,tree,form"/>
 	 <menuitem id="teratech_achat_str_1_1" label="emplacements.de.stockages articles" parent_ref="teratech_achat_structure" entity_ref="LienEmplacement" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false" hide="true"/>
-	 <menuitem id="teratech_achat_str_2" label="Familles.articles" parent_ref="teratech_achat_structure" entity_ref="FamilleArticle" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_achat_str_2" label="familles.articles" parent_ref="teratech_achat_structure" entity_ref="FamilleArticle" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false" />
 	 <menuitem id="teratech_achat_str_3" label="arbre.familles" parent_ref="teratech_achat_structure" entity_ref="FamilleArticle" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false" view_type="list"/>
 	 <menu id="teratech_achat_comptabilite" label="comptabilite" parent="teratech_achat" gyphycon="glyphicon glyphicon-pencil"/>
 	 <menuitem id="teratech_achat_com_1" label="plan.comptable" parent_ref="teratech_achat_comptabilite" entity_ref="Compte" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false" />

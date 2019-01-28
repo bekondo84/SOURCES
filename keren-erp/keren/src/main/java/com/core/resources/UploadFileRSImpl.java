@@ -225,4 +225,30 @@ public class UploadFileRSImpl  implements UploadFileRS{
 //        return null;
 //    }
 
+    @Override
+    public Response getFile(HttpHeaders headers, String filename) {
+        //To change body of generated methods, choose Tools | Templates.
+         try{   Gson gson = new Gson();
+                String _module = null;
+                 FileHelper.setCurrentModule(null);
+                if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+                    _module = gson.fromJson(headers.getRequestHeader("modulename").get(0), String.class);
+//                    FileHelper.setCurrentModule(_module);
+                }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
+                if(_module!=null && !_module.isEmpty()){
+                    FileHelper.setCurrentModule(_module);
+                }//end if(_module!=null && !_module.isEmpty()){
+                FileHelper.setCurrentModule(_module);
+                String resourceDir = FileHelper.getStaticDirectory()+File.separator+filename;
+                File file = new File(resourceDir);
+                if(file.exists()){
+                    return CommonTools.getStream(file,filename);
+                }else{
+                    return Response.noContent().build();
+                }//end if(file.exists())
+        }catch(Exception ex){
+            throw new WebApplicationException(ex, Response.serverError().build());
+        }
+    }
+
 }
