@@ -28,25 +28,25 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("INOUT")
 public class Transfert extends DocumentStock implements Serializable{
 
-    @Predicate(label = "Référence",search = true)
+    @Predicate(label = "reference",search = true)
     private String reference ;
     
-    @Predicate(label = "Type document",target = "combobox",values = "Mouvement du stock(articles,equipements,...);Autres",hide = true)
+    @Predicate(label = "type.document",target = "combobox",values = "Mouvement du stock(articles,equipements,...);Autres",hide = true)
     private String nature = "0";
     
     @ManyToOne
     @JoinColumn(name = "ENTR_ID")
-    @Predicate(label = "Entrepôt source ",type = Entrepot.class,target = "many-to-one",optional = false,nullable = false,search = true)
+    @Predicate(label = "entrepot.source ",type = Entrepot.class,target = "many-to-one",optional = false,nullable = false,search = true)
     private Entrepot source ;
     
     @ManyToOne
     @JoinColumn(name = "ENTR2_ID")
-    @Predicate(label = "Entrepôt cible ",type = Entrepot.class,target = "many-to-one",optional = false,nullable = false,search = true)
+    @Predicate(label = "entrepot.cible ",type = Entrepot.class,target = "many-to-one",optional = false,nullable = false,search = true)
     private Entrepot cible ;
     
      @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "INOUT_ID")
-    @Predicate(label = " ",type = LigneTransfert.class,target = "one-to-many",group =true ,groupName = "group1",groupLabel = "Articles",edittable = true)
+    @Predicate(label = " ",type = LigneTransfert.class,target = "one-to-many",group =true ,groupName = "group1",groupLabel = "articles",edittable = true)
     private List<LigneTransfert> lignes = new ArrayList<LigneTransfert>();
     /**
      * 
@@ -142,12 +142,12 @@ public class Transfert extends DocumentStock implements Serializable{
 
     @Override
     public String getEditTitle() {
-        return "TRANSFERTD"; //To change body of generated methods, choose Tools | Templates.
+        return "transfert"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getListTitle() {
-        return "TRANSFERTL"; //To change body of generated methods, choose Tools | Templates.
+        return "transfert"; //To change body of generated methods, choose Tools | Templates.
     }
     
 

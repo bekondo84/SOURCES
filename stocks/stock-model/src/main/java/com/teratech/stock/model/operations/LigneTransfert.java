@@ -26,11 +26,11 @@ public class LigneTransfert extends LigneDocumentStock implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "LIEMP_ID")
-    @Predicate(label = "Emplacement source",type = LienEmplacement.class,target = "many-to-one",search = true,optional = false)
+    @Predicate(label = "emplacement.source",type = LienEmplacement.class,target = "many-to-one",search = true,optional = false)
     @Filter(value = "[{\"fieldName\":\"article\",\"value\":\"object.article\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner l'article\"},{\"fieldName\":\"entrpot\",\"value\":\"this.source\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner le magasin\"}]")
     private LienEmplacement empsource;
     
-    @Predicate(label = "N° lot/série",type = Lot.class,target = "many-to-one",optional = true,unique = true,search = true)
+    @Predicate(label = "numero.lot.ou.serie",type = Lot.class,target = "many-to-one",optional = true,unique = true,search = true)
     @ManyToOne
     @JoinColumn(name = "LOT_ID")
     @Filter(value = "[{\"fieldName\":\"lien\",\"value\":\"object.empsource\",\"searchfield\":\"id\",\"optional\":false,\"message\":\"Veuillez sélectionner l'emplacement\"}]")
@@ -42,7 +42,7 @@ public class LigneTransfert extends LigneDocumentStock implements Serializable{
     
     @ManyToOne
     @JoinColumn(name = "LIEMP2_ID")
-    @Predicate(label = "Emplacement cible",type = LienEmplacement.class,target = "many-to-one",search = true,optional = false)
+    @Predicate(label = "emplacement.cible",type = LienEmplacement.class,target = "many-to-one",search = true,optional = false)
     @Filter(value = "[{\"fieldName\":\"article\",\"value\":\"object.article\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner l'article\"},{\"fieldName\":\"entrpot\",\"value\":\"this.cible\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner le magasin\"}]")
     private LienEmplacement empcible ;
     
@@ -142,7 +142,7 @@ public class LigneTransfert extends LigneDocumentStock implements Serializable{
 
     @Override
     public String getListTitle() {
-        return "TRANSFERTL"; //To change body of generated methods, choose Tools | Templates.
+        return "lignes.transfert"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

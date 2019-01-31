@@ -29,39 +29,39 @@ public class LienEmplacement extends BaseElement implements Serializable,Compara
 
      @ManyToOne
     @JoinColumn(name = "ENTR_ID")
-    @Predicate(label = "Entrepôt",type = Entrepot.class,target = "many-to-one",optional = false,nullable = false,search = true)
+    @Predicate(label = "entrepot",type = Entrepot.class,target = "many-to-one",optional = false,nullable = false,search = true)
     private Entrepot entrpot ;
     
     @ManyToOne
     @JoinColumn(name = "EMP_ID")
-    @Predicate(label = "Emplacement",type = Emplacement.class,target = "many-to-one",optional = false,nullable = false,search = true)
+    @Predicate(label = "emplacement",type = Emplacement.class,target = "many-to-one",optional = false,nullable = false,search = true)
     @Filter(value = "[{\"fieldName\":\"edepot\",\"value\":\"object.entrpot\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner l'entrepôt\"}]")
     private Emplacement emplacement ;
     
     @ManyToOne
     @JoinColumn(name = "ART_ID")
-    @Predicate(label = "Article",type = Article.class,target = "many-to-one",search = false,editable = false)
+    @Predicate(label = "article",type = Article.class,target = "many-to-one",search = false,editable = false)
     private Article article ;
     
-    @Predicate(label = "Stock réel",type = Double.class,editable = false,search = true)
+    @Predicate(label = "stock.reel",type = Double.class,editable = false,search = true)
     private Double stock ;    
     
-    @Predicate(label = "Stock sécurité",type = Double.class,optional = false)
+    @Predicate(label = "stock.securite",type = Double.class,optional = false)
     private Double stocksec =0.0;
      
-    @Predicate(label = "Stock d'alerte",type = Double.class,optional = false)
+    @Predicate(label = "stock.alerte",type = Double.class,optional = false)
     private Double stockalert =0.0;
     
-    @Predicate(label = "Stock Min",type = Double.class)
+    @Predicate(label = "stock.min",type = Double.class)
     private Double stockmin ;
     
-    @Predicate(label = "Stock Maxi",type = Double.class)
+    @Predicate(label = "stock.maxi",type = Double.class)
     private Double stockmax ;
     
-    @Predicate(label = "Prévision de sortie",type = Double.class,search = true,editable = false,hide = true)
+    @Predicate(label = "prevision.de.sortie",type = Double.class,search = true,editable = false,hide = true)
     private Double prevision ;
     
-    @Predicate(label = "A terme",type = Double.class,search = true,editable = false,hide=true)
+    @Predicate(label = "a.terme",type = Double.class,search = true,editable = false,hide=true)
     private Double terme ;
     
     @OneToMany(mappedBy = "lien",fetch = FetchType.LAZY)
@@ -247,7 +247,7 @@ public class LienEmplacement extends BaseElement implements Serializable,Compara
 
     @Override
     public String getEditTitle() {
-        return "Espace de stockage"; //To change body of generated methods, choose Tools | Templates.
+        return "espace.stockage"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

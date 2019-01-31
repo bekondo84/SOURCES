@@ -22,35 +22,35 @@ import javax.persistence.Table;
 @Table(name = "T_CANALYTIQUE")
 public class CompteAnalytique extends BaseElement implements Serializable,Comparable<CompteAnalytique>{
 
-    @Predicate(label = "N° de compte",unique = true,optional = false,updatable = false,search = true)
+    @Predicate(label = "numero.compte",unique = true,optional = false,updatable = false,search = true)
     private String code ;
     
-    @Predicate(label = "Intitulé",search = true)
+    @Predicate(label = "intitule",search = true)
     private String label ;
     
-    @Predicate(label = "Type de compte",target ="combobox" ,values ="Détail;Total" ,search = false)
+    @Predicate(label = "type.compte",target ="combobox" ,values ="Détail;Total" ,search = false)
     private String type ="0";
     
-    @Predicate(label = "Classement",search = true)
+    @Predicate(label = "classement",search = true)
     private String classe;
     
-    @Predicate(label = "Report-à-nouveau" , type = Boolean.class,search = false)
+    @Predicate(label = "report.nouveau" , type = Boolean.class,search = false)
     private Boolean reportANouveau = false;
     
-    @Predicate(label = "Actif" , type = Boolean.class,search = false)
+    @Predicate(label = "actif" , type = Boolean.class,search = false)
     private Boolean active = true ;
     
-    @Predicate(label = "Niveau d'analyse",type = NiveauAnalyse.class,target = "many-to-one",search = true)
+    @Predicate(label = "niveau.analyse",type = NiveauAnalyse.class,target = "many-to-one",search = true)
     @ManyToOne
     @JoinColumn(name = "NA_ID")
     private NiveauAnalyse niveau ;
     
     @ManyToOne
     @JoinColumn(name = "SOC_ID")
-    @Predicate(label = "Socièté",updatable = false,type = Societe.class,target = "many-to-one",search = true)
+    @Predicate(label = "societe",updatable = false,type = Societe.class,target = "many-to-one",search = true)
     private Societe societe ;
     
-    @Predicate(label = "Bloc-notes",group = true,groupLabel = "Bloc-notes",groupName = "group2",target = "textarea",search = false)
+    @Predicate(label = " ",group = true,groupLabel = "bloc.notes",groupName = "group2",target = "textarea",search = false)
     private String note ;
 
     /**
@@ -175,12 +175,12 @@ public class CompteAnalytique extends BaseElement implements Serializable,Compar
 
     @Override
     public String getListTitle() {
-        return "Plan analytiques"; //To change body of generated methods, choose Tools | Templates.
+        return "plan.analytiques"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Compte analytique"; //To change body of generated methods, choose Tools | Templates.
+        return "compte.analytique"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

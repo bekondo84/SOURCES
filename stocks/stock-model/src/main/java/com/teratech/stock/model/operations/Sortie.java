@@ -32,10 +32,10 @@ public class Sortie extends DocumentStock implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "ENTR_ID")
-    @Predicate(label = "Entrepôt cible ",type = Entrepot.class,target = "many-to-one",optional = false,nullable = false,search = true)
+    @Predicate(label = "entrepot.cible ",type = Entrepot.class,target = "many-to-one",optional = false,nullable = false,search = true)
     private Entrepot entrepot ;
     
-    @Predicate(label = "Référence",search = true)
+    @Predicate(label = "reference",search = true)
     private String reference ;    
     
     
@@ -44,16 +44,16 @@ public class Sortie extends DocumentStock implements Serializable{
     
      @ManyToOne
     @JoinColumn(name = "FOUR_ID")
-    @Predicate(label = "Fournisseur",type = Tier.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "fournisseur",type = Tier.class,target = "many-to-one",optional = false,search = true)
 //    @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"1\"}]")
     private Tier fournisseur;
     
-     @Predicate(label = "Location ?",type = Boolean.class,target = "checkbox",search = true ,hide = true)
+     @Predicate(label = "location?",type = Boolean.class,target = "checkbox",search = true ,hide = true)
     private Boolean location = Boolean.FALSE ;
      
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "OUT_ID")
-    @Predicate(label = " ",type = LigneSortie.class,target = "one-to-many",group =true ,groupName = "group1",groupLabel = "Articles",edittable = true)
+    @Predicate(label = " ",type = LigneSortie.class,target = "one-to-many",group =true ,groupName = "group1",groupLabel = "articles",edittable = true)
     private List<LigneSortie> lignes = new ArrayList<LigneSortie>();
     
 //    @ManyToOne
@@ -176,12 +176,12 @@ public class Sortie extends DocumentStock implements Serializable{
 
     @Override
     public String getEditTitle() {
-        return "SORTIE"; //To change body of generated methods, choose Tools | Templates.
+        return "sortie"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getListTitle() {
-        return "SORTIES"; //To change body of generated methods, choose Tools | Templates.
+        return "sorties"; //To change body of generated methods, choose Tools | Templates.
     }
 
         

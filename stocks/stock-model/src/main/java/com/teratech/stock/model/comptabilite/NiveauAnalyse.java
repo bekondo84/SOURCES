@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Table(name = "T_NAnalyse")
 public class NiveauAnalyse extends BaseElement implements Serializable,Comparable<NiveauAnalyse>{
 
-    @Predicate(label = "Intitulé" ,unique = true,optional = false)
+    @Predicate(label = "intitule" ,unique = true,optional = false)
     private String code ;
 
     /**
@@ -60,12 +60,12 @@ public class NiveauAnalyse extends BaseElement implements Serializable,Comparabl
 
     @Override
     public String getListTitle() {
-        return "Niveaux d'analyse"; //To change body of generated methods, choose Tools | Templates.
+        return "niveaux.analyse"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Niveau d'analyse"; //To change body of generated methods, choose Tools | Templates.
+        return "niveau.analyse"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

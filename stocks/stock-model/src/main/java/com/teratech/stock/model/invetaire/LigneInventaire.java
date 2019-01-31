@@ -30,36 +30,36 @@ public class LigneInventaire extends BaseElement implements Serializable,Compara
 
     @ManyToOne
     @JoinColumn(name = "ARTI_ID")
-    @Predicate(label = "Article concerné",type = Article.class,target = "many-to-one",editable = false,optional = true,nullable = false,search = true)
+    @Predicate(label = "article.concerne",type = Article.class,target = "many-to-one",editable = false,optional = true,nullable = false,search = true)
     private Article article ;    
     
     @ManyToOne
     @JoinColumn(name = "LIIN_ID")
-    @Predicate(label = "N° Lot/Série",type = Lot.class,target = "many-to-one",editable = false,search = true)
+    @Predicate(label = "numer.lot.ou.serie",type = Lot.class,target = "many-to-one",editable = false,search = true)
     private Lot lot ;
     
     @Temporal(TemporalType.DATE)
-    @Predicate(label = "Peremption",type = Date.class,target = "date",editable = false,search = true)
+    @Predicate(label = "peremption",type = Date.class,target = "date",editable = false,search = true)
     private Date peremption ;
     
-    @Predicate(label = "Stock Dispo",type = Double.class,editable = false,updatable = false,search = true)
+    @Predicate(label = "stock.dispo",type = Double.class,editable = false,updatable = false,search = true)
     private Double stockdispo ;
     
-    @Predicate(label = "Stock Ajusté",type = Double.class,optional = true,nullable = false,search = true)
+    @Predicate(label = "stock.ajuste",type = Double.class,optional = true,nullable = false,search = true)
     private Double stockconstate;
     
-    @Predicate(label = "Ecart",type = Double.class,editable = false,search = true)
+    @Predicate(label = "ecart",type = Double.class,editable = false,search = true)
     private Double stockecart;
     
-    @Predicate(label = "PU HT",type = Double.class,editable = false,search = true)
+    @Predicate(label = "pu.ht",type = Double.class,editable = false,search = true)
     private Double puht;
     
-    @Predicate(label = "PU HT Ajusté",type = Double.class,search = true)
+    @Predicate(label = "pu.ht.ajuste",type = Double.class,search = true)
     private Double puajuste ;
     
     @ManyToOne
     @JoinColumn(name = "EMPL_ID")
-    @Predicate(label = "Emplacement concerné",type = Emplacement.class,target = "many-to-one",search = true,editable = false)
+    @Predicate(label = "emplacement.concerne",type = Emplacement.class,target = "many-to-one",search = true,editable = false)
     private Emplacement localisation ;
     
 

@@ -98,17 +98,15 @@ public class EcritureSearchRSImpl extends AbstractGenericService<EcritureSearch,
             String templateURL = FileHelper.getReportsDirectory()+File.separator+PLAN_CPLE;
             String temp_dir = FileHelper.getTemporalDirectory()+File.separator+"plancmpte.pdf";
             Map parameters = new HashMap();
-            return buildReportFomTemplate(FileHelper.getTemporalDirectory().toString(), templateURL, parameters, datas);
+//            return buildReportFomTemplate(FileHelper.getTemporalDirectory().toString(), templateURL, parameters, datas);
 //            jasperPdfBuilder(new File(templateURL), temp_dir, parameters, datas);
-//            //To change body of generated methods, choose Tools | Templates.
-//            File file = new File(temp_dir);        
-//            return getPdf(file);
+            //To change body of generated methods, choose Tools | Templates.
+            File file = new File(temp_dir);        
+            return getPdf(file);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(EcritureSearchRSImpl.class.getName()).log(Level.SEVERE, null, ex);
             Response.serverError().build();
-        } catch (JRException ex) {
-            Logger.getLogger(EcritureSearchRSImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
         return Response.noContent().build();
     }
 

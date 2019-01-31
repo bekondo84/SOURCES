@@ -21,10 +21,10 @@ import javax.persistence.Table;
 @Table(name = "T_CBANCAIRE")
 public class CompteBancaire extends BaseElement implements Serializable,Comparable<CompteBancaire>{
 
-    @Predicate(label = "Numéro de compte",optional = false,unique = true,search =true )
+    @Predicate(label = "numero.de.compte",optional = false,unique = true,search =true )
     private String numero ;
     
-    @Predicate(label = "Banque",optional = false,unique = true,type = Banque.class,target = "many-to-one",search = true)
+    @Predicate(label = "banque",optional = false,unique = true,type = Banque.class,target = "many-to-one",search = true)
     @ManyToOne
     @JoinColumn(name = "CB_ID")
     private Banque banque;
@@ -69,12 +69,12 @@ public class CompteBancaire extends BaseElement implements Serializable,Comparab
 
     @Override
     public String getListTitle() {
-        return "Comptes bancaires"; //To change body of generated methods, choose Tools | Templates.
+        return "comptes.bancaires"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Compte bancaire"; //To change body of generated methods, choose Tools | Templates.
+        return "compte.bancaire"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

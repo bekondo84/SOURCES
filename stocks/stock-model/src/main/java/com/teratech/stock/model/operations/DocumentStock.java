@@ -34,10 +34,10 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue("DC")
 public class DocumentStock extends BaseElement implements Serializable,Comparable<DocumentStock>{
 
-    @Predicate(label = "N° de pièce",optional = false,unique = true,search = true)
+    @Predicate(label = "numero.piece",optional = false,unique = true,search = true)
     protected String code ;
     
-    @Predicate(label = "Date",type = Date.class,target = "date",search = true)
+    @Predicate(label = "date",type = Date.class,target = "date",search = true)
     @Temporal(TemporalType.DATE)
     protected Date date ;
     
@@ -181,9 +181,9 @@ public class DocumentStock extends BaseElement implements Serializable,Comparabl
     @Override
     public List<State> getStates() {
         List<State> states = new ArrayList<State>();
-        State state = new State("etabli", "Broullion");
+        State state = new State("etabli", "broullion");
         states.add(state);
-        state = new State("valider", "Valider");
+        state = new State("valider", "valider");
         states.add(state);
         return states; //To change body of generated methods, choose Tools | Templates.
     }
@@ -222,12 +222,12 @@ public class DocumentStock extends BaseElement implements Serializable,Comparabl
 
     @Override
     public String getListTitle() {
-        return "Mouvements d'entrées"; //To change body of generated methods, choose Tools | Templates.
+        return "mouvements.entrées"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-         return "Entrée "; //To change body of generated methods, choose Tools | Templates.
+         return "entree "; //To change body of generated methods, choose Tools | Templates.
     }  
     
     

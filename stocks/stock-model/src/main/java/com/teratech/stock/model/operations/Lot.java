@@ -27,27 +27,27 @@ import javax.persistence.TemporalType;
 @Table(name = "T_LOT")
 public class Lot extends BaseElement implements Serializable,Comparable<Lot>{
 
-    @Predicate(label = "Numéro",optional = false,unique = true,search = true)
+    @Predicate(label = "numero",optional = false,unique = true,search = true)
     private String code ;
     
-    @Predicate(label = "Quantite",type = Double.class,optional = false,search = true)
+    @Predicate(label = "quantite",type = Double.class,optional = false,search = true)
     private Double quantite ;
     
     private Double sorties = 0.0;
     
     private Double encours = 0.0;
     
-    @Predicate(label = "Péremption",type = Date.class,target = "date",search = true)
+    @Predicate(label = "peremption",type = Date.class,target = "date",search = true)
     @Temporal(TemporalType.DATE)
     private Date peremption ;
     
-    @Predicate(label = "Fabrication",type = Date.class,target = "date",search = true)
+    @Predicate(label = "fabrication",type = Date.class,target = "date",search = true)
     @Temporal(TemporalType.DATE)
     private Date fabrication ;
     
     @ManyToOne
     @JoinColumn(name = "LIEM_ID")
-    @Predicate(label = "Emplacement",type = LienEmplacement.class,target = "many-to-one",editable = false,hide=true,search = true)
+    @Predicate(label = "emplacement",type = LienEmplacement.class,target = "many-to-one",editable = false,hide=true,search = true)
     private LienEmplacement lien ;
     
     @Column(unique = true)    
@@ -245,12 +245,12 @@ public class Lot extends BaseElement implements Serializable,Comparable<Lot>{
 
     @Override
     public String getListTitle() {
-        return "LOTS"; //To change body of generated methods, choose Tools | Templates.
+        return "lots"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "LOT"; //To change body of generated methods, choose Tools | Templates.
+        return "lot"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

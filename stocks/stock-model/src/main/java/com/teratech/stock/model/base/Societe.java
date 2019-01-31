@@ -23,53 +23,53 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Societe extends BaseElement implements Serializable,Comparable<Societe>{
     
-    @Predicate(label = "Logo de la société",search = false,target = "image")
+    @Predicate(label = "logo.societe",search = false,target = "image")
      private String image ;
     
-     @Predicate(label = "Nom de la socièté" ,optional = false,unique = true,search = true)
+     @Predicate(label = "intitule" ,optional = false,unique = true,search = true)
      private String code ;
      
-     @Predicate(label = "Slogan de la socièté",search = true)
+     @Predicate(label = "slogan.societe",search = true)
      private String intitule;
      
-     @Predicate(label = "Adresse",group = true,groupName = "infosgenerales",groupLabel = "Informations Générales",search = true)
+     @Predicate(label = "adresse",group = true,groupName = "infosgenerales",groupLabel = "informations.generales",search = true)
      private String adresse;
      
-     @Predicate(label = "Téléphone",target = "tel",group = true,groupName = "infosgenerales",groupLabel = "Informations Générales",search = true)
+     @Predicate(label = "telephone",target = "tel",group = true,groupName = "infosgenerales",groupLabel = "informations.generales",search = true)
      private String telephone;    
      
-     @Predicate(label = "Ville",group = true,groupName = "infosgenerales",groupLabel = "Informations Générales")
+     @Predicate(label = "ville",group = true,groupName = "infosgenerales",groupLabel = "informations.generales")
      private String ville;
      
-     @Predicate(label = "Fax" , target = "tel",group = true,groupName = "infosgenerales",groupLabel = "Informations Générales")
+     @Predicate(label = "fax" , target = "tel",group = true,groupName = "infosgenerales",groupLabel = "informations.generales")
      private String fax ;
      
-     @Predicate(label = "Code Postal",group = true,groupName = "infosgenerales",groupLabel = "Informations Générales",search = true)
+     @Predicate(label = "code.postal",group = true,groupName = "infosgenerales",groupLabel = "informations.generales",search = true)
      private String codePostal;
      
-     @Predicate(label = "Courriel",group = true,groupName = "infosgenerales",groupLabel = "Informations Générales",search = true)
+     @Predicate(label = "courriel",group = true,groupName = "infosgenerales",groupLabel = "informations.generales",search = true)
      private String courriel ;
      
-     @Predicate(label = "Pays" , type = Pays.class,group = true,groupName = "infosgenerales",groupLabel = "Informations Générales")
+     @Predicate(label = "pays" , type = Pays.class,group = true,groupName = "infosgenerales",groupLabel = "informations.generales")
      @ManyToOne
      @JoinColumn(name = "PAYS_ID")
      private Pays pays ;
      
-     @Predicate(label = "Numéro fiscal",group = true,groupName = "infosgenerales",groupLabel = "Informations Générales")
+     @Predicate(label = "numero.fiscal",group = true,groupName = "infosgenerales",groupLabel = "informations.generales")
      private String numFiscal ;
      
-     @Predicate(label = "Site Web",target = "url",group = true,groupName = "infosgenerales",groupLabel = "Informations Générales")
+     @Predicate(label = "site.web",target = "url",group = true,groupName = "infosgenerales",groupLabel = "informations.generales")
      private String siteWeb ;
      
-     @Predicate(label = "Registre du commerce",group = true,groupName = "infosgenerales",groupLabel = "Informations Générales")
+     @Predicate(label = "registre.commerce",group = true,groupName = "infosgenerales",groupLabel = "informations.generales")
      private String registre ;
      
-     @Predicate(label = "Devise" ,type = Devise.class,group = true,groupName = "infosgenerales",groupLabel = "Informations Générales")
+     @Predicate(label = "devise" ,type = Devise.class,group = true,groupName = "infosgenerales",groupLabel = "informations.generales")
      @ManyToOne
      @JoinColumn(name = "DEV_ID")
      private Devise devise ;
      
-    @Predicate(label = "Socièté mère" , type = Societe.class,target="many-to-one")
+    @Predicate(label = "societe.mere" , type = Societe.class,target="many-to-one")
     @ManyToOne
     @JoinColumn(name = "SOCP_ID")
      private Societe societeMere ;
@@ -257,12 +257,12 @@ public class Societe extends BaseElement implements Serializable,Comparable<Soci
 
     @Override
     public String getListTitle() {
-        return "SOCIETES"; //To change body of generated methods, choose Tools | Templates.
+        return "societes"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "SOCIETE"; //To change body of generated methods, choose Tools | Templates.
+        return "societe"; //To change body of generated methods, choose Tools | Templates.
     }
      
      @Override

@@ -35,30 +35,30 @@ public class ControleQualite extends BaseElement implements Serializable,Compara
 
     @ManyToOne
     @JoinColumn(name = "ART_ID")
-    @Predicate(label = "Article",type = Article.class,target = "many-to-one",search = true,optional = false,editable = false)
+    @Predicate(label = "article",type = Article.class,target = "many-to-one",search = true,optional = false,editable = false)
     private Article article;
     
-    @Predicate(label = "N° Lot/Série" ,search = true,editable = false)
+    @Predicate(label = "numero.serie.ou.lot" ,search = true,editable = false)
     private String numlot ;
     
     @ManyToOne
     @JoinColumn(name = "TIER_ID")
-    @Predicate(label = "Fournisseur",type = Tier.class,target = "many-to-one",search = true,editable = false)
+    @Predicate(label = "fournisseur",type = Tier.class,target = "many-to-one",search = true,editable = false)
     private Tier fournisseur ;
     
     @ManyToOne
     @JoinColumn(name = "EN_ID")
-    @Predicate(label = "Document source",type = Entree.class,target = "many-to-one",search = true,editable = false)
+    @Predicate(label = "document.source",type = Entree.class,target = "many-to-one",search = true,editable = false)
     private Entree entree;
     
     @Temporal(javax.persistence.TemporalType.DATE)
-    @Predicate(label = "Date contrôle",type = Date.class,target = "date",search = true)
+    @Predicate(label = "date.controle",type = Date.class,target = "date",search = true)
     private Date dcontrole ;
     
-    @Predicate(label = "Quantité recue",type = Double.class,search = true,editable = false)
+    @Predicate(label = "quantite.recue",type = Double.class,search = true,editable = false)
     private Double recu ;
     
-    @Predicate(label = "Rebus",type = Double.class,search = true)
+    @Predicate(label = "rebus",type = Double.class,search = true)
     private Double rebus ;
     
     @Predicate(label = " ",target = "color",search = true,hide = true)
@@ -66,10 +66,10 @@ public class ControleQualite extends BaseElement implements Serializable,Compara
     
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "COQU_ID")
-    @Predicate(label = " ",type = LigneControleQualite.class,target = "one-to-many",edittable = true,group = true,groupName = "group1",groupLabel = "Resultats")
+    @Predicate(label = " ",type = LigneControleQualite.class,target = "one-to-many",edittable = true,group = true,groupName = "group1",groupLabel = "resultats")
     private List<LigneControleQualite> lignes = new ArrayList<LigneControleQualite>();
     
-    @Predicate(label = " ",target = "richeditor",group = true,groupName = "group2",groupLabel = "Votre Rapport")
+    @Predicate(label = " ",target = "richeditor",group = true,groupName = "group2",groupLabel = "votre.rapport")
     @Lob
     private String avis ;
     
@@ -252,12 +252,12 @@ public class ControleQualite extends BaseElement implements Serializable,Compara
 
     @Override
     public String getListTitle() {
-        return "Contrôle Qualité"; //To change body of generated methods, choose Tools | Templates.
+        return "controle.qualite"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Contrôle Qualité"; //To change body of generated methods, choose Tools | Templates.
+        return "controle.qualite"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -284,9 +284,9 @@ public class ControleQualite extends BaseElement implements Serializable,Compara
     public List<State> getStates() {
         List<State> states = new ArrayList<State>();
         if(state.equalsIgnoreCase("etabli")){
-            states.add(new State("etabli", "A traiter"));
+            states.add(new State("etabli", "a.traiter"));
         }else if(state.equalsIgnoreCase("traite")){
-            states.add(new State("traite", "Traité"));
+            states.add(new State("traite", "traite"));
         }
         return states; //To change body of generated methods, choose Tools | Templates.
     }

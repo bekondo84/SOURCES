@@ -21,27 +21,27 @@ import javax.persistence.Table;
 @Table(name = "T_CONTACT")
 public class Contact extends BaseElement implements Serializable,Comparable<Contact>{
 
-    @Predicate(label = "Nom",search = true)
+    @Predicate(label = "nom",search = true)
     private String nom ;
     
-    @Predicate(label = "Civilité" ,search = true,type = Civilite.class,target = "many-to-one")
+    @Predicate(label = "civilite" ,search = true,type = Civilite.class,target = "many-to-one")
     @ManyToOne
     @JoinColumn(name = "CIV_ID")
     private Civilite civilite ;
     
-    @Predicate(label = "Poste Occupé",search = true)
+    @Predicate(label = "poste.occupe",search = true)
     private String poste ;
     
-    @Predicate(label = "Courriel",search = true)
+    @Predicate(label = "courriel",search = true)
     private String courriel;
     
-    @Predicate(label = "Téléphone",search = true)
+    @Predicate(label = "telephone",search = true)
     private String tel ;
     
-    @Predicate(label = "Mobile",search = true)
+    @Predicate(label = "mobile",search = true)
     private String mobile;
     
-    @Predicate(label = "Notes",target = "textarea",group = true,groupName = "group1",groupLabel = "Notes interne")
+    @Predicate(label = " ",target = "textarea",group = true,groupName = "group1",groupLabel = "notes.interne")
     private String note ;
 
     public Contact() {
@@ -134,12 +134,12 @@ public class Contact extends BaseElement implements Serializable,Comparable<Cont
 
     @Override
     public String getListTitle() {
-        return "Contacts"; //To change body of generated methods, choose Tools | Templates.
+        return "contacts"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Contact"; //To change body of generated methods, choose Tools | Templates.
+        return "contact"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

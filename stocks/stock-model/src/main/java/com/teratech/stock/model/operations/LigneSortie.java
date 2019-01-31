@@ -26,11 +26,11 @@ public class LigneSortie extends LigneDocumentStock implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "LIEMP_ID")
-    @Predicate(label = "Emplacement cible",type = LienEmplacement.class,target = "many-to-one",search = true,optional = false,observable = true)
+    @Predicate(label = "emplacement.cible",type = LienEmplacement.class,target = "many-to-one",search = true,optional = false,observable = true)
     @Filter(value = "[{\"fieldName\":\"article\",\"value\":\"object.article\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner l'article\"},{\"fieldName\":\"entrpot\",\"value\":\"this.entrepot\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner le magasin\"}]")
     private LienEmplacement emplacement ;        
     
-    @Predicate(label = "N° lot/série",type = Lot.class,target = "many-to-one",optional = true,search = true)
+    @Predicate(label = "numero.serie.ou.lot",type = Lot.class,target = "many-to-one",optional = true,search = true)
     @ManyToOne
     @JoinColumn(name = "LOT_ID")
     @Filter(value = "[{\"fieldName\":\"lien\",\"value\":\"object.emplacement\",\"searchfield\":\"id\",\"optional\":false,\"message\":\"Veuillez sélectionner l'emplacement\"}]")
@@ -123,7 +123,7 @@ public class LigneSortie extends LigneDocumentStock implements Serializable{
 
     @Override
     public String getListTitle() {
-        return "LIGNESORTIE"; //To change body of generated methods, choose Tools | Templates.
+        return "lignes.sortie"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

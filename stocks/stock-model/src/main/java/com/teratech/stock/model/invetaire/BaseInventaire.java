@@ -37,21 +37,21 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue("TMP")
 public class BaseInventaire extends BaseElement implements Serializable,Comparable<BaseInventaire>{
 
-    @Predicate(label = "Reference",optional = false,unique = true,search = true)
+    @Predicate(label = "reference",optional = false,unique = true,search = true)
     protected String code ;
     
-    @Predicate(label = "Date Inventaire",optional = false,type = Date.class,target = "date",search = true)
+    @Predicate(label = "date.inventaire",optional = false,type = Date.class,target = "date",search = true)
     @Temporal(TemporalType.DATE)
     protected Date dateinventaire ;
     
     @ManyToOne
     @JoinColumn(name = "ENTR_ID")
-    @Predicate(label = "Entrepôt",type = Entrepot.class,target = "many-to-one",search = true)
+    @Predicate(label = "entrepot",type = Entrepot.class,target = "many-to-one",search = true)
     protected Entrepot fentrepot ;
     
     @ManyToOne
     @JoinColumn(name = "EMPL_ID")
-    @Predicate(label = "Emplacement",type = Emplacement.class,target = "many-to-one",search = true)
+    @Predicate(label = "emplacement",type = Emplacement.class,target = "many-to-one",search = true)
     @Filter(value = "[{\"fieldName\":\"edepot\",\"value\":\"object.fentrepot\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner l'entrepôt\"}]")
     protected Emplacement femplacement;
     
@@ -179,12 +179,12 @@ public class BaseInventaire extends BaseElement implements Serializable,Comparab
 
     @Override
     public String getListTitle() {
-       return "Fiches d'inventaire"; //To change body of generated methods, choose Tools | Templates.
+       return "fiches.inventaire"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Fiche d'inventaire"; //To change body of generated methods, choose Tools | Templates.
+        return "fiche.inventaire"; //To change body of generated methods, choose Tools | Templates.
     }
 
     public String getState() {

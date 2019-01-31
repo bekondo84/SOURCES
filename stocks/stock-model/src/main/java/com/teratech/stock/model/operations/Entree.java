@@ -33,10 +33,10 @@ public class Entree extends DocumentStock implements Serializable{
     
     @ManyToOne
     @JoinColumn(name = "ENTR_ID")
-    @Predicate(label = "Entrepôt cible ",type = Entrepot.class,target = "many-to-one",optional = false,nullable = false,search = true)
+    @Predicate(label = "entrepot.cible ",type = Entrepot.class,target = "many-to-one",optional = false,nullable = false,search = true)
     private Entrepot entrepot ;
     
-    @Predicate(label = "Référence",search = true)
+    @Predicate(label = "reference",search = true)
     private String reference ;
     
 //    @Predicate(label = "Type document",target = "combobox",values = "Retour location;Autres")
@@ -44,13 +44,13 @@ public class Entree extends DocumentStock implements Serializable{
     
      @ManyToOne
     @JoinColumn(name = "FOUR_ID")
-    @Predicate(label = "Fournisseur",type = Tier.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "fournisseur",type = Tier.class,target = "many-to-one",optional = false,search = true)
 //    @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"1\"}]")
     private Tier fournisseur;
     
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "IN_ID")
-    @Predicate(label = " ",type = LigneEntree.class,target = "one-to-many",group =true ,groupName = "group1",groupLabel = "Articles",customfooter = true,edittable = true)
+    @Predicate(label = " ",type = LigneEntree.class,target = "one-to-many",group =true ,groupName = "group1",groupLabel = "articles",customfooter = true,edittable = true)
     private List<LigneEntree> lignes = new ArrayList<LigneEntree>();
      
     /**
@@ -175,24 +175,24 @@ public class Entree extends DocumentStock implements Serializable{
         List<State> states = new ArrayList<State>();
         State state = null;
         if(this.state.equalsIgnoreCase("etabli")){
-             state = new State("etabli", "Brouillon");
+             state = new State("etabli", "brouillon");
              states.add(state);
-            state = new State("transfere", "Disponible");
+            state = new State("transfere", "disponible");
             states.add(state);        
         }else if(this.state.equalsIgnoreCase("qualite")){
-            state = new State("qualite", "Brouillon");
+            state = new State("qualite", "brouillon");
             states.add(state);
-            state = new State("controle", "Qualité controlée");
+            state = new State("controle", "qualite.controlee");
             states.add(state);
         }else if(this.state.equalsIgnoreCase("transfere")){
-             state = new State("transfere", "Attente de transfert");
+             state = new State("transfere", "attente.de.transfert");
             states.add(state);
-            state = new State("disponible", "Disponible en stock");
+            state = new State("disponible", "disponible.en.stock");
             states.add(state);
 //            state = new State("annule", "Annulé");
 //            states.add(state);
         }else if(this.state.equalsIgnoreCase("disponible")){
-            state = new State("disponible", "Disponible en stock");
+            state = new State("disponible", "disponible.en.stock");
             states.add(state);
         }      
         return states; //To change body of generated methods, choose Tools | Templates.

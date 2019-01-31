@@ -123,13 +123,31 @@
         border-radius:.25rem
     }
     </style>
+    <script type="text/javascript">		
+            function allowDrop(ev) {
+//              console.log("vous êtes dans allowDrop(ev) "+ev.target.id);
+              ev.preventDefault();              
+            }
 
+            function drag(ev) {
+//              console.log("vous êtes dans drag(ev) "+ev.target.id);
+              ev.dataTransfer.setData("text", ev.target.id);              
+            }
+
+            function drop(ev) {                
+               ev.preventDefault();
+               var data = ev.dataTransfer.getData("text");
+//               console.log("vous êtes dans drop(ev)==== "+ev.target.id+" ==== data : "+data);
+               angular.element(document.getElementById('main_controller')).scope().transitionAllow(ev.target.id);
+               ev.target.appendChild(document.getElementById(data));              
+            } 
+    </script>
   </head>
 
   <body ng-controller="kerenCtrl" class="principal-background websitecontainer">
       <div ng-switch on="activemodule">
           <div ng-switch-when="kerencore" >
-              <div ng-controller="mainCtrl"  ng-show = "active('kerencore')">
+              <div ng-controller="mainCtrl"  ng-show = "active('kerencore')" id="main_controller">
                 <ng-include src="'views/principalFragment.html'" ></ng-include>
              </div>
           </div>

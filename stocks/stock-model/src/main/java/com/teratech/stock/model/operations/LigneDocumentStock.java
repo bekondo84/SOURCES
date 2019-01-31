@@ -34,7 +34,7 @@ public class LigneDocumentStock extends BaseElement implements Serializable,Comp
 
     @ManyToOne
     @JoinColumn(name = "ART_ID")
-    @Predicate(label = "Article concerné",type = Article.class,target = "many-to-one",optional = false,nullable = true,search = true)
+    @Predicate(label = "aticle.concerne",type = Article.class,target = "many-to-one",optional = false,nullable = true,search = true)
     protected Article article ;
     
 //    @ManyToOne
@@ -43,7 +43,7 @@ public class LigneDocumentStock extends BaseElement implements Serializable,Comp
 //    @Observer(observable = "article" ,source = "field:unitevente")
 //    private UniteGestion unite ;   
     
-    @Predicate(label = "Quantité",type = Double.class,optional = false,search = true)
+    @Predicate(label = "quantite",type = Double.class,optional = false,search = true)
     protected Double quantite ;
     
 //    @Predicate(label = "PU HT",type = Double.class,optional = false,search = true)

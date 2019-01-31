@@ -1,4 +1,3 @@
-
 angular.module("mainApp" , ["ngResource","ngSanitize","pascalprecht.translate","angularjs-datetime-picker","textAngular","keren.core.calendar","keren.core.discussion","keren.core.commons"]);        
 //Regle de traduction 
 //angular.module("mainApp")
@@ -159,8 +158,9 @@ angular.module("mainApp")
     $scope.tchatinput = new Array();   
     $scope.hostname = $location.host();    
     $scope.portvalue = $location.port();
-    $scope.protocol = $location.protocol(); 
-   //Utilisateur courant
+    $scope.protocol = $location.protocol();     
+    $scope.metaData = null;
+//Utilisateur courant
    $scope.agendaModule = { id:-1 , name:"discussionconf",label:"Discussion",selected:false,hasmenu:false,
                           groups:[
                                                       
@@ -179,7 +179,7 @@ angular.module("mainApp")
                       {id:-1 , name:"utilisateurs",label:"Utilisateurs",icon:"glyphicon glyphicon-user" ,showmenu:true,
                        actions:[
                           {id:-1,name:"utilisateur" , label:"Utilisateurs",icon:"glyphicon glyphicon-user",entityName:"Utilisateur",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',hide:false,viewMode:'kaban,tree,form'
-                              ,kaban:{code:"application_001",script:"<div class='col-md-12 col-sm-12' id='detail-panel-body-header'> <div class='col-md-3 col-sm-4'> <div id='imageContent'  style='float: left;margin-left: -20px;'> <img id='apercuImageContent' ng-src='{{srcFn(item.image,null,null)}}' alt='Image ' ng-click='imageClick()' height='70' width='75'></div> </div> <div  class='col-md-8 col-sm-7'> <div style='font-weight: bold;'>{{item.designation}}</div> <div>{{item.courriel | cut:true:50:'...'}}</div> <div> <div class='col-sm-6 col-md-6 pull-left' >{{item.societe.designation}}</div></div> </div> </div>"}},
+                              ,kaban:{code:"application_001",script:"<div class='col-md-12 col-sm-12' id='detail-panel-body-header'> <div class='col-md-3 col-sm-4'> <div id='imageContent'  style='float: left;margin-left: -33px;'> <img id='apercuImageContent' ng-src='{{srcFn(item.image,null,null)}}' alt='Image ' ng-click='imageClick()' height='70' width='75'></div> </div> <div  class='col-md-8 col-sm-7'> <div style='font-weight: bold;'>{{item.designation}}</div> <div>{{item.courriel | cut:true:50:'...'}}</div> <div> <div class='col-sm-6 col-md-6 pull-left' >{{item.societe.designation}}</div></div> </div> </div>"}},
                           {id:-2,name:"groupes" , label:"Groupes",icon:"glyphicon glyphicon-list-alt",entityName:"Groupe",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',hide:false},
                           {id:-3,name:"societe" , label:"Societes",icon:"glyphicon glyphicon-home",entityName:"Societe",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',hide:false},
                           {id:-4,name:"pays" , label:"Pays",icon:"glyphicon glyphicon-flag",entityName:"pays",moduleName:"kerencore",modal:false,securitylevel:0,model:'kerencore',hide:false}
@@ -236,17 +236,7 @@ angular.module("mainApp")
       };
    
    
-   $scope.metaData = {  entityName:"Module",
-                         name:{type:"string" , search:true ,fieldName:"name" , "fieldLabel":"Nom Module"},
-                         shortDescription:{type:"string" , search:true,fieldName:"shortDescription" , fieldLabel:"Description Module"},
-                         actions:{type:"array" , search:false,fieldName:"actions"
-                         ,metaData:{name:{type:"string" , search:true,fieldName:"name"},
-                                    shortDescription:{type:"string" , search:true,fieldName:"description"}
-                                   }
-                               }
-                      };
-
-   $scope.checkbox01 = false;
+    $scope.checkbox01 = false;
     /**
        type de fenetre active : new ,update , view ,list
     **/
@@ -261,7 +251,7 @@ angular.module("mainApp")
     $scope.currentObject = null;
 
     $scope.currentUser = null;
-    
+   
     $scope.company = null;    
     
     $scope.enabledVerticalMenu = false;
@@ -922,9 +912,43 @@ angular.module("mainApp")
                        $scope.getDefaultModule();                       
                    });
        };
+       /**
+        * call transition resource 
+        * @param {type} dropzone
+        * @returns {undefined}
+        */
+        $scope.transitionAllow =function(dropzone){
+            var url = commonsTools.urlRootBuilder($scope.metaData.moduleName,$scope.metaData.entityName);
+            url +="/translate/"+dropzone;
+            commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
+            $http.put(url,$scope.currentObject)
+                    .then(function(response){
+                        commonsTools.hideDialogLoading();
+                        var data = response.data;
+                        if(data==null || !angular.isDefined(data)){//Transition necessitant une action de l'utilisateur afficher la vue
+                            $scope.resetHttp_commons();
+                            $rootScope.$broadcast("currentActionUpdate" ,{
+                                 item:$scope.currentObject, action:$scope.currentAction});  
+                        }else{
+                            commonsTools.notifyWindow("Status Operation" ,"L'opération s'est déroulée avec succes ","success");
+                        }//end if(data==null || !angular.isDefined(data)){
+                    },function(error){
+                        commonsTools.hideDialogLoading();
+                        if(error.status==405||error.status==404){
+                            $scope.resetHttp_commons();
+                            $rootScope.$broadcast("currentActionUpdate" ,{
+                                 item:$scope.currentObject, action:$scope.currentAction});   
+                        }else{
+                            commonsTools.showMessageDialog(error);
+                        }//end if(error.status==405){
+                    });
+            
+//            console.log("Controle de transition execute dropzone : "+dropzone+" ===== Item : "+$scope.currentObject.id+" ===== action : "+$scope.currentAction.id);
+        };
+        
        //Chargmeent du theme
        $scope.loadTheme();    
-
+       
      /**
         Reception du signal de changement de module
       **/
@@ -1038,6 +1062,11 @@ angular.module("mainApp")
                   commonsTools.notifyWindow("Status Operation" ,"Impossible de trouver l'action "+args.action,"danger");
               }//end if(angular.isDefined(action)&&action!=null){
           });
+          $scope.$on("currentobject",
+                function(event,args){
+                     $scope.currentObject = args.item;
+                     $scope.metaData = args.meta;
+                });
 
 });
 
@@ -1706,6 +1735,16 @@ angular.module("mainApp")
                commonsTools.hideDialogLoading();                                                        
                $rootScope.$broadcast("login" , {  });  
            };
+            /**
+            * 
+            * @param {type} item
+            * @returns {undefined}
+            */
+           $scope.selectedItem = function(item){
+//               console.log("principal ================ "+angular.toJson($scope.metaData));
+               $rootScope.$broadcast("currentobject",{item:item,meta:$scope.metaData});
+           };
+         
            /**
             * 
             * @returns {Boolean}
@@ -1756,6 +1795,7 @@ angular.module("mainApp")
              }  
              return false ;
          };
+         
          /**
           * 
           * @returns {Boolean}
@@ -7790,13 +7830,13 @@ $scope.gererChangementFichier3 = function(event,model){
            viewElem.setAttribute('id' , bodyID);
            viewElem.setAttribute("class","modal-body");
            viewElem.setAttribute("style","height:100%;");
-           var headerElem = $scope.editPanelHeader('temporalData' , metaData,index,true);  
+           var headerElem = $scope.editPanelHeader('temporalData' , metaData,index+1,true);  
            var editPanel =  null;//$scope.editPanelComponent('temporalData',metaData,'new',index,'temporalData');
            if($scope.currentAction.formView!=null
                       && $scope.currentAction.formView.template!=null){
-                editPanel = commonsTools.xmlViewParser($scope.currentAction.formView.template,$scope,'temporalData',metaData,null,0,'temporalData');
+                editPanel = commonsTools.xmlViewParser($scope.currentAction.formView.template,$scope,'temporalData',metaData,null,index+1,'temporalData');
             }else{
-                editPanel = $scope.editPanelComponent('temporalData' , metaData,null,0,'temporalData',true);   
+                editPanel = $scope.editPanelComponent('temporalData' , metaData,null,index+1,'temporalData',true);   
             }//end if(angular.isDefined($scope.currentAction.formView)
             if(headerElem){
                viewElem.appendChild(headerElem);
@@ -9988,6 +10028,24 @@ $scope.gererChangementFichier3 = function(event,model){
                                      $scope.displayListPanel();
                                      commonsTools.hideDialogLoading();
                                      $scope.notifyWindow("Status Operation" ,"L'opÃ©ration s'est dÃ©roulÃ©e avec sucess","success");
+                                    var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/cleanfiles";
+                                    $http.defaults.headers.common['entity']=angular.lowercase($scope.metaData.ownerentity);
+                                    $http.defaults.headers.common['modulename'] = $scope.currentModule.name;
+                                    if($scope.currentModule.name!==$scope.metaData.ownermodule){
+                                        $http.defaults.headers.common['modulename'] = $scope.metaData.ownermodule;
+                                    }//end if($scope.currentModule.name!=$scope.metaData.ownermodule){
+                                    var ids = new Array();
+                                    for(var i=0 ;i<$scope.selectedObjects.length;i){
+                                        ids.push($scope.selectedObjects[i].id);
+                                    }//end for(var i=0 ;i<$scope.selectedObjects.length;i){
+                                    $http.defaults.headers.common['entityids']=angular.toJson(ids);
+                                    $http.defaults.headers.common['entityserial']=$scope.currentObject.serial;
+                                    $http.get(url)
+                                           .then(function(response){
+
+                                           },function(error){
+                                               commonsTools.showMessageDialog(error);
+                                           });
                               },function(error){
                                   commonsTools.hideDialogLoading();
                                   commonsTools.showMessageDialog(error);
@@ -10055,6 +10113,14 @@ $scope.gererChangementFichier3 = function(event,model){
                             try{ // console.log("$scope.deleteAction = Vous avez cliquez sur  delete == "+$scope.selectedObjects);
                                   if($scope.currentObject){
                                       restService.delete($scope.currentObject).$promise.then(function(){
+                                          var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/cleanfiles";
+                                          $http.defaults.headers.common['entity']=angular.lowercase($scope.metaData.ownerentity);
+                                          $http.defaults.headers.common['modulename'] = $scope.currentModule.name;
+                                          if($scope.currentModule.name!==$scope.metaData.ownermodule){
+                                              $http.defaults.headers.common['modulename'] = $scope.metaData.ownermodule;
+                                          }//end if($scope.currentModule.name!=$scope.metaData.ownermodule){
+                                          $http.defaults.headers.common['entityid']=$scope.currentObject.id;
+                                          $http.defaults.headers.common['entityserial']=$scope.currentObject.serial;
                                           $scope.reset();
                                           //Retour precedent
                                            $scope.navigatorcontainer.gotoPreview();
@@ -10062,15 +10128,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                          $scope.displayListPanel();
                                          commonsTools.hideDialogLoading();
                                          commonsTools.notifyWindow("Status Operation" ,"L'opération s'est déroulée avec sucess","success");
-                                         var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/cleanfiles";
-                                          $http.defaults.headers.common['entity']=angular.lowercase($scope.metaData.entityName);
-                                          $http.defaults.headers.common['modulename'] = $scope.currentModule.name;
-                                          if($scope.currentModule.name!==$scope.metaData.ownermodule){
-                                              $http.defaults.headers.common['modulename'] = $scope.metaData.ownermodule;
-                                          }//end if($scope.currentModule.name!=$scope.metaData.ownermodule){
-                                          $http.defaults.headers.common['entityid']=$scope.currentObject.id;
-                                          $http.defaults.headers.common['entityserial']=$scope.currentObject.serial;
-                                          $http.get(url)
+                                         $http.get(url)
                                                  .then(function(response){
                                                      
                                                  },function(error){
@@ -10940,6 +10998,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                  url = url+'text/'+pj.filename+'/'+pj.attachename;
                                  type = "text/plain";
                              }//end if(extension=='pdf')
+                             url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/file/"+pj.filename+"/"+pj.attachename;
 //                             console.log("$scope.piecejointeviewAction  ============================================= "+$scope.currentModule.name+"    ===  url : "+url);
                              $http.get(url, {responseType: "arraybuffer"})
                                      .then(function(response){                                         
@@ -12594,8 +12653,8 @@ $scope.gererChangementFichier3 = function(event,model){
                 var divElem = document.createElement("div");
 //                divElem.setAttribute("class","panel-body container-body-panel");
                 divElem.setAttribute("id","datawidget");
-//                divElem.setAttribute("style","height: 82%;overflow: auto;margin-top: -8%;");
-                var kabancontainer = commonsTools.kabanContainerBuilder($scope);
+                divElem.setAttribute("class","trt-datawidget-container");
+                var kabancontainer = commonsTools.kabanContainerBuilder($scope,metaData);
                 divElem.appendChild(kabancontainer);
                 /**
                  * 
@@ -12962,64 +13021,7 @@ $scope.gererChangementFichier3 = function(event,model){
                          showTags: true,
                          data: $scope.datas
                        });
-                 }//end if($scope.datas.length>0){
-//                  var defaultData = [
-//                    {
-//                      text: 'Parent 1',
-//                      href: '#parent1',
-//                      tags: ['4'],
-//                      nodes: [
-//                        {
-//                          text: 'Child 1',
-//                          href: '#child1',
-//                          tags: ['2'],
-//                          nodes: [
-//                            {
-//                              text: 'Grandchild 1',
-//                              href: '#grandchild1',
-//                              tags: ['4']
-//                            },
-//                            {
-//                              text: 'Grandchild 2',
-//                              href: '#grandchild2',
-//                              tags: ['0']
-//                            }
-//                          ]
-//                        },
-//                        {
-//                          text: 'Child 2',
-//                          href: '#child2',
-//                          tags: ['0']
-//                        }
-//                      ]
-//                    },
-//                    {
-//                      text: 'Parent 2',
-//                      href: '#parent2',
-//                      tags: ['0']
-//                    },
-//                    {
-//                      text: 'Parent 3',
-//                      href: '#parent3',
-//                       tags: ['0']
-//                    },
-//                    {
-//                      text: 'Parent 4',
-//                      href: '#parent4',
-//                      tags: ['0']
-//                    },
-//                    {
-//                      text: 'Parent 5',
-//                      href: '#parent5'  ,
-//                      tags: ['0']
-//                    }
-//                  ];
-//                  $('#datawidget').treeview({
-////                        color: "#428bca",
-//                        showTags: true,
-//                        data: defaultData
-//                      });
-                 
+                 }//end if($scope.datas.length>0){                 
                  return listElem;
           };
 
@@ -13051,7 +13053,7 @@ $scope.gererChangementFichier3 = function(event,model){
 
            
            $scope.$on("dataLoad" , function(event ,args){
-//                console.log('$scope.$on("dataLoad" , function(event ,args) :::::::::::::::: '+$scope.currentAction.viewMode+" === "+args.item);
+//                console.log('$scope.$on("dataLoad" , function(event ,args) :::::::::::::::: '+$scope.windowType+" === "+$scope.previousType);
                 if($scope.windowType=="calendar"){
                      $scope.calendarFramePanelBuilder($scope.metaData);
                 }else if($scope.windowType=="kaban"){
@@ -13064,7 +13066,11 @@ $scope.gererChangementFichier3 = function(event,model){
                 commonsTools.searchkeyevent('search-text-id',$scope);        
                 commonsTools.hideDialogLoading();
                if(angular.isDefined(args.item) && args.item!=null){
-                   $scope.viewbyIDAction(args.item);
+                   if(angular.isObject(args.item)){
+                       $scope.viewbyIDAction(args.item.id);
+                   }else{
+                       $scope.viewbyIDAction(args.item);
+                   }//end if(angular.isObject(args.item)){
                }//end if(angular.isDefined(args.item) && args.item!=null){
                $scope.pagination.hasnext();
                $scope.pagination.hasprevious();
@@ -13485,7 +13491,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                         }else{
                                             index = new Number(index)+1;
                                         }//end if(index==null||!angular.isDefined(index))
-//                                        console.log("initAction ========== isString : "+angular.isString($scope.currentAction)+" ::::: isobject : "+angular.isObject($scope.currentAction));
+                                        console.log("initAction ========== index = "+index+" isString : "+angular.isString($scope.currentAction)+" ::::: isobject : "+angular.isObject($scope.currentAction));
                                         if(angular.isString($scope.currentAction)){
                                             $scope.currentAction = angular.fromJson($scope.currentAction);
                                         }//end if(angular.isString($scope.currentAction)){
@@ -13533,14 +13539,18 @@ $scope.gererChangementFichier3 = function(event,model){
                if(args.action){
                     $scope.dataCache['currentObject'] = $scope.currentObject;
                     $scope.dataCache['currentAction'] = $scope.currentAction;
-                    $scope.dataCache['restriction'] = args.restriction;
+                    if(args.restriction){
+                        $scope.dataCache['restriction'] = args.restriction;
+                    }//end if(args.restriction){
                     $scope.viewmode = args.action.viewMode;   
                     $scope.calendarrecord = args.action.calendar;
                     $scope.currentAction = args.action;
                     var template = args.template;
                     var index = args.index;
-//                    console.log("$scope.$on(currentActionUpdate , function(event , args) ===== "+angular.toJson($scope.currentModule));
-                    $scope.enabledVerticalMenu = args.verticalMenu;
+//                    console.log("$scope.$on(currentActionUpdate , function(event , args) ===== "+angular.toJson(args.item));
+                    if(args.verticalMenu){
+                        $scope.enabledVerticalMenu = args.verticalMenu;
+                    }//end if(args.verticalMenu){
                     $scope.reset();
                     $scope.initAction(template,index , args.item,args.inner);
               }//end if(args.action){
@@ -13675,6 +13685,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                 $http.defaults.headers.common['modulename']= angular.lowercase(modele);
                              } //end if(modele){
 //                             console.log("$scope.downloadAction = function(model , fieldName) =================== model :"+model+" === fieldName :"+fieldName+" ==== pj:"+pj+" === modele.. = "+modele+" ===== meta : "+entite+" === url : "+url);
+                             url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/resource/file/"+pj+"/"+pj;
                              $http.get(url, {responseType: "arraybuffer"})
                                      .then(function(response){
 //                                         console.log("$scope.piecejointeviewAction  ============================================= "+type+" === file name : "+pj);
@@ -13816,7 +13827,7 @@ $scope.gererChangementFichier3 = function(event,model){
 //               console.log("Critere de recherh=c*************** "+$scope.dataCache["report"]+" === "+angular.toJson($scope.temporalData));
               
          };
-        
+         
       },      
       /**
        * 

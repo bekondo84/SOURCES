@@ -6,6 +6,7 @@
 package com.teratech.achat.model.base;
 
 import com.core.base.BaseElement;
+import com.core.base.State;
 import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
@@ -114,6 +115,10 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
    @JoinColumn(name = "ART_ID")
    @Predicate(label = " ",type = Controle.class,target = "one-to-many",group = true,groupName = "group4",groupLabel = "controle.qualite",edittable = true)
    private List<Controle> controles = new ArrayList<Controle>();
+   
+   @Predicate(label = " ",target = "state",hide = true)
+   private String state ="etabli";
+   
     /**
      * 
      */
@@ -181,6 +186,7 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
         this.achete = art.getAchete();
         this.vendu = art.getVendu();
         this.setOwnermodule(art.getOwnermodule());
+        this.state = art.state;
     }
 
     public String getCode() {
@@ -310,6 +316,14 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
     public void setControles(List<Controle> controles) {
         this.controles = controles;
     }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
     
     
 
@@ -410,6 +424,28 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
 
     public void setGarantie(Short garantie) {
         this.garantie = garantie;
+    }
+    
+     @Override
+    public List<State> getStates() {
+         List<State> states = new ArrayList<State>();
+        State state = new State("etabli", "broullion",null,"#f08080");
+        states.add(state);
+        state = new State("transmi", "transmi",null,"#90ee90");
+        states.add(state);
+        state = new State("confirme", "confirme",null,"#87cefa");
+        states.add(state);
+        state = new State("valider", "valide",null,"#87cefa");
+        states.add(state);
+        state = new State("signe", "signe",null,"#87cefa");
+        states.add(state);
+        state = new State("marque", "marque",null,"#87cefa");
+        states.add(state);
+        state = new State("clos", "clos",null,"#87cefa");
+        states.add(state);
+        state = new State("annule", "annule",null,"#87cefa");
+        states.add(state);
+        return states; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

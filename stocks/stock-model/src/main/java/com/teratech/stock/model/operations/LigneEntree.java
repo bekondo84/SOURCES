@@ -29,13 +29,13 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue("IN")
 public class LigneEntree extends LigneDocumentStock implements Serializable{
     
-    @Predicate(label = "PU HT",type = Double.class,optional = false,search = true)
+    @Predicate(label = "pu.ht",type = Double.class,optional = false,search = true)
     @Observer(observable = "article" ,source = "field:uniteachat")
     private Double puht ;
     
     @ManyToOne
     @JoinColumn(name = "LIEMP_ID")
-    @Predicate(label = "Emplacement cible",type = LienEmplacement.class,target = "many-to-one",search = true,optional = false)
+    @Predicate(label = "emplacement.cible",type = LienEmplacement.class,target = "many-to-one",search = true,optional = false)
     @Filter(value = "[{\"fieldName\":\"article\",\"value\":\"object.article\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner l'article\"},{\"fieldName\":\"entrpot\",\"value\":\"this.entrepot\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"Veuillez selectionner le magasin\"}]")
     private LienEmplacement emplacement ;    
     
@@ -43,18 +43,18 @@ public class LigneEntree extends LigneDocumentStock implements Serializable{
 //    @Predicate(label = "PU Net",type = Double.class,optional = false,editable = false)
     private Double punet ;
     
-    @Predicate(label = "N° lot/série",optional = true,unique = true,search = true)
+    @Predicate(label = "numero.serie.ou.lot",optional = true,unique = true,search = true)
     private String code ;
     
-    @Predicate(label = "Péremption",type = Date.class,target = "date",search = true)
+    @Predicate(label = "peremption",type = Date.class,target = "date",search = true)
     @Temporal(TemporalType.DATE)
     private Date peremption ;
     
-    @Predicate(label = "Fabrication",type = Date.class,target = "date",search = true)
+    @Predicate(label = "fabrication",type = Date.class,target = "date",search = true)
     @Temporal(TemporalType.DATE)
     private Date fabrication ;
     
-    @Predicate(label = "Total HT",type = Double.class,optional = false,search = true,hide = true,compute = true,values ="this.puht;*;this.quantite" )
+    @Predicate(label = "total.ht",type = Double.class,optional = false,search = true,hide = true,compute = true,values ="this.puht;*;this.quantite" )
     private Double totalht ;  
     
     @OneToOne
