@@ -27,8 +27,8 @@ public class SMSOUT extends BaseElement implements Serializable,Comparable<SMSOU
      * The message type. This should be "O" for normal outbound messages, or "W" for wap si messages.
      */
     @Column(nullable = false)
-    @Predicate(label = "type",search = true,optional = false)
-    private String type ;
+    @Predicate(label = "type",search = false,optional = false)
+    private String type ="O";
     
     /**
      * The recipient's number to whom the message should be sent. International format, no leading "+" or zeroes.
@@ -48,7 +48,7 @@ public class SMSOUT extends BaseElement implements Serializable,Comparable<SMSOU
      * The WAP SI URL address.
      */
     @Column(name = "wap_url")
-    @Predicate(label = "wap.url",search = true)
+    @Predicate(label = "wap.url",search = false)
     private String wapurl;
     
     /**
@@ -56,14 +56,14 @@ public class SMSOUT extends BaseElement implements Serializable,Comparable<SMSOU
      */
     @Column(name = "wap_expiry_date")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    @Predicate(label = "wap.expiry.date",type = Date.class,target = "datetime",search = true)
+    @Predicate(label = "wap.expiry.date",type = Date.class,target = "datetime",search = false)
     private Date wapexpiredate ;
     
     /**
      * The WAP SI signal. Use "N" for NONE, "L" for LOW, "M" for MEDIUM, "H" for HIGH, "D" for DELETE. If no value/invalid value is given, the NONE signal will be used.
      */
     @Column(name = "wap_signal")
-    @Predicate(label = "wap.signal",search = true)
+    @Predicate(label = "wap.signal",search = false)
     private String wapsignal;
     
     /**
@@ -78,42 +78,42 @@ public class SMSOUT extends BaseElement implements Serializable,Comparable<SMSOU
      * The originator. Normally you should leave this blank.
      */
     @Column(nullable = false)
-    @Predicate(label = "originator",optional = true,search = true)
+    @Predicate(label = "originator",optional = true,search = false)
     private String originator ="";
     
     /**
      * "7" for 7bit, "8" for 8bit and "U" for Unicode/UCS2.
      */
     @Column(nullable = false)
-    @Predicate(label = "encoding",optional = false,search = true)
+    @Predicate(label = "encoding",optional = false,search = false)
     private String encoding="7";
     
     /**
      * Set to 1 if you require a status report message to be generated.
      */
     @Column(nullable = false,name = "status_report")
-    @Predicate(label = "status.report",type = Integer.class,optional = false,search = true)
+    @Predicate(label = "status.report",type = Integer.class,optional = false,search = false)
     private Integer statusreport =0 ;
     
     /**
      * Set to 1 if you require your message to be sent as a flash message.
      */
     @Column(nullable = false,name = "flash_sms")
-    @Predicate(label = "flash.sms",type = Integer.class,optional = false,search = true)
+    @Predicate(label = "flash.sms",type = Integer.class,optional = false,search = false)
     private Integer flashsms =0;
     
     /**
      * Set to source port (for midlets)
      */
     @Column(name = "src_port",nullable = false)
-    @Predicate(label = "src.port",optional = false,type = Integer.class,search = true)
+    @Predicate(label = "src.port",optional = false,type = Integer.class,search = false)
     private Integer srcport = -1;
     
     /**
      * Set to destination port (for midlets)
      */
     @Column(name = "dst_port",nullable = false)
-    @Predicate(label = "dst.port",optional = false,type = Integer.class,search = true)
+    @Predicate(label = "dst.port",optional = false,type = Integer.class,search = false)
     private Integer dstport = -1 ;
     
     /**
@@ -128,14 +128,14 @@ public class SMSOUT extends BaseElement implements Serializable,Comparable<SMSOU
      * The Reference ID of your message. This field is updated by SMSServer when it sends your message.
      */
     @Column(name = "ref_no")
-    @Predicate(label = "ref.no",search = true)
+    @Predicate(label = "ref.no",search = false)
     private String refno ;
     
     /**
      * Lower (or negative) values mean lower priority than higher (or positive) values. By convention, a priority of a value 0 (zero) is considered the normal priority. High priority messages get sent first than others.
      */
     @Column(nullable = false)
-    @Predicate(label = "priority",type = Integer.class,optional = false,search = true)
+    @Predicate(label = "priority",type = Integer.class,optional = false,search = false)
     private Integer priority = 0;
     
     /**
@@ -149,7 +149,7 @@ public class SMSOUT extends BaseElement implements Serializable,Comparable<SMSOU
      * The number of retries SMSServer did to send your message. This field is updated by SMSServer.
      */
     @Column(nullable = false)
-    @Predicate(label = "errors",type = Integer.class,optional = false,search = true)
+    @Predicate(label = "errors",type = Integer.class,optional = false,search = false)
     private Integer errors = 0;
     
     /**
@@ -157,7 +157,7 @@ public class SMSOUT extends BaseElement implements Serializable,Comparable<SMSOU
      */
     @Column(name = "gateway_id")
     @Predicate(label = "gateway.id",search = true)
-    private String gateway;
+    private String gateway ="*";
 
     /**
      * 
@@ -167,29 +167,13 @@ public class SMSOUT extends BaseElement implements Serializable,Comparable<SMSOU
 
     /**
      * 
-     * @param type
      * @param recipient
-     * @param text
-     * @param wapurl
-     * @param wapexpiredate
-     * @param sentdate
-     * @param refno
-     * @param gateway
-     * @param id
-     * @param designation
-     * @param moduleName
-     * @param comparedid 
+     * @param text 
      */
-    public SMSOUT(String type, String recipient, String text, String wapurl, Date wapexpiredate, Date sentdate, String refno, String gateway, long id, String designation, String moduleName, long comparedid) {
-        super(id, designation, moduleName, comparedid);
-        this.type = type;
+    public SMSOUT( String recipient, String text) {
+        super(-1, null, null, -1);
         this.recipient = recipient;
-        this.text = text;
-        this.wapurl = wapurl;
-        this.wapexpiredate = wapexpiredate;
-        this.sentdate = sentdate;
-        this.refno = refno;
-        this.gateway = gateway;
+        this.text = text;       
     }
     
      public SMSOUT(SMSOUT entity) {
@@ -199,8 +183,19 @@ public class SMSOUT extends BaseElement implements Serializable,Comparable<SMSOU
         this.text = entity.text;
         this.wapurl = entity.wapurl;
         this.wapexpiredate = entity.wapexpiredate;
+        this.wapsignal = entity.wapsignal;
+        this.createdate=entity.createdate;
+        this.originator=entity.originator;
+        this.encoding = entity.encoding;
+        this.statusreport=entity.statusreport;
+        this.flashsms = entity.flashsms;
+        this.srcport = entity.srcport;
+        this.dstport = entity.dstport;
         this.sentdate = entity.sentdate;
         this.refno = entity.refno;
+        this.priority = entity.priority;
+        this.status = entity.status;
+        this.errors = entity.errors;
         this.gateway = entity.gateway;
     }
 
@@ -340,6 +335,24 @@ public class SMSOUT extends BaseElement implements Serializable,Comparable<SMSOU
         this.gateway = gateway;
     }
 
+    public String getWapsignal() {
+        return wapsignal;
+    }
+
+    public void setWapsignal(String wapsignal) {
+        this.wapsignal = wapsignal;
+    }
+
+    public Date getCreatedate() {
+        return createdate;
+    }
+
+    public void setCreatedate(Date createdate) {
+        this.createdate = createdate;
+    }
+    
+    
+
     @Override
     public String getOwnerentity() {
         return "smsout"; //To change body of generated methods, choose Tools | Templates.
@@ -364,6 +377,13 @@ public class SMSOUT extends BaseElement implements Serializable,Comparable<SMSOU
     public boolean isCreateonfield() {
         return false; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public boolean isDesablecreate() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
     @Override
     public String getDesignation() {

@@ -33,9 +33,16 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(SMSCALLRSImpl.class);
-        resources.add(SMSINRSImpl.class);
-        resources.add(SMSOUTRSImpl.class);        
+        resources.add(com.keren.smsgateway.jaxrs.impl.ContactRSImpl.class);
+        resources.add(com.keren.smsgateway.jaxrs.impl.GroupeContactRSImpl.class);
+        resources.add(com.keren.smsgateway.jaxrs.impl.ProgramSMSRSImpl.class);        
+        resources.add(com.keren.smsgateway.jaxrs.impl.SMSCALLRSImpl.class);
+        resources.add(com.keren.smsgateway.jaxrs.impl.SMSConfigurationRSImpl.class);        
+        resources.add(com.keren.smsgateway.jaxrs.impl.SMSGatewayRSImpl.class);
+        resources.add(com.keren.smsgateway.jaxrs.impl.SMSINRSImpl.class);
+        resources.add(com.keren.smsgateway.jaxrs.impl.SMSModelRSImpl.class);
+        resources.add(com.keren.smsgateway.jaxrs.impl.SMSOUTRSImpl.class);
+        resources.add(com.keren.smsgateway.jaxrs.impl.SendSMSRSImpl.class);
     }
     
 }

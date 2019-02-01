@@ -350,12 +350,22 @@ angular.module('keren.core.commons')
                     }
                     return true;
                 },
+                enableSelect : function(scope ,field){
+                    if(scope.windowType=="view"){
+                        return false ;
+                    }else if(field.updatable==false&& scope.windowType=="update"){
+                        return false;
+                    }else if(field.editable==false&& scope.windowType=="new"){
+                        return false;
+                    }//end if(scope.windowType=="view")
+                    return true;
+                },
                 /***
                  * 
                  * */
                 printer : function(report_id){
                     var mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=100');
-                    mywindow.document.write('<html><head><style>@media print {footer {page-break-after: always;}}</style>');
+                    mywindow.document.write('<html><head><style><link href="css\bootstrap.min.css" rel="stylesheet" media="print"/>@media print {footer {page-break-after: always;}}</style>');
                     mywindow.document.write('</head><body >');
                     mywindow.document.write(document.getElementById(report_id).innerHTML);
                     mywindow.document.write('</body></html>');
@@ -1382,9 +1392,9 @@ angular.module('keren.core.commons')
                         content.setAttribute('style','height:300px;overflow:auto;');
                         //console.log(angular.toJson(error.data));
                         if(error.data){
-                            content.innerHTML = error.data;
+                            content.innerHTML = angular.toJson(error.data);
                         }else{
-                            content.innerHTML = error;
+                            content.innerHTML = angular.toJson(error);
                         }
                         viewElem.appendChild(content);
                         //Construction du footer

@@ -3,15 +3,23 @@ package com.keren.smsgateway.jaxrs.impl;
 
 import javax.ws.rs.Path;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
+import com.kerem.core.MetaDataUtil;
 import com.keren.smsgateway.core.ifaces.SMSOUTManagerRemote;
 import com.keren.smsgateway.jaxrs.ifaces.SMSOUTRS;
 import com.keren.smsgateway.model.SMSOUT;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
+import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ws.rs.core.HttpHeaders;
 
 
 /**
- * Classe d'implementation du Web Service JAX-RS
+ * Classe d'implementation du Web Service JAX-RS
+
  * @since Tue Jan 29 21:41:40 WAT 2019
  * 
  */
@@ -44,5 +52,20 @@ public class SMSOUTRSImpl
     public String getModuleName() {
         return ("smsgateway");
     }
+
+    @Override
+    public MetaData getMetaData(HttpHeaders headers) {
+        MetaData meta = null;
+        try {
+            meta = MetaDataUtil.getMetaData(new SMSOUT(), new HashMap<String, MetaData>(), new ArrayList<String>());
+        } catch (InstantiationException ex) {
+            Logger.getLogger(SMSOUTRSImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(SMSOUTRSImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return meta;
+    }
+    
+    
 
 }

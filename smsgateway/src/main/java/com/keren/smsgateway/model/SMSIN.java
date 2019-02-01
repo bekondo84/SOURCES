@@ -23,7 +23,7 @@ import javax.persistence.Temporal;
 public class SMSIN extends BaseElement implements Serializable,Comparable<SMSIN>{
 
     @Column(nullable = false)
-    @Predicate(label = "process",type = Integer.class,search = true)
+    @Predicate(label = "process",type = Integer.class,search = false)
     private Integer process =0 ;
     
     @Column(nullable = false)
@@ -40,7 +40,7 @@ public class SMSIN extends BaseElement implements Serializable,Comparable<SMSIN>
      *  7 : for 7 bits , 8:for 8bits and U:for Unicode/UCS2
      */
     @Column(nullable = false)
-    @Predicate(label = "encoding",search = true,optional = false)
+    @Predicate(label = "encoding",search = false,optional = false)
     private String encoding;
     
     /**
@@ -62,21 +62,21 @@ public class SMSIN extends BaseElement implements Serializable,Comparable<SMSIN>
     /**
      * the body of the message
      */
-    @Predicate(label = " ",target = "textarea",search = true,group = true,groupName = "group1",groupLabel = "text")
+    @Predicate(label = "message",target = "textarea",search = true,group = true,groupName = "group1",groupLabel = "text")
     private String text ;
     
     /**
      * Available only for status S :reference of the original outbound messsage 
      */
     @Column(name = "original_ref_no")
-    @Predicate(label = "original.ref.number",search = true)
+    @Predicate(label = "original.ref.number",search = false)
     private String refNo;
     
     /**
      * Available only for status report messages: refers to the receive date of the original outbound message.
      */
     @Column(name = "original_receive_date")
-    @Predicate(label = "original.receive.date",search = true)
+    @Predicate(label = "original.receive.date",search = false)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date receiveDate;
     

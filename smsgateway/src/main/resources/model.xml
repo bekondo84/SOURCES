@@ -24,42 +24,42 @@ and open the template in the editor.
                 <role>ADMIN</role>
             </roles>           
         </element>
-  <!--           <element type="com.keren.posweb.model.FamilleArticle"  idclass="long"  idname="id" deseable="true">
+        <element type="com.keren.smsgateway.model.GroupeContact"  idclass="long"  idname="id" deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           
         </element>
-        <element type="com.keren.posweb.model.Article"  idclass="long"  idname="id" deseable="true">
+        <element type="com.keren.smsgateway.model.Contact"  idclass="long"  idname="id" deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           
         </element>   
-        <element type="com.keren.posweb.model.PointVente"  idclass="Long"  idname="id"  deseable="true">
+        <element type="com.keren.smsgateway.model.SMSModel"  idclass="Long"  idname="id"  deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           
         </element>   
-        <element type="com.keren.posweb.model.PosWebDashboard"  idclass="Long"  idname="id"   deseable="true">
+        <element type="com.keren.smsgateway.model.SendSMS"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           
         </element>           
-        <element type="com.keren.posweb.model.Structure"  idclass="Long"  idname="id"   deseable="true">
+        <element type="com.keren.smsgateway.model.ProgramSMS"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           
         </element>  
-        <element type="com.keren.posweb.model.User"  idclass="Long"  idname="id"   deseable="true">
+       <element type="com.keren.smsgateway.model.SMSConfiguration"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           
         </element>
-        <element type="com.keren.posweb.model.PosSession"  idclass="Long"  idname="id"   deseable="true">
+        <element type="com.keren.smsgateway.model.SMSGateway"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           
         </element>  
-       <element type="com.keren.posweb.model.Commande"  idclass="Long"  idname="id"   deseable="true">
+      <!--          <element type="com.keren.posweb.model.Commande"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           

@@ -426,27 +426,27 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
         this.garantie = garantie;
     }
     
-     @Override
-    public List<State> getStates() {
-         List<State> states = new ArrayList<State>();
-        State state = new State("etabli", "broullion",null,"#f08080");
-        states.add(state);
-        state = new State("transmi", "transmi",null,"#90ee90");
-        states.add(state);
-        state = new State("confirme", "confirme",null,"#87cefa");
-        states.add(state);
-        state = new State("valider", "valide",null,"#87cefa");
-        states.add(state);
-        state = new State("signe", "signe",null,"#87cefa");
-        states.add(state);
-        state = new State("marque", "marque",null,"#87cefa");
-        states.add(state);
-        state = new State("clos", "clos",null,"#87cefa");
-        states.add(state);
-        state = new State("annule", "annule",null,"#87cefa");
-        states.add(state);
-        return states; //To change body of generated methods, choose Tools | Templates.
-    }
+//     @Override
+//    public List<State> getStates() {
+//         List<State> states = new ArrayList<State>();
+//        State state = new State("etabli", "broullion",null,"#f08080");
+//        states.add(state);
+//        state = new State("transmi", "transmi",null,"#90ee90");
+//        states.add(state);
+//        state = new State("confirme", "confirme",null,"#87cefa");
+//        states.add(state);
+//        state = new State("valider", "valide",null,"#87cefa");
+//        states.add(state);
+//        state = new State("signe", "signe",null,"#87cefa");
+//        states.add(state);
+//        state = new State("marque", "marque",null,"#87cefa");
+//        states.add(state);
+//        state = new State("clos", "clos",null,"#87cefa");
+//        states.add(state);
+//        state = new State("annule", "annule",null,"#87cefa");
+//        states.add(state);
+//        return states; //To change body of generated methods, choose Tools | Templates.
+//    }
 
     @Override
     public int hashCode() {

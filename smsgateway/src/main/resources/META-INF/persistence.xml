@@ -6,6 +6,13 @@
     <class>com.keren.smsgateway.model.SMSCALL</class>
     <class>com.keren.smsgateway.model.SMSIN</class>
     <class>com.keren.smsgateway.model.SMSOUT</class>
+    <class>com.keren.smsgateway.model.Civilite</class>
+    <class>com.keren.smsgateway.model.Contact</class>
+    <class>com.keren.smsgateway.model.GroupeContact</class>
+    <class>com.keren.smsgateway.model.SMSModel</class>
+    <class>com.keren.smsgateway.model.ProgramSMS</class>
+    <class>com.keren.smsgateway.model.SMSConfiguration</class>
+    <class>com.keren.smsgateway.model.SMSGateway</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="update"/>

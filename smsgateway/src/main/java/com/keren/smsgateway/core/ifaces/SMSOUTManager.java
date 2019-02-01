@@ -6,7 +6,8 @@ import com.keren.smsgateway.model.SMSOUT;
 
 
 /**
- * Interface etendue par les interfaces locale et remote du manager
+ * Interface etendue par les interfaces locale et remote du manager
+
  * @since Tue Jan 29 21:41:40 WAT 2019
  * 
  */
@@ -16,4 +17,5 @@ public interface SMSOUTManager
 
     public final static String SERVICE_NAME = "SMSOUTManager";
 
+    
 }
