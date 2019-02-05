@@ -55,7 +55,7 @@ public class PeriodeComptable extends BaseElement implements Serializable,Compar
     
     @ManyToOne
     @JoinColumn(name = "EXER_ID")
-    @Predicate(label = "Exercice",type = ExerciceComptable.class,target = "many-to-one",hide = true)
+    @Predicate(label = "exercice",type = ExerciceComptable.class,target = "many-to-one",hide = true)
     private ExerciceComptable exercice ;
 
     public PeriodeComptable() {

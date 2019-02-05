@@ -5,7 +5,6 @@
  */
 package com.basaccount.model.ventes;
 
-import com.basaccount.model.achats.*;
 import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.comptabilite.Taxe;
 import com.core.base.BaseElement;
@@ -26,21 +25,21 @@ public class LigneNoteFraisVente extends BaseElement implements Serializable,Com
 
     @ManyToOne
     @JoinColumn(name = "COMP_ID")
-    @Predicate(label = "Compte",type = Compte.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "compte",type = Compte.class,target = "many-to-one",optional = false,search = true)
     private Compte compte ;
     
-    @Predicate(label = "Description",search = true)
+    @Predicate(label = "description",search = true)
     private String libelle ;
     
-    @Predicate(label = "Montant",type = Double.class,optional = false,search = true)
+    @Predicate(label = "montant",type = Double.class,optional = false,search = true)
     private Double montant =0.0;
     
     @ManyToOne
     @JoinColumn(name = "TAX_ID")
-    @Predicate(label = "Taxes",type = Taxe.class,target = "many-to-one",search = true)
+    @Predicate(label = "taxes",type = Taxe.class,target = "many-to-one",search = true)
     private Taxe taxe ;
     
-    @Predicate(label = "Total HT",type = Double.class,editable = false)
+    @Predicate(label = "total.ht",type = Double.class,editable = false)
     private Double total ;
 
     public LigneNoteFraisVente(Compte compte, String libelle) {

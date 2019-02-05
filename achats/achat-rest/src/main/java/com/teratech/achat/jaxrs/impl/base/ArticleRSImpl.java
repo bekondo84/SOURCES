@@ -3,6 +3,7 @@ package com.teratech.achat.jaxrs.impl.base;
 
 import javax.ws.rs.Path;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
+import com.kerem.core.KerenExecption;
 import com.kerem.core.MetaDataUtil;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
@@ -89,6 +90,15 @@ public class ArticleRSImpl
             }//end if(entity.getStockages().get(i).getId()<=0){
         }//end for(int i=0;i<=entity.getStockages().size();i++){
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Article delete(HttpHeaders headers, Long id) {
+      try{
+          return super.delete(headers, id);
+      }catch(Exception ex){
+        throw new KerenExecption("article.delete.error");
+      } //To change body of generated methods, choose Tools | Templates.
     }
 
       

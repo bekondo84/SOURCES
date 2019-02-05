@@ -3,13 +3,13 @@ package com.teratech.achat.jaxrs.impl.base;
 
 import javax.ws.rs.Path;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
+import com.kerem.core.KerenExecption;
 import com.kerem.core.MetaDataUtil;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
 import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import com.teratech.achat.core.ifaces.base.UniteGestionManagerRemote;
 import com.teratech.achat.jaxrs.ifaces.base.UniteGestionRS;
-import com.teratech.achat.model.base.Civilite;
 import com.teratech.achat.model.base.UniteGestion;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,5 +66,13 @@ public class UniteGestionRSImpl
         return null;
     }
 
+    @Override
+    public UniteGestion delete(HttpHeaders headers, Long id) {
+      try{
+          return super.delete(headers, id);
+      }catch(Exception ex){
+        throw new KerenExecption("unite.gestion.delete.error");
+      } //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

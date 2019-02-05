@@ -30,58 +30,58 @@ import javax.persistence.Table;
 @Table(name = "T_ENTR")
 public class Entrepot extends BaseElement implements Serializable,Comparable<Entrepot>{
     
-    @Predicate(label = "Code dépôt",optional = false,unique = true,search = true,colsequence = 1)
+    @Predicate(label = "code.depot",optional = false,unique = true,search = true,colsequence = 1)
     private String code ;
     
-    @Predicate(label = "Magasin principal?" ,type = Boolean.class,search = true,colsequence = 3)
+    @Predicate(label = "magasin.principal.?" ,type = Boolean.class,search = true,colsequence = 3)
     private Boolean principal = Boolean.FALSE;
     
-    @Predicate(label = "Intitulé",search = true,colsequence = 2)
+    @Predicate(label = "intitule",search = true,colsequence = 2)
     private String intitule ;
     
-    @Predicate(label = "Adresse",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "adresse",group = true,groupName = "group1",groupLabel = "complement")
     private String adresse1 ;
     
-    @Predicate(label = "Complement",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "complement",group = true,groupName = "group1",groupLabel = "complement")
     private String adresse2;
     
-    @Predicate(label = "Boîte postale",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "boite.postale",group = true,groupName = "group1",groupLabel = "complement")
     private String cp ;
     
-    @Predicate(label = "Ville",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "ville",group = true,groupName = "group1",groupLabel = "complement")
     private String ville ;
     
     @ManyToOne
     @JoinColumn(name = "REGI_ID")
-    @Predicate(label = "Région",type = Region.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "region",type = Region.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "complement")
     private Region region ;
     
     @ManyToOne
     @JoinColumn(name = "PAYS_ID")
-    @Predicate(label = "Pays",type = Pays.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "pays",type = Pays.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "complement")
     private Pays pays ;
     
     @ManyToOne
     @JoinColumn(name = "TIER_ID")
-    @Predicate(label = "Responsable",type = Tier.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "responsable",type = Tier.class,target = "many-to-one",group = true,groupName = "group1",groupLabel = "complement")
     private Tier responsable ;   
     
     
-    @Predicate(label = "Téléphone",target = "tel",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "telephone",target = "tel",group = true,groupName = "group1",groupLabel = "complement")
     private String tel;
     
-     @Predicate(label = "Mobile",target = "tel",group = true,groupName = "group1",groupLabel = "Complement")
+     @Predicate(label = "mobile",target = "tel",group = true,groupName = "group1",groupLabel = "complement")
     private String mobile;
     
-    @Predicate(label = "Courriel",target = "email",group = true,groupName = "group1",groupLabel = "Complement")
+    @Predicate(label = "courriel",target = "email",group = true,groupName = "group1",groupLabel = "complement")
     private String email;
     
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     @JoinColumn(name = "CONT_ID")
-    @Predicate(label = "contact",type = Contact.class,target = "one-to-many",group = true,groupName = "group2",groupLabel = "Contacts")
+    @Predicate(label = " ",type = Contact.class,target = "one-to-many",group = true,groupName = "group2",groupLabel = "contacts")
     private List<Contact> contacts = new ArrayList<Contact>();
     
-    @Predicate(label = "c",target = "textarea",group = true,groupName = "group3",groupLabel = "Commentaire")
+    @Predicate(label = " ",target = "textarea",group = true,groupName = "group3",groupLabel = "commentaire")
     private String commentaire ;
 
     /**
@@ -307,12 +307,12 @@ public class Entrepot extends BaseElement implements Serializable,Comparable<Ent
 
     @Override
     public String getListTitle() {
-        return "ENTREPÔTS"; //To change body of generated methods, choose Tools | Templates.
+        return "entrepots"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "ENTREPÔT"; //To change body of generated methods, choose Tools | Templates.
+        return "entrepot"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

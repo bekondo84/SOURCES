@@ -5,8 +5,8 @@
  */
 package com.basaccount.model.operations;
 
-import com.basaccount.model.comptabilite.ExerciceComptable;
 import com.basaccount.model.comptabilite.JournalComptable;
+import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.core.base.BaseElement;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
@@ -14,12 +14,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -27,27 +25,26 @@ import javax.persistence.TemporalType;
  *
  * @author Commercial_2
  */
-@Entity
-@Table(name = "T_JRNSAISIE")
+
 public class JournalSaisie extends BaseElement implements Serializable,Comparable<JournalSaisie>{
     
-    @Predicate(label = "PERIODE",optional = false,updatable = false,search = true)
+    @Predicate(label = "periode",optional = false,updatable = false,search = true)
     private String code ;
     
     @ManyToOne
     @JoinColumn(name = "EXER_ID")
-    @Predicate(label = "EXERCICE BUDGETAIRE",type = ExerciceComptable.class,search = true,optional = false,updatable = false)
-    private ExerciceComptable exercice ;
+    @Predicate(label = "periode.comptable",type = PeriodeComptable.class,search = true,optional = false,updatable = false)
+    private PeriodeComptable periode ;
     
     @ManyToOne
     @JoinColumn(name = "JRND_ID")
-    @Predicate(label = "JOURNAL" ,search = true,type = JournalComptable.class,optional = false,updatable = false)
+    @Predicate(label = "journal" ,search = true,type = JournalComptable.class,optional = false,updatable = false)
     private JournalComptable journal ;
     
-    @Predicate(label = "DEBIT" ,search = false,editable = false,hide = true,type = BigDecimal.class)
+    @Predicate(label = "debit" ,search = false,editable = false,hide = true,type = BigDecimal.class)
     private BigDecimal debit = BigDecimal.ZERO;
     
-    @Predicate(label = "CREDIT" ,search = false,editable = false,hide = true,type = BigDecimal.class)
+    @Predicate(label = "credit" ,search = false,editable = false,hide = true,type = BigDecimal.class)
     private BigDecimal credit = BigDecimal.ZERO;
     
    
@@ -57,21 +54,19 @@ public class JournalSaisie extends BaseElement implements Serializable,Comparabl
     @Temporal(TemporalType.DATE)
     private Date fin ;
     
-    @Predicate(label = "Operations",group = true,groupName = "group1",groupLabel = "OPERATIONS",type = EcritureComptable.class,target = "one-to-many")
+    @Predicate(label = " ",group = true,groupName = "group1",groupLabel = "operations",type = EcritureComptable.class,target = "one-to-many")
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "journaldesaisie")
     private List<EcritureComptable> operations = new ArrayList<EcritureComptable>();
 
     /**
      * 
      * @param code
-     * @param exercice
      * @param debut
      * @param fin 
      */
-    public JournalSaisie(String code, ExerciceComptable exercice, Date debut, Date fin) {
+    public JournalSaisie(String code, Date debut, Date fin) {
         this.code = code;
-        this.exercice = exercice;
-        this.debut = debut;
+       this.debut = debut;
         this.fin = fin;
     }
 
@@ -85,10 +80,9 @@ public class JournalSaisie extends BaseElement implements Serializable,Comparabl
      * @param designation
      * @param moduleName 
      */
-    public JournalSaisie(String code, ExerciceComptable exercice, Date debut, Date fin, long id, String designation, String moduleName) {
+    public JournalSaisie(String code, Date debut, Date fin, long id, String designation, String moduleName) {
         super(id, designation, moduleName,0L);
         this.code = code;
-        this.exercice = exercice;
         this.debut = debut;
         this.fin = fin;
     }
@@ -96,13 +90,13 @@ public class JournalSaisie extends BaseElement implements Serializable,Comparabl
     public JournalSaisie(JournalSaisie journal) {
         super(journal.id, journal.designation, journal.moduleName,journal.compareid);
         this.code = journal.code;
-        this.exercice = journal.exercice;
+        this.periode = journal.periode;
         this.debut = journal.debut;
         this.fin = journal.fin;
         this.journal = journal.getJournal();
         this.debit = journal.getDebit();
         this.credit = journal.getCredit();
-        this.operations = new ArrayList<EcritureComptable>();
+        
     }
     
     public JournalSaisie() {
@@ -116,14 +110,15 @@ public class JournalSaisie extends BaseElement implements Serializable,Comparabl
         this.code = code;
     }
 
-    public ExerciceComptable getExercice() {
-        return exercice;
+    public PeriodeComptable getPeriode() {
+        return periode;
     }
 
-    public void setExercice(ExerciceComptable exercice) {
-        this.exercice = exercice;
+    public void setPeriode(PeriodeComptable periode) {
+        this.periode = periode;
     }
 
+  
     public Date getDebut() {
         return debut;
     }
@@ -234,10 +229,6 @@ public class JournalSaisie extends BaseElement implements Serializable,Comparabl
         return code.compareTo(o.code);
     }
 
-    @Override
-    public String toString() {
-        return "JournalSaisie{" + "code=" + code + ", exercice=" + exercice + ", journal=" + journal + ", debit=" + debit + ", credit=" + credit + ", debut=" + debut + ", fin=" + fin + ", operations=" + operations + '}';
-    }
     
     
 }

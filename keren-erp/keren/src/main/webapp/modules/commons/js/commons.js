@@ -333,6 +333,7 @@ angular.module('keren.core.commons')
                  * @returns {Boolean}
                  */
                 iseditable : function(scope , model,field){
+//                    console.log("commons.iseditable : function(scope , model,field) ===== model : "+model+"  ==== field : "+angular.toJson(field));
                     var parts = model.split('.');
                     var metaData = scope.getCurrentMetaData(model);                   
                     if(parts[0]=='currentObject'){
@@ -365,7 +366,7 @@ angular.module('keren.core.commons')
                  * */
                 printer : function(report_id){
                     var mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=100');
-                    mywindow.document.write('<html><head><style><link href="css\bootstrap.min.css" rel="stylesheet" media="print"/>@media print {footer {page-break-after: always;}}</style>');
+                    mywindow.document.write('<html><head><style>@media print {footer {page-break-after: always;}}</style>');
                     mywindow.document.write('</head><body >');
                     mywindow.document.write(document.getElementById(report_id).innerHTML);
                     mywindow.document.write('</body></html>');

@@ -7,22 +7,25 @@ package com.basaccount.model.achats;
 
 import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.comptabilite.JournalComptable;
-import com.basaccount.model.comptabilite.Taxe;
 import com.basaccount.model.tiers.Tier;
-import com.core.base.BaseElement;
+import com.basaccount.model.ventes.NoteFraisTMP;
 import com.core.base.State;
+import com.megatim.common.annotations.Filter;
+import com.megatim.common.annotations.KHeader;
+import com.megatim.common.annotations.KHeaders;
+import com.megatim.common.annotations.KValue;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -30,49 +33,62 @@ import javax.persistence.TemporalType;
  *
  * @author BEKO
  */
+@KHeaders(statubar = true
+        ,value = {
+           @KHeader(type = "button",name = "work1",label = "valider",target = "workflow",roles = {"administrateur","gestionnaire"},states = {"etabli"},pattern = "btn btn-danger"
+                , value = @KValue("{'model':'baseaccount','entity':'notefrais','method':'validate','critical':true,'alert':'cette action est irreversible \nÊtes-vous sûr de vouloir continuer ?'}")
+            ),
+            @KHeader(type = "button",name = "work2",label = "imprimer.note",target = "report",roles = {"administrateur","gestionnaire"},pattern = "btn btn-default"
+                , value = @KValue("{'name':'notedefrais_report01','model':'baseaccount','entity':'notefrais','method':'imprime'}")
+            )
+        })
 @Entity
-@Table(name = "T_NOFR_ACH")
-public class NoteFrais extends BaseElement implements Serializable,Comparable<NoteFrais>{
+@DiscriminatorValue("ACH")
+public class NoteFrais extends NoteFraisTMP implements Serializable{
     
-    @Predicate(label = "N° de Référence",optional = false,unique = true,search = true)
-    private String code ;
-    
-    @ManyToOne
+   @ManyToOne
     @JoinColumn(name = "FOUR_ID")
-    @Predicate(label = "Fournisseur",type = Tier.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "fournisseur",type = Tier.class,target = "many-to-one",optional = false,search = true)
+    @Filter("[{\"fieldName\":\"type\",\"value\":\"1\"}]")
     private Tier fournisseur ;
     
-    @Temporal(TemporalType.DATE)
-    @Predicate(label = "Date ",target = "date",type = Date.class,optional = false,search = true)
-    private Date date ;
-    
-    @ManyToOne
+     @ManyToOne
     @JoinColumn(name = "COMP_ID")
-    @Predicate(label = "Compte",type = Compte.class,target = "many-to-one",optional = false,search = true)
-    private Compte compte ;
+    @Predicate(label = "compte",type = Compte.class,target = "many-to-one",optional = false,search = true)
+    private Compte comptecompens ;
     
     @Temporal(TemporalType.DATE)
 //    @Predicate(label = "Date échéance",type = Date.class,optional = false,search = true)
     private Date decheance;
     
-    @Predicate(label = "Mémo",search = true)
+    @Predicate(label = "memo",search = true)
     private String memo;
     
     @ManyToOne
     @JoinColumn(name = "JOUR_ID")
-    @Predicate(label = "Journal Comptable",type = JournalComptable.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "journal.comptable",type = JournalComptable.class,target = "many-to-one",optional = false,search = true)
     private JournalComptable journal ;    
     
     
     @OneToMany(orphanRemoval = false,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name = "NOFR_ID")
-    @Predicate(label = "Lignes",type = LigneNoteFrais.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "NOTES DE FRAIS",edittable = true)
+    @JoinColumn(name = "NOFRACH_ID")
+    @Predicate(label = " ",type = LigneNoteFrais.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "notes.frais",edittable = true)
     private List<LigneNoteFrais> notes = new ArrayList<LigneNoteFrais>();
 
-    @Predicate(label = " ",target = "textarea",group = true,groupName = "group2",groupLabel = "NOTES")
+    @Predicate(label = " ",target = "textarea",group = true,groupName = "group2",groupLabel = "notes")
     private String commentaire ;
     
+    @Predicate(label = "total.ht",type = Double.class,search = true,hide = true,editable = false)
+    private Double totalht = 0.0;
     
+    @Predicate(label = "total.taxes",type = Double.class,hide = true,search = true,editable = false)
+    private Double totaltaxes = 0.0;
+    
+    @Predicate(label = "total.ttc",type = Double.class,hide = true,search = true,editable = false)
+    private Double totalttc = 0.0;
+    
+    @Predicate(label = " ",target = "state",hide = true,search = true)
+    private String state ="etabli";
     /**
      * 
      * @param code
@@ -87,68 +103,42 @@ public class NoteFrais extends BaseElement implements Serializable,Comparable<No
         this.code = code;
         this.fournisseur = fournisseur;
         this.date = date;
-        this.compte = compte;
+        this.comptecompens = compte;
         this.decheance = decheance;
         this.memo = memo;
         this.journal = journal;
     }
 
-    /**
-     * 
-     * @param code
-     * @param fournisseur
-     * @param date
-     * @param compte
-     * @param decheance
-     * @param memo
-     * @param journal
-     * @param id
-     * @param designation
-     * @param moduleName 
-     */
-    public NoteFrais(String code, Tier fournisseur, Date date, Compte compte, Date decheance, String memo, JournalComptable journal, long id, String designation, String moduleName) {
-        super(id, designation, moduleName,0L);
-        this.code = code;
-        this.fournisseur = fournisseur;
-        this.date = date;
-        this.compte = compte;
-        this.decheance = decheance;
-        this.memo = memo;
-        this.journal = journal;
-    }
+   
     
     /**
      * 
      * @param note 
      */
     public NoteFrais(NoteFrais note) {
-        super(note.id, note.designation, note.moduleName,note.compareid);
+        super(note);
         this.code = note.code;
         if(note.fournisseur!=null){
             this.fournisseur = new Tier(note.fournisseur);
         }
         this.date = note.date;
-        if(note.compte!=null){
-            this.compte = new Compte(note.compte);
+        if(note.comptecompens!=null){
+            this.comptecompens = new Compte(note.comptecompens);
         }
-        
+        this.state = note.state;
         this.decheance = note.decheance;
         this.memo = note.memo;
         this.journal = note.journal;
         this.commentaire = note.commentaire;
+        this.totalht = note.totalht;
+        this.totaltaxes = note.totaltaxes;
+        this.totalttc = note.totalttc;
     }
 
     public NoteFrais() {
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
+  
     public Tier getFournisseur() {
         return fournisseur;
     }
@@ -157,22 +147,24 @@ public class NoteFrais extends BaseElement implements Serializable,Comparable<No
         this.fournisseur = fournisseur;
     }
 
-    public Date getDate() {
-        return date;
+  
+    public Compte getComptecompens() {
+        return comptecompens;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setComptecompens(Compte comptecompens) {
+        this.comptecompens = comptecompens;
     }
 
-    public Compte getCompte() {
-        return compte;
+    public String getState() {
+        return state;
     }
 
-    public void setCompte(Compte compte) {
-        this.compte = compte;
+    public void setState(String state) {
+        this.state = state;
     }
 
+   
     public Date getDecheance() {
         return decheance;
     }
@@ -215,6 +207,59 @@ public class NoteFrais extends BaseElement implements Serializable,Comparable<No
         this.notes = notes;
     }
 
+    public Double getTotalht() {
+        return totalht;
+    }
+
+    public void setTotalht(Double totalht) {
+        this.totalht = totalht;
+    }
+
+    public Double getTotaltaxes() {
+        return totaltaxes;
+    }
+
+    public void setTotaltaxes(Double totaltaxes) {
+        this.totaltaxes = totaltaxes;
+    }
+
+    public Double getTotalttc() {
+        return totalttc;
+    }
+
+    public void setTotalttc(Double totalttc) {
+        this.totalttc = totalttc;
+    }
+    
+    
+
+    @Override
+    public boolean isDesableupdate() {
+        return super.isDesableupdate(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesabledelete() {
+        return super.isDesabledelete(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesablecreate() {
+        return super.isDesablecreate(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isCreateonfield() {
+        return super.isCreateonfield(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getSearchkeys() {
+        return super.getSearchkeys(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+
     @Override
     public boolean isActivatefollower() {
         return true; //To change body of generated methods, choose Tools | Templates.
@@ -222,7 +267,12 @@ public class NoteFrais extends BaseElement implements Serializable,Comparable<No
 
     @Override
     public List<State> getStates() {
-        return super.getStates(); //To change body of generated methods, choose Tools | Templates.
+        List<State> states = new ArrayList<State>();
+        State stat = new State("etabli", "brouillon");
+        states.add(stat);
+        stat = new State("valide", "valide");
+        states.add(stat);
+        return states; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -247,19 +297,19 @@ public class NoteFrais extends BaseElement implements Serializable,Comparable<No
 
     @Override
     public String getListTitle() {
-        return "Reçus d'achats"; //To change body of generated methods, choose Tools | Templates.
+        return "recus.achats"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Reçu d'achat";//To change body of generated methods, choose Tools | Templates.
+        return "recu.achat";//To change body of generated methods, choose Tools | Templates.
     }
     
     
     
-    @Override
-    public int compareTo(NoteFrais o) {
-        return 0; //To change body of generated methods, choose Tools | Templates.
-    }
+//    @Override
+//    public int compareTo(NoteFrais o) {
+//        return 0; //To change body of generated methods, choose Tools | Templates.
+//    }
     
 }

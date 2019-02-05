@@ -34,8 +34,11 @@ public class SMSGateway extends BaseElement implements Serializable,Comparable<S
     @Predicate(label = "modem.model",search = true)
     private String model = "6310i";
     
-    @Predicate(label = "modem.protocol",search = true)
-    private String protocol = "PDU";
+    @Predicate(label = "modem.protocol",target = "combobox",values = "PDU;TEXT",search = true)
+    private String protocol = "0";
+    
+    @Predicate(label = "modem.pin",search = true)
+    private String pin ="0000";
     
     @Predicate(label = "modem.inbound",type = Boolean.class,search = true)
     private Boolean inbound = Boolean.TRUE;
@@ -63,6 +66,21 @@ public class SMSGateway extends BaseElement implements Serializable,Comparable<S
     public SMSGateway(String smscnumber, long id, String designation, String moduleName, long comparedid) {
         super(id, designation, moduleName, comparedid);
         this.smscnumber = smscnumber;
+    }
+    
+    public SMSGateway(SMSGateway entity) {
+        super(entity.id, entity.designation, entity.moduleName, entity.compareid);
+        this.type = entity.type;
+        this.port = entity.port;
+        this.baudrate = entity.baudrate;
+        this.manufacturer = entity.manufacturer;
+        this.model = entity.model;
+        this.protocol = entity.protocol;
+        this.pin = entity.pin;
+        this.inbound = entity.inbound;
+        this.outbound=entity.outbound;
+        this.smscnumber = entity.smscnumber;
+        this.initstring = entity.initstring;
     }
 
     public String getType() {
@@ -113,6 +131,14 @@ public class SMSGateway extends BaseElement implements Serializable,Comparable<S
         this.protocol = protocol;
     }
 
+    public String getPin() {
+        return pin;
+    }
+
+    public void setPin(String pin) {
+        this.pin = pin;
+    }
+
    
 
     public Boolean getInbound() {
@@ -160,6 +186,16 @@ public class SMSGateway extends BaseElement implements Serializable,Comparable<S
     @Override
     public String getModuleName() {
         return "smsgateway"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getListTitle() {
+        return super.getListTitle(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getEditTitle() {
+        return "sms.gateway"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

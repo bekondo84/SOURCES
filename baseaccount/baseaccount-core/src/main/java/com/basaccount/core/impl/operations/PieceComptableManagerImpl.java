@@ -99,7 +99,7 @@ public class PieceComptableManagerImpl
                     ecri.setTier(new Tier(ecri.getTier()));
                 }
                 ecri.setCompte(new Compte(ecri.getCompte()));
-                ecri.setJournaldesaisie(new JournalSaisie(ecri.getJournaldesaisie()));
+//                ecri.setJournaldesaisie(new JournalSaisie(ecri.getJournaldesaisie()));
                 if(ecri.getEcrituretier()!=null){
                     ecri.getEcrituretier().setCompte(new Tier(ecri.getEcrituretier().getCompte()));
                 }
@@ -110,94 +110,101 @@ public class PieceComptableManagerImpl
 
     @Override
     public void processBeforeUpdate(PieceComptable entity) {
-        if(entity.getEcritures()!=null){
-            BigDecimal debit = BigDecimal.ZERO;
-            BigDecimal credit = BigDecimal.ZERO;
-            String[] shortMonths =  {"janv","févr","mars","avr","mai","juin","juil","août","sept","oct","nov","déc"};
-            for(EcritureComptable ecrit:entity.getEcritures()){
-                debit = debit.add(ecrit.getDebit());
-                credit = credit.add(ecrit.getCredit()); 
-                if(ecrit.getId()<0){
-                    //Generateur d'ecriture analytique
-                    ecritureAnalytiqueGenerator(ecrit);
-                    //Generation des ecritures tiers
-                    ecritureTierGenerator(ecrit);
-                    String code = shortMonths[ecrit.getDateEcriture().getMonth()]+"."+DateHelper.convertToString(ecrit.getDateEcriture(), "yy");
-                    RestrictionsContainer container = RestrictionsContainer.newInstance();
-                    container.addEq("code", code);
-                    container.addEq("journal", entity.getJournal());
-                    List<JournalSaisie> saisies = journalsaisiedao.filter(container.getPredicats(), null, new HashSet<String>(), 0, -1);
-                    if(saisies.size()>0){
-                        JournalSaisie saisie = saisies.get(0);
-                        saisie.credit(entity.getCredit());
-                        saisie.debit(entity.getDebit());
-                        ecrit.setExercice(saisie.getExercice());
-                        ecrit.setJournaldesaisie(new JournalSaisie(saisie));  
-//                        ecrituredao.save(ecrit);
-                        journalsaisiedao.update(saisie.getId(), saisie);
-                        
-                    }else {
-                        RuntimeException excep = new RuntimeException("Impossible de trouver le journal de saisie ");
-                        throw new WebApplicationException();
-                    }
-                }
-                
-            }
-            entity.setCredit(credit);
-            entity.setDebit(debit);
-        }//end if(entity.getEcritures()!=null)
+//        if(entity.getEcritures()!=null){
+//            BigDecimal debit = BigDecimal.ZERO;
+//            BigDecimal credit = BigDecimal.ZERO;
+//            String[] shortMonths =  {"janv","févr","mars","avr","mai","juin","juil","août","sept","oct","nov","déc"};
+//            for(EcritureComptable ecrit:entity.getEcritures()){
+//                debit = debit.add(ecrit.getDebit());
+//                credit = credit.add(ecrit.getCredit()); 
+//                if(ecrit.getId()<0){
+//                    //Generateur d'ecriture analytique
+//                    ecritureAnalytiqueGenerator(ecrit);
+//                    //Generation des ecritures tiers
+//                    ecritureTierGenerator(ecrit);
+//                    String code = shortMonths[ecrit.getDateEcriture().getMonth()]+"."+DateHelper.convertToString(ecrit.getDateEcriture(), "yy");
+//                    RestrictionsContainer container = RestrictionsContainer.newInstance();
+//                    container.addEq("code", code);
+//                    container.addEq("journal", entity.getJournal());
+//                    List<JournalSaisie> saisies = journalsaisiedao.filter(container.getPredicats(), null, new HashSet<String>(), 0, -1);
+//                    if(saisies.size()>0){
+//                        JournalSaisie saisie = saisies.get(0);
+//                        saisie.credit(entity.getCredit());
+//                        saisie.debit(entity.getDebit());
+////                        ecrit.setExercice(saisie.getExercice());
+////                        ecrit.setJournaldesaisie(new JournalSaisie(saisie));  
+////                        ecrituredao.save(ecrit);
+//                        journalsaisiedao.update(saisie.getId(), saisie);
+//                        
+//                    }else {
+//                        RuntimeException excep = new RuntimeException("Impossible de trouver le journal de saisie ");
+//                        throw new WebApplicationException();
+//                    }
+//                }
+//                
+//            }
+//            entity.setCredit(credit);
+//            entity.setDebit(debit);
+//        }//end if(entity.getEcritures()!=null)
         super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
     }
     
     @Override
     public void processBeforeSave(PieceComptable entity) {
+        entity.setState("etabli");
+        for(EcritureComptable ecriture : entity.getEcritures()){
+            if(ecriture.getId()<=0){
+                ecriture.setId(-1L);
+            }//end if(ecriture.getId()<=0){
+        }//end for(EcritureComptable ecriture : entity.getEcritures()){
 //        entity = dao.findByPrimaryKey("code", entity.getCode());
-        if(entity.getEcritures()!=null){
-            BigDecimal debit = BigDecimal.ZERO;
-            BigDecimal credit = BigDecimal.ZERO;
-            String[] shortMonths =  {"janv","févr","mars","avr","mai","juin","juil","août","sept","oct","nov","déc"};
-            for(EcritureComptable ecrit:entity.getEcritures()){
-                    //Generateur d'ecriture analytique
-                    ecritureAnalytiqueGenerator(ecrit);
-                    //Generation des ecritures tiers
-                    ecritureTierGenerator(ecrit);
-                    ecrit.setJournal(entity.getJournal());
-                    if(ecrit.getDebit()!=null){
-                        debit = debit.add(ecrit.getDebit());
-                    }
-                    if(ecrit.getCredit()!=null){
-                        credit = credit.add(ecrit.getCredit());
-                    }  
-                    String code = shortMonths[ecrit.getDateEcriture().getMonth()]+"."+DateHelper.convertToString(ecrit.getDateEcriture(), "yy");
-                    RestrictionsContainer container = RestrictionsContainer.newInstance();
-                    container.addEq("code", code);
-                    container.addEq("journal", entity.getJournal());
-                    List<JournalSaisie> saisies = journalsaisiedao.filter(container.getPredicats(), null, new HashSet<String>(), 0, -1);
-                    if(saisies.size()>0){
-                        JournalSaisie saisie = saisies.get(0);
-                        entity.setExercice(saisie.getExercice());
-                        ecrit.setExercice(saisie.getExercice());
-                        saisie.credit(ecrit.getCredit());
-                        saisie.debit(ecrit.getDebit());
-                        ecrit.setJournaldesaisie(new JournalSaisie(saisie));                        
-//                        ecrituredao.save(ecrit);
-                        journalsaisiedao.update(saisie.getId(), saisie);
-                        
-                    }else {
-                        RuntimeException excep = new RuntimeException("Impossible de trouver le journal de saisie ");
-                        throw new WebApplicationException(excep);
-                    }
-            }
-            entity.setCredit(credit);
-            entity.setDebit(debit);
-            //Traitement des journaux de saisie            
-        }else{//end if(entity.getEcritures()!=null)
-            RuntimeException excep = new RuntimeException("Veuillez saisir au moins une ecriture");
-            throw new WebApplicationException(excep, Response.Status.NOT_MODIFIED);
-        }
+//        if(entity.getEcritures()!=null){
+//            BigDecimal debit = BigDecimal.ZERO;
+//            BigDecimal credit = BigDecimal.ZERO;
+//            String[] shortMonths =  {"janv","févr","mars","avr","mai","juin","juil","août","sept","oct","nov","déc"};
+//            for(EcritureComptable ecrit:entity.getEcritures()){
+//                    //Generateur d'ecriture analytique
+//                    ecritureAnalytiqueGenerator(ecrit);
+//                    //Generation des ecritures tiers
+//                    ecritureTierGenerator(ecrit);
+//                    ecrit.setJournal(entity.getJournal());
+//                    if(ecrit.getDebit()!=null){
+//                        debit = debit.add(ecrit.getDebit());
+//                    }
+//                    if(ecrit.getCredit()!=null){
+//                        credit = credit.add(ecrit.getCredit());
+//                    }  
+//                    String code = shortMonths[ecrit.getDateEcriture().getMonth()]+"."+DateHelper.convertToString(ecrit.getDateEcriture(), "yy");
+//                    RestrictionsContainer container = RestrictionsContainer.newInstance();
+//                    container.addEq("code", code);
+//                    container.addEq("journal", entity.getJournal());
+//                    List<JournalSaisie> saisies = journalsaisiedao.filter(container.getPredicats(), null, new HashSet<String>(), 0, -1);
+//                    if(saisies.size()>0){
+//                        JournalSaisie saisie = saisies.get(0);
+////                        entity.setExercice(saisie.getExercice());
+////                        ecrit.setExercice(saisie.getExercice());
+////                        saisie.credit(ecrit.getCredit());
+////                        saisie.debit(ecrit.getDebit());
+////                        ecrit.setJournaldesaisie(new JournalSaisie(saisie));                        
+////                        ecrituredao.save(ecrit);
+//                        journalsaisiedao.update(saisie.getId(), saisie);
+//                        
+//                    }else {
+//                        RuntimeException excep = new RuntimeException("Impossible de trouver le journal de saisie ");
+//                        throw new WebApplicationException(excep);
+//                    }
+//            }
+//            entity.setCredit(credit);
+//            entity.setDebit(debit);
+//            //Traitement des journaux de saisie            
+//        }else{//end if(entity.getEcritures()!=null)
+//            RuntimeException excep = new RuntimeException("Veuillez saisir au moins une ecriture");
+//            throw new WebApplicationException(excep, Response.Status.NOT_MODIFIED);
+//        }
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
     }
 
+    
     
     @Override
     public PieceComptable delete(Long id) {
@@ -222,7 +229,7 @@ public class PieceComptableManagerImpl
                         if(ecrit.getDebit()!=null){
                             saisie.debit(ecrit.getDebit().negate());
                         }
-                        ecrit.setJournaldesaisie(new JournalSaisie(saisie));  
+//                        ecrit.setJournaldesaisie(new JournalSaisie(saisie));  
 //                        ecrituredao.delete(ecrit.getId());
                         journalsaisiedao.update(saisie.getId(), saisie);
                     }else {

@@ -21,28 +21,28 @@ import javax.persistence.Table;
 @Table(name = "T_CONTACT")
 public class Contact extends BaseElement implements Serializable,Comparable<Contact>{
 
-    @Predicate(label = "Nom",search = true)
+    @Predicate(label = "nom",search = true)
     private String nom ;
     
-    @Predicate(label = "Civilité" ,search = true,type = Civilite.class,target = "many-to-one")
+    @Predicate(label = "civilite" ,search = true,type = Civilite.class,target = "many-to-one")
     @ManyToOne
     @JoinColumn(name = "CIV_ID")
     private Civilite civilite ;
     
-    @Predicate(label = "Poste Occupé",search = true)
+    @Predicate(label = "ooste.occupe",search = true)
     private String poste ;
     
-    @Predicate(label = "Courriel",search = true)
+    @Predicate(label = "courriel",search = true)
     private String courriel;
     
-    @Predicate(label = "Téléphone",search = true)
+    @Predicate(label = "telephone",search = true)
     private String tel ;
     
-    @Predicate(label = "Mobile",search = true)
+    @Predicate(label = "mobile",search = true)
     private String mobile;
     
     //,group = true,groupName = "group1",groupLabel = "Notes interne"
-    @Predicate(label = "Notes",target = "textarea",search = true)
+    @Predicate(label = "notes",target = "textarea",search = true)
     private String note ;
 
     public Contact() {

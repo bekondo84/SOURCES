@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Table(name = "T_NAnalyse")
 public class NiveauAnalyse extends BaseElement implements Serializable,Comparable<NiveauAnalyse>{
 
-    @Predicate(label = "Intitulé" ,unique = true,optional = false)
+    @Predicate(label = "intitule" ,unique = true,optional = false)
     private String code ;
 
     /**

@@ -6,6 +6,7 @@
 package com.basaccount.model.operations;
 
 import com.basaccount.model.comptabilite.ExerciceComptable;
+import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.basaccount.model.tiers.Tier;
 import com.core.base.BaseElement;
 import com.megatim.common.annotations.Predicate;
@@ -28,31 +29,31 @@ import javax.persistence.TemporalType;
 public class EcritureTier extends BaseElement implements Serializable,Comparable<EcritureTier>{
 
      @Temporal(TemporalType.DATE)
-    @Predicate(label = "DATE ECRITURE",target = "date",optional = false,updatable = false,type = Date.class,search = true,colsequence = 1,sequence = 0)
+    @Predicate(label = "date.ecriture",target = "date",optional = false,updatable = false,type = Date.class,search = true,colsequence = 1,sequence = 0)
     private Date dateEcriture ;
     
-    @Predicate(label = "REFERENCE",search = true,colsequence = 2,sequence = 2)
+    @Predicate(label = "reference",search = true,colsequence = 2,sequence = 2)
     private String refPiece ;
     
-    @Predicate(label = "LIBELLE",search = true,colsequence = 3,sequence = 3)
+    @Predicate(label = "libelle",search = true,colsequence = 3,sequence = 3)
     private String libelle ;
     
        
     @ManyToOne
     @JoinColumn(name = "CPTE_ID")
-    @Predicate(label = "COMPTE ANALYTIQUE",type = Tier.class,updatable = false,optional = false,target = "many-to-one",search = true,colsequence = 4,sequence = 4)
+    @Predicate(label = "compte.analytique",type = Tier.class,updatable = false,optional = false,target = "many-to-one",search = true,colsequence = 4,sequence = 4)
     private Tier compte ;
     
    
-    @Predicate(label = "DEBIT",type = BigDecimal.class,search = true,colsequence = 6,sequence = 6,updatable = false)
+    @Predicate(label = "debit",type = BigDecimal.class,search = true,colsequence = 6,sequence = 6,updatable = false)
     private BigDecimal debit =BigDecimal.ZERO;
     
-    @Predicate(label = "CREDIT",type = BigDecimal.class,search = true,colsequence = 7,sequence = 7,updatable = false)
+    @Predicate(label = "credit",type = BigDecimal.class,search = true,colsequence = 7,sequence = 7,updatable = false)
     private BigDecimal credit = BigDecimal.ZERO;
     
     @ManyToOne
-    @JoinColumn(name = "EXER_ID")
-    private ExerciceComptable exercice;
+    @JoinColumn(name = "PECBT_ID")
+    private PeriodeComptable periode;
 
     /**
      * 
@@ -97,7 +98,7 @@ public class EcritureTier extends BaseElement implements Serializable,Comparable
         this.compte = new Tier(data.compte);
         this.debit = data.getDebit();
         this.credit=data.getCredit();
-        this.exercice = data.exercice;
+        this.periode = data.periode;
     }
     
     /**
@@ -111,7 +112,7 @@ public class EcritureTier extends BaseElement implements Serializable,Comparable
         this.compte = new Tier(data.getTier());
         this.debit = data.getDebit();
         this.credit=data.getCredit();
-        this.exercice = data.getExercice();
+        this.periode = data.getPeriode();
     }
 
     /**
@@ -177,12 +178,12 @@ public class EcritureTier extends BaseElement implements Serializable,Comparable
 
     @Override
     public String getListTitle() {
-        return "INTERROGATION TIER"; //To change body of generated methods, choose Tools | Templates.
+        return "interrogation.tiers"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "INTERROGATION TIER"; //To change body of generated methods, choose Tools | Templates.
+        return "interrogation.tier"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -195,13 +196,14 @@ public class EcritureTier extends BaseElement implements Serializable,Comparable
         return true; //To change body of generated methods, choose Tools | Templates.
     }
 
-    public ExerciceComptable getExercice() {
-        return exercice;
+    public PeriodeComptable getPeriode() {
+        return periode;
     }
 
-    public void setExercice(ExerciceComptable exercice) {
-        this.exercice = exercice;
+    public void setPeriode(PeriodeComptable periode) {
+        this.periode = periode;
     }
+
     
     
     

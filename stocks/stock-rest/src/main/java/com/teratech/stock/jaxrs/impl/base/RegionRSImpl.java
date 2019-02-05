@@ -9,7 +9,6 @@ import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
 import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import com.teratech.stock.core.ifaces.base.RegionManagerRemote;
 import com.teratech.stock.jaxrs.ifaces.base.RegionRS;
-import com.teratech.stock.model.base.Entrepot;
 import com.teratech.stock.model.base.Region;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,4 +65,7 @@ public class RegionRSImpl
         }
         return null;
     }
+    
+    
+    
 }

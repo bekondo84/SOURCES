@@ -118,6 +118,38 @@ public class ExerciceComptable extends BaseElement implements Serializable,Compa
     }
 
     @Override
+    public String getOwnerentity() {
+        return "exercicecomptable"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getOwnermodule() {
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesableupdate() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesabledelete() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesablecreate() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isCreateonfield() {
+        return false; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    
+    @Override
     public String getListTitle() {
         //To change body of generated methods, choose Tools | Templates.
         return "exercices.comptable";

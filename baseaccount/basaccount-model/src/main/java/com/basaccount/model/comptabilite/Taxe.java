@@ -26,33 +26,33 @@ import javax.persistence.Table;
 @Table(name = "T_TAXE")
 public class Taxe extends BaseElement implements Serializable,Comparable<Taxe>{
 
-    @Predicate(label = "Code taxe",unique = true,optional = false,search = true)
+    @Predicate(label = "code.taxe",unique = true,optional = false,search = true)
     private String code ;
     
-    @Predicate(label = "Sens",target = "combobox",values = "Déductible;Collectée",search = false)    
+    @Predicate(label = "sens",target = "combobox",values = "Déductible;Collectée",search = false)    
     private String sens ="0";
     
-    @Predicate(label = "Intitulé" ,optional = false,search = true)
+    @Predicate(label = "intitule" ,optional = false,search = true)
     private String label ;
     
-    @Predicate(label = "Portée de la taxe",target = "combobox",values = "Ventes;Achats;Aucun",search = false)
+    @Predicate(label = "portee.taxe",target = "combobox",values = "Ventes;Achats;Aucun",search = false)
     private String porte = "0";
     
-    @Predicate(label = "Calcul de la taxe",target = "combobox",values = "Fixé;Pourcentage du prix;Pourcentage du prix taxes incluses",search = false)
+    @Predicate(label = "calcul.taxe",target = "combobox",values = "Fixé;Pourcentage du prix;Pourcentage du prix taxes incluses",search = false)
     private String calculTaxe = "0" ;
     
-    @Predicate(label = "Montant" ,optional = false,type = Double.class,search = false)
+    @Predicate(label = "montant" ,optional = false,type = Double.class,search = false)
     private Double montant = 0.0;
     
     @ManyToOne
     @JoinColumn(name = "SOC_ID")
-    @Predicate(label = "Socièté",updatable = false,type = Societe.class,target = "many-to-one",search = true)
+    @Predicate(label = "societe",updatable = false,type = Societe.class,target = "many-to-one",search = true)
     private Societe societe ;
     
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "taxe")
     private List<Compte> comptes = new ArrayList<Compte>();
     
-    @Predicate(label = "Bloc-notes",group = true,groupLabel = "Bloc-notes",groupName = "group2",target = "textarea",search = false)
+    @Predicate(label = " ",group = true,groupLabel = "bloc.notes",groupName = "group2",target = "textarea",search = false)
     private String note ;
 
     /**

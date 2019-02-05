@@ -9,7 +9,6 @@ import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
 import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import com.teratech.vente.core.ifaces.base.DeviseManagerRemote;
 import com.teratech.vente.jaxrs.ifaces.base.DeviseRS;
-import com.teratech.vente.model.base.CategorieProduit;
 import com.teratech.vente.model.base.Devise;
 import java.util.ArrayList;
 import java.util.HashMap;

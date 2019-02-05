@@ -22,25 +22,25 @@ import javax.persistence.Table;
 @Table(name = "T_BANQUE")
 public class Banque extends BaseElement implements Serializable,Comparable<Banque>{
     
-    @Predicate(label = "Code banque",updatable = false,optional = false,unique = true,search = true)
+    @Predicate(label = "code.banque",updatable = false,optional = false,unique = true,search = true)
     private String code ;
     
-    @Predicate(label = "Nom",search = true)
+    @Predicate(label = "intitule",search = true)
     private String label ;
     
-    @Predicate(label = "Adresse",group = true,groupName = "group1",groupLabel = "Informations",search = true)
+    @Predicate(label = "adresse",group = true,groupName = "group1",groupLabel = "informations",search = true)
     private String adresse ;
     
-    @Predicate(label = "Téléphone",group = true,groupName = "group1",groupLabel = "Informations",search = true)
+    @Predicate(label = "telephone",group = true,groupName = "group1",groupLabel = "informations",search = true)
     private String tel ;
     
-    @Predicate(label = "Fax",group = true,groupName = "group1",groupLabel = "Informations",search = true)
+    @Predicate(label = "fax",group = true,groupName = "group1",groupLabel = "informations",search = true)
     private String fax ;
     
-    @Predicate(label = "Courriel",group = true,groupName = "group1",groupLabel = "Informations",search = true)
+    @Predicate(label = "courriel",group = true,groupName = "group1",groupLabel = "informations",search = true)
     private String courriel ;
     
-    @Predicate(label = "Actif",group = true,groupName = "group1",groupLabel = "Informations")
+    @Predicate(label = "actif",group = true,groupName = "group1",groupLabel = "informations")
     private Boolean active = true;
     
     private String state = "etabli";

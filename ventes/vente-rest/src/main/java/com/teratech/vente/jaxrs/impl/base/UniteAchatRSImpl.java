@@ -3,6 +3,7 @@ package com.teratech.vente.jaxrs.impl.base;
 
 import javax.ws.rs.Path;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
+import com.kerem.core.KerenExecption;
 import com.kerem.core.MetaDataUtil;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
@@ -63,5 +64,14 @@ public class UniteAchatRSImpl
             Logger.getLogger(CiviliteRSImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+     @Override
+    public UniteAchat delete(HttpHeaders headers, Long id) {
+        try{
+            return super.delete(headers, id);
+        } catch(Exception ex){
+           throw  new KerenExecption("unite.achat.delete.error");
+        }//To change body of generated methods, choose Tools | Templates.
     }
 }

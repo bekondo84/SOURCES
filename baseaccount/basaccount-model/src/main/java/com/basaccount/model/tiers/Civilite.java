@@ -19,10 +19,10 @@ import javax.persistence.Table;
 @Table(name = "T_CIVILITE")
 public class Civilite extends BaseElement implements Serializable,Comparable<Civilite>{
 
-    @Predicate(label = "Civilité",unique = true,optional = false)
+    @Predicate(label = "civilite",unique = true,optional = false)
     private String code;
     
-    @Predicate(label = "Abréviation")
+    @Predicate(label = "abreviation")
     private String shortcut ;
 
     public Civilite() {

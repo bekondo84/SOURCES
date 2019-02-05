@@ -21,7 +21,7 @@ import javax.persistence.Table;
 @Table(name = "T_UNAC")
 public class UniteAchat extends BaseElement implements Serializable,Comparable<UniteAchat>{
 
-    @Predicate(label = "Code",optional = false,unique = true,search = true)
+    @Predicate(label = "code",optional = false,unique = true,search = true)
     private String code ;    
     
     @Predicate(label = "actif",type = Boolean.class)

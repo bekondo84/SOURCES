@@ -210,4 +210,12 @@ public class LienEmplacementRSImpl
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
     }
 
+     @Override
+    public LienEmplacement delete(HttpHeaders headers, Long id) {
+        try{
+            return super.delete(headers, id);
+        } catch(Exception ex){
+           throw  new KerenExecption("lien.emplacement.delete.error");
+        }//To change body of generated methods, choose Tools | Templates.
+    }
 }

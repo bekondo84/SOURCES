@@ -22,7 +22,6 @@
     <class>com.basaccount.model.operations.EcritureComptable</class>
     <class>com.basaccount.model.operations.PieceComptable</class>
     <class>com.basaccount.model.comptabilite.ExerciceComptable</class>
-    <class>com.basaccount.model.operations.JournalSaisie</class>
     <class>com.basaccount.model.operations.EcritureAnalytique</class>
     <class>com.basaccount.model.operations.EcritureTier</class>
     <class>com.basaccount.model.achats.Acompte</class>
@@ -57,6 +56,10 @@
     <class>com.basaccount.model.operations.EcritureBanque</class>
     <class>com.basaccount.model.operations.OperationBancaire</class>
     <class>com.basaccount.model.comptabilite.PeriodeComptable</class>
+    <class>com.basaccount.model.ventes.NoteFraisTMP</class>
+    <class>com.basaccount.model.ventes.LigneReglement</class>
+    <class>com.basaccount.model.ventes.ReglementTmp</class>
+    <class>com.basaccount.model.operations.PieceComptableTmp</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="update"/>

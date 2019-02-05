@@ -34,7 +34,7 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue("TMP")
 public class DocumentAchat extends BaseElement implements Serializable,Comparable<DocumentAchat>{
 
-    @Predicate(label = "Reference",optional = false,search = true)
+    @Predicate(label = "numero.piece",optional = false,search = true)
     protected String code ;
     
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -42,20 +42,20 @@ public class DocumentAchat extends BaseElement implements Serializable,Comparabl
     
     @ManyToOne
     @JoinColumn(name = "FOUR_ID")
-    @Predicate(label = "Fournisseur",type = Tier.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "fournisseur",type = Tier.class,target = "many-to-one",optional = false,search = true)
     @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"1\"}]")
     protected Tier fournisseur ;
     
     @Temporal(TemporalType.DATE)
-    @Predicate(label = "Date ",type = Date.class,target = "date",optional = false,search = true)    
+    @Predicate(label = "date",type = Date.class,target = "date",optional = false,search = true)    
     protected Date datecommande ;
     
-    @Predicate(label = "Reference du fournisseur")
+    @Predicate(label = "reference.fournisseur")
     protected String codefourni;
     
     @ManyToOne
     @JoinColumn(name = "ENTR_ID")
-    @Predicate(label = "Entrepôt livraison",type = Entrepot.class,target = "many-to-one",optional = true,search = true)
+    @Predicate(label = "entrepot.livraison",type = Entrepot.class,target = "many-to-one",optional = true,search = true)
     protected Entrepot emplacement;
     
 //    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)

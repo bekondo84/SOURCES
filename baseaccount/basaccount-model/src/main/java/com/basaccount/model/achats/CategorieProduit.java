@@ -19,10 +19,10 @@ import javax.persistence.Table;
 @Table(name = "T_CAPR")
 public class CategorieProduit extends BaseElement implements Serializable,Comparable<CategorieProduit>{
 
-    @Predicate(label = "Intitulé",optional = false,nullable = false,unique =true,search=true)
+    @Predicate(label = "intitule",optional = false,nullable = false,unique =true,search=true)
     private String code ;
     
-    @Predicate(label = "Suivi en gestion de stock",type = Boolean.class)
+    @Predicate(label = "suivi.stock",type = Boolean.class)
     private Boolean suiviestock ;
 
     /**

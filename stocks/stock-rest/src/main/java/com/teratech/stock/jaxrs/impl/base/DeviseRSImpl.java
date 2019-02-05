@@ -8,10 +8,12 @@ import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
 import com.teratech.stock.core.ifaces.base.DeviseManagerRemote;
 import com.teratech.stock.jaxrs.ifaces.base.DeviseRS;
 import com.teratech.stock.model.base.Devise;
+import javax.ws.rs.core.HttpHeaders;
 
 
 /**
- * Classe d'implementation du Web Service JAX-RS
+ * Classe d'implementation du Web Service JAX-RS
+
  * @since Tue Feb 20 00:26:45 GMT+01:00 2018
  * 
  */
@@ -44,5 +46,8 @@ public class DeviseRSImpl
     public String getModuleName() {
         return ("teratechstock");
     }
+
+   
+    
 
 }

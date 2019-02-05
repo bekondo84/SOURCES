@@ -2251,14 +2251,8 @@ angular.module("mainApp")
                    textareaElem.setAttribute('rows' ,'3');
                    textareaElem.setAttribute('ng-model' , model);
                    $scope.constraintsProvider(field , textareaElem);
-                   if((($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType!='new'))||(field.editable==false))){
-                        if(($scope.metaData.desableupdate==false && $scope.innerWindowType!='new')){
-                            textareaElem.setAttribute('readonly' , 'readonly');
-                        }else{
-                            if((field.updatable==false)||(field.editable==false)){
-                                textareaElem.setAttribute('readonly' , 'readonly');
-                            }//end if((field.updatable==false)||(field.editable==false)){
-                        }
+                   if(!commonsTools.iseditable($scope,model,field)){
+                        textareaElem.setAttribute('readonly' , 'readonly');                      
                     }//end if(($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')
                    divElem.appendChild(textareaElem);
                     if(field.hide){
@@ -2345,14 +2339,8 @@ angular.module("mainApp")
 //                    }//end if(type=="file"){
                     inputElem.setAttribute('ng-model' , model);
                     $scope.constraintsProvider(field , inputElem);
-                    if((($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType!='new'))||(field.editable==false))){
-                        if(($scope.metaData.desableupdate==false && $scope.innerWindowType!='new')){
-                            inputElem.setAttribute('readonly' , 'readonly');
-                        }else{
-                            if((field.updatable==false)||(field.editable==false)){
-                                inputElem.setAttribute('readonly' , 'readonly');
-                            }//end if((field.updatable==false)||(field.editable==false)){
-                        }
+                    if(!commonsTools.iseditable($scope,model,field)){
+                        inputElem.setAttribute('readonly' , 'readonly');
                     }//end if(($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')                    
                     if(field.hide){
                         divElem.setAttribute('ng-hide',true);
@@ -2439,11 +2427,8 @@ angular.module("mainApp")
                     inputElem.setAttribute('ng-model' , model);
                     inputElem.setAttribute('name' , field.fieldName);       
                     $scope.constraintsProvider(field , inputElem);
-                    if(($scope.windowType=="view")||
-                            ((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType==false))||(field.editable==false)){
-                        if($scope.metaData.desableupdate==false && $scope.innerWindowType!='new'){
-                            inputElem.setAttribute('ng-disabled', 'true'); 
-                        }//end if($scope.metaData.desableupdate==false){
+                    if(!commonsTools.iseditable($scope,model,field)){
+                       inputElem.setAttribute('ng-disabled', 'true');                       
                     }//end if(($scope.windowType=="view")||
                     divElem.appendChild(inputElem);  
 //                    labelElem.appendChild(document.createTextNode(labelText)); 
@@ -2517,13 +2502,10 @@ angular.module("mainApp")
                        div00.appendChild(div001);
                    }//end for(var i=0 ; i<values.length;i++){                   
 //                    $scope.constraintsProvider(field , inputElem);
-                    if(($scope.windowType=="view")||
-                            ((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType==false))||(field.editable==false)){
-                        if($scope.metaData.desableupdate==false && $scope.innerWindowType!='new'){
-                            for(var i=0;i<inputs.length;i++){
-                                inputs[i].setAttribute('ng-disabled', 'true'); 
-                            }//end for(var i=0;i<inputs.length;i++){
-                        }//end if($scope.metaData.desableupdate==false){
+                    if(!commonsTools.iseditable($scope,model,field)){
+                        for(var i=0;i<inputs.length;i++){
+                            inputs[i].setAttribute('ng-disabled', 'true'); 
+                        }//end for(var i=0;i<inputs.length;i++){                       
                     }//end if(($scope.windowType=="view")||
                     divElem.appendChild(div00);  
                     labelElem.appendChild(document.createTextNode("{{'"+labelText+"' | translate | cut:true:22:'...'}}")); 
@@ -3039,14 +3021,8 @@ $scope.gererChangementFichier3 = function(event,model){
 //              if($scope.windowType=="view"||(field.updatable&&field.updatable==false&&$scope.windowType!='new'&&$scope.innerWindowType==false)){
 //                  selectElem.setAttribute('disabled' , 'disabled');
 //              }
-              if((($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType!='new'))||(field.editable==false))){
-                    if(($scope.metaData.desableupdate==false && $scope.innerWindowType!='new')){
-                       selectElem.setAttribute('disabled' , 'true');
-                    }else{
-                        if((field.updatable==false)||(field.editable==false)){
-                            selectElem.setAttribute('disabled' , 'true');
-                        }//end if((field.updatable==false)||(field.editable==false)){
-                    }
+              if(!commonsTools.iseditable($scope,model,field)){
+                    selectElem.setAttribute('disabled' , 'true');                  
               }//end if(($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')
               var optionElem = document.createElement('option');
               optionElem.setAttribute('value' , '');
@@ -3372,7 +3348,7 @@ $scope.gererChangementFichier3 = function(event,model){
             var spanElem = document.createElement('span');
             spanElem.setAttribute('class' , 'input-group-btn  trt-linkfile');
             divElem_1.appendChild(spanElem);
-            var buttonElem = document.createElement('button');$scope.imageClick()
+            var buttonElem = document.createElement('button');$scope.imageClick();
             buttonElem.setAttribute('class' , 'btn btn-default btn-sm my-group-button');
             buttonElem.setAttribute('ng-click' , "imageClick('"+field.fieldName+"_pj')");
             buttonElem.setAttribute('data-toggle' , "modal");            
@@ -3383,12 +3359,9 @@ $scope.gererChangementFichier3 = function(event,model){
             spanElem_1.setAttribute('aria-hidden' , 'true');
             spanElem_1.setAttribute('style' , 'color:blue');
             buttonElem.appendChild(spanElem_1);
-            if(($scope.windowType=="view")||((field.updatable==false)&&($scope.windowType!='new')&&($scope.innerWindowType==false))){
+            if(!commonsTools.iseditable($scope,model,field)){
                 buttonElem.setAttribute('disabled' , 'disabled');
             }//end if(($scope.windowType=="view")||(metaData.createonfield==false)|  
-            if(field.editable==false){
-                buttonElem.setAttribute('disabled' , 'disabled');               
-            }//end if(field.editable==false)
             if(field.hide){
                 divElem.setAttribute('ng-hide',true);
             }//end if(field.hide)
@@ -6962,7 +6935,9 @@ $scope.gererChangementFichier3 = function(event,model){
                                 for(var i=0 ; i<metaData.columns.length ;i++){
                                     if(fieldname==metaData.columns[i].fieldName){
      //                                    console.log("!!!!!!!"+part[1]+"=====editDialogBuilder  ===== "+metaData.columns[i].fieldName+" ******* "+angular.toJson(metaData.columns[i].metaData));                               
-                                         metaData = metaData.columns[i].metaData;
+                                       if(metaData.columns[i].metaData!=null){
+                                           metaData = metaData.columns[i].metaData;
+                                       }//end if(metaData.columns[i].metaData!=null){
                                     }//end if(part[1]==$scope.metaData.columns[i].fieldName){
 
                                 }//end for(var i=0 ; i<$scope.metaData.columns.length ;i++){
@@ -6978,7 +6953,9 @@ $scope.gererChangementFichier3 = function(event,model){
                                                 var columns = metaData.groups[i].columns;
                                                 for(var j=0 ; j < taille ;j++){
                                                      if(columns && (fieldname== columns[j].fieldName)){
-                                                           metaData = columns[j].metaData;
+                                                        if(columns[j].metaData!=null){
+                                                            metaData = columns[j].metaData;
+                                                        }//end if(columns[j].metaData!=null){
                                                       }//end if(columns && (part[k]== columns[j].fieldName)){
                                                 }//end for(var j=0 ; j < taille ;j++){
                                             }//end if(metaData.groups[i].columns)
@@ -6986,7 +6963,9 @@ $scope.gererChangementFichier3 = function(event,model){
                                             if(groupe.metaArray){//&&groupe.metaArray.length>0
                                                 for(var l=0;l<groupe.metaArray.length;l++){
                                                     if(groupe.metaArray[l].fieldName==fieldname){
-                                                        metaData = groupe.metaArray[l].metaData;
+                                                        if(groupe.metaArray[l].metaData!=null){
+                                                            metaData = groupe.metaArray[l].metaData;
+                                                        }//end if(groupe.metaArray[l].metaData!=null){
                                                     }//end if(groupe.metaArray[l].fieldName==part[k])
                                                 }//end for(var l=0;l<groupe.metaArray.length;l++){
                                             }//end if(groupe.metaArray&&groupe.metaArray.length>0){
@@ -7893,7 +7872,7 @@ $scope.gererChangementFichier3 = function(event,model){
                footerID="modalfooter2";
            }//end if(endIndex==1)
            footerDiv.setAttribute('id' , footerID);
-//           console.log("$scope.editDialogBuilderExtern = function(metaData,index,link) ====== canupdate : "+$scope.canUpdate()+" ==== cancreate : "+$scope.canCreate())
+//           console.log("$scope.editDialogBuilderExtern = function(metaData,index,link) ====== canupdate : "+$scope.canUpdate()+" ==== cancreate : "+angular.toJson(report))
            /*if(metaData.desableupdate==true||$scope.canUpdate()||$scope.canCreate())*/{
                 var buttonElem = document.createElement('button');
                 footerDiv.appendChild(buttonElem);
@@ -7901,7 +7880,7 @@ $scope.gererChangementFichier3 = function(event,model){
                 if(angular.isDefined(report) && report==true){
                     buttonElem.setAttribute('ng-click', "printDialogAction('temporalData' , 'save_only','"+metaData.entityName+"' , '"+metaData.moduleName+"',null,"+(index+1)+",null,'"+link+"')"); 
                 }else{
-                    buttonElem.setAttribute('ng-click', "addDialogAction('temporalData' , 'save_only','"+metaData.entityName+"' , '"+metaData.moduleName+"',null,"+(index+1)+",null,'"+link+"')"); 
+                    buttonElem.setAttribute('ng-click', "addDialogAction('temporalData' , 'save_only','"+metaData.entityName+"' , '"+metaData.moduleName+"',null,"+(index+1)+",null,'"+link+"',"+report+")"); 
                 }//end if(angular.isDefined(report) && report==true){
                 if(angular.isDefined(report) && report==true){
                     buttonElem.appendChild(document.createTextNode("{{'Imprimer' | translate}}"));
@@ -8139,8 +8118,8 @@ $scope.gererChangementFichier3 = function(event,model){
          * @param {type} link
          * @returns {undefined}
          */
-        $scope.addDialogAction = function(model , type,entityName , moduleName,customfooter,index,modelpath,link){  
-//           console.log("$scope.addDialogAction ===== model:"+model+" type:"+type+" entity:"+entityName+" module:"+moduleName+"  index:"+index+" ::: modelpath:"+modelpath+"  link : "+link);
+        $scope.addDialogAction = function(model , type,entityName , moduleName,customfooter,index,modelpath,link,data){  
+//           console.log("$scope.addDialogAction ===== model:"+model+" type:"+type+" entity:"+entityName+" module:"+moduleName+"  index:"+index+" ::: modelpath:"+modelpath+"  link : "+link+" ==== data : "+data);
             var modalID = "";
             var endIndex = index-1;            
             if(endIndex==1){
@@ -8238,7 +8217,13 @@ $scope.gererChangementFichier3 = function(event,model){
                         $scope.notifyWindow("Les champs suivants sont incorrects" ,message,"danger",modalID);                        
                         throw "Interrupt";
                 }//end if(validate.length>0){
-                $scope.saveonly(model,$scope.temporalData,entityName,moduleName,link);   
+                var template = null;
+                if(data!=null){
+//                    console.log("principal.addDialogAction :::::::::::::::::::::::::::::::::::::: "+data);
+                    data = angular.fromJson(data);
+                    template = $scope.templateDataBuilder(data['template'],true);
+                }//end if(data!=null){
+                $scope.saveonly(model,$scope.temporalData,entityName,moduleName,link,template);   
 //                $("#globalModal").modal("hide");
             }else if(type=="list"){
                 var parts = model.split(".");
@@ -9076,8 +9061,8 @@ $scope.gererChangementFichier3 = function(event,model){
         * @param {type} moduleName
         * @returns {undefined}
         */
-       $scope.saveonly = function(model ,item ,entityName,moduleName,link){
-//           console.log("$scope.saveonly = function(model ,item ,entityName,moduleName) ==== "+link);
+       $scope.saveonly = function(model ,item ,entityName,moduleName,link,template){
+//           console.log("$scope.saveonly = function(model ,item ,entityName,moduleName) ==== "+link+" ======= template : "+angular.toJson(template));
            commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%"); 
            var urlPath = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+angular.lowercase(moduleName)+"/"+angular.lowercase(entityName)+"/";
            $http.post(urlPath,item).then(
@@ -9086,12 +9071,12 @@ $scope.gererChangementFichier3 = function(event,model){
                        var urlPah=$location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/menuaction/bystringproperty/name/"+link;
                        $http.get(urlPah)
                                .then(function(response){
-//                                   console.log("$scope.saveonly = function(model ,item ,entityName,moduleName,link) ===== "+angular.toJson(response.data));
                                    commonsTools.hideDialogLoading();
+//                                   console.log("$scope.saveonly = function(model ,item ,entityName,moduleName,link) ===== "+angular.toJson(data)+" === action : "+angular.toJson($scope.currentAction));                                   
 //                                   commonsTools.notifyWindow("Status Operation" ,"L'opÃ©ration s'est dÃ©roulÃ©e avec sucess","success");     
                                    if(response.data.length>0){
                                      $rootScope.$broadcast("currentActionUpdate" ,{
-                                     action:response.data[0] , verticalMenu:$scope.enabledVerticalMenu,index:0});  
+                                     action:response.data[0] , verticalMenu:$scope.enabledVerticalMenu,index:0,template:template});  
                                    }//nd if(response.data.length>0)                                   
                                },function(error){
                                    commonsTools.hideDialogLoading();
@@ -11478,7 +11463,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                    $http.defaults.headers.common[key]=angular.toJson(template[key].id);
                                }else if(!angular.isArray(template[key])){
                                    $http.defaults.headers.common[key]=angular.toJson(template[key]);
-                               } 
+                               } //end if(angular.isDate(template[key])){
                            }//end for(var key in template){
                              var parts = template.linkfile.split(".");
                              var type = "application/pdf";
@@ -11579,7 +11564,7 @@ $scope.gererChangementFichier3 = function(event,model){
         * @returns {undefined}
         */   
       $scope.templateDataBuilder = function(template,extern){
-          
+          console.log("$scope.templateDataBuilder = function(template) ==================== "+angular.toJson(template)+" ::::: key : "+key+" === att : ");
           if(template==null||!angular.isDefined(template)){
               return null;
           }//end if(template==null||!angular.isDefined(template)){
@@ -11587,7 +11572,6 @@ $scope.gererChangementFichier3 = function(event,model){
           //Construction du template
           var data = new Object();
           for(var key in template){  
-//              console.log("$scope.templateDataBuilder = function(template) ==================== "+angular.toJson(template)+" ::::: key : "+key+" === att : "+template[key]);
               var attr = template[key];
               if(key=='this'){
                   if(attr=='object'){
@@ -13537,12 +13521,12 @@ $scope.gererChangementFichier3 = function(event,model){
                                         }else{
                                             index = new Number(index)+1;
                                         }//end if(index==null||!angular.isDefined(index))
-                                        console.log("initAction ========== index = "+index+" isString : "+angular.isString($scope.currentAction)+" ::::: isobject : "+angular.isObject($scope.currentAction));
                                         if(angular.isString($scope.currentAction)){
                                             $scope.currentAction = angular.fromJson($scope.currentAction);
                                         }//end if(angular.isString($scope.currentAction)){
                                         commonsTools.hideDialogLoading();
-                                        $scope.editDialogBuilderExtern(metaData,index,$scope.currentAction.link);
+//                                        console.log("initAction ========== index = "+index+" isString : "+angular.toJson($scope.currentAction)+" ::::: isobject : "+angular.isObject($scope.currentAction));
+                                        $scope.editDialogBuilderExtern(metaData,index,$scope.currentAction.link,$scope.currentAction.value);
                                         $scope.currentAction = $scope.dataCache['currentAction'];
                                         $scope.currentObject = $scope.dataCache['currentObject'];
                                         //Initialisation de l'url

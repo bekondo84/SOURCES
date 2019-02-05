@@ -90,53 +90,53 @@ public class EcritureComptableManagerImpl
     @Override
     public EcritureComptable delete(Long id) {
         EcritureComptable ecriture = super.delete(id); //To change body of generated methods, choose Tools | Templates.
-        String[] shortMonths =  {"janv","févr","mars","avr","mai","juin","juil","août","sept","oct","nov","déc"};
-        String code = shortMonths[ecriture.getDateEcriture().getMonth()]+"."+DateHelper.convertToString(ecriture.getDateEcriture(), "yy");
-        RestrictionsContainer container = RestrictionsContainer.newInstance();
-        container.addEq("code", code);
-        container.addEq("journal", ecriture.getJournal());
-        List<JournalSaisie> saisies = journalsaisiedao.filter(container.getPredicats(), null, new HashSet<String>(), 0, -1);
-        if(saisies.size()>0){
-            JournalSaisie saisie = saisies.get(0);
-            if(ecriture.getCredit()!=null){
-                saisie.credit(ecriture.getCredit().negate());
-            }
-            if(ecriture.getDebit()!=null){
-                saisie.debit(ecriture.getDebit().negate());
-            }
-            ecriture.setJournaldesaisie(new JournalSaisie(saisie));
-            journalsaisiedao.update(saisie.getId(), saisie);
-        }else {
-            RuntimeException excep = new RuntimeException("Impossible de trouver le journal de saisie ");
-            throw new WebApplicationException(excep);
-        }
+//        String[] shortMonths =  {"janv","févr","mars","avr","mai","juin","juil","août","sept","oct","nov","déc"};
+//        String code = shortMonths[ecriture.getDateEcriture().getMonth()]+"."+DateHelper.convertToString(ecriture.getDateEcriture(), "yy");
+//        RestrictionsContainer container = RestrictionsContainer.newInstance();
+//        container.addEq("code", code);
+//        container.addEq("journal", ecriture.getJournal());
+//        List<JournalSaisie> saisies = journalsaisiedao.filter(container.getPredicats(), null, new HashSet<String>(), 0, -1);
+//        if(saisies.size()>0){
+//            JournalSaisie saisie = saisies.get(0);
+//            if(ecriture.getCredit()!=null){
+//                saisie.credit(ecriture.getCredit().negate());
+//            }
+//            if(ecriture.getDebit()!=null){
+//                saisie.debit(ecriture.getDebit().negate());
+//            }
+//            ecriture.setJournaldesaisie(new JournalSaisie(saisie));
+//            journalsaisiedao.update(saisie.getId(), saisie);
+//        }else {
+//            RuntimeException excep = new RuntimeException("Impossible de trouver le journal de saisie ");
+//            throw new WebApplicationException(excep);
+//        }
         return new EcritureComptable(ecriture);
     }
 
     @Override
     public void processBeforeSave(EcritureComptable entity) {
-        //Generation des ecritures analytiques
-        ecritureAnalytiqueGenerator(entity);
-        //Generation des ecriture tier
-        ecritureTierGenerator(entity);
-         //Traitement des journal de saisie
-        String[] shortMonths =  {"janv","févr","mars","avr","mai","juin","juil","août","sept","oct","nov","déc"};
-        String code = shortMonths[entity.getDateEcriture().getMonth()]+"."+DateHelper.convertToString(entity.getDateEcriture(), "yy");
-        RestrictionsContainer container = RestrictionsContainer.newInstance();
-        container.addEq("code", code);
-        container.addEq("journal", entity.getJournal());
-        List<JournalSaisie> saisies = journalsaisiedao.filter(container.getPredicats(), null, new HashSet<String>(), 0, -1);
-        if(saisies.size()>0){
-            JournalSaisie saisie = saisies.get(0);
-            saisie.credit(entity.getCredit());
-            saisie.debit(entity.getDebit());
-            entity.setExercice(saisie.getExercice());
-            entity.setJournaldesaisie(new JournalSaisie(saisie));
-            journalsaisiedao.update(saisie.getId(), saisie);
-        }else {
-            RuntimeException excep = new RuntimeException("Impossible de trouver le journal de saisie ");
-            throw new WebApplicationException(excep);
-        }
+//        //Generation des ecritures analytiques
+//        ecritureAnalytiqueGenerator(entity);
+//        //Generation des ecriture tier
+//        ecritureTierGenerator(entity);
+//         //Traitement des journal de saisie
+//        String[] shortMonths =  {"janv","févr","mars","avr","mai","juin","juil","août","sept","oct","nov","déc"};
+//        String code = shortMonths[entity.getDateEcriture().getMonth()]+"."+DateHelper.convertToString(entity.getDateEcriture(), "yy");
+//        RestrictionsContainer container = RestrictionsContainer.newInstance();
+//        container.addEq("code", code);
+//        container.addEq("journal", entity.getJournal());
+//        List<JournalSaisie> saisies = journalsaisiedao.filter(container.getPredicats(), null, new HashSet<String>(), 0, -1);
+//        if(saisies.size()>0){
+//            JournalSaisie saisie = saisies.get(0);
+//            saisie.credit(entity.getCredit());
+//            saisie.debit(entity.getDebit());
+//            entity.setExercice(saisie.getExercice());
+//            entity.setJournaldesaisie(new JournalSaisie(saisie));
+//            journalsaisiedao.update(saisie.getId(), saisie);
+//        }else {
+//            RuntimeException excep = new RuntimeException("Impossible de trouver le journal de saisie ");
+//            throw new WebApplicationException(excep);
+//        }
     }
     
     /**

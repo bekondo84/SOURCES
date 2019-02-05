@@ -18,11 +18,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ClotureJournal extends BaseElement implements Serializable,Comparable<ClotureJournal>{
 
-    @Predicate(label = "JOURNAL SAISIE",type = JournalSaisie.class,target = "many-to-one",optional = false)
+    @Predicate(label = "journal.saisie",type = JournalSaisie.class,target = "many-to-one",optional = false)
     @ManyToOne
     private JournalSaisie journal ;
     
-    @Predicate(label = "TYPE CLOTURE",target = "combobox",values = "Cloture partielle;Cloture totale")
+    @Predicate(label = "type.cloture",target = "combobox",values = "Cloture partielle;Cloture totale")
     private String type = "0";
 
     public ClotureJournal(JournalSaisie journal) {
@@ -78,7 +78,7 @@ public class ClotureJournal extends BaseElement implements Serializable,Comparab
 
     @Override
     public String getEditTitle() {
-        return "CLOTURE JOURNAL DE SAISIE"; //To change body of generated methods, choose Tools | Templates.
+        return "cloture.journal.saisie"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

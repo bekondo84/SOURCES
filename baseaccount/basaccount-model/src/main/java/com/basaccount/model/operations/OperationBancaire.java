@@ -5,51 +5,34 @@
  */
 package com.basaccount.model.operations;
 
-import com.basaccount.model.comptabilite.ExerciceComptable;
 import com.basaccount.model.comptabilite.JournalComptable;
-import com.core.base.BaseElement;
 import com.core.base.State;
 import com.megatim.common.annotations.Predicate;
 import com.megatim.common.annotations.TableFooter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author Commercial_2
  */
 @Entity
-@Table(name = "T_PICO_COM")
-public class OperationBancaire extends BaseElement implements Serializable,Comparable<OperationBancaire>{
+@DiscriminatorValue("OBQ")
+public class OperationBancaire extends PieceComptableTmp implements Serializable{
     @ManyToOne
     @JoinColumn(name = "JRN_ID")
-    @Predicate(label = "jouranl.comptable",type = JournalComptable.class,target = "many-to-one",optional = false,updatable = false,search = true)
+    @Predicate(label = "jouranl.comptable",type = JournalComptable.class,target = "many-to-one",optional = false,editable = false,search = true)
     private JournalComptable journal;
-    
-    @Temporal(TemporalType.DATE)
-    @Predicate(label = "date",type = Date.class,target = "date",optional = false,search = true)
-    private Date datePiece ;
    
-    @Predicate(label = "numero.extraite" ,optional = false,updatable = false,search = true,unique = true)
-    @Column(unique = true)
-    private String code ;
-    
-    @Predicate(label = "libelle",search = true)
-    private String libelle ;
-    
     @Predicate(label = "solde.initial",type = BigDecimal.class,updatable = false,search = true,editable = false,hide = true)
     private BigDecimal soldedebut = BigDecimal.ZERO;
     
@@ -57,15 +40,14 @@ public class OperationBancaire extends BaseElement implements Serializable,Compa
     private BigDecimal soldefin = BigDecimal.ZERO;
     
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "PIEC_ID")
+    @JoinColumn(name = "OPEBAN_ID")
     @Predicate(label=" ",group = true,groupLabel = "ecritures.comptable",groupName = "group1",type = EcritureBanque.class,target = "one-to-many",customfooter = true,edittable = true)
-    @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td>Total Debit</td><td></td> <td>this.debit</td> </tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td>Total Credit</td><td></td> <td>this.credit</td> </tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td>Solde</td><td></td><td>this.debit;-;this.credit</td> </tr>")
-    private List<EcritureBanque> ecritures = new ArrayList<EcritureBanque>();
+    @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td>Total Debit</td><td></td><td>this.debit</td><td></td></tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td>Total Credit</td><td></td><td>this.credit</td><td></td></tr><tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td>Solde</td><td></td><td>this.debit;-;this.credit</td><td></td></tr>")
+    private List<EcritureBanque> ecritures = new ArrayList<EcritureBanque>();    
     
-    @ManyToOne
-    @JoinColumn(name = "EXER_ID")
-    private ExerciceComptable exercice;
-
+    @Predicate(label = " ",target = "state",search = true,hide = true)
+    private String state ="etabli";
+   
     /**
      * 
      * @param libelle
@@ -76,46 +58,24 @@ public class OperationBancaire extends BaseElement implements Serializable,Compa
         this.journal = journal;
     }
 
-    /**
-     * 
-     * @param libelle
-     * @param journal
-     * @param id
-     * @param designation
-     * @param moduleName 
-     */
-    public OperationBancaire(String libelle, JournalComptable journal, long id, String designation, String moduleName) {
-        super(id, designation, moduleName,0L);
-        this.libelle = libelle;
-        this.journal = journal;
-    }
+    
 
     public OperationBancaire(OperationBancaire piece) {
-        super(piece.id, piece.designation, piece.moduleName,piece.compareid);
+        super(piece);
         this.code = piece.code;
         this.libelle = piece.libelle;
         this.journal = piece.journal;
         this.datePiece = piece.datePiece;
         this.soldedebut = piece.soldedebut;
         this.soldefin = piece.soldefin;
-        this.exercice = piece.exercice;
+        this.state = piece.state;
     }
     /**
      * 
      */
     public OperationBancaire() {
-    }
-
-    
-    
-    public String getLibelle() {
-        return libelle;
-    }
-
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
-    }
-
+    }    
+  
     public JournalComptable getJournal() {
         return journal;
     }
@@ -132,13 +92,6 @@ public class OperationBancaire extends BaseElement implements Serializable,Compa
         this.ecritures = ecritures;
     }
 
-    public Date getDatePiece() {
-        return datePiece;
-    }
-
-    public void setDatePiece(Date datePiece) {
-        this.datePiece = datePiece;
-    }
 
     public BigDecimal getSoldedebut() {
         return soldedebut;
@@ -156,6 +109,15 @@ public class OperationBancaire extends BaseElement implements Serializable,Compa
         this.soldefin = soldefin;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    
     
     @Override
     public String getDesignation() {
@@ -182,9 +144,12 @@ public class OperationBancaire extends BaseElement implements Serializable,Compa
         return super.isDesableupdate(); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
+     @Override
     public List<State> getStates() {
-        return super.getStates(); //To change body of generated methods, choose Tools | Templates.
+        List<State> etats = new ArrayList<State>();
+        etats.add(new State("etabli", "broullion"));
+        etats.add(new State("valide", "valide"));
+        return etats; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -210,25 +175,8 @@ public class OperationBancaire extends BaseElement implements Serializable,Compa
     @Override
     public String getSearchkeys() {
         return super.getSearchkeys(); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public ExerciceComptable getExercice() {
-        return exercice;
-    }
-
-    public void setExercice(ExerciceComptable exercice) {
-        this.exercice = exercice;
-    }
+    }   
+   
 
     @Override
     public boolean isActivatefollower() {
@@ -244,14 +192,6 @@ public class OperationBancaire extends BaseElement implements Serializable,Compa
     @Override
     public String getSerial() {
         return "piececomptable01234"; //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
-    
-    @Override
-    public int compareTo(OperationBancaire o) {
-         //To change body of generated methods, choose Tools | Templates.
-        return journal.compareTo(o.journal);
-    }
+    } 
     
 }

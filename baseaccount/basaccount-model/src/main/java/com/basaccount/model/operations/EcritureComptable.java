@@ -8,6 +8,7 @@ package com.basaccount.model.operations;
 import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.comptabilite.ExerciceComptable;
 import com.basaccount.model.comptabilite.JournalComptable;
+import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.basaccount.model.tiers.Tier;
 import com.core.base.BaseElement;
 import com.core.base.State;
@@ -33,7 +34,7 @@ import javax.persistence.TemporalType;
  * @author Commercial_2
  */
 @Entity
-@Table(name = "T_ECRCO_COM")
+@Table(name = "T_ECRCO_CBT")
 public class EcritureComptable extends BaseElement implements Serializable,Comparable<EcritureComptable>{
 
     
@@ -69,9 +70,9 @@ public class EcritureComptable extends BaseElement implements Serializable,Compa
     @Predicate(label = "credit",type = BigDecimal.class,search = true,colsequence = 7,sequence = 7,updatable = false,optional = false)
     private BigDecimal credit = BigDecimal.ZERO;
     
-    @ManyToOne
-    @JoinColumn(name = "JRNSAISIE_ID")
-    private JournalSaisie journaldesaisie;
+//    @ManyToOne
+//    @JoinColumn(name = "JRNSAISIE_ID")
+//    private JournalSaisie journaldesaisie;
     
     @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)
     @JoinColumn(name = "ECRIT_ANAL_ID")
@@ -82,8 +83,8 @@ public class EcritureComptable extends BaseElement implements Serializable,Compa
     private EcritureTier ecrituretier ;
     
     @ManyToOne
-    @JoinColumn(name = "EXER_ID")
-    private ExerciceComptable exercice ;
+    @JoinColumn(name = "PECBT_ID")
+    private PeriodeComptable periode ;
     
 //    @ManyToOne
 //    @JoinColumn(name = "PIEC_ID")
@@ -147,7 +148,7 @@ public class EcritureComptable extends BaseElement implements Serializable,Compa
         this.journal = ecriture.journal;
         this.debit = ecriture.debit;
         this.credit = ecriture.credit;
-        this.exercice = ecriture.exercice;
+        this.periode = ecriture.periode;
 //        if(ecriture.getPiece()!=null){
 //            this.piece = new PieceComptable(ecriture.getPiece());
 //        }
@@ -157,9 +158,9 @@ public class EcritureComptable extends BaseElement implements Serializable,Compa
         if(ecriture.getTier()!=null){
             this.tier = new Tier(ecriture.tier);
         }//end if(ecriture.getTier()!=null)
-        if(ecriture.getJournaldesaisie()!=null){
-            this.journaldesaisie = new JournalSaisie(ecriture.journaldesaisie);
-        }
+//        if(ecriture.getJournaldesaisie()!=null){
+//            this.journaldesaisie = new JournalSaisie(ecriture.journaldesaisie);
+//        }
         
     }
      
@@ -241,14 +242,6 @@ public class EcritureComptable extends BaseElement implements Serializable,Compa
         this.tier = tier;
     } 
 
-    public JournalSaisie getJournaldesaisie() {
-        return journaldesaisie;
-    }
-
-    public void setJournaldesaisie(JournalSaisie journaldesaisie) {
-        this.journaldesaisie = journaldesaisie;
-    }
-
     public List<EcritureAnalytique> getAnalytiques() {
         return analytiques;
     }
@@ -265,16 +258,15 @@ public class EcritureComptable extends BaseElement implements Serializable,Compa
         this.ecrituretier = ecrituretier;
     }  
 
-    public ExerciceComptable getExercice() {
-        return exercice;
+    public PeriodeComptable getPeriode() {
+        return periode;
     }
 
-    public void setExercice(ExerciceComptable exercice) {
-        this.exercice = exercice;
+    public void setPeriode(PeriodeComptable periode) {
+        this.periode = periode;
     }
-    
-    
 
+  
     @Override
     public String getListTitle() {
         return "ecriture.comptable.list"; //To change body of generated methods, choose Tools | Templates.

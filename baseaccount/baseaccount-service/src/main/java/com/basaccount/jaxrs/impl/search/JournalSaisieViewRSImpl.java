@@ -65,6 +65,11 @@ public class JournalSaisieViewRSImpl
         }
         return meta; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public JournalSaisieView save(HttpHeaders headers, JournalSaisieView entity) {
+        return entity; //To change body of generated methods, choose Tools | Templates.
+    }
     
     
 

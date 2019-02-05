@@ -3,6 +3,7 @@ package com.teratech.achat.jaxrs.impl.base;
 
 import javax.ws.rs.Path;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
+import com.kerem.core.KerenExecption;
 import com.kerem.core.MetaDataUtil;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
@@ -72,9 +73,16 @@ public class FamilleArticleRSImpl
     public List<TreeNode> treefilter(HttpHeaders headers, int firstResult, int maxResult) {
         List<FamilleArticle> familles = super.filter(headers, firstResult, maxResult);
         FamilleArticleTNContainer container = new FamilleArticleTNContainer();
-        System.out.println(FamilleArticleRSImpl.class.toString()+" =======================================");
+//        System.out.println(FamilleArticleRSImpl.class.toString()+" =======================================");
         return container.buildTree(familles); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
+    @Override
+    public FamilleArticle delete(HttpHeaders headers, Long id) {
+      try{
+          return super.delete(headers, id);
+      }catch(Exception ex){
+        throw new KerenExecption("famille.article.delete.error");
+      } //To change body of generated methods, choose Tools | Templates.
+    }
 }

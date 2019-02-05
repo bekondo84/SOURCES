@@ -3,6 +3,7 @@ package com.teratech.stock.jaxrs.impl.base;
 
 import javax.ws.rs.Path;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
+import com.kerem.core.KerenExecption;
 import com.kerem.core.MetaDataUtil;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
@@ -10,7 +11,6 @@ import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import com.teratech.stock.core.ifaces.base.CiviliteManagerRemote;
 import com.teratech.stock.jaxrs.ifaces.base.CiviliteRS;
 import com.teratech.stock.model.base.Civilite;
-import com.teratech.stock.model.base.Entrepot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -66,4 +66,15 @@ public class CiviliteRSImpl
         }
         return null;
     }
+
+    @Override
+    public Civilite delete(HttpHeaders headers, Long id) {
+        try{
+            return super.delete(headers, id);
+        }catch(Exception ex){
+           throw new KerenExecption("civilite.delete.error");
+        } //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 }

@@ -12,7 +12,6 @@ import com.teratech.stock.core.ifaces.base.ArticleManagerLocal;
 import com.teratech.stock.core.ifaces.base.ArticleManagerRemote;
 import com.teratech.stock.dao.ifaces.base.ArticleDAOLocal;
 import com.teratech.stock.model.base.Article;
-import com.teratech.stock.model.base.LienEmplacement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +41,7 @@ public class ArticleManagerImpl
     }
 
     @Override
-    public List<Article> filter(List<Predicat> predicats, Map<String, OrderType> orders, Set<String> properties, int firstResult, int maxResult) {
+    public List<Article> filter(List<Predicat> predicats, Map<String, OrderType> orders, Set<String> properties, int firstResult, int maxResult) {       
         List<Article> datas = super.filter(predicats, orders, properties, firstResult, maxResult); //To change body of generated methods, choose Tools | Templates.
         List<Article> result = new ArrayList<Article>();
         for(Article art:datas){
@@ -78,6 +77,7 @@ public class ArticleManagerImpl
     public Article delete(Long id) {
         Article data = super.delete(id); //To change body of generated methods, choose Tools | Templates.
         return new Article(data);
+      
     }
     
     

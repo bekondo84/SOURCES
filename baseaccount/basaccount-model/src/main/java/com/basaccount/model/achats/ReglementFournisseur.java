@@ -7,41 +7,33 @@ package com.basaccount.model.achats;
 
 import com.basaccount.model.comptabilite.JournalComptable;
 import com.basaccount.model.tiers.Tier;
-import com.core.base.BaseElement;
+import com.basaccount.model.ventes.ReglementTmp;
 import com.core.base.State;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
 
 /**
  *
  * @author BEKO
  */
 @Entity
-@Table(name = "T_REGFO_COM")
-public class ReglementFournisseur extends BaseElement implements Serializable,Comparable<ReglementFournisseur>{
-
-    @Predicate(label = "numero.piece",optional = false,unique = true,search = true)
-    private String code;
-    
+@DiscriminatorValue("ACH")
+public class ReglementFournisseur extends ReglementTmp implements Serializable{
+   
     @ManyToOne
     @JoinColumn(name = "FOUR_ID")
     @Predicate(label = "fournisseur",type = Tier.class,target = "many-to-one",search = true,optional = false)
     private Tier fournisseur;
     
-    @Temporal(javax.persistence.TemporalType.DATE)
-    @Predicate(label = "date",type = Date.class,target = "date",optional = false,search = true)
-    private Date date ;
     
     @ManyToOne
     @JoinColumn(name = "MOREG_ID")
@@ -67,39 +59,17 @@ public class ReglementFournisseur extends BaseElement implements Serializable,Co
     public ReglementFournisseur() {
     }
 
-    /**
-     * 
-     * @param code
-     * @param fournisseur
-     * @param date
-     * @param modereglement
-     * @param montant
-     * @param source
-     * @param id
-     * @param designation
-     * @param moduleName
-     * @param comparedid 
-     */
-    public ReglementFournisseur(String code, Tier fournisseur, Date date, ModeReglement modereglement, Double montant, String source, long id, String designation, String moduleName, long comparedid) {
-        super(id, designation, moduleName, comparedid);
-        this.code = code;
-        this.fournisseur = fournisseur;
-        this.date = date;
-        this.modereglement = modereglement;
-        this.source = source;
-    }
+   
 
     /**
      * 
      * @param entity 
      */
      public ReglementFournisseur(ReglementFournisseur entity) {
-        super(entity.id, entity.designation, entity.moduleName, entity.compareid);
-        this.code = entity.code;
+        super(entity);
         if(entity.fournisseur!=null){
             this.fournisseur = new Tier(entity.fournisseur);
         }
-        this.date = entity.date;
         this.modereglement = entity.modereglement;
         this.source = entity.source;
         if(entity.journal!=null){
@@ -107,28 +77,13 @@ public class ReglementFournisseur extends BaseElement implements Serializable,Co
         }
     }
     
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
+   
     public Tier getFournisseur() {
         return fournisseur;
     }
 
     public void setFournisseur(Tier fournisseur) {
         this.fournisseur = fournisseur;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public ModeReglement getModereglement() {
@@ -193,11 +148,6 @@ public class ReglementFournisseur extends BaseElement implements Serializable,Co
     }
 
     @Override
-    public String getSerial() {
-        return "160120191109REFO"; //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public boolean isDesabledelete() {
         return super.isDesabledelete(); //To change body of generated methods, choose Tools | Templates.
     }
@@ -238,15 +188,6 @@ public class ReglementFournisseur extends BaseElement implements Serializable,Co
     @Override
     public String getSearchkeys() {
         return super.getSearchkeys(); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
-    
-    
-    @Override
-    public int compareTo(ReglementFournisseur o) {
-        //To change body of generated methods, choose Tools | Templates.
-        return code.compareTo(o.code);
     }
     
 }

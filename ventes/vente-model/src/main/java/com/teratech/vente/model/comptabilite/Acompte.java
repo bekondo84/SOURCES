@@ -158,6 +158,11 @@ public class Acompte extends BaseElement implements Serializable,Comparable<Acom
     public String getModuleName() {
         return "teratechvente"; //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public String getOwnerentity() {
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
     public String getListTitle() {

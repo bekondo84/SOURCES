@@ -59,15 +59,16 @@ public class PieceComptableRSImpl
 
     @Override
     public MetaData getMetaData(HttpHeaders headers) {
+        MetaData meta = null;
         try {
             //To change body of generated methods, choose Tools | Templates.
-            return MetaDataUtil.getMetaData(new PieceComptable(), new HashMap<String, MetaData>(),new ArrayList<String>());
+            meta = MetaDataUtil.getMetaData(new PieceComptable(), new HashMap<String, MetaData>(),new ArrayList<String>());
         } catch (InstantiationException ex) {
             Logger.getLogger(PieceComptableRSImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
             Logger.getLogger(PieceComptableRSImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return meta;
     }
 
     @Override

@@ -8,7 +8,6 @@ package com.basaccount.model.ventes;
 import com.basaccount.model.achats.*;
 import com.basaccount.model.comptabilite.JournalComptable;
 import com.basaccount.model.tiers.Tier;
-import com.core.base.BaseElement;
 import com.core.base.State;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
@@ -16,33 +15,25 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
 
 /**
  *
  * @author BEKO
  */
 @Entity
-@Table(name = "T_REGCL_COM")
-public class ReglementClient extends BaseElement implements Serializable,Comparable<ReglementClient>{
+@DiscriminatorValue("VTE")
+public class ReglementClient extends ReglementTmp implements Serializable{
 
-    @Predicate(label = "numero.piece",optional = false,unique = true,search = true)
-    private String code;
-    
-    @ManyToOne
+     @ManyToOne
     @JoinColumn(name = "FOUR_ID")
-    @Predicate(label = "fournisseur",type = Tier.class,target = "many-to-one",search = true,optional = false)
+    @Predicate(label = "client",type = Tier.class,target = "many-to-one",search = true,optional = false)
     private Tier fournisseur;
-    
-    @Temporal(javax.persistence.TemporalType.DATE)
-    @Predicate(label = "date",type = Date.class,target = "date",optional = false,search = true)
-    private Date date ;
     
     @ManyToOne
     @JoinColumn(name = "MOREG_ID")
@@ -68,34 +59,14 @@ public class ReglementClient extends BaseElement implements Serializable,Compara
     public ReglementClient() {
     }
 
-    /**
-     * 
-     * @param code
-     * @param fournisseur
-     * @param date
-     * @param modereglement
-     * @param montant
-     * @param source
-     * @param id
-     * @param designation
-     * @param moduleName
-     * @param comparedid 
-     */
-    public ReglementClient(String code, Tier fournisseur, Date date, ModeReglement modereglement, Double montant, String source, long id, String designation, String moduleName, long comparedid) {
-        super(id, designation, moduleName, comparedid);
-        this.code = code;
-        this.fournisseur = fournisseur;
-        this.date = date;
-        this.modereglement = modereglement;
-        this.source = source;
-    }
+ 
 
     /**
      * 
      * @param entity 
      */
      public ReglementClient(ReglementClient entity) {
-        super(entity.id, entity.designation, entity.moduleName, entity.compareid);
+        super(entity);
         this.code = entity.code;
         if(entity.fournisseur!=null){
             this.fournisseur = new Tier(entity.fournisseur);
@@ -191,12 +162,7 @@ public class ReglementClient extends BaseElement implements Serializable,Compara
     @Override
     public boolean isActivefilelien() {
         return true; //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getSerial() {
-        return "160120191110RECL"; //To change body of generated methods, choose Tools | Templates.
-    }
+    }   
 
     @Override
     public boolean isDesabledelete() {
@@ -240,14 +206,6 @@ public class ReglementClient extends BaseElement implements Serializable,Compara
     public String getSearchkeys() {
         return super.getSearchkeys(); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
-    
-    
-    @Override
-    public int compareTo(ReglementClient o) {
-        //To change body of generated methods, choose Tools | Templates.
-        return code.compareTo(o.code);
-    }
+   
     
 }

@@ -51,22 +51,22 @@ public class JournalComptableManagerImpl
     @Override
     public void processBeforeSave(JournalComptable entity) {
         //Creation des journaux de saisie
-        ExerciceComptable exercice = exercicedao.getOpenExercice();
-        if(exercice==null){
-            RuntimeException excep = new RuntimeException("Aucun exercice comptable disponible");
-            throw new WebApplicationException(excep,Response.Status.NOT_MODIFIED);
-        }
-        String[] shortMonths =  {"janv","févr","mars","avr","mai","juin","juil","août","sept","oct","nov","déc"};
-        Date begin = exercice.getDebut();
-        while(DateHelper.convertToString(begin, "yyyy-MM-dd")
-                .compareTo(DateHelper.convertToString(exercice.getFin(), "yyyy-MM-dd"))<=0){
-            String code = shortMonths[begin.getMonth()]+"."+DateHelper.convertToString(begin, "yy");
-            JournalSaisie saisie = new JournalSaisie(code, exercice, DateHelper.getFirstDayOfMonth(begin)
-                    , DateHelper.getLastDayOfMonth(begin));
-            saisie.setJournal(entity);
-            journalsaisiedao.save(saisie);
-            begin = DateHelper.nextMonth(begin);
-        }//end while(DateHelper.convertToString(begin, "yyyy-MM-dd")
+//        ExerciceComptable exercice = exercicedao.getOpenExercice();
+//        if(exercice==null){
+//            RuntimeException excep = new RuntimeException("Aucun exercice comptable disponible");
+//            throw new WebApplicationException(excep,Response.Status.NOT_MODIFIED);
+//        }
+//        String[] shortMonths =  {"janv","févr","mars","avr","mai","juin","juil","août","sept","oct","nov","déc"};
+//        Date begin = exercice.getDebut();
+//        while(DateHelper.convertToString(begin, "yyyy-MM-dd")
+//                .compareTo(DateHelper.convertToString(exercice.getFin(), "yyyy-MM-dd"))<=0){
+//            String code = shortMonths[begin.getMonth()]+"."+DateHelper.convertToString(begin, "yy");
+//            JournalSaisie saisie = new JournalSaisie(code, exercice, DateHelper.getFirstDayOfMonth(begin)
+//                    , DateHelper.getLastDayOfMonth(begin));
+//            saisie.setJournal(entity);
+//            journalsaisiedao.save(saisie);
+//            begin = DateHelper.nextMonth(begin);
+//        }//end while(DateHelper.convertToString(begin, "yyyy-MM-dd")
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
     }
     

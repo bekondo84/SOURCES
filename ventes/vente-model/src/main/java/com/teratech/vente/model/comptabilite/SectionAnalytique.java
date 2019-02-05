@@ -103,6 +103,31 @@ public class SectionAnalytique extends BaseElement implements Serializable,Compa
     public String getModuleName() {
         return "teratechvente"; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public String getOwnermodule() {
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesableupdate() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesabledelete() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesablecreate() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isCreateonfield() {
+        return false; //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     

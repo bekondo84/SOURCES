@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Table(name = "T_UNGE")
 public class UniteGestion extends BaseElement implements Serializable,Comparable<UniteGestion>{
 
-    @Predicate(label = "Intitulé",optional = false,unique = true,search = true)
+    @Predicate(label = "intitule",optional = false,unique = true,search = true)
     private String code ;
     
     private boolean actif = Boolean.TRUE;

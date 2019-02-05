@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import com.bekosoftware.genericdaolayer.dao.ifaces.GenericDAO;
 import com.bekosoftware.genericdaolayer.dao.tools.Predicat;
+import com.bekosoftware.genericdaolayer.dao.tools.RestrictionsContainer;
 import com.bekosoftware.genericmanagerlayer.core.impl.AbstractGenericManager;
 import com.keren.smsgateway.core.ifaces.SMSConfigurationManagerLocal;
 import com.keren.smsgateway.core.ifaces.SMSConfigurationManagerRemote;
@@ -41,9 +42,12 @@ public class SMSConfigurationManagerImpl
         return "id";
     }
 
+    
+    
+
     @Override
     public List<SMSConfiguration> filter(List<Predicat> predicats, Map<String, OrderType> orders, Set<String> properties, int firstResult, int maxResult) {
-        List<SMSConfiguration> datas = super.filter(predicats, orders, properties, firstResult, maxResult); //To change body of generated methods, choose Tools | Templates.
+        List<SMSConfiguration> datas = dao.filter(predicats, orders, properties, firstResult, maxResult); //To change body of generated methods, choose Tools | Templates.
         List<SMSConfiguration> result = new ArrayList<SMSConfiguration>();
         for(SMSConfiguration data : datas){
             result.add(new SMSConfiguration(data));
@@ -52,11 +56,24 @@ public class SMSConfigurationManagerImpl
     }
 
     @Override
+    public List<SMSConfiguration> findAll() {
+        RestrictionsContainer container = RestrictionsContainer.newInstance();
+         List<SMSConfiguration> datas = dao.filter(container.getPredicats(), null, null, 0, -1); //To change body of generated methods, choose Tools | Templates.
+        List<SMSConfiguration> result = new ArrayList<SMSConfiguration>();
+        for(SMSConfiguration data : datas){
+            result.add(new SMSConfiguration(data));
+        }
+        return result;
+    }
+    
+    
+
+    @Override
     public SMSConfiguration find(String propertyName, Long entityID) {
-        SMSConfiguration data = super.find(propertyName, entityID); //To change body of generated methods, choose Tools | Templates.
+        SMSConfiguration data = dao.findByPrimaryKey(propertyName, entityID); //To change body of generated methods, choose Tools | Templates.
         SMSConfiguration result = new SMSConfiguration(data);
         for(SMSGateway gate:data.getModems()){
-            result.getModems().add(gate);
+            result.getModems().add(new SMSGateway(gate));
         }
         return result;
     }

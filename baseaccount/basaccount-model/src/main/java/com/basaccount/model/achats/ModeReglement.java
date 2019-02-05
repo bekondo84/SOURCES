@@ -19,13 +19,13 @@ import javax.persistence.Table;
 @Table(name = "T_MORE")
 public class ModeReglement extends BaseElement implements Serializable,Comparable<ModeReglement>{
 
-    @Predicate(label = "Code règlement",optional = false )
+    @Predicate(label = "code.reglement",optional = false )
     private String code ;
     
-    @Predicate(label = "Intitulé")
+    @Predicate(label = "intitule")
     private String label ;
     
-    @Predicate(label = "Type de règlement",target = "combobox",values = "Aucun;Espèces;Chèque;Carte bancaire")
+    @Predicate(label = "type.reglement",target = "combobox",values = "Aucun;Espèces;Chèque;Carte bancaire")
     private String type ="0";
 
     public ModeReglement(String code, String label) {

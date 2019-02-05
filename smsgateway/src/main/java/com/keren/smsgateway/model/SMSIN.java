@@ -100,17 +100,11 @@ public class SMSIN extends BaseElement implements Serializable,Comparable<SMSIN>
      * @param text
      * @param refNo
      * @param receiveDate
-     * @param gateway
-     * @param id
-     * @param designation
-     * @param moduleName
-     * @param comparedid 
+     * @param gateway     
      */
-    public SMSIN(String originator, String type, String encoding, Date messageDate, Date recieveDate, String text, String refNo, Date receiveDate, String gateway, long id, String designation, String moduleName, long comparedid) {
-        super(id, designation, moduleName, comparedid);
+    public SMSIN(String originator, Date messageDate, Date recieveDate, String text, String refNo, String gateway) {
+        super(-1, null, null, -1);
         this.originator = originator;
-        this.type = type;
-        this.encoding = encoding;
         this.messageDate = messageDate;
         this.recieveDate = recieveDate;
         this.text = text;

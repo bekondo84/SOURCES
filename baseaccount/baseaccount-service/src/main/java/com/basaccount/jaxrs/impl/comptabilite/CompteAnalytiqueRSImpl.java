@@ -16,6 +16,8 @@ import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
 import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -62,19 +64,15 @@ public class CompteAnalytiqueRSImpl
     
     @Override
     public MetaData getMetaData(@Context HttpHeaders headers) {
+        MetaData meta = null;
         try {
-            Gson gson = new Gson();
-            MenuAction action = gson.fromJson(headers.getRequestHeader("action").get(0),MenuAction.class);
-            if(action==null||action.getId()<=0){
-                return MetaDataUtil.getMetaData(new CompteAnalytique(),new HashMap<String, MetaData>(),new ArrayList<String>());
-            }else{
-                action = actionmanager.find("id", action.getId());
-                return CommonTools.xmlViewParser(CompteAnalytique.class, action.getFormView(), action.getTreeView());
-            }
-            
-        } catch (Exception ex) {
-           throw new WebApplicationException(ex);
-        }  
+            meta = MetaDataUtil.getMetaData(new CompteAnalytique(), new HashMap<String, MetaData>(), new ArrayList<String>());
+        } catch (InstantiationException ex) {
+            Logger.getLogger(CompteAnalytiqueRSImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(CompteAnalytiqueRSImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return meta;
     }
 
 }

@@ -36,13 +36,14 @@ public class SMSConfiguration extends BaseElement implements Serializable,Compar
     
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "SMSCONF_ID")
-    @Predicate(label = " ",type = SMSGateway.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "modem.configuration",edittable = true)
+    @Predicate(label = " ",type = SMSGateway.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "modem.configuration")
     private List<SMSGateway> modems = new ArrayList<SMSGateway>();
 
     public SMSConfiguration() {
     }
     
     public SMSConfiguration(SMSConfiguration entity) {
+        super(entity.id, entity.designation, entity.moduleName, entity.compareid);
         this.inboundinterval = entity.inboundinterval;
         this.outboundinterval = entity.outboundinterval;
         this.deleteafterprocess = entity.deleteafterprocess;

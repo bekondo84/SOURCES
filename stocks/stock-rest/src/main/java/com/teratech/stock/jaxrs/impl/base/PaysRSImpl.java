@@ -10,7 +10,6 @@ import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import com.teratech.stock.core.ifaces.base.PaysManagerRemote;
 import com.teratech.stock.jaxrs.ifaces.base.PaysRS;
 import com.teratech.stock.model.base.Pays;
-import com.teratech.stock.model.base.UniteGestion;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.ws.rs.WebApplicationException;

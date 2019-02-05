@@ -33,7 +33,7 @@ import javax.persistence.TemporalType;
  * @author Commercial_2
  */
 @Entity
-@Table(name = "T_ECRCO_COM")
+@Table(name = "T_ECRCO_CBT")
 public class EcritureBanque extends BaseElement implements Serializable,Comparable<EcritureBanque>{
 
     
@@ -72,9 +72,9 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
     @Predicate(label = "encaissement",type = BigDecimal.class,search = true,colsequence = 7,sequence = 7,updatable = false,optional = false)
     private BigDecimal credit = BigDecimal.ZERO;
     
-    @ManyToOne
-    @JoinColumn(name = "JRNSAISIE_ID")
-    private JournalSaisie journaldesaisie;
+//    @ManyToOne
+//    @JoinColumn(name = "JRNSAISIE_ID")
+//    private JournalSaisie journaldesaisie;
     
     @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)
     @JoinColumn(name = "ECRIT_ANAL_ID")
@@ -82,11 +82,8 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
 
     @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "ECRIT_TIER_ID")
-    private EcritureTier ecrituretier ;
-    
-    @ManyToOne
-    @JoinColumn(name = "EXER_ID")
-    private ExerciceComptable exercice ;
+    private EcritureTier ecrituretier ;    
+   
     
 //    @ManyToOne
 //    @JoinColumn(name = "PIEC_ID")
@@ -150,7 +147,6 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
         this.journal = ecriture.journal;
         this.debit = ecriture.debit;
         this.credit = ecriture.credit;
-        this.exercice = ecriture.exercice;
         this.tresorerie = ecriture.tresorerie;
 //        if(ecriture.getPiece()!=null){
 //            this.piece = new PieceComptable(ecriture.getPiece());
@@ -161,9 +157,9 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
         if(ecriture.getTier()!=null){
             this.tier = new Tier(ecriture.tier);
         }//end if(ecriture.getTier()!=null)
-        if(ecriture.getJournaldesaisie()!=null){
-            this.journaldesaisie = new JournalSaisie(ecriture.journaldesaisie);
-        }
+//        if(ecriture.getJournaldesaisie()!=null){
+//            this.journaldesaisie = new JournalSaisie(ecriture.journaldesaisie);
+//        }
         
     }
      
@@ -254,14 +250,7 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
         this.tier = tier;
     } 
 
-    public JournalSaisie getJournaldesaisie() {
-        return journaldesaisie;
-    }
-
-    public void setJournaldesaisie(JournalSaisie journaldesaisie) {
-        this.journaldesaisie = journaldesaisie;
-    }
-
+   
     public List<EcritureAnalytique> getAnalytiques() {
         return analytiques;
     }
@@ -278,15 +267,7 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
         this.ecrituretier = ecrituretier;
     }  
 
-    public ExerciceComptable getExercice() {
-        return exercice;
-    }
-
-    public void setExercice(ExerciceComptable exercice) {
-        this.exercice = exercice;
-    }
-    
-    
+     
 
     @Override
     public String getListTitle() {

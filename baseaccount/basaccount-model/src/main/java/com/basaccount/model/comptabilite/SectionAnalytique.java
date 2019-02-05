@@ -21,15 +21,15 @@ import javax.persistence.Table;
 @Table(name = "T_SANALYTIQUE")
 public class SectionAnalytique extends BaseElement implements Serializable,Comparable<SectionAnalytique>{
 
-    @Predicate(label = "Section Analytique",type = CompteAnalytique.class,target = "many-to-one",search = true,sequence = 1,colsequence = 1)
+    @Predicate(label = "section.analytique",type = CompteAnalytique.class,target = "many-to-one",search = true,sequence = 1,colsequence = 1)
     @ManyToOne
     @JoinColumn(name = "CA_ID")
     private CompteAnalytique compte ;    
     
-    @Predicate(label = "Valeur",type = Double.class,optional = false,search = true,sequence = 2,colsequence = 3)
+    @Predicate(label = "valeur",type = Double.class,optional = false,search = true,sequence = 2,colsequence = 3)
     private Double quantite ;
     
-    @Predicate(label = "Clé de repartition" ,target = "combobox",values = "Pourcentage;Equilibre;Montant",search = true,sequence = 3,colsequence = 2)
+    @Predicate(label = "cle.repartition" ,target = "combobox",values = "Pourcentage;Equilibre;Montant",search = true,sequence = 3,colsequence = 2)
     private String type ="0";
     
     public SectionAnalytique() {

@@ -10,8 +10,12 @@ import com.basaccount.model.comptabilite.Taxe;
 import com.core.base.BaseElement;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -25,22 +29,26 @@ public class LigneNoteFrais extends BaseElement implements Serializable,Comparab
 
     @ManyToOne
     @JoinColumn(name = "COMP_ID")
-    @Predicate(label = "Compte",type = Compte.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "compte",type = Compte.class,target = "many-to-one",optional = false,search = true)
     private Compte compte ;
     
-    @Predicate(label = "Description",search = true)
+    @Predicate(label = "description",search = true)
     private String libelle ;
     
-    @Predicate(label = "Montant",type = Double.class,optional = false,search = true)
+    @Predicate(label = "montant",type = Double.class,optional = false,search = true)
     private Double montant =0.0;
     
-    @ManyToOne
-    @JoinColumn(name = "TAX_ID")
-    @Predicate(label = "Taxes",type = Taxe.class,target = "many-to-one",search = true)
-    private Taxe taxe ;
+    @ManyToMany
+    @JoinTable(name = "NOF_TAX_ACH",joinColumns = @JoinColumn(name = "NOF_ID"),inverseJoinColumns = @JoinColumn(name = "TAX_ID"))
+    @Predicate(label = "taxes",type = Taxe.class,target = "many-to-many",search = true)
+    private List<Taxe> taxes =new ArrayList<Taxe>();
     
-    @Predicate(label = "Total HT",type = Double.class,editable = false)
-    private Double total ;
+    @Predicate(label = "total.taxes",type = Double.class,search = true,editable = false)
+    private Double taxe = 0.0;
+    
+    @Predicate(label = "total.ttc",type = Double.class,search = true,editable = false)
+    private Double total =0.0;    
+    
 
     public LigneNoteFrais(Compte compte, String libelle) {
         this.compte = compte;
@@ -63,7 +71,9 @@ public class LigneNoteFrais extends BaseElement implements Serializable,Comparab
             this.compte = new Compte(ligne.compte);
         }
         this.libelle = ligne.libelle;
+        this.montant = ligne.montant;
         this.total = ligne.total;
+        this.taxe = ligne.taxe;
     }
 
     /**
@@ -98,6 +108,16 @@ public class LigneNoteFrais extends BaseElement implements Serializable,Comparab
         this.montant = montant;
     }
 
+    public Double getTaxe() {
+        return taxe;
+    }
+
+    public void setTaxe(Double taxe) {
+        this.taxe = taxe;
+    }
+    
+    
+
     @Override
     public String getDesignation() {
         return compte.getDesignation(); //To change body of generated methods, choose Tools | Templates.
@@ -105,16 +125,18 @@ public class LigneNoteFrais extends BaseElement implements Serializable,Comparab
 
     @Override
     public String getEditTitle() {
-        return "Note de frais"; //To change body of generated methods, choose Tools | Templates.
+        return "note.frais"; //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Taxe getTaxe() {
-        return taxe;
+    public List<Taxe> getTaxes() {
+        return taxes;
     }
 
-    public void setTaxe(Taxe taxe) {
-        this.taxe = taxe;
+    public void setTaxes(List<Taxe> taxes) {
+        this.taxes = taxes;
     }
+
+    
 
     public Double getTotal() {
         return total;

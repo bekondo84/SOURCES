@@ -107,6 +107,26 @@ public class Pays extends BaseElement implements Serializable,Comparable<Pays>{
         return "PAYS"; //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public boolean isDesableupdate() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesabledelete() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesablecreate() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isCreateonfield() {
+        return false; //To change body of generated methods, choose Tools | Templates.
+    }
+
     
     
     @Override

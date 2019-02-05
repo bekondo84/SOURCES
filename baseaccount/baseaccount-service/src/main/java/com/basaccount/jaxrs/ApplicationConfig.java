@@ -54,6 +54,8 @@ public class ApplicationConfig extends Application {
         resources.add(com.basaccount.jaxrs.impl.operations.PieceComptableRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.search.EcritureSearchRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.search.JournalSaisieViewRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.search.OperationBancaireViewRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.search.PieceComptableViewRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.CiviliteRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.ConditionPaiementRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.ContactRSImpl.class);

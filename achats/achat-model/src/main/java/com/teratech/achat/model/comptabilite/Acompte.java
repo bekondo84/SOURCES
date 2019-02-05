@@ -160,6 +160,13 @@ public class Acompte extends BaseElement implements Serializable,Comparable<Acom
     }
 
     @Override
+    public String getOwnerentity() {
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+
+    @Override
     public String getListTitle() {
         return "acomptes"; //To change body of generated methods, choose Tools | Templates.
     }

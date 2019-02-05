@@ -34,7 +34,7 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue("TMP")
 public class DocumentVente extends BaseElement implements Serializable,Comparable<DocumentVente>{
 
-    @Predicate(label = "N° de Pièce",optional = false,search = true)
+    @Predicate(label = "numero.piece",optional = false,search = true)
     protected String code ;
     
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -42,22 +42,22 @@ public class DocumentVente extends BaseElement implements Serializable,Comparabl
     
     @ManyToOne
     @JoinColumn(name = "FOUR_ID")
-    @Predicate(label = "Client",type = Tier.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "client",type = Tier.class,target = "many-to-one",optional = false,search = true)
     @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"0\"}]")
     protected Tier client ;
     
     @Temporal(TemporalType.DATE)
-    @Predicate(label = "Date ",type = Date.class,target = "date",optional = false,search = true)    
+    @Predicate(label = "date ",type = Date.class,target = "date",optional = false,search = true)    
     protected Date datecommande ;
     
-    @Predicate(label = "Reference")
+    @Predicate(label = "reference")
     protected String codeclient;
     
-    @Predicate(label = "Lieu de livraison",search = true)
+    @Predicate(label = "lieu.livraison",search = true)
     protected String lieu;
     
     @Temporal(javax.persistence.TemporalType.DATE)
-    @Predicate(label = "Livraison",type = Date.class,target = "date",search = true)
+    @Predicate(label = "livraison",type = Date.class,target = "date",search = true)
     protected Date livraison ;
        
     

@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ClotureExerciceComptable extends BaseElement implements Serializable,Comparable<ClotureExerciceComptable>{
 
-    @Predicate(label = "Exercice Comptable",optional = false,type = ExerciceComptable.class,target = "many-to-one")
+    @Predicate(label = "exercice.comptable",optional = false,type = ExerciceComptable.class,target = "many-to-one")
     @ManyToOne
     private ExerciceComptable exercice ;
 
@@ -75,7 +75,7 @@ public class ClotureExerciceComptable extends BaseElement implements Serializabl
 
     @Override
     public String getEditTitle() {
-        return "CLOTURE EXERCICE COMPTABLE"; //To change body of generated methods, choose Tools | Templates.
+        return "cloture.exercice.comptable"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

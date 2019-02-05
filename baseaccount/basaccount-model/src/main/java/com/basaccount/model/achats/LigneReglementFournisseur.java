@@ -6,31 +6,23 @@
 package com.basaccount.model.achats;
 
 import com.basaccount.model.comptabilite.Compte;
-import com.core.base.BaseElement;
+import com.basaccount.model.ventes.LigneReglement;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
 
 /**
  *
  * @author BEKO
  */
 @Entity
-@Table(name = "T_LIREFO_COM")
-public class LigneReglementFournisseur extends BaseElement implements Serializable,Comparable<LigneReglementFournisseur>{
+@DiscriminatorValue("ACH")
+public class LigneReglementFournisseur extends LigneReglement implements Serializable{
 
-    @Temporal(javax.persistence.TemporalType.DATE)
-    @Predicate(label = "echeance",type = Date.class,target = "date",search = true)
-    private Date echeance ;
-    
-    @Predicate(label = "montant",target = "number",type = Double.class,search = true,optional = false)
-    private Double montant ;
-    
     @ManyToOne
     @JoinColumn(name = "COPA_ID")
     @Predicate(label = "compte",type = Compte.class,target = "many-to-one",search = true,optional = false)
@@ -50,21 +42,10 @@ public class LigneReglementFournisseur extends BaseElement implements Serializab
     public LigneReglementFournisseur() {
     }
 
-    public LigneReglementFournisseur(Date echeance, Double montant, String typepiece, Facture piece, Double solde, long id, String designation, String moduleName, long comparedid) {
-        super(id, designation, moduleName, comparedid);
-        this.echeance = echeance;
-        this.montant = montant;
-        this.typepiece = typepiece;
-        this.piece = piece;
-        this.solde = solde;
-//        this.compte = compte;
-    }
-    
+  
     
     public LigneReglementFournisseur(LigneReglementFournisseur entity) {
-        super(entity.id, entity.designation, entity.moduleName, entity.compareid);
-        this.echeance = entity.echeance;
-        this.montant = entity.montant;
+        super(entity);
         this.typepiece = entity.typepiece;
         if(entity.piece!=null){
             this.piece = new Facture(entity.piece);
@@ -75,22 +56,7 @@ public class LigneReglementFournisseur extends BaseElement implements Serializab
         }
     }
 
-    public Date getEcheance() {
-        return echeance;
-    }
-
-    public void setEcheance(Date echeance) {
-        this.echeance = echeance;
-    }
-
-    public Double getMontant() {
-        return montant;
-    }
-
-    public void setMontant(Double montant) {
-        this.montant = montant;
-    }
-
+   
     public Compte getCompte() {
         return compte;
     }
@@ -157,12 +123,5 @@ public class LigneReglementFournisseur extends BaseElement implements Serializab
     public String getSearchkeys() {
         return super.getSearchkeys(); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
-    @Override
-    public int compareTo(LigneReglementFournisseur o) {
-         //To change body of generated methods, choose Tools | Templates.
-        return echeance.compareTo(o.echeance);
-    }
-    
+        
 }

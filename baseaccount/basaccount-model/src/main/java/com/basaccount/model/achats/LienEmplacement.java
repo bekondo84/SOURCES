@@ -27,28 +27,28 @@ public class LienEmplacement extends BaseElement implements Serializable,Compara
 
     @ManyToOne
     @JoinColumn(name = "EMP_ID")
-    @Predicate(label = "Emplacement",type = Emplacement.class,target = "many-to-one",optional = false,nullable = false,search = true)
+    @Predicate(label = "emplacement",type = Emplacement.class,target = "many-to-one",optional = false,nullable = false,search = true)
     private Emplacement emplacement ;
     
-    @Predicate(label = "Stock réel",type = Double.class,optional = false,search = true)
+    @Predicate(label = "stock.reel",type = Double.class,optional = false,search = true)
     private Double stock ;    
     
-    @Predicate(label = "Stock sécurité",type = Double.class,optional = false)
+    @Predicate(label = "stock.securite",type = Double.class,optional = false)
     private Double stocksec =0.0;
      
-    @Predicate(label = "Stock d'alerte",type = Double.class,optional = false)
+    @Predicate(label = "stock.alerte",type = Double.class,optional = false)
     private Double stockale =0.0;
     
-    @Predicate(label = "Stock Min",type = Double.class,optional = false,editable = false)
+    @Predicate(label = "stock.min",type = Double.class,optional = false,editable = false)
     private Double stockmin ;
     
-    @Predicate(label = "Stock Maxi",type = Double.class,optional = false)
+    @Predicate(label = "stock.maxi",type = Double.class,optional = false)
     private Double stockmax ;
     
-    @Predicate(label = "Prévision",type = Double.class,optional = false,search = true,editable = false)
+    @Predicate(label = "prevision",type = Double.class,optional = false,search = true,editable = false)
     private Double prevision ;
     
-    @Predicate(label = "A terme",type = Double.class,optional = false,search = true,editable = false)
+    @Predicate(label = "a.terme",type = Double.class,optional = false,search = true,editable = false)
     private Double terme ;
     
     @OneToMany(mappedBy = "lien",fetch = FetchType.LAZY)
@@ -194,7 +194,7 @@ public class LienEmplacement extends BaseElement implements Serializable,Compara
 
     @Override
     public String getEditTitle() {
-        return "Espace de stockage"; //To change body of generated methods, choose Tools | Templates.
+        return "espace.stockage"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
