@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<keren>
+     <action id="teratech_sms" />
+	 <menu id="teratech_sms_oper" label="sms.actions" parent="teratech_sms" gyphycon="glyphicon glyphicon-pencil"/>
+	 <menuitem id="teratech_sms_send" label="send.sms" parent_ref="teratech_sms_oper" entity_ref="SendSMS" model_ref="smsgateway" gyphycon="glyphicon glyphicon-th" modal="true" />
+	 <menuitem id="teratech_sms_program" label="program.sms" parent_ref="teratech_sms_oper" entity_ref="ProgramSMS" model_ref="smsgateway" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_sms_inbox" label="inbox" parent_ref="teratech_sms_oper" entity_ref="SMSIN" model_ref="smsgateway" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_sms_outbox" label="outbox" parent_ref="teratech_sms_oper" entity_ref="SMSOUT" model_ref="smsgateway" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menu id="teratech_sms_struct" label="structures" parent="teratech_sms" gyphycon="glyphicon glyphicon-pencil"/>
+	 <menuitem id="teratech_sms_groupe" label="groupe.de.contacts" parent_ref="teratech_sms_struct" entity_ref="GroupeContact" model_ref="smsgateway" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_sms_contact" label="contacts" parent_ref="teratech_sms_struct" entity_ref="Contact" model_ref="smsgateway" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_sms_modele" label="sms.modeles" parent_ref="teratech_sms_struct" entity_ref="SMSModel" model_ref="smsgateway" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menu id="teratech_sms_para" label="parametres" parent="teratech_sms" gyphycon="glyphicon glyphicon-pencil"/>
+	 <menuitem id="teratech_sms_gateway" label="sms.gateways" parent_ref="teratech_sms_para" entity_ref="SMSConfiguration" model_ref="smsgateway" gyphycon="glyphicon glyphicon-th" modal="false" view_type="form"/>
+</keren>

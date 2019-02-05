@@ -185,9 +185,9 @@
 						<table class="width-5">
 							<thead class="border-7">
 								<tr class="font-weight-1">
-									<td width="30%">{{'article' | translate}}</td>
-									<td width="20%">{{'qte' | translate}}</td>
-									<td width="20%">{{'total' | translate}}</td>
+									<th width="30%" style="border-bottom:solid 2px black !important;margin-bottom:15px !important;font-weight:bold!important;">{{'article' | translate}}</th>
+									<th width="20%" style="border-bottom:solid 2px black !important;margin-bottom:15px !important;font-weight:bold!important;">{{'qte' | translate}}</th>
+									<th width="20%" style="border-bottom:solid 2px black !important;margin-bottom:15px !important;font-weight:bold!important;">{{'total' | translate}}</th>
 								</tr>
 							</thead>
 							<tbody>

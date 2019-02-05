@@ -29,7 +29,7 @@
 	 <menuitem id="teratech_achat_conf_1" label="entrepots" parent_ref="teratech_achat_configuration" entity_ref="Entrepot" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false" />
 	 <menuitem id="teratech_achat_conf_2" label="emplacements" parent_ref="teratech_achat_configuration" entity_ref="Emplacement" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false" />
 	 <menuitem id="teratech_achat_conf_3" label="unite.de.gestion" parent_ref="teratech_achat_configuration" entity_ref="UniteGestion" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree" />
-	 <menuitem id="teratech_achat_conf_4" label="Unite.achat" parent_ref="teratech_achat_configuration" entity_ref="UniteAchat" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree" />
+	 <menuitem id="teratech_achat_conf_4" label="unite.achat" parent_ref="teratech_achat_configuration" entity_ref="UniteAchat" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree" />
 	 <menuitem id="teratech_achat_conf_5" label="categorie.de.produit" parent_ref="teratech_achat_configuration" entity_ref="CategorieProduit" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree"/>
 	 <menuitem id="teratech_achat_conf_6" label="regions" parent_ref="teratech_achat_configuration" entity_ref="Region" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree"/>
 	 <menuitem id="teratech_achat_conf_7" label="pays" parent_ref="teratech_achat_configuration" entity_ref="Pays" model_ref="teratechachat" gyphycon="glyphicon glyphicon-th" modal="false"  view_type="kaban,tree,form"/>
@@ -240,7 +240,7 @@
 		    <![CDATA[				   
 			 <div class='col-md-12 col-sm-12' id='detail-panel-body-header'> 
 				 <div class='col-md-3 col-sm-4'>
-				  <div id='imageContent'  style='float: left;margin-left: -20px;'> <img id='apercuImageContent' ng-src="{{srcFn(item.image,'article','baseaccount')}}" alt='Image ' ng-click='imageClick()' height='70' width='75'/>
+				  <div id='imageContent'  style='float: left;margin-left: -35px;margin-top:-3px;'> <img id='apercuImageContent' ng-src="{{srcFn(item.image,'article','baseaccount')}}" alt='Image ' ng-click='imageClick()' height='60' width='75'/>
 				  </div> 
 				 </div>
 				 <div  class='col-md-8 col-sm-7'>
@@ -262,7 +262,7 @@
 		    <![CDATA[				   
 				<div class='col-md-12 col-sm-12' id='detail-panel-body-header'> 
 					 <div class='col-md-3 col-sm-4'>
-					  <div id='imageContent'  style='float: left;margin-left: -20px;'> <img id='apercuImageContent' ng-src="{{srcFn(item.image,'tier','baseaccount')}}" alt='Image ' ng-click='imageClick()' height='70' width='75'/>
+					  <div id='imageContent'  style='float: left;margin-left: -35px;margin-top:-3px;'> <img id='apercuImageContent' ng-src="{{srcFn(item.image,'tier','baseaccount')}}" alt='Image ' ng-click='imageClick()' height='60' width='75'/>
 					  </div> 
 					 </div>
 					 <div  class='col-md-8 col-sm-7'>
@@ -284,7 +284,7 @@
 		    <![CDATA[				   
 			 <div class='col-md-12 col-sm-12' id='detail-panel-body-header'> 
 				 <div class='col-md-3 col-sm-4'>
-				  <div id='imageContent'  style='float: left;margin-left: -20px;'> <img id='apercuImageContent' ng-src="{{srcFn(item.image,null,null)}}" alt='Image ' ng-click='imageClick()' height='70' width='75'/>
+				  <div id='imageContent'  style='float: left;margin-left: -35px;margin-top:-3px;'> <img id='apercuImageContent' ng-src="{{srcFn(item.image,null,null)}}" alt='Image ' ng-click='imageClick()' height='60' width='75'/>
 				  </div> 
 				 </div>
 				 <div  class='col-md-8 col-sm-7'>

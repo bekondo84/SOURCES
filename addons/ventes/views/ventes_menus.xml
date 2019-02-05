@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <keren>
      <action id="teratech_vente" />
-	 <menu id="teratech_vente_operation" label="Opérations de vente" parent="teratech_vente" gyphycon="glyphicon glyphicon-pencil"/>
-	 <menuitem id="teratech_vente_ope_1" label="Devis" parent_ref="teratech_vente_operation" entity_ref="Devis" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="teratech_vente_ope_1_1" label="Envoi mail" parent_ref="teratech_vente_operation" entity_ref="SendDevisForm" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" hide="true"/>
-	 <menuitem id="teratech_vente_ope_2" label="Commandes" parent_ref="teratech_vente_operation" entity_ref="Commande" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="teratech_vente_ope_2_1" label="Commandes" parent_ref="teratech_vente_operation" entity_ref="CommandeDevis" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" hide="true" />
-	 <menuitem id="teratech_vente_ope_3" label="Livraisons" parent_ref="teratech_vente_operation" entity_ref="BonLivraison" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="teratech_vente_ope_3_1" label="Retours clients" parent_ref="teratech_vente_operation" entity_ref="RetourClient" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" hide="true"/>
-	 <menuitem id="teratech_vente_ope_4" label="Factures" parent_ref="teratech_vente_operation" entity_ref="Facture" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menu id="teratech_vente_structure" label="Structures." parent="teratech_vente" gyphycon="glyphicon glyphicon-pencil"/>
-	 <menuitem id="teratech_vente_str_1" label="Articles." parent_ref="teratech_vente_structure" entity_ref="Article" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false"  view_type="kaban,tree,form"/>
-	 <menuitem id="teratech_vente_str_1_1" label="Liens Emplacements." parent_ref="teratech_vente_structure" entity_ref="LienEmplacement" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false"  hide="true"/>
-	 <menuitem id="teratech_vente_str_2" label="Familles. Articles" parent_ref="teratech_vente_structure" entity_ref="FamilleArticle" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="teratech_vente_str_3" label="Arbre Familles" parent_ref="teratech_vente_structure" entity_ref="FamilleArticle" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" view_type="list"/>
-	 <menu id="teratech_vente_comptabilite" label="Comptabilité.." parent="teratech_vente" gyphycon="glyphicon glyphicon-pencil"/>
-	 <menuitem id="teratech_vente_com_1" label="Plan comptable." parent_ref="teratech_vente_comptabilite" entity_ref="Compte" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="teratech_vente_com_2" label="Fournisseurs" parent_ref="teratech_vente_comptabilite" entity_ref="Tier" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false"   view_type="kaban,tree,form"/>
-	 <menuitem id="teratech_vente_com_3" label="Plan Analytique.." parent_ref="teratech_vente_comptabilite" entity_ref="CompteAnalytique" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="teratech_vente_com_4" label="Journal comptable." parent_ref="teratech_vente_comptabilite" entity_ref="JournalComptable" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="teratech_vente_com_5" label="Taxes" parent_ref="teratech_vente_comptabilite" entity_ref="Taxe" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menu id="teratech_vente_configuration" label="Configuration" parent="teratech_vente" gyphycon="glyphicon glyphicon-pencil"/>
-	 <menuitem id="teratech_vente_conf_1" label="Entrepôts" parent_ref="teratech_vente_configuration" entity_ref="Entrepot" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="teratech_vente_conf_2" label="Emplacements" parent_ref="teratech_vente_configuration" entity_ref="Emplacement" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="teratech_vente_conf_3" label="Unité de gestion." parent_ref="teratech_vente_configuration" entity_ref="UniteGestion" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree" />
-	 <menuitem id="teratech_vente_conf_4" label="Unité d'achat" parent_ref="teratech_vente_configuration" entity_ref="UniteAchat" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree" />
-	 <menuitem id="teratech_vente_conf_5" label="Catégorie de produit." parent_ref="teratech_vente_configuration" entity_ref="CategorieProduit" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree"/>
-	 <menuitem id="teratech_vente_conf_6" label="Régions .." parent_ref="teratech_vente_configuration" entity_ref="Region" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree"/>
-	 <menuitem id="teratech_vente_conf_7" label="Pays" parent_ref="teratech_vente_configuration" entity_ref="Pays" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false"  view_type="kaban,tree,form"/>
-	 <menuitem id="teratech_vente_conf_8" label="Civilité .." parent_ref="teratech_vente_configuration" entity_ref="Civilite" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree"/>
-	 <reportRecord  id="devisvte_report01" label="Demande de prix" action_ref="teratech_vente_ope_1_1"  extern="false">
+	 <menu id="teratech_vente_operation" label="operations.de.vente" parent="teratech_vente" gyphycon="glyphicon glyphicon-pencil"/>
+	 <menuitem id="teratech_vente_ope_1" label="devis" parent_ref="teratech_vente_operation" entity_ref="Devis" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_vente_ope_1_1" label="envoi.mail" parent_ref="teratech_vente_operation" entity_ref="SendDevisForm" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" hide="true"/>
+	 <menuitem id="teratech_vente_ope_2" label="commandes" parent_ref="teratech_vente_operation" entity_ref="Commande" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_vente_ope_2_1" label="commandes" parent_ref="teratech_vente_operation" entity_ref="CommandeDevis" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" hide="true" />
+	 <menuitem id="teratech_vente_ope_3" label="livraisons" parent_ref="teratech_vente_operation" entity_ref="BonLivraison" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_vente_ope_3_1" label="retours.clients" parent_ref="teratech_vente_operation" entity_ref="RetourClient" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" hide="true"/>
+	 <menuitem id="teratech_vente_ope_4" label="factures" parent_ref="teratech_vente_operation" entity_ref="Facture" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menu id="teratech_vente_structure" label="structures" parent="teratech_vente" gyphycon="glyphicon glyphicon-pencil"/>
+	 <menuitem id="teratech_vente_str_1" label="articles" parent_ref="teratech_vente_structure" entity_ref="Article" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false"  view_type="kaban,tree,form"/>
+	 <menuitem id="teratech_vente_str_1_1" label="liens.emplacements" parent_ref="teratech_vente_structure" entity_ref="LienEmplacement" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false"  hide="true"/>
+	 <menuitem id="teratech_vente_str_2" label="familles.articles" parent_ref="teratech_vente_structure" entity_ref="FamilleArticle" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_vente_str_3" label="arbre.familles" parent_ref="teratech_vente_structure" entity_ref="FamilleArticle" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" view_type="list"/>
+	 <menu id="teratech_vente_comptabilite" label="comptabilite" parent="teratech_vente" gyphycon="glyphicon glyphicon-pencil"/>
+	 <menuitem id="teratech_vente_com_1" label="plan.comptable" parent_ref="teratech_vente_comptabilite" entity_ref="Compte" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_vente_com_2" label="fournisseurs" parent_ref="teratech_vente_comptabilite" entity_ref="Tier" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false"   view_type="kaban,tree,form"/>
+	 <menuitem id="teratech_vente_com_3" label="plan.analytique" parent_ref="teratech_vente_comptabilite" entity_ref="CompteAnalytique" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_vente_com_4" label="journal.comptable" parent_ref="teratech_vente_comptabilite" entity_ref="JournalComptable" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_vente_com_5" label="taxes" parent_ref="teratech_vente_comptabilite" entity_ref="Taxe" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menu id="teratech_vente_configuration" label="configuration" parent="teratech_vente" gyphycon="glyphicon glyphicon-pencil"/>
+	 <menuitem id="teratech_vente_conf_1" label="entrepots" parent_ref="teratech_vente_configuration" entity_ref="Entrepot" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_vente_conf_2" label="emplacements" parent_ref="teratech_vente_configuration" entity_ref="Emplacement" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="teratech_vente_conf_3" label="unite.de.gestion" parent_ref="teratech_vente_configuration" entity_ref="UniteGestion" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree" />
+	 <menuitem id="teratech_vente_conf_4" label="unite.achat" parent_ref="teratech_vente_configuration" entity_ref="UniteAchat" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree" />
+	 <menuitem id="teratech_vente_conf_5" label="categorie.de.produit" parent_ref="teratech_vente_configuration" entity_ref="CategorieProduit" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree"/>
+	 <menuitem id="teratech_vente_conf_6" label="regions" parent_ref="teratech_vente_configuration" entity_ref="Region" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree"/>
+	 <menuitem id="teratech_vente_conf_7" label="pays" parent_ref="teratech_vente_configuration" entity_ref="Pays" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false"  view_type="kaban,tree,form"/>
+	 <menuitem id="teratech_vente_conf_8" label="civilite" parent_ref="teratech_vente_configuration" entity_ref="Civilite" model_ref="teratechvente" gyphycon="glyphicon glyphicon-th" modal="false" view_type="tree"/>
+	 <reportRecord  id="devisvte_report01" label="demande.de.prix" action_ref="teratech_vente_ope_1_1"  extern="false">
 	      <template>
 		     <![CDATA[
 			    <div>				   
@@ -61,7 +61,7 @@
 			   ]]>
 		  </template>
 	 </reportRecord>
-	 <reportRecord  id="commandevte_report01" label="Demande de prix" action_ref="teratech_vente_ope_1_1"  extern="false">
+	 <reportRecord  id="commandevte_report01" label="demande.de.prix" action_ref="teratech_vente_ope_1_1"  extern="false">
 	      <template>
 		     <![CDATA[
 			    <div>				   
@@ -93,7 +93,7 @@
 			   ]]>
 		  </template>
 	 </reportRecord>
-	 <reportRecord  id="livraisonvte_report01" label="Bon de commande" action_ref="teratech_vente_ope_1_1"  extern="false">
+	 <reportRecord  id="livraisonvte_report01" label="bon.de.commande" action_ref="teratech_vente_ope_1_1"  extern="false">
 	      <template>
 		     <![CDATA[
 			    <div>
@@ -125,7 +125,7 @@
 			   ]]>
 		  </template>
 	 </reportRecord>
-	 <reportRecord  id="facturevte_report01" label="Bon de reception" action_ref="teratech_vente_ope_1_1"  extern="false">
+	 <reportRecord  id="facturevte_report01" label="bon.de.reception" action_ref="teratech_vente_ope_1_1"  extern="false">
 	      <template>
 		     <![CDATA[
 			    <div>
@@ -154,7 +154,7 @@
 			   ]]>
 		  </template>
 	 </reportRecord>	 
-	 <reportRecord  id="bretourvte_report01" label="Bon de reception" action_ref="teratech_vente_ope_1_1"  extern="false">
+	 <reportRecord  id="bretourvte_report01" label="bon.de.reception" action_ref="teratech_vente_ope_1_1"  extern="false">
 	      <template>
 		     <![CDATA[
 			    <div>

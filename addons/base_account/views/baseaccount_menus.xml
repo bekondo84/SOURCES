@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <keren>
      <action id="base_account" />
-	 <menu id="base_account_dashboard" label="Tableaux de bord" parent="base_account" gyphycon="glyphicon glyphicon-scale"/>
-	 <menuitem id="base_account_dashboard_01" label="Tableau de bord" parent_ref="base_account_dashboard" entity_ref="ComptaDashboard" model_ref="baseaccount" method_ref="solde" gyphycon="glyphicon glyphicon-th" modal="false" view_type="dashboard" />
-	 <menu id="base_account_ventes" label="Ventes" parent="base_account" gyphycon="glyphicon glyphicon-pencil"/>
-	 <menuitem id="base_account_vte02" label="Factures Clients" parent_ref="base_account_ventes" entity_ref="FactureVente" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="base_account_vte04" label="Recus de ventes" parent_ref="base_account_ventes" entity_ref="NoteFraisVente" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="base_account_vte05" label="Paiements client" parent_ref="base_account_ventes" entity_ref="ReglementClient" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menu id="base_account_achats" label="Achats" parent="base_account" gyphycon="glyphicon glyphicon-pencil"/>
-	 <menuitem id="base_account_ach02" label="Factures fournisseurs" parent_ref="base_account_achats" entity_ref="Facture" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="base_account_ach04" label="Recus d'achat" parent_ref="base_account_achats" entity_ref="NoteFrais" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="base_account_ach05" label="Paiements fournisseurs" parent_ref="base_account_achats" entity_ref="ReglementFournisseur" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menu id="base_account_operations" label="Traitements" parent="base_account" gyphycon="glyphicon glyphicon-pencil"/>
-	 <menuitem id="base_account_07" label="Saisie par pièce" parent_ref="base_account_operations" entity_ref="PieceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="base_account_08" label="Saisie des opérations bancaire" parent_ref="base_account_operations" entity_ref="OperationBancaire" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
-	 <menuitem id="base_account_09" label="Saisie des écritures" parent_ref="base_account_operations" entity_ref="JournalSaisieView" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="true" />
+	 <menu id="base_account_dashboard" label="tableaux.de.bord" parent="base_account" gyphycon="glyphicon glyphicon-scale"/>
+	 <menuitem id="base_account_dashboard_01" label="tableau.de.bord" parent_ref="base_account_dashboard" entity_ref="ComptaDashboard" model_ref="baseaccount" method_ref="solde" gyphycon="glyphicon glyphicon-th" modal="false" view_type="dashboard" />
+	 <menu id="base_account_ventes" label="ventes" parent="base_account" gyphycon="glyphicon glyphicon-pencil"/>
+	 <menuitem id="base_account_vte02" label="factures.clients" parent_ref="base_account_ventes" entity_ref="FactureVente" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="base_account_vte04" label="recus.de.ventes" parent_ref="base_account_ventes" entity_ref="NoteFraisVente" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="base_account_vte05" label="paiements.client" parent_ref="base_account_ventes" entity_ref="ReglementClient" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menu id="base_account_achats" label="achats" parent="base_account" gyphycon="glyphicon glyphicon-pencil"/>
+	 <menuitem id="base_account_ach02" label="factures.fournisseurs" parent_ref="base_account_achats" entity_ref="Facture" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="base_account_ach04" label="recus.achat" parent_ref="base_account_achats" entity_ref="NoteFrais" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menuitem id="base_account_ach05" label="paiements.fournisseurs" parent_ref="base_account_achats" entity_ref="ReglementFournisseur" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" />
+	 <menu id="base_account_operations" label="traitements" parent="base_account" gyphycon="glyphicon glyphicon-pencil"/>
+	 <menuitem id="base_account_07" label="saisie.par.piece" parent_ref="base_account_operations" entity_ref="PieceComptableView" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="true" link="base_account_07_1" value="{'name':'piececomptable','template':{'journal':'object.journal','periode':'object.periode'}}"/>
+	 <menuitem id="base_account_07_1" label="saisie.par.piece" parent_ref="base_account_operations" entity_ref="PieceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" hide="true" />
+	 <menuitem id="base_account_08" label="saisie.des.operations.bancaire" parent_ref="base_account_operations" entity_ref="OperationBancaireView" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="true" link="base_account_08_1" value="{'name':'piececomptable','template':{'journal':'object.journal','periode':'object.periode'}}"/>
+	 <menuitem id="base_account_08_1" label="saisie.des.operations.bancaire" parent_ref="base_account_operations" entity_ref="OperationBancaire" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false" hide="true" />
+	 <menuitem id="base_account_09" label="saisie.des.ecritures" parent_ref="base_account_operations" entity_ref="JournalSaisieView" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="true"  link="base_account_09_1" value="{'name':'piececomptable','template':{'journal':'object.journal','periode':'object.periode'}}"/>
+	 <menuitem id="base_account_09_1" label="saisie.des.ecritures" parent_ref="base_account_operations" entity_ref="JournalSaisie" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th" modal="false"  hide="true"/>
 	 <menuitem id="base_account_10" label="Separateur"  parent_ref="base_account_operations"  view_type="none" />
-	 <menuitem id="base_account_11" label="Journaux de saisie" parent_ref="base_account_operations" entity_ref="JournalSaisie" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
-	 <menuitem id="base_account_12" label="Cloture des Journaux" parent_ref="base_account_operations" entity_ref="ClotureJournal" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" modal="true"  />
+	 <menuitem id="base_account_11" label="journaux.de.saisie" parent_ref="base_account_operations" entity_ref="JournalSaisie" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
+	 <menuitem id="base_account_12" label="cloture.des.journaux" parent_ref="base_account_operations" entity_ref="ClotureJournal" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" modal="true"  />
 	 <menuitem id="base_account_13" label="Separateur"  parent_ref="base_account_operations"  view_type="none" />
-	 <menuitem id="base_account_14" label="Interrogation analytique" parent_ref="base_account_operations" entity_ref="EcritureAnalytique" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
-	 <menuitem id="base_account_15" label="Interrogation tier" parent_ref="base_account_operations" entity_ref="EcritureTier" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
+	 <menuitem id="base_account_14" label="interrogation.analytique" parent_ref="base_account_operations" entity_ref="EcritureAnalytique" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
+	 <menuitem id="base_account_15" label="interrogation.tier" parent_ref="base_account_operations" entity_ref="EcritureTier" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
 	 <menuitem id="base_account_16" label="Separateur"  parent_ref="base_account_operations"  view_type="none" />
-	 <menuitem id="base_account_17" label="Lettrage des ecritures" parent_ref="base_account_operations" entity_ref="EcritureTier" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
-	 <menuitem id="base_account_18" label="Rapprochements bancaires" parent_ref="base_account_operations" entity_ref="EcritureTier" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
+	 <menuitem id="base_account_17" label="lettrage.des.ecritures" parent_ref="base_account_operations" entity_ref="EcritureTier" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
+	 <menuitem id="base_account_18" label="rapprochements.bancaires" parent_ref="base_account_operations" entity_ref="EcritureTier" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
 	 <menuitem id="base_account_19" label="Separateur"  parent_ref="base_account_operations"  view_type="none" />
-	 <menuitem id="base_account_20" label="Exercices Comptable" parent_ref="base_account_operations" entity_ref="ExerciceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
-	 <menuitem id="base_account_21" label="Periodes Comptable" parent_ref="base_account_operations" entity_ref="PeriodeComptable" model_ref="baseaccount" method_ref="exercice" gyphycon="glyphicon glyphicon-list-alt" />
-	 <menuitem id="base_account_22" label="Cloture d'un exercice" parent_ref="base_account_operations" entity_ref="ClotureExerciceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" modal="true" />
-	 <menuitem id="base_account_23" label="Cloture d'une période" parent_ref="base_account_operations" entity_ref="ClotureExerciceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" modal="true" />
-	 <menu id="base_account_compta" label="Comptabilité" parent="base_account" gyphycon="glyphicon glyphicon-plus"/>
-	 <menuitem id="base_account_01" label="Plan Comptable" parent_ref="base_account_compta" entity_ref="Compte" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th">
+	 <menuitem id="base_account_20" label="exercices.comptable" parent_ref="base_account_operations" entity_ref="ExerciceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" />
+	 <menuitem id="base_account_21" label="periodes.comptable" parent_ref="base_account_operations" entity_ref="PeriodeComptable" model_ref="baseaccount" method_ref="exercice" gyphycon="glyphicon glyphicon-list-alt" />
+	 <menuitem id="base_account_22" label="cloture.exercice" parent_ref="base_account_operations" entity_ref="ClotureExerciceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" modal="true" />
+	 <menuitem id="base_account_23" label="cloture.periode.comptable" parent_ref="base_account_operations" entity_ref="ClotureExerciceComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt" modal="true" />
+	 <menu id="base_account_compta" label="stuctures" parent="base_account" gyphycon="glyphicon glyphicon-plus"/>
+	 <menuitem id="base_account_01" label="plan.comptable" parent_ref="base_account_compta" entity_ref="Compte" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th">
 	      <action id="plc_01" type="action" name="plc_name01" label="Action 1" value="{'name':'update_pwd'}" roles="comptable"/>
 		  <action id="plc_02" type="object" name="plc_name02" label="Action 2" value="{'model':'email','entity':'mail','method':'sendmail','template':{'object':'Modification de mot de passe','source':'user.courriel','cible':'object.courriel','message':'Votre mot de passe est @object.password'}}"/>
 	 </menuitem>
-	 <menuitem id="base_account_02" label="Plan Analytique" parent_ref="base_account_compta" entity_ref="CompteAnalytique" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th-list" report="base_account_report04"/>
-	 <menuitem id="base_account_03" label="Taux Taxes" parent_ref="base_account_compta" entity_ref="Taxe" model_ref="baseaccount" gyphycon="glyphicon glyphicon-minus"/>
-	 <menuitem id="base_account_04" label="Code Journaux" parent_ref="base_account_compta" entity_ref="JournalComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt"/>
-	 <menuitem id="base_account_05" label="Banques" parent_ref="base_account_compta" entity_ref="Banque" model_ref="baseaccount" gyphycon="glyphicon glyphicon-user"/>
-	 <menuitem id="base_account_06" label="Plan tiers" parent_ref="base_account_compta" entity_ref="Tier" model_ref="baseaccount" gyphycon="glyphicon glyphicon-user"/>
-	 <treeRecord  id="baseaccount_periode" label="Liste groupe des periodes" action_ref="base_account_21">
+	 <menuitem id="base_account_02" label="plan.analytique" parent_ref="base_account_compta" entity_ref="CompteAnalytique" model_ref="baseaccount" gyphycon="glyphicon glyphicon-th-list" />
+	 <menuitem id="base_account_03" label="taxes" parent_ref="base_account_compta" entity_ref="Taxe" model_ref="baseaccount" gyphycon="glyphicon glyphicon-minus"/>
+	 <menuitem id="base_account_04" label="journal.comptable" parent_ref="base_account_compta" entity_ref="JournalComptable" model_ref="baseaccount" gyphycon="glyphicon glyphicon-list-alt"/>
+	 <menuitem id="base_account_05" label="banques" parent_ref="base_account_compta" entity_ref="Banque" model_ref="baseaccount" gyphycon="glyphicon glyphicon-user"/>
+	 <menuitem id="base_account_06" label="plan.tiers" parent_ref="base_account_compta" entity_ref="Tier" model_ref="baseaccount" gyphycon="glyphicon glyphicon-user"/>
+	 <treeRecord  id="baseaccount_periode" label="liste.groupe.des.periodes" action_ref="base_account_21">
 	      <template>
 		     <![CDATA[
 			    <div>
@@ -47,36 +50,7 @@
 				</div>
 			   ]]>
 		  </template>
-	 </treeRecord>
-	 <formRecord id="base_account_form01" label="Banque" action_ref="base_account_05">
-	    <header>
-		     <button type="action" name="un button" label="Contact banque" value="{'name':'base_account_07'}" class="btn btn-primary" />
-			 <button type="workflow" name="valider" label="Valider banque" value="{'model':'baseaccount','entity':'Banque','method':'workflow'}" class="btn btn-primary" states="etabli"/>
-			 <field name="state" target="statusbar"/>
-		</header>
-		<sheet>
-		     <field name="code"/>
-			 <field name="label"/>
-			 <field name="adresse"/>
-			 <field name="tel" target="tel"/>
-			 <field name="fax" target="tel"/>
-			 <field name="courriel" target="email"/>
-			 <field name="active" />
-		</sheet>
-		<template>
-		     <![CDATA[
-		       <div>
-					 <field name="code"/>
-					 <field name="label"/>
-					 <field name="adresse"/>
-					 <field name="tel" target="tel"/>
-					 <field name="fax" target="tel"/>
-					 <field name="courriel" target="email"/>
-					 <field name="active" />
-			   </div>
-			   ]]>
-		  </template>
-	 </formRecord>
+	 </treeRecord>	 
 	 <template id="kheader" name="Entete de page">
 	     <script>
 		      <![CDATA[
@@ -155,47 +129,7 @@
 		     <field name="code"/>
              <field name="libele"/>			 
 		  </search>	     
-	 </reportRecord>
-	  <reportRecord  id="base_account_report04" label="IReport Report" action_ref="base_account_02"  extern="true">
-	      <search entity="EcritureSearch" module="baseaccount" method="pdf">
-		     <field name="code"/>
-             <field name="libele"/>			 
-		  </search>	     
-	 </reportRecord>
-	 <treeRecord id="base_account_tree01" label="Banques" action_ref="base_account_07">
-	        <template>
-		     <![CDATA[
-		       <div>
-			       <table class="table  table-striped table-sm table-hover" style="margin-top: -10px;">
-				       <thead> 
-					      <tr class="table-header">
-						     <th><input type="checkbox" ng-model="tableheaderselected" ng-click="onCheckboxClick()" /></th>
-							 <th>Code<span ng-show="down('code')==true" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span><span ng-show="up('code')==true" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></th>
-							 <th>Intitulé<span ng-show="down('label')==true" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span><span ng-show="up('label')==true" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></th>
-							 <th>Adresse<span ng-show="down('adresse')==true" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span><span ng-show="up('adresse')==true" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></th>
-							 <th>Téléphone<span ng-show="down('tel')==true" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span><span ng-show="up('tel')==true" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></th>
-							 <th>Fax<span ng-show="down('fax')==true" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span><span ng-show="up('fax')==true" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></th>
-							 <th>E-Mail<span ng-show="down('courriel')==true" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span><span ng-show="up('courriel')==true" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></th>
-							 <th></th>
-						  </tr>
-					   </thead>
-					   <tbody>
-					      <tr ng-repeat="obj in datas">
-						     <td><input type="checkbox" ng-model="obj.selected" ng-click="onRowCheckboxClick(obj)" style="cursor:pointer;" /></td>
-							 <td ng-click="viewAction(obj)">{{obj.code}}</td>
-							 <td ng-click="viewAction(obj)">{{obj.label}}</td>
-							 <td ng-click="viewAction(obj)">{{obj.adresse}}</td>
-							 <td ng-click="viewAction(obj)">{{obj.tel}}</td>
-							 <td ng-click="viewAction(obj)">{{obj.fax}}</td>
-							 <td ng-click="viewAction(obj)">{{obj.courriel}}</td>
-						     <td><span class="tc-dropdown" style="float:right;"></span></td>
-						  </tr>
-					   </tbody>
-				   </table>
-			   </div>
-			   ]]>
-		  </template> 
-	 </treeRecord>
+	 </reportRecord>	  
 	 <dashboardRecord id="dashboard_001" label="Tableau de Bord"  action_ref="base_account_dashboard_01" entity_ref="ComptaDashboard"  model_ref="baseaccount" method_ref="dashboard">
 	     <dashboard  id="dashboard001" parent_ref="dashboard_001" label="Trésorerie">
 		      <dashboardentry id="dashentry001" type="data,bar,pie,line" parent_ref="dashboard001" label="Données">

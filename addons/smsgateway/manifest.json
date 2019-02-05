@@ -1,0 +1,20 @@
+{
+	'name':'SMS',
+	'version':'1.0',
+	'author' : 'BKD',
+	'summary':'Passerelle sms',
+	'sequence':10,
+	'description':'',
+	'category':'Communication',
+	'website':'http://www.teratech.com',
+	'icon':'static\\sms.png',
+	'images': ['static\\sms.png'],
+	'depends' : [],
+	'views' : ['views\\sms_menus.xml'],
+	'cores' : [],
+	'templates':[],
+	'reports':[],
+	'installable':True,
+	'application':True,
+	'auto_install' : False
+}
