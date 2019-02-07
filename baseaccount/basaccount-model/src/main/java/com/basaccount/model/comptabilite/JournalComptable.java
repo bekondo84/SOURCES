@@ -6,7 +6,6 @@
 package com.basaccount.model.comptabilite;
 
 import com.core.base.BaseElement;
-import com.core.referentiels.Societe;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import javax.persistence.Entity;
@@ -25,11 +24,16 @@ public class JournalComptable extends BaseElement implements Serializable,Compar
     @Predicate(label = "code",unique = true,optional = false,updatable = false,search = true)
     private String code;
     
+    @Predicate(label = "intitule",search = true)
+    private String label ;
+    
     @Predicate(label = "type",target = "combobox",values = "Ventes;Achats;Trésorerie;Général;Situation")
     private String type ="0";
     
-    @Predicate(label = "intitule",search = true)
-    private String label ;
+    @ManyToOne
+    @JoinColumn(name = "CMPTSR_ID")
+    @Predicate(label = "compte.tresorerie",type = Compte.class,target = "many-to-one",search = true)
+    private Compte comptetresorie ;
     
     @Predicate(label = "saisie.analytique",type = Boolean.class)
     private Boolean analytique = false;
@@ -60,6 +64,21 @@ public class JournalComptable extends BaseElement implements Serializable,Compar
         super(id, designation, moduleName,0L);
         this.code = code;
         this.label = label;
+    }
+    
+    /**
+     * 
+     * @param entity 
+     */
+     public JournalComptable(JournalComptable entity) {
+        super(entity.id, entity.designation, entity.moduleName,entity.compareid);
+        this.code = entity.code;
+        this.label = entity.label;
+        this.active = entity.getActive();
+        this.analytique = entity.getAnalytique();
+        if(entity.comptetresorie!=null){
+            this.comptetresorie = new Compte(entity.comptetresorie);
+        }
     }
 
     public String getCode() {
@@ -101,6 +120,16 @@ public class JournalComptable extends BaseElement implements Serializable,Compar
     public void setActive(Boolean active) {
         this.active = active;
     }
+
+    public Compte getComptetresorie() {
+        return comptetresorie;
+    }
+
+    public void setComptetresorie(Compte comptetresorie) {
+        this.comptetresorie = comptetresorie;
+    }
+    
+    
 
 //    public Societe getSociete() {
 //        return societe;

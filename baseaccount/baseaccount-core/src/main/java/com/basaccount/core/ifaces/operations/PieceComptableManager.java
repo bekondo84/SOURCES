@@ -6,7 +6,8 @@ import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
 
 
 /**
- * Interface etendue par les interfaces locale et remote du manager
+ * Interface etendue par les interfaces locale et remote du manager
+
  * @since Sat Dec 23 09:07:30 WAT 2017
  * 
  */
@@ -15,5 +16,12 @@ public interface PieceComptableManager
 {
 
     public final static String SERVICE_NAME = "PieceComptableManager";
+    
+    /**
+     * 
+     * @param entity
+     * @return 
+     */
+    public PieceComptable valider(PieceComptable entity);
 
 }

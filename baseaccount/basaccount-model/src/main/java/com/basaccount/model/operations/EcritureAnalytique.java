@@ -45,11 +45,11 @@ public class EcritureAnalytique extends BaseElement implements Serializable,Comp
     private CompteAnalytique compte ;
     
    
-    @Predicate(label = "debit",type = BigDecimal.class,search = true,colsequence = 6,sequence = 6,updatable = false)
-    private BigDecimal debit =BigDecimal.ZERO;
+    @Predicate(label = "debit",type = Double.class,search = true,colsequence = 6,sequence = 6,updatable = false)
+    private Double debit =0.0;
     
-    @Predicate(label = "credit",type = BigDecimal.class,search = true,colsequence = 7,sequence = 7,updatable = false)
-    private BigDecimal credit = BigDecimal.ZERO;
+    @Predicate(label = "credit",type = Double.class,search = true,colsequence = 7,sequence = 7,updatable = false)
+    private Double credit = 0.0;
     
     @ManyToOne
     @JoinColumn(name = "PECBT_ID")
@@ -99,7 +99,9 @@ public class EcritureAnalytique extends BaseElement implements Serializable,Comp
         this.compte = data.compte;
         this.debit = data.debit;
         this.credit = data.credit;
-        this.periode = data.periode;
+        if(data.getPeriode()!=null){
+             this.periode = new PeriodeComptable(data.periode);
+        }
     }
     
    /**
@@ -109,7 +111,7 @@ public class EcritureAnalytique extends BaseElement implements Serializable,Comp
     * @param debit
     * @param credit 
     */
-    public EcritureAnalytique(EcritureComptable data,CompteAnalytique compte , BigDecimal debit , BigDecimal credit) {
+    public EcritureAnalytique(EcritureComptable data,CompteAnalytique compte , Double debit , Double credit) {
         this.dateEcriture = data.getDateEcriture();
         this.refPiece = data.getRefPiece();
         this.libelle = data.getLibelle();
@@ -154,19 +156,19 @@ public class EcritureAnalytique extends BaseElement implements Serializable,Comp
         this.compte = compte;
     }
 
-    public BigDecimal getDebit() {
+    public Double getDebit() {
         return debit;
     }
 
-    public void setDebit(BigDecimal debit) {
+    public void setDebit(Double debit) {
         this.debit = debit;
     }
 
-    public BigDecimal getCredit() {
+    public Double getCredit() {
         return credit;
     }
 
-    public void setCredit(BigDecimal credit) {
+    public void setCredit(Double credit) {
         this.credit = credit;
     }
 
@@ -201,6 +203,21 @@ public class EcritureAnalytique extends BaseElement implements Serializable,Comp
 
     public void setPeriode(PeriodeComptable periode) {
         this.periode = periode;
+    }
+
+    @Override
+    public boolean isDesableupdate() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isCreateonfield() {
+        return false; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getModuleName() {
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
     }
 
    

@@ -13,9 +13,15 @@ import com.basaccount.model.comptabilite.ExerciceComptable;
 import com.basaccount.model.comptabilite.JournalComptable;
 import com.basaccount.model.operations.JournalSaisie;
 import com.bekosoftware.genericdaolayer.dao.ifaces.GenericDAO;
+import com.bekosoftware.genericdaolayer.dao.tools.Predicat;
 import com.bekosoftware.genericmanagerlayer.core.impl.AbstractGenericManager;
 import com.kerem.commons.DateHelper;
+import com.megatim.common.annotations.OrderType;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -68,6 +74,28 @@ public class JournalComptableManagerImpl
 //            begin = DateHelper.nextMonth(begin);
 //        }//end while(DateHelper.convertToString(begin, "yyyy-MM-dd")
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<JournalComptable> filter(List<Predicat> predicats, Map<String, OrderType> orders, Set<String> properties, int firstResult, int maxResult) {
+        List<JournalComptable> datas = super.filter(predicats, orders, properties, firstResult, maxResult); //To change body of generated methods, choose Tools | Templates.
+        List<JournalComptable> result = new ArrayList<JournalComptable>();
+        for(JournalComptable data:datas){
+            result.add(new JournalComptable(data));
+        }
+        return result;
+    }
+
+    @Override
+    public JournalComptable find(String propertyName, Long entityID) {
+        JournalComptable data = super.find(propertyName, entityID); //To change body of generated methods, choose Tools | Templates.
+        return new JournalComptable(data);
+    }
+
+    @Override
+    public JournalComptable delete(Long id) {
+        JournalComptable data = super.delete(id); //To change body of generated methods, choose Tools | Templates.
+        return new JournalComptable(data);
     }
     
     

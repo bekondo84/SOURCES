@@ -22,6 +22,7 @@ public class OperationBancaireView extends BaseElement implements Serializable,C
 
     @ManyToOne
     @Predicate(label = "journal.comptable",type = JournalComptable.class,target = "many-to-one",optional = false,sequence = 1)
+    @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"2\"}]")
     private JournalComptable journal ;
     
     @Predicate(label = "exercice.comptable",type = ExerciceComptable.class,target = "many-to-one",optional = false,sequence = 3)
@@ -70,7 +71,7 @@ public class OperationBancaireView extends BaseElement implements Serializable,C
 
     @Override
     public String getEditTitle() {
-        return "journaldesaisie.title"; //To change body of generated methods, choose Tools | Templates.
+        return "operation.bancaire"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

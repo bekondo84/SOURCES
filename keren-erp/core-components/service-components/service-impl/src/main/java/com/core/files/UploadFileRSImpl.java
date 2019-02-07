@@ -605,10 +605,10 @@ public class UploadFileRSImpl
          }//end if(headers.getRequestHeader("modulename")!=null && !headers.getRequestHeader("modulename").isEmpty()){
          //Chargement de tous les ficiers de cette instances
          RestrictionsContainer container = RestrictionsContainer.newInstance();
-         container.addEq("entity", entityname);
+         container.addEq("ownerentity", entityname);
          container.addEq("_instance", _instance);
          if(modulename!=null){
-            container.addEq("modele", modulename);
+            container.addEq("ownermodele", modulename);
          }//end if(modele!=null){
          List<ResourceRegistry> resources = registry.filter(container.getPredicats(), null, null, 0, -1);
          for(ResourceRegistry resource : resources){

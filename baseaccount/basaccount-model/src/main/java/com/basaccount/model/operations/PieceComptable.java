@@ -13,7 +13,6 @@ import com.megatim.common.annotations.KValue;
 import com.megatim.common.annotations.Predicate;
 import com.megatim.common.annotations.TableFooter;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -31,7 +30,7 @@ import javax.persistence.OneToMany;
 @KHeaders(statubar = true
         ,value = {
            @KHeader(type = "button",name = "work1",label = "valider",target = "workflow",roles = {"administrateur","gestionnaire"},states = {"etabli"},pattern = "btn btn-danger"
-                , value = @KValue("{'model':'baseaccount','entity':'piececomptable','method':'validate','critical':true,'alert':'cette action est irreversible \nÊtes-vous sûr de vouloir continuer ?'}")
+                , value = @KValue("{'model':'baseaccount','entity':'piececomptable','method':'validate','critical':true,'alert':'Vous ne pourriez plus modifier cette pièce comptable \nÊtes-vous sûr de vouloir continuer ?'}")
             ),
             @KHeader(type = "button",name = "work2",label = "imprimer.note",target = "report",roles = {"administrateur","gestionnaire"},pattern = "btn btn-default"
                 , value = @KValue("{'name':'piececomptable_report01','model':'baseaccount','entity':'piececomptable','method':'imprime'}")
@@ -46,17 +45,17 @@ public class PieceComptable extends PieceComptableTmp implements Serializable{
     @Predicate(label = "jouranl.comptable",type = JournalComptable.class,target = "many-to-one",optional = false,editable = false,search = true)
     private JournalComptable journal;
     
-    @Predicate(label = "debit",type = BigDecimal.class,updatable = false,search = true,editable = false,hide = true)
-    private BigDecimal debit = BigDecimal.ZERO;
+    @Predicate(label = "debit",type = Double.class,updatable = false,search = true,editable = false,hide = true)
+    private Double debit = 0.0;
     
-    @Predicate(label = "credit",type = BigDecimal.class,updatable = false , search = true,editable = false,hide = true)
-    private BigDecimal credit = BigDecimal.ZERO;
+    @Predicate(label = "credit",type = Double.class,updatable = false , search = true,editable = false,hide = true)
+    private Double credit = 0.0;
     
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "PIECO_ID")
-    @Predicate(label=" ",group = true,groupLabel = "ecritures.comptable",groupName = "group1",type = EcritureComptable.class,target = "one-to-many",customfooter = true,edittable = true)
-    @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td></td><td>Total Debit</td><td></td> <td>this.debit</td><td></td></tr><tr style='border:none;'> <td></td><td></td><td></td><td></td><td>Total Credit</td><td></td> <td>this.credit</td><td></td></tr> <tr style='border:none;'> <td></td><td></td><td></td><td></td><td>Solde</td><td></td><td>this.debit;-;this.credit</td><td></td></tr>")
-    private List<EcritureComptable> ecritures = new ArrayList<EcritureComptable>();
+    @Predicate(label=" ",group = true,groupLabel = "ecritures.comptable",groupName = "group1",type = LignePieceComptable.class,target = "one-to-many",customfooter = true,edittable = true)
+    @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td></td><td>Total Debit</td><td></td><td>this.debit</td><td></td></tr><tr style='border:none;'><td></td><td></td><td></td><td></td><td>Total Credit</td><td></td> <td>this.credit</td><td></td></tr><tr style='border:none;'><td></td><td></td><td></td><td></td><td>Solde</td><td></td><td>this.debit;-;this.credit</td><td></td></tr>")
+    private List<LignePieceComptable> ecritures = new ArrayList<LignePieceComptable>();
     
     @Predicate(label = " ",target = "state",search = true,hide = true)
     private String state ="etabli";
@@ -79,7 +78,9 @@ public class PieceComptable extends PieceComptableTmp implements Serializable{
         super(piece);
         this.code = piece.code;
         this.libelle = piece.libelle;
-        this.journal = piece.journal;
+        if(piece.journal!=null){
+            this.journal = new JournalComptable(piece.journal);
+        }
         this.datePiece = piece.datePiece;
         this.debit = piece.debit;
         this.credit = piece.credit;     
@@ -102,28 +103,28 @@ public class PieceComptable extends PieceComptableTmp implements Serializable{
         this.journal = journal;
     }
 
-    public List<EcritureComptable> getEcritures() {
+    public List<LignePieceComptable> getEcritures() {
         return ecritures;
     }
 
-    public void setEcritures(List<EcritureComptable> ecritures) {
+    public void setEcritures(List<LignePieceComptable> ecritures) {
         this.ecritures = ecritures;
     }
 
   
-    public BigDecimal getDebit() {
+    public Double getDebit() {
         return debit;
     }
 
-    public void setDebit(BigDecimal debit) {
+    public void setDebit(Double debit) {
         this.debit = debit;
     }
 
-    public BigDecimal getCredit() {
+    public Double getCredit() {
         return credit;
     }
 
-    public void setCredit(BigDecimal credit) {
+    public void setCredit(Double credit) {
         this.credit = credit;
     }
 
@@ -159,7 +160,7 @@ public class PieceComptable extends PieceComptableTmp implements Serializable{
 
     @Override
     public boolean isDesableupdate() {
-        return super.isDesableupdate(); //To change body of generated methods, choose Tools | Templates.
+        return state.equalsIgnoreCase("valide"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -172,7 +173,7 @@ public class PieceComptable extends PieceComptableTmp implements Serializable{
 
     @Override
     public boolean isDesabledelete() {
-        return super.isDesabledelete(); //To change body of generated methods, choose Tools | Templates.
+        return state.equalsIgnoreCase("valide");  //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

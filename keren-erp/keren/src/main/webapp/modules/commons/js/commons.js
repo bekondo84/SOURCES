@@ -333,30 +333,34 @@ angular.module('keren.core.commons')
                  * @returns {Boolean}
                  */
                 iseditable : function(scope , model,field){
-//                    console.log("commons.iseditable : function(scope , model,field) ===== model : "+model+"  ==== field : "+angular.toJson(field));
+                    console.log("commons.iseditable : function(scope , model,field) ===== windowType : "+scope.windowType+" model : "+model+"  ==== field : "+angular.toJson(field));
                     var parts = model.split('.');
-                    var metaData = scope.getCurrentMetaData(model);                   
-                    if(parts[0]=='currentObject'){
-                        if(scope.windowType=="view"){
-                            return false ;
-                        }else if((metaData.desableupdate==true || field.updatable==false)&& scope.windowType=="update"){
-                            return false;
-                        }else if((metaData.desablecreate==true||field.editable==false)&& scope.windowType=="new"){
-                            return false;
-                        }//end if(scope.windowType=="view")
-                    }else{//Fenetre modal
-                        if(scope.innerWindowType=="new" && (metaData.desablecreate ||field.editable==false)){
-                            return false;
-                        }//end if(scope.innerWindowType=="new" && metaData.desablecreate){
-                    }
+                    var metaData = scope.getParentMetaData(model); 
+                    if(metaData.desableupdate==true){//element non modifiable
+                        return false ;
+                    }//end if(metaData.desableupdate==true){
+                    if(scope.windowType=="view"){
+                        return false ;
+                    }else if((field.updatable==false)&& (scope.windowType=="update"||scope.windowType=="list")){
+                        return false;
+                    }else if((field.editable==false)&& (scope.windowType=="new"||scope.windowType=="list")){
+                        return false;
+                    }//end if(scope.windowType=="view")if(parts[0]=='currentObject'){                       
+                    
                     return true;
                 },
+                /**
+                 * 
+                 * @param {type} scope
+                 * @param {type} field
+                 * @returns {Boolean}
+                 */
                 enableSelect : function(scope ,field){
                     if(scope.windowType=="view"){
                         return false ;
-                    }else if(field.updatable==false&& scope.windowType=="update"){
+                    }else if((field.updatable==false)&& (scope.windowType=="update"||scope.windowType=="list")){
                         return false;
-                    }else if(field.editable==false&& scope.windowType=="new"){
+                    }else if(field.editable==false && (scope.windowType=="new"||scope.windowType=="list")){
                         return false;
                     }//end if(scope.windowType=="view")
                     return true;

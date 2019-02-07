@@ -5,13 +5,11 @@
  */
 package com.basaccount.model.operations;
 
-import com.basaccount.model.comptabilite.ExerciceComptable;
 import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.basaccount.model.tiers.Tier;
 import com.core.base.BaseElement;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -41,15 +39,15 @@ public class EcritureTier extends BaseElement implements Serializable,Comparable
        
     @ManyToOne
     @JoinColumn(name = "CPTE_ID")
-    @Predicate(label = "compte.analytique",type = Tier.class,updatable = false,optional = false,target = "many-to-one",search = true,colsequence = 4,sequence = 4)
+    @Predicate(label = "compte.tier",type = Tier.class,updatable = false,optional = false,target = "many-to-one",search = true,colsequence = 4,sequence = 4)
     private Tier compte ;
     
    
-    @Predicate(label = "debit",type = BigDecimal.class,search = true,colsequence = 6,sequence = 6,updatable = false)
-    private BigDecimal debit =BigDecimal.ZERO;
+    @Predicate(label = "debit",type = Double.class,search = true,colsequence = 6,sequence = 6,updatable = false)
+    private Double debit =0.0;
     
-    @Predicate(label = "credit",type = BigDecimal.class,search = true,colsequence = 7,sequence = 7,updatable = false)
-    private BigDecimal credit = BigDecimal.ZERO;
+    @Predicate(label = "credit",type = Double.class,search = true,colsequence = 7,sequence = 7,updatable = false)
+    private Double credit = 0.0;
     
     @ManyToOne
     @JoinColumn(name = "PECBT_ID")
@@ -98,7 +96,10 @@ public class EcritureTier extends BaseElement implements Serializable,Comparable
         this.compte = new Tier(data.compte);
         this.debit = data.getDebit();
         this.credit=data.getCredit();
-        this.periode = data.periode;
+        if(data.getPeriode()!=null){
+             this.periode = new PeriodeComptable(data.periode);
+        }
+       
     }
     
     /**
@@ -155,19 +156,19 @@ public class EcritureTier extends BaseElement implements Serializable,Comparable
         this.compte = compte;
     }
 
-    public BigDecimal getDebit() {
+    public Double getDebit() {
         return debit;
     }
 
-    public void setDebit(BigDecimal debit) {
+    public void setDebit(Double debit) {
         this.debit = debit;
     }
 
-    public BigDecimal getCredit() {
+    public Double getCredit() {
         return credit;
     }
 
-    public void setCredit(BigDecimal credit) {
+    public void setCredit(Double credit) {
         this.credit = credit;
     }
 
@@ -195,6 +196,23 @@ public class EcritureTier extends BaseElement implements Serializable,Comparable
     public boolean isDesablecreate() {
         return true; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public boolean isDesableupdate() {
+        return true; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isCreateonfield() {
+        return false; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getModuleName() {
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
     public PeriodeComptable getPeriode() {
         return periode;

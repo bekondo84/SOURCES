@@ -39,6 +39,11 @@ public class PieceComptableTmp extends BaseElement implements Serializable,Compa
     @Column(unique = true)
     protected String code ;
     
+    @ManyToOne
+    @JoinColumn(name = "PERCB_ID")
+    @Predicate(label = "periode.comptable",type = PeriodeComptable.class,target = "many-to-one",editable = false,search = true)
+    protected PeriodeComptable periode;
+   
     @Temporal(TemporalType.DATE)
     @Predicate(label = "date",type = Date.class,target = "date",optional = false,search = true)
     protected Date datePiece ;
@@ -46,11 +51,7 @@ public class PieceComptableTmp extends BaseElement implements Serializable,Compa
     @Predicate(label = "libelle",search = true)
     protected String libelle ;
     
-    @ManyToOne
-    @JoinColumn(name = "PERCB_ID")
-    @Predicate(label = "periode.comptable",type = PeriodeComptable.class,target = "many-to-one",editable = false,search = false,group = true,groupName = "group2",groupLabel = "complements")
-    protected PeriodeComptable periode;
-    
+     
     public PieceComptableTmp() {
     }
 

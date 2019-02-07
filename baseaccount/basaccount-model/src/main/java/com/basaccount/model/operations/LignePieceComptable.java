@@ -26,8 +26,8 @@ import javax.persistence.TemporalType;
  * @author Commercial_2
  */
 @Entity
-@Table(name = "T_LIOPBAN_CBT")
-public class EcritureBanque extends BaseElement implements Serializable,Comparable<EcritureBanque>{
+@Table(name = "T_LIGPIECBT_CBT")
+public class LignePieceComptable extends BaseElement implements Serializable,Comparable<LignePieceComptable>{
 
     
     @Temporal(TemporalType.DATE)
@@ -37,15 +37,18 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
     @Predicate(label = "numero.piece",search = true,colsequence = 2,sequence = 2)
     private String refPiece ;
     
-    @Predicate(label = "piece.tresorerie",search = true,colsequence = 2,sequence = 2)
-    private String tresorerie ;
-    
     @Predicate(label = "libelle",search = true,colsequence = 3,sequence = 3)
     private String libelle ;
     
+     
+//    @ManyToOne
+//    @JoinColumn(name = "PECBT_ID")
+////    @Predicate(label = "periode.comptable",type = PeriodeComptable.class,target = "many-to-one",hide = true,search = true,editable = false)
+//    private PeriodeComptable periode ;
+//    
 //    @ManyToOne
 //    @JoinColumn(name = "JRN_ID")
-//    @Predicate(label = "journal.comptable" , type = JournalComptable.class,sequence = 3,colsequence = 3,target = "many-to-one",optional = false,updatable = false)
+////    @Predicate(label = "journal.comptable" , type = JournalComptable.class,sequence = 3,colsequence = 3,target = "many-to-one",optional = false,search = true,editable = false)
 //    private JournalComptable journal ;    
     
     @ManyToOne
@@ -58,21 +61,36 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
     @Predicate(label = "compte.tier",type = Tier.class,target = "many-to-one",colsequence = 5,sequence = 5,search = true)
     private Tier tier ;
     
-   
-    @Predicate(label = "encaissement",type = Double.class,search = true,colsequence = 7,sequence = 7,optional = false)
-    private Double credit = 0.0;
-     
-    @Predicate(label = "decaissement",type = Double.class,search = true,colsequence = 6,sequence = 6,optional = false)
+    
+    @Predicate(label = "debit",type = Double.class,search = true,colsequence = 6,sequence = 6)
     private Double debit =0.0;
     
-
+    @Predicate(label = "credit",type = Double.class,search = true,colsequence = 7,sequence = 7)
+    private Double credit = 0.0;
+    
+////    @ManyToOne
+////    @JoinColumn(name = "JRNSAISIE_ID")
+////    private JournalSaisie journaldesaisie;
+//    
+//    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)
+//    @JoinColumn(name = "ECRIT_ANAL_ID")
+//    private List<EcritureAnalytique> analytiques = new ArrayList<EcritureAnalytique>();
+//
+//    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
+//    @JoinColumn(name = "ECRIT_TIER_ID")
+//    private EcritureTier ecrituretier ;
+//   
+    
+//    @ManyToOne
+//    @JoinColumn(name = "PIEC_ID")
+//    private PieceComptable piece ;
     
     /**
      * 
      * @param libelle
      * @param compte 
      */
-    public EcritureBanque(String libelle, Compte compte) {
+    public LignePieceComptable(String libelle, Compte compte) {
         this.libelle = libelle;
         this.compte = compte;
     }
@@ -85,7 +103,7 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
      * @param designation
      * @param moduleName 
      */
-    public EcritureBanque(String libelle, Compte compte, long id, String designation, String moduleName) {
+    public LignePieceComptable(String libelle, Compte compte, long id, String designation, String moduleName) {
         super(id, designation, moduleName,0L);
         this.libelle = libelle;
         this.compte = compte;
@@ -103,7 +121,7 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
      * @param designation
      * @param moduleName 
      */
-    public EcritureBanque(Date dateEcriture, String refPiece, String libelle, JournalComptable journal, Compte compte, Tier tier, long id, String designation, String moduleName) {
+    public LignePieceComptable(Date dateEcriture, String refPiece, String libelle, JournalComptable journal, Compte compte, Tier tier, long id, String designation, String moduleName) {
         super(id, designation, moduleName,0L);
         this.dateEcriture = dateEcriture;
         this.refPiece = refPiece;
@@ -117,7 +135,7 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
      * 
      * @param ecriture 
      */
-    public EcritureBanque(EcritureBanque ecriture) {
+    public LignePieceComptable(LignePieceComptable ecriture) {
         super(ecriture.id, ecriture.designation, ecriture.moduleName,ecriture.compareid);
         this.dateEcriture = ecriture.dateEcriture;
         this.refPiece = ecriture.refPiece;
@@ -125,10 +143,12 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
 //        this.journal = ecriture.journal;
         this.debit = ecriture.debit;
         this.credit = ecriture.credit;
-        this.tresorerie = ecriture.tresorerie;
 //        if(ecriture.periode!=null){
 //            this.periode = new PeriodeComptable(ecriture.periode);
-//        }//end if(ecriture.periode!=null){
+//        }
+//        if(ecriture.getPiece()!=null){
+//            this.piece = new PieceComptable(ecriture.getPiece());
+//        }
         if(ecriture.getCompte()!=null){
             this.compte = new Compte(ecriture.compte);
         }//end if(ecriture.getCompte()!=null)
@@ -144,7 +164,7 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
     /**
      * 
      */
-    public EcritureBanque() {
+    public LignePieceComptable() {
     }
 
     
@@ -204,23 +224,6 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
 //    public void setJournal(JournalComptable journal) {
 //        this.journal = journal;
 //    }    
-
-    public String getTresorerie() {
-        return tresorerie;
-    }
-
-    public void setTresorerie(String tresorerie) {
-        this.tresorerie = tresorerie;
-    }
-//
-//    public PeriodeComptable getPeriode() {
-//        return periode;
-//    }
-//
-//    public void setPeriode(PeriodeComptable periode) {
-//        this.periode = periode;
-//    }
-    
     
 
     @Override
@@ -236,7 +239,6 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
         this.tier = tier;
     } 
 
-   
 //    public List<EcritureAnalytique> getAnalytiques() {
 //        return analytiques;
 //    }
@@ -252,9 +254,16 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
 //    public void setEcrituretier(EcritureTier ecrituretier) {
 //        this.ecrituretier = ecrituretier;
 //    }  
+//
+//    public PeriodeComptable getPeriode() {
+//        return periode;
+//    }
+//
+//    public void setPeriode(PeriodeComptable periode) {
+//        this.periode = periode;
+//    }
 
-     
-
+  
     @Override
     public String getListTitle() {
         return "ecriture.comptable.list"; //To change body of generated methods, choose Tools | Templates.
@@ -331,7 +340,7 @@ public class EcritureBanque extends BaseElement implements Serializable,Comparab
     
     
     @Override
-    public int compareTo(EcritureBanque o) {
+    public int compareTo(LignePieceComptable o) {
          //To change body of generated methods, choose Tools | Templates.
         return compte.compareTo(o.compte);
     }

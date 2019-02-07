@@ -92,48 +92,7 @@ public class JournalSaisieManagerImpl
     @Override
     public void processBeforeUpdate(JournalSaisie entity) {
         //Map contenant les ecritures 
-//        Map<Long , EcritureComptable> map = new HashMap<Long,EcritureComptable>();
-//        if(entity.getOperations()!=null){
-//            for(EcritureComptable ecriture:entity.getOperations()){
-//                //Traitement des comptes analytiques
-//                ecritureAnalytiqueGenerator(ecriture);
-//                //Generation des ecritures tiers
-//                ecritureTierGenerator(ecriture);
-//                ecriture.setExercice(entity.getExercice());
-//                ecriture.setJournal(entity.getJournal());
-//                ecriture.setJournaldesaisie(entity);
-//                if(ecriture.getId()>0){
-//                    //Sauvegarde dans le map
-//                    map.put(ecriture.getId(), ecriture);
-//                    ecrituredao.update(ecriture.getId(), ecriture);
-//                }else{
-//                    if(ecriture.getCredit()!=null){
-//                        entity.credit(ecriture.getCredit());
-//                    }
-//                    if(ecriture.getDebit()!=null){
-//                        entity.debit(ecriture.getDebit());
-//                    }
-//                    ecrituredao.save(ecriture);
-//                }
-//            }//end for(EcritureComptable ecriture:entity.getOperations())
-//        }//end if(entity.getOperations()!=null)
-//        //Suppression des ecritures surprime
-//        JournalSaisie old = dao.findByPrimaryKey("id",entity.getId());
-////        entity.setJournal(old.getJournal());
-//        if(old.getOperations()!=null){
-//            for(EcritureComptable ecriture:old.getOperations()){
-//                if(!map.containsKey(ecriture.getId())){
-//                    if(ecriture.getCredit()!=null){
-//                        entity.credit(ecriture.getCredit().negate());
-//                    }
-//                    if(ecriture.getDebit()!=null){
-//                        entity.debit(ecriture.getDebit().negate());
-//                    }
-//                    ecrituredao.delete(ecriture.getId());
-//                }//end if(!map.containsKey(ecriture.getId()))
-//            }//end for(EcritureComptable ecriture:old.getOperations())
-//        }//end if(old.getOperations()!=null)
-        super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
+       super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -147,42 +106,6 @@ public class JournalSaisieManagerImpl
     public JournalSaisie delete(Long id) {
          //To change body of generated methods, choose Tools | Templates.
         return new JournalSaisie();
-    }   
-    
-     /**
-     * Genere les ecritures analytiques
-     * @param entity 
-     */
-    private void ecritureAnalytiqueGenerator(EcritureComptable entity){
-        Compte compte = comptedao.findByPrimaryKey("id", entity.getCompte().getId());
-        if(compte.getAnalytiques()!=null&&!compte.getAnalytiques().isEmpty()){
-            for(SectionAnalytique sec:compte.getAnalytiques()){
-                double debit = 0;
-                double credit = 0;
-                if(sec.getType().equalsIgnoreCase("0")){//pourcentage
-                    debit = (entity.getDebit()!=null ? entity.getDebit().doubleValue():0)*sec.getQuantite()/100;
-                    credit = (entity.getCredit()!=null ? entity.getCredit().doubleValue():0)*sec.getQuantite()/100;
-                }else if(sec.getType().equalsIgnoreCase("1")){
-                    debit = (entity.getDebit()!=null ? entity.getDebit().doubleValue():0)/entity.getAnalytiques().size();
-                    credit = (entity.getCredit()!=null ? entity.getCredit().doubleValue():0)/entity.getAnalytiques().size();
-                }else{
-                    debit = (entity.getDebit()!=null ? sec.getQuantite():0);
-                    credit = (entity.getCredit()!=null ? sec.getQuantite():0);
-                }
-                EcritureAnalytique ecriture = new EcritureAnalytique(entity, sec.getCompte(), BigDecimal.valueOf(debit), BigDecimal.valueOf(credit));
-                entity.getAnalytiques().add(ecriture);
-            }//end for(SectionAnalytique sec:compte.getAnalytiques())
-        }//end if(compte.getAnalytiques()!=null&&!compte.getAnalytiques().isEmpty())
-    }//end private void ecritureAnalytiqueGenerator
+    }     
 
-    /**
-     * 
-     * @param entity 
-     */
-    private void ecritureTierGenerator(EcritureComptable entity){
-       if(entity.getTier()!=null){ 
-            EcritureTier ecriture = new EcritureTier(entity);
-            entity.setEcrituretier(ecriture);
-       }//end if(entity.getTier()!=null)
-    }
 }

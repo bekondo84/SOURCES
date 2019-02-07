@@ -25,6 +25,7 @@ public class Observer implements Serializable,Comparable<Observer>{
      * 
      * @param observable
      * @param source 
+     * @param parameters 
      */
     public Observer(String observable, String source,String parameters) {
         this.observable = observable;

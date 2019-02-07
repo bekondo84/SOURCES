@@ -60,6 +60,7 @@
     <class>com.basaccount.model.ventes.LigneReglement</class>
     <class>com.basaccount.model.ventes.ReglementTmp</class>
     <class>com.basaccount.model.operations.PieceComptableTmp</class>
+    <class>com.basaccount.model.operations.LignePieceComptable</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="update"/>

@@ -7,6 +7,9 @@ package com.basaccount.model.operations;
 
 import com.basaccount.model.comptabilite.JournalComptable;
 import com.core.base.State;
+import com.megatim.common.annotations.KHeader;
+import com.megatim.common.annotations.KHeaders;
+import com.megatim.common.annotations.KValue;
 import com.megatim.common.annotations.Predicate;
 import com.megatim.common.annotations.TableFooter;
 import java.io.Serializable;
@@ -25,6 +28,15 @@ import javax.persistence.OneToMany;
  *
  * @author Commercial_2
  */
+@KHeaders(statubar = true
+        ,value = {
+           @KHeader(type = "button",name = "work1",label = "valider",target = "workflow",roles = {"administrateur","gestionnaire"},states = {"etabli"},pattern = "btn btn-danger"
+                , value = @KValue("{'model':'baseaccount','entity':'operationbancaire','method':'validate','critical':true,'alert':'cette action est irreversible \nÊtes-vous sûr de vouloir continuer ?'}")
+            ),
+            @KHeader(type = "button",name = "work2",label = "imprimer.note",target = "report",roles = {"administrateur","gestionnaire"},pattern = "btn btn-default"
+                , value = @KValue("{'name':'operationbancaire_report01','model':'baseaccount','entity':'operationbancaire','method':'imprime'}")
+            )
+        })
 @Entity
 @DiscriminatorValue("OBQ")
 public class OperationBancaire extends PieceComptableTmp implements Serializable{
@@ -33,17 +45,24 @@ public class OperationBancaire extends PieceComptableTmp implements Serializable
     @Predicate(label = "jouranl.comptable",type = JournalComptable.class,target = "many-to-one",optional = false,editable = false,search = true)
     private JournalComptable journal;
    
-    @Predicate(label = "solde.initial",type = BigDecimal.class,updatable = false,search = true,editable = false,hide = true)
-    private BigDecimal soldedebut = BigDecimal.ZERO;
-    
-    @Predicate(label = "solde.final",type = BigDecimal.class,updatable = false , search = true,editable = false,hide = true)
-    private BigDecimal soldefin = BigDecimal.ZERO;
+//    @Predicate(label = "solde.initial",type = Double.class,updatable = false,search = true,editable = false,hide = true)
+//    private Double soldedebut = 0.0;
+//    
+//    @Predicate(label = "solde.final",type = Double.class,updatable = false , search = true,editable = false,hide = true)
+//    private Double soldefin = 0.0;
     
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "OPEBAN_ID")
     @Predicate(label=" ",group = true,groupLabel = "ecritures.comptable",groupName = "group1",type = EcritureBanque.class,target = "one-to-many",customfooter = true,edittable = true)
-    @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td>Total Debit</td><td></td><td>this.debit</td><td></td></tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td>Total Credit</td><td></td><td>this.credit</td><td></td></tr><tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td>Solde</td><td></td><td>this.debit;-;this.credit</td><td></td></tr>")
+    @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td>Total encaissé</td><td></td><td>this.credit</td><td></td></tr> <tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td>Total Décaissé</td><td></td><td>this.debit</td><td></td></tr><tr style='border:none;'><td></td><td></td><td></td><td></td><td></td><td>Solde</td><td></td><td>this.credit;-;this.debit</td><td></td></tr>")
     private List<EcritureBanque> ecritures = new ArrayList<EcritureBanque>();    
+    
+   @Predicate(label = "total.encaissement",type = Double.class, search = true,editable = false,hide = true)
+    private Double credit = 0.0;
+    
+    @Predicate(label = "total.decaissement",type = Double.class,search = true,editable = false,hide = true)
+    private Double debit = 0.0;
+    
     
     @Predicate(label = " ",target = "state",search = true,hide = true)
     private String state ="etabli";
@@ -64,11 +83,16 @@ public class OperationBancaire extends PieceComptableTmp implements Serializable
         super(piece);
         this.code = piece.code;
         this.libelle = piece.libelle;
-        this.journal = piece.journal;
         this.datePiece = piece.datePiece;
-        this.soldedebut = piece.soldedebut;
-        this.soldefin = piece.soldefin;
+        if(piece.journal!=null){
+            this.journal = new JournalComptable(piece.journal);
+        }
+        this.datePiece = piece.datePiece;
+//        this.soldedebut = piece.soldedebut;
+//        this.soldefin = piece.soldefin;
         this.state = piece.state;
+        this.credit = piece.credit;
+        this.debit = piece.debit;
     }
     /**
      * 
@@ -93,21 +117,21 @@ public class OperationBancaire extends PieceComptableTmp implements Serializable
     }
 
 
-    public BigDecimal getSoldedebut() {
-        return soldedebut;
-    }
-
-    public void setSoldedebut(BigDecimal soldedebut) {
-        this.soldedebut = soldedebut;
-    }
-
-    public BigDecimal getSoldefin() {
-        return soldefin;
-    }
-
-    public void setSoldefin(BigDecimal soldefin) {
-        this.soldefin = soldefin;
-    }
+//    public Double getSoldedebut() {
+//        return soldedebut;
+//    }
+//
+//    public void setSoldedebut(Double soldedebut) {
+//        this.soldedebut = soldedebut;
+//    }
+//
+//    public Double getSoldefin() {
+//        return soldefin;
+//    }
+//
+//    public void setSoldefin(Double soldefin) {
+//        this.soldefin = soldefin;
+//    }
 
     public String getState() {
         return state;
@@ -115,6 +139,22 @@ public class OperationBancaire extends PieceComptableTmp implements Serializable
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public Double getDebit() {
+        return debit;
+    }
+
+    public void setDebit(Double debit) {
+        this.debit = debit;
+    }
+
+    public Double getCredit() {
+        return credit;
+    }
+
+    public void setCredit(Double credit) {
+        this.credit = credit;
     }
 
     
@@ -141,7 +181,7 @@ public class OperationBancaire extends PieceComptableTmp implements Serializable
 
     @Override
     public boolean isDesableupdate() {
-        return super.isDesableupdate(); //To change body of generated methods, choose Tools | Templates.
+        return state.equalsIgnoreCase("valide"); //To change body of generated methods, choose Tools | Templates.
     }
 
      @Override
@@ -154,7 +194,7 @@ public class OperationBancaire extends PieceComptableTmp implements Serializable
 
     @Override
     public boolean isDesabledelete() {
-        return super.isDesabledelete(); //To change body of generated methods, choose Tools | Templates.
+        return state.equalsIgnoreCase("valide"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
