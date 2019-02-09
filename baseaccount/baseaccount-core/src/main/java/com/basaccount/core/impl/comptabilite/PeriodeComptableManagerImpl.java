@@ -15,7 +15,9 @@ import com.bekosoftware.genericdaolayer.dao.tools.Predicat;
 import com.bekosoftware.genericdaolayer.dao.tools.RestrictionsContainer;
 import com.bekosoftware.genericmanagerlayer.core.impl.AbstractGenericManager;
 import com.megatim.common.annotations.OrderType;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -86,5 +88,17 @@ public class PeriodeComptableManagerImpl
     }
     
     
+    @Override
+    public PeriodeComptable getPeriodeFromDate(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+       RestrictionsContainer container = RestrictionsContainer.newInstance();
+       container.addLe("debut", date);
+       container.addGe("fin", date);
+       List<PeriodeComptable> periodes = dao.filter(container.getPredicats(), null, null, 0, -1);
+       if(periodes!=null && !periodes.isEmpty()){
+           return periodes.get(0);
+       }
+       return null;
+    }
 
 }

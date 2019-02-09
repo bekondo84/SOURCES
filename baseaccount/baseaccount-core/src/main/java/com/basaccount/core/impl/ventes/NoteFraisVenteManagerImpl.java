@@ -6,10 +6,13 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import com.basaccount.core.ifaces.ventes.NoteFraisVenteManagerLocal;
 import com.basaccount.core.ifaces.ventes.NoteFraisVenteManagerRemote;
+import com.basaccount.dao.ifaces.operations.EcritureComptableDAOLocal;
 import com.basaccount.dao.ifaces.ventes.NoteFraisVenteDAOLocal;
 import com.basaccount.model.achats.LigneNoteFrais;
-import com.basaccount.model.achats.NoteFrais;
+import com.basaccount.model.comptabilite.Compte;
+import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.basaccount.model.comptabilite.Taxe;
+import com.basaccount.model.operations.EcritureComptable;
 import com.basaccount.model.ventes.LigneNoteFraisVente;
 import com.basaccount.model.ventes.NoteFraisVente;
 import com.bekosoftware.genericdaolayer.dao.ifaces.GenericDAO;
@@ -17,6 +20,7 @@ import com.bekosoftware.genericdaolayer.dao.tools.Predicat;
 import com.bekosoftware.genericmanagerlayer.core.impl.AbstractGenericManager;
 import com.megatim.common.annotations.OrderType;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +34,11 @@ public class NoteFraisVenteManagerImpl
 
     @EJB(name = "NoteFraisVenteDAO")
     protected NoteFraisVenteDAOLocal dao;
-
+    
+    @EJB(name = "EcritureComptableDAO")
+    protected EcritureComptableDAOLocal ecrituredao;
+    
+    
     public NoteFraisVenteManagerImpl() {
     }
 
@@ -123,6 +131,39 @@ public class NoteFraisVenteManagerImpl
         entity.setTotalttc(totalttc);
         entity.setState("etabli");
         super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public NoteFraisVente valider(NoteFraisVente entity,PeriodeComptable periode) {        
+        //generation des ecritures comptables
+        Map<Compte,Double> map = new HashMap<Compte, Double>();
+        for(LigneNoteFrais ligne:entity.getNotes()){
+            if(ligne.getTaxes()!=null && !ligne.getTaxes().isEmpty()){
+                for(Taxe tax : ligne.getTaxes()){
+                    double value = tax.getMontant();
+                    if(tax.getCalculTaxe()!=null && tax.getCalculTaxe().trim().equalsIgnoreCase("1")){
+                        value = ligne.getMontant()*tax.getMontant()/100;
+                    }//end if(tax.getCalculTaxe()!=null && tax.getCalculTaxe().trim().equalsIgnoreCase("1")){
+                    if(map.containsKey(tax.getCompte())){
+                        map.put(tax.getCompte(), map.get(tax.getCompte())+value);
+                    }else{
+                        map.put(tax.getCompte(), value);
+                    }//end if(map.containsKey(tax.getCompte())){
+                }//end for(Taxe tax : ligne.getTaxes()){
+            }//end if(ligne.getTaxes()!=null && !ligne.getTaxes().isEmpty()){
+        }//end for(LigneNoteFrais ligne:entity.getNotes()){
+        EcritureComptable ecrittier = new EcritureComptable(entity.getDate(), entity.getCode(), entity.getFournisseur().getCompte().getLibele(), periode, entity.getJournal(), entity.getFournisseur().getCompte(), entity.getFournisseur(), entity.getTotalttc(), 0.0);
+        ecrituredao.save(ecrittier);
+        EcritureComptable ecritvte = new EcritureComptable(entity.getDate(), entity.getCode(), entity.getMemo(), periode, entity.getJournal(), entity.getComptecompens(), null, 0.0, entity.getTotalht());
+        ecrituredao.save(ecritvte);
+        //Ecriture taxes
+        for(Compte compte : map.keySet()){
+            EcritureComptable ecriture = new EcritureComptable(entity.getDate(), entity.getCode(), compte.getLibele(), periode, entity.getJournal(), compte, null, 0.0, map.get(compte));
+            ecrituredao.save(ecriture);
+        }//end for(Compte compte : map.keySet()){
+        entity.setState("valide");
+        dao.update(entity.getId(), entity);
+        return entity;
     }
 
 

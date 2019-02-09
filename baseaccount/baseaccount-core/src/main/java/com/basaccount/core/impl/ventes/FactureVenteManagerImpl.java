@@ -10,7 +10,6 @@ import com.basaccount.dao.ifaces.ventes.FactureVenteDAOLocal;
 import com.basaccount.model.achats.Acompte;
 import com.basaccount.model.achats.DocumentAchatState;
 import com.basaccount.model.achats.EcheanceReglement;
-import com.basaccount.model.achats.LigneFacture;
 import com.basaccount.model.ventes.FactureVente;
 import com.basaccount.model.ventes.LigneFactureVente;
 import com.bekosoftware.genericdaolayer.dao.ifaces.GenericDAO;
@@ -67,13 +66,19 @@ public class FactureVenteManagerImpl
 
     @Override
     public List<FactureVente> findAll() {
-        return super.findAll(); //To change body of generated methods, choose Tools | Templates.
+        List<FactureVente> datas = super.findAll();//To change body of generated methods, choose Tools | Templates.
+        List<FactureVente> result = new ArrayList<FactureVente>();
+        for(FactureVente data:datas){
+            result.add(new FactureVente(data));
+        }
+        return result;
     }
 
     @Override
     public FactureVente find(String propertyName, Long entityID) {
         FactureVente data = super.find(propertyName, entityID); //To change body of generated methods, choose Tools | Templates.
         FactureVente result = new FactureVente(data);
+        result.setPiececomptable(data.getPiececomptable());        
         for(LigneFactureVente ligne:data.getLignes()){
             result.getLignes().add(new LigneFactureVente(ligne));
         }
@@ -81,7 +86,7 @@ public class FactureVenteManagerImpl
             result.getAcomptes().add(new Acompte(acom));
         }
         for(EcheanceReglement ech:data.getEcheances()){
-            result.getEcheances().add(ech);
+            result.getEcheances().add(new EcheanceReglement(ech));
         }
        return result;
     }

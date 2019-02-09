@@ -4,6 +4,7 @@ package com.basaccount.core.ifaces.comptabilite;
 import com.basaccount.model.comptabilite.ExerciceComptable;
 import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
+import java.util.Date;
 import java.util.List;
 
 
@@ -24,5 +25,12 @@ public interface PeriodeComptableManager
      * @return 
      */
     public List<ExerciceComptable> getExercices();
+    
+    /**
+     * 
+     * @param date
+     * @return 
+     */
+    public PeriodeComptable getPeriodeFromDate(Date date);
 
 }

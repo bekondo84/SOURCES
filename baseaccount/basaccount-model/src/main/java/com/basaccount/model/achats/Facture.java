@@ -8,6 +8,7 @@ package com.basaccount.model.achats;
 import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.comptabilite.JournalComptable;
 import com.core.base.State;
+import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.Predicate;
 import com.megatim.common.annotations.TableFooter;
 import java.io.Serializable;
@@ -44,17 +45,19 @@ public class Facture extends DocumentAchat implements Serializable{
     private String source;
     
     @Predicate(label = "escompte.pourcent",type = Double.class,group = true,groupName = "group2",groupLabel = "valorisation.or.comptabilite")
-    private Double escompte =0.0;
-    
-    @ManyToOne
-    @JoinColumn(name = "JOCO_ID")
-    @Predicate(label = "journal.comptable",type = JournalComptable.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "valorisation.or.comptabilite")
-    private JournalComptable journal ;
+    private Double escompte =0.0;    
     
     @ManyToOne
     @JoinColumn(name = "COMP_ID")
     @Predicate(label = "compte",type = Compte.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "valorisation.or.comptabilite")
+    @Filter(value = "[{\"fieldName\":\"nature\",\"value\":\"2\"}]")
     private Compte compte ;
+    
+    @ManyToOne
+    @JoinColumn(name = "JOCO_ID")
+    @Predicate(label = "journal.comptable",type = JournalComptable.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "valorisation.or.comptabilite")
+    @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"1\"}]")
+    private JournalComptable journal ;
     
     private Double transport=0.0;
     

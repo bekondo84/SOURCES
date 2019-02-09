@@ -51,31 +51,35 @@ public class NoteFraisVente extends NoteFraisTMP implements Serializable{
     @Predicate(label = "client",type = Tier.class,target = "many-to-one",optional = false,search = true)
      @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"0\"}]")
     private Tier fournisseur ;
+     
+    @ManyToOne
+    @JoinColumn(name = "JOUR_ID")
+    @Predicate(label = "journal.comptable",type = JournalComptable.class,target = "many-to-one",optional = false,search = true)
+    private JournalComptable journal ;    
+    
+    @Temporal(TemporalType.DATE)
+//    @Predicate(label = "date.echeance",type = Date.class,target = "date",optional = false,search = true)
+    private Date decheance;
+    
+    @Predicate(label = "memo",search = true)
+    private String memo;   
     
      @ManyToOne
     @JoinColumn(name = "COMP_ID")
     @Predicate(label = "compte",type = Compte.class,target = "many-to-one",optional = false,search = true)
     private Compte comptecompens ;
     
-    @Temporal(TemporalType.DATE)
-//    @Predicate(label = "Date échéance",type = Date.class,optional = false,search = true)
-    private Date decheance;
-    
-    @Predicate(label = "memo",search = true)
-    private String memo;
-    
-    @ManyToOne
-    @JoinColumn(name = "JOUR_ID")
-    @Predicate(label = "journal.comptable",type = JournalComptable.class,target = "many-to-one",optional = false,search = true)
-    private JournalComptable journal ;    
-    
-    
     @OneToMany(orphanRemoval = false,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "NOFRVTE_ID")
     @Predicate(label = " ",type = LigneNoteFrais.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "notes.frais",edittable = true)
     private List<LigneNoteFrais> notes = new ArrayList<LigneNoteFrais>();
 
-    @Predicate(label = " ",target = "textarea",group = true,groupName = "group2",groupLabel = "notes")
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+    @JoinColumn(name = "NFV_ID")
+    @Predicate(label = " ",type = EcheanceReglement.class,target = "one-to-many",group = true,groupName = "group2",groupLabel = "echeances",edittable = true)
+    private List<EcheanceReglement> echeances = new ArrayList<EcheanceReglement>();
+    
+    @Predicate(label = " ",target = "textarea",group = true,groupName = "group3",groupLabel = "notes")
     private String commentaire ;    
     
     @Predicate(label = "total.ht",type = Double.class,search = true,hide = true,editable = false)
@@ -211,6 +215,15 @@ public class NoteFraisVente extends NoteFraisTMP implements Serializable{
         this.state = state;
     }   
 
+    public List<EcheanceReglement> getEcheances() {
+        return echeances;
+    }
+
+    public void setEcheances(List<EcheanceReglement> echeances) {
+        this.echeances = echeances;
+    }
+
+    
     
     @Override
     public List<State> getStates() {
@@ -256,6 +269,26 @@ public class NoteFraisVente extends NoteFraisTMP implements Serializable{
     @Override
     public String getEditTitle() {
         return "Reçu d'achat";//To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesableupdate() {
+        return state.trim().equalsIgnoreCase("valide"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesabledelete() {
+        return state.trim().equalsIgnoreCase("valide"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDesablecreate() {
+        return state.trim().equalsIgnoreCase("valide"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isCreateonfield() {
+        return false; //To change body of generated methods, choose Tools | Templates.
     }
     
     

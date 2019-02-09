@@ -7,23 +7,27 @@ import javax.ejb.TransactionAttribute;
 import com.basaccount.core.ifaces.operations.PieceComptableManagerLocal;
 import com.basaccount.core.ifaces.operations.PieceComptableManagerRemote;
 import com.basaccount.dao.ifaces.comptabilite.CompteDAOLocal;
+import com.basaccount.dao.ifaces.comptabilite.PeriodeComptableDAOLocal;
 import com.basaccount.dao.ifaces.operations.EcritureComptableDAOLocal;
 import com.basaccount.dao.ifaces.operations.JournalSaisieDAOLocal;
 import com.basaccount.dao.ifaces.operations.PieceComptableDAOLocal;
+import com.basaccount.dao.ifaces.ventes.FactureVenteDAOLocal;
 import com.basaccount.model.comptabilite.Compte;
-import com.basaccount.model.comptabilite.SectionAnalytique;
-import com.basaccount.model.operations.EcritureAnalytique;
+import com.basaccount.model.comptabilite.PeriodeComptable;
+import com.basaccount.model.comptabilite.Taxe;
 import com.basaccount.model.operations.EcritureComptable;
-import com.basaccount.model.operations.EcritureTier;
 import com.basaccount.model.operations.LignePieceComptable;
 import com.basaccount.model.operations.PieceComptable;
-import com.basaccount.model.tiers.Tier;
+import com.basaccount.model.ventes.FactureVente;
+import com.basaccount.model.ventes.LigneFactureVente;
 import com.bekosoftware.genericdaolayer.dao.ifaces.GenericDAO;
 import com.bekosoftware.genericdaolayer.dao.tools.Predicat;
+import com.bekosoftware.genericdaolayer.dao.tools.RestrictionsContainer;
 import com.bekosoftware.genericmanagerlayer.core.impl.AbstractGenericManager;
 import com.megatim.common.annotations.OrderType;
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,6 +51,11 @@ public class PieceComptableManagerImpl
     @EJB(name = "EcritureComptableDAO")
     protected EcritureComptableDAOLocal ecrituredao;    
     
+    @EJB(name = "FactureVenteDAO")
+    protected FactureVenteDAOLocal fvdao;  
+    
+     @EJB(name = "PeriodeComptableDAO")
+    protected PeriodeComptableDAOLocal periodedao;  
     
     public PieceComptableManagerImpl() {
     }
@@ -86,6 +95,7 @@ public class PieceComptableManagerImpl
         //To change body of generated methods, choose Tools | Templates.
         PieceComptable piece = super.find(propertyName, entityID); 
          PieceComptable entity = new PieceComptable(piece);
+         entity.setFacturevente(piece.getFacturevente());
         if(piece.getEcritures()!=null){
             for(LignePieceComptable ecri:piece.getEcritures()){
                 LignePieceComptable ecriture = new LignePieceComptable(ecri);                
@@ -137,6 +147,14 @@ public class PieceComptableManagerImpl
     @Override
     public PieceComptable delete(Long id) {
         PieceComptable piece = super.delete(id); //To change body of generated methods, choose Tools | Templates.
+        if(piece.getFacturevente()!=null){
+            FactureVente facture = fvdao.findByPrimaryKey("id", piece.getFacturevente());
+            facture.getLignes().size();
+            facture.getAcomptes().size();
+            facture.getEcheances().size();
+            facture.setState("transfere");
+            fvdao.update(facture.getId(), facture);
+        }//end if(piece.getFacturevente()!=null){
         PieceComptable entity = new PieceComptable(piece);
          return entity;
     } 
@@ -150,6 +168,14 @@ public class PieceComptableManagerImpl
         entity.setState("valide");
         ecritureComptableeGenerator(entity);
         dao.update(entity.getId(), entity);
+        if(entity.getFacturevente()!=null){
+            FactureVente facture = fvdao.findByPrimaryKey("id", entity.getFacturevente());
+            facture.getLignes().size();
+            facture.getAcomptes().size();
+            facture.getEcheances().size();
+            facture.setState("comptabilise");
+            fvdao.update(facture.getId(), facture);
+        }//end if(entity.getFacturevente()!=null){
         return entity;
     }
     
@@ -158,12 +184,67 @@ public class PieceComptableManagerImpl
      * @param entity 
      */
     private void ecritureComptableeGenerator(PieceComptable entity){
+        int index = 1 ;
         for(LignePieceComptable ligne:entity.getEcritures()){
+            Date today = new Date();
             EcritureComptable ecriture = new EcritureComptable(entity, ligne);
             ecriture.setRefPiece(entity.getCode());
+            ecriture.setCompareid(today.getTime()+index);
+            index++;
             ecrituredao.save(ecriture);
         }//end for(LignePieceComptable ligne:entity.getEcritures()){
     }//end private void ecritureAnalytiqueGenerator
+
+    @Override
+    public List<PieceComptable> priseencompte(Long id,PeriodeComptable periode) {
+        //To change body of generated methods, choose Tools | Templates.
+        RestrictionsContainer container = RestrictionsContainer.newInstance();
+        container.addEq("facturevente", id);
+        List<PieceComptable> pieces = dao.filter(container.getPredicats(), null, null, 0, -1);
+        if(pieces==null||pieces.isEmpty()){
+                FactureVente facture = fvdao.findByPrimaryKey("id", id);
+                facture.getLignes().size();
+                facture.getAcomptes().size();
+                facture.getEcheances().size();
+                Map<Compte,Double> map = new HashMap<Compte, Double>();
+                for(LigneFactureVente ligne:facture.getLignes()){
+                    if(ligne.getTaxes()!=null && !ligne.getTaxes().isEmpty()){
+                        for(Taxe tax:ligne.getTaxes()){
+                            double value = tax.getMontant();
+                            if(tax.getCalculTaxe()!=null && tax.getCalculTaxe().equalsIgnoreCase("1")){
+                                value = ligne.getQuantite()*ligne.getPuht();
+                                if(ligne.getRemise()!=null){
+                                    value = value*(100-ligne.getRemise())/100;
+                                }//end if(ligne.getRemise()!=null){
+                                value = value*tax.getMontant()/100;
+                            }//end if(tax.getCalculTaxe()=="1"){                        
+                            if(map.containsKey(tax.getCompte())){                        
+                                map.put(tax.getCompte(),map.get(tax.getCompte())+value);
+                            }else{
+                                map.put(tax.getCompte(),value);
+                            }//end if(map.containsKey(tax.getCompte())){
+                        }//end for(Taxe tax:ligne.getTaxes()){
+                    }//end if(ligne.getTaxes()!=null && !ligne.getTaxes().isEmpty()){
+                }//end for(LigneFactureVente ligne:facture.getLignes()){
+                PieceComptable piece = new PieceComptable(facture, map);
+                piece.setCredit(facture.getTotalttc());
+                piece.setDebit(facture.getTotalttc());
+                Date today = new Date();
+                piece.setCompareid(today.getTime());
+                piece.setPeriode(periode);
+                dao.save(piece);
+                facture.setState("prisencompte");
+                fvdao.update(facture.getId(), facture);
+                container = RestrictionsContainer.newInstance();
+                container.addEq("facturevente", id);
+                pieces = dao.filter(container.getPredicats(), null, null, 0, -1);
+        }//end if(pieces==null||pieces.isEmpty()){
+        List<PieceComptable> output = new ArrayList<PieceComptable>();
+        for(PieceComptable piec:pieces){
+            output.add(new PieceComptable(piec));
+        }
+        return output;
+    }
 
    
 }

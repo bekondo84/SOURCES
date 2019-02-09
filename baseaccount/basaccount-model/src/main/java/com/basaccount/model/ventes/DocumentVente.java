@@ -244,6 +244,9 @@ public class DocumentVente extends BaseElement implements Serializable,Comparabl
 
     @Override
     public String getDesignation() {
+        if(code==null){
+            return code;
+        }//end if(code==null){
         StringBuilder builder = new StringBuilder(code);
         builder.append("/").append(client.getDesignation());
         return builder.toString(); //To change body of generated methods, choose Tools | Templates.

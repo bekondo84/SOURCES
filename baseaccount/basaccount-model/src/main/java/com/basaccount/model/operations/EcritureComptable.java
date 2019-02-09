@@ -69,10 +69,10 @@ public class EcritureComptable extends BaseElement implements Serializable,Compa
     
     
     @Predicate(label = "debit",type = Double.class,search = true,colsequence = 6,sequence = 6,updatable = false)
-    private Double debit =0.0;
+    private Double debit ;//=0.0;
     
     @Predicate(label = "credit",type = Double.class,search = true,colsequence = 7,sequence = 7,updatable = false)
-    private Double credit = 0.0;
+    private Double credit ;//= 0.0;
     
 //    @ManyToOne
 //    @JoinColumn(name = "JRNSAISIE_ID")
@@ -103,39 +103,30 @@ public class EcritureComptable extends BaseElement implements Serializable,Compa
 
     /**
      * 
-     * @param libelle
-     * @param compte
-     * @param id
-     * @param designation
-     * @param moduleName 
-     */
-    public EcritureComptable(String libelle, Compte compte, long id, String designation, String moduleName) {
-        super(id, designation, moduleName,0L);
-        this.libelle = libelle;
-        this.compte = compte;
-    }
-
-    /**
-     * 
      * @param dateEcriture
      * @param refPiece
      * @param libelle
+     * @param periode
      * @param journal
      * @param compte
      * @param tier
-     * @param id
-     * @param designation
-     * @param moduleName 
+     * @param debit
+     * @param credit 
      */
-    public EcritureComptable(Date dateEcriture, String refPiece, String libelle, JournalComptable journal, Compte compte, Tier tier, long id, String designation, String moduleName) {
-        super(id, designation, moduleName,0L);
+    public EcritureComptable(Date dateEcriture, String refPiece, String libelle, PeriodeComptable periode, JournalComptable journal, Compte compte, Tier tier, Double debit, Double credit) {
+        super(-1L, null, null, -1L);
         this.dateEcriture = dateEcriture;
         this.refPiece = refPiece;
         this.libelle = libelle;
+        this.periode = periode;
         this.journal = journal;
         this.compte = compte;
         this.tier = tier;
+        this.debit = debit;
+        this.credit = credit;
     }
+
+   
     
     /**
      * 

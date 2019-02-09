@@ -31,4 +31,5 @@ public class PeriodeComptableDAOImpl
         return (PeriodeComptable.class);
     }
 
+
 }

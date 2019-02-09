@@ -5,10 +5,13 @@
  */
 package com.basaccount.model.achats;
 
+import com.basaccount.model.comptabilite.Compte;
 import com.core.base.BaseElement;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -19,25 +22,36 @@ import javax.persistence.Table;
 @Table(name = "T_MORE")
 public class ModeReglement extends BaseElement implements Serializable,Comparable<ModeReglement>{
 
-    @Predicate(label = "code.reglement",optional = false )
+    @Predicate(label = "code.reglement",optional = false ,search = true)
     private String code ;
     
-    @Predicate(label = "intitule")
+    @Predicate(label = "intitule" ,search = true)
     private String label ;
     
-    @Predicate(label = "type.reglement",target = "combobox",values = "Aucun;Espèces;Chèque;Carte bancaire")
+    @Predicate(label = "type.reglement",target = "combobox",values = "Aucun;Espèces;Chèque;Carte bancaire" ,search = true)
     private String type ="0";
+    
+    @ManyToOne
+    @JoinColumn(name = "CMPT_ID")
+    @Predicate(label = "compte.associe",type = Compte.class,target = "many-to-one",search = true)
+    private Compte compte ;
 
     public ModeReglement(String code, String label) {
         this.code = code;
         this.label = label;
     }
 
-    public ModeReglement(String code, String label, long id, String designation, String moduleName) {
-        super(id, designation, moduleName,0L);
-        this.code = code;
-        this.label = label;
+    public ModeReglement(ModeReglement entity) {
+        super(entity.getId(), entity.designation, entity.moduleName, entity.compareid);
+        this.code = entity.getCode();
+        this.label = entity.getLabel();
+        this.type = entity.getType();
+        if(entity.getCompte()!=null){
+            this.compte = new Compte(entity.getCompte());
+        }
     }
+
+    
 
     public ModeReglement() {
     }
@@ -84,6 +98,19 @@ public class ModeReglement extends BaseElement implements Serializable,Comparabl
     @Override
     public String getEditTitle() {
         return "Mode de règlement"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Compte getCompte() {
+        return compte;
+    }
+
+    public void setCompte(Compte compte) {
+        this.compte = compte;
+    }
+
+    @Override
+    public boolean isCreateonfield() {
+        return false; //To change body of generated methods, choose Tools | Templates.
     }
     
     

@@ -9,6 +9,7 @@ import com.basaccount.model.achats.*;
 import com.basaccount.model.comptabilite.JournalComptable;
 import com.basaccount.model.tiers.Tier;
 import com.core.base.State;
+import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,57 +29,56 @@ import javax.persistence.OneToMany;
  */
 @Entity
 @DiscriminatorValue("VTE")
-public class ReglementClient extends ReglementTmp implements Serializable{
+public class ReglementClient extends ReglementTmp implements Serializable {
 
-     @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "FOUR_ID")
-    @Predicate(label = "client",type = Tier.class,target = "many-to-one",search = true,optional = false)
+    @Predicate(label = "client", type = Tier.class, target = "many-to-one", search = true, optional = false)
     private Tier fournisseur;
-    
+
     @ManyToOne
     @JoinColumn(name = "MOREG_ID")
-    @Predicate(label = "mode.reglement",type = Tier.class,target = "many-to-one",search = true,optional = false)
-    private ModeReglement modereglement ;
-    
+    @Predicate(label = "mode.reglement", type = ModeReglement.class, target = "many-to-one", search = true, optional = false)
+    private ModeReglement modereglement;
+
     @ManyToOne
     @JoinColumn(name = "JOCO_ID")
-    @Predicate(label = "journal.comptable" ,type = JournalComptable.class,target = "many-to-one",search = true)
-    private JournalComptable journal ;
-    
-    @Predicate(label = "reference",search = true)
+    @Predicate(label = "journal.comptable", type = JournalComptable.class, target = "many-to-one", search = true)
+    private JournalComptable journal;
+
+    @Predicate(label = "reference", search = true)
     private String source;
-    
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "RECL_ID")
-    @Predicate(label = " ",type = LigneReglementClient.class,target = "one-to-many",edittable = true,group = true,groupName = "reglement.lignes")
+    @Predicate(label = " ", type = LigneReglementClient.class, target = "many-to-many-list", edittable = true, group = true, groupName = "reglement.lignes")
+    @Filter("[{\"fieldName\":\"fournisseur\",\"value\":\"object.fournisseur\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"veuillez selectionner le client\"},{\"fieldName\":\"modereglement\",\"value\":\"object.modereglement\",\"searchfield\":\"code\",\"optional\":false,\"message\":\"veuillez selectionner le mode de reglement\"}]")
     private List<LigneReglementClient> lignes = new ArrayList<LigneReglementClient>();
 
     /**
-     * 
+     *
      */
     public ReglementClient() {
     }
 
- 
-
     /**
-     * 
-     * @param entity 
+     *
+     * @param entity
      */
-     public ReglementClient(ReglementClient entity) {
+    public ReglementClient(ReglementClient entity) {
         super(entity);
         this.code = entity.code;
-        if(entity.fournisseur!=null){
+        if (entity.fournisseur != null) {
             this.fournisseur = new Tier(entity.fournisseur);
         }
         this.date = entity.date;
         this.modereglement = entity.modereglement;
         this.source = entity.source;
-        if(entity.journal!=null){
+        if (entity.journal != null) {
             this.journal = entity.journal;
         }
     }
-    
+
     public String getCode() {
         return code;
     }
@@ -119,8 +119,6 @@ public class ReglementClient extends ReglementTmp implements Serializable{
         this.journal = journal;
     }
 
-    
-
     public String getSource() {
         return source;
     }
@@ -136,8 +134,6 @@ public class ReglementClient extends ReglementTmp implements Serializable{
     public void setLignes(List<LigneReglementClient> lignes) {
         this.lignes = lignes;
     }
-    
-    
 
     @Override
     public String getOwnermodule() {
@@ -162,7 +158,7 @@ public class ReglementClient extends ReglementTmp implements Serializable{
     @Override
     public boolean isActivefilelien() {
         return true; //To change body of generated methods, choose Tools | Templates.
-    }   
+    }
 
     @Override
     public boolean isDesabledelete() {
@@ -206,6 +202,5 @@ public class ReglementClient extends ReglementTmp implements Serializable{
     public String getSearchkeys() {
         return super.getSearchkeys(); //To change body of generated methods, choose Tools | Templates.
     }
-   
-    
+
 }

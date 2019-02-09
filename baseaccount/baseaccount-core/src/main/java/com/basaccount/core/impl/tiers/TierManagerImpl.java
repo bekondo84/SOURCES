@@ -7,6 +7,8 @@ import javax.ejb.TransactionAttribute;
 import com.basaccount.core.ifaces.tiers.TierManagerLocal;
 import com.basaccount.core.ifaces.tiers.TierManagerRemote;
 import com.basaccount.dao.ifaces.tiers.TierDAOLocal;
+import com.basaccount.model.banques.CompteBancaire;
+import com.basaccount.model.tiers.Contact;
 import com.basaccount.model.tiers.Tier;
 import com.bekosoftware.genericdaolayer.dao.ifaces.GenericDAO;
 import com.bekosoftware.genericdaolayer.dao.tools.Predicat;
@@ -63,9 +65,15 @@ public class TierManagerImpl
     @Override
     public Tier find(String propertyName, Long entityID) {
         Tier data = super.find(propertyName, entityID); //To change body of generated methods, choose Tools | Templates.
-        if(data.getComptesbancaire()!=null) data.getComptesbancaire().size();
-        if(data.getContacts()!=null) data.getContacts().size();
-        return data;
+        Tier entity = new Tier(data);
+        for(CompteBancaire compte:data.getComptesbancaire()){
+            entity.getComptesbancaire().add(compte);
+        }
+        for(Contact cont:data.getContacts()){
+            entity.getContacts().add(cont);
+        }
+        
+        return entity;
     }
     
     

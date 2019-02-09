@@ -7,6 +7,7 @@ package com.basaccount.model.operations;
 
 import com.basaccount.model.comptabilite.ExerciceComptable;
 import com.basaccount.model.comptabilite.PeriodeComptable;
+import com.basaccount.model.ventes.FactureVente;
 import com.core.base.BaseElement;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
@@ -83,6 +84,13 @@ public class PieceComptableTmp extends BaseElement implements Serializable,Compa
         if(entity.periode!=null){
             this.periode = new PeriodeComptable(entity.periode);
         }
+    }
+    
+    public PieceComptableTmp(FactureVente entity) {
+        super(-1, null,null, -1);
+        this.code = entity.getCode();
+        this.datePiece = entity.getDate();
+        this.libelle = entity.getCodeclient();        
     }
     
     @Override

@@ -333,7 +333,12 @@ angular.module('keren.core.commons')
                  * @returns {Boolean}
                  */
                 iseditable : function(scope , model,field){
-                    console.log("commons.iseditable : function(scope , model,field) ===== windowType : "+scope.windowType+" model : "+model+"  ==== field : "+angular.toJson(field));
+//                    console.log("commons.iseditable : function(scope , model,field) ===== windowType : "+scope.windowType+" model : "+model+"  ==== field : "+angular.toJson(field));
+                    if(field.metaData && field.metaData!=null){
+                        if(field.metaData.createonfield==false){
+                            return false;
+                        }//end if(field.metaData.createonfield==false){
+                    }//end if(field.metaData && field.metaData!=null){
                     var parts = model.split('.');
                     var metaData = scope.getParentMetaData(model); 
                     if(metaData.desableupdate==true){//element non modifiable

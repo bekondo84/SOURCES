@@ -7,6 +7,7 @@ import com.basaccount.core.ifaces.operations.EcritureComptableManagerRemote;
 import com.basaccount.jaxrs.ifaces.operations.EcritureComptableRS;
 import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.basaccount.model.operations.EcritureComptable;
+import com.basaccount.model.operations.JournalSaisie;
 import com.bekosoftware.genericdaolayer.dao.tools.RestrictionsContainer;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
 import com.google.gson.Gson;
@@ -193,6 +194,12 @@ public class EcritureComptableRSImpl
     @Override
     public EcritureComptable delete(HttpHeaders headers, Long id) {
         return super.delete(headers, id); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<JournalSaisie> getJournalSaisies(HttpHeaders headers) {
+        Gson gson =new Gson();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

@@ -5,10 +5,10 @@
  */
 package com.basaccount.model.achats;
 
+import com.basaccount.model.tiers.Tier;
 import com.core.base.BaseElement;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
-import java.lang.annotation.Target;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -37,10 +37,18 @@ public class EcheanceReglement extends BaseElement implements Serializable,Compa
     @Predicate(label = "mode.reglement",type = ModeReglement.class,target = "many-to-one",optional = false,search = true)
     private ModeReglement mode ;
    
+   @Predicate(label = "montant.percu",type = Double.class,optional = false,search = true)
+    private Double percu = 0.0;
+    
+   @Predicate(label = "montant.solde",type = Double.class,optional = false,search = true,compute = true,values = "this.montant;-;this.percu")
+    private Double solde = 0.0;
+    
     @Predicate(label = "etat",type = Boolean.class,updatable = false,editable = false,search = true)
     private Boolean etat =Boolean.FALSE;
     
-    
+    @ManyToOne
+    @JoinColumn(name = "TIER_ID")
+    private Tier tier ;
 
     /**
      * 
@@ -54,17 +62,25 @@ public class EcheanceReglement extends BaseElement implements Serializable,Compa
 
     /**
      * 
-     * @param date
-     * @param mode
-     * @param id
-     * @param designation
-     * @param moduleName 
+     * @param entity 
      */
-    public EcheanceReglement(Date date, ModeReglement mode, long id, String designation, String moduleName) {
-        super(id, designation, moduleName,0L);
-        this.date = date;
-        this.mode = mode;
+    public EcheanceReglement(EcheanceReglement entity) {
+        super(entity.id, entity.designation, entity.moduleName, entity.compareid);
+        this.date = entity.date;
+        this.montant = entity.montant;
+        if(entity.mode!=null){
+            this.mode = new ModeReglement(entity.mode);
+        }
+        if(entity.tier!=null){
+            this.tier = new Tier(entity.tier);
+        }
+        this.percu = entity.percu;
+        this.solde = this.montant-(this.percu!=null ? this.percu:0.0);
+        this.etat = entity.etat;
     }
+
+  
+    
 
     public EcheanceReglement() {
     }
@@ -100,6 +116,33 @@ public class EcheanceReglement extends BaseElement implements Serializable,Compa
     public void setMode(ModeReglement mode) {
         this.mode = mode;
     }
+
+    public Double getPercu() {
+        return percu;
+    }
+
+    public void setPercu(Double percu) {
+        this.percu = percu;
+    }
+
+    public Double getSolde() {
+        solde = this.montant - (percu==null ? 0.0:percu);
+        return solde;
+    }
+
+    public void setSolde(Double solde) {
+        this.solde = solde;
+    }
+
+    public Tier getTier() {
+        return tier;
+    }
+
+    public void setTier(Tier tier) {
+        this.tier = tier;
+    }
+    
+    
 
     @Override
     public String getDesignation() {

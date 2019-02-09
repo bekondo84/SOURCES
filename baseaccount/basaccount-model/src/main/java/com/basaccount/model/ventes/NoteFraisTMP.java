@@ -36,8 +36,11 @@ public class NoteFraisTMP extends BaseElement implements Serializable,Comparable
      @Temporal(TemporalType.DATE)
     @Predicate(label = "date",target = "date",type = Date.class,optional = false,search = true)
     protected Date date ;
+     
+    protected Boolean paye = Boolean.FALSE;  
 
     public NoteFraisTMP() {
+        this.paye = Boolean.FALSE;
     }
 
     /**
@@ -59,6 +62,7 @@ public class NoteFraisTMP extends BaseElement implements Serializable,Comparable
         super(entity.id, entity.designation, entity.moduleName, entity.compareid);
         this.code = entity.code;
         this.date = entity.date;
+        this.paye = entity.paye;
     }
 
     public String getCode() {
@@ -75,6 +79,14 @@ public class NoteFraisTMP extends BaseElement implements Serializable,Comparable
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Boolean getPaye() {
+        return paye;
+    }
+
+    public void setPaye(Boolean paye) {
+        this.paye = paye;
     }
      
      

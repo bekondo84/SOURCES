@@ -29,7 +29,9 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(com.basaccount.jaxrs.impl.achats.EcheanceReglementRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.achats.FactureRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.achats.ModeReglementRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.achats.NoteFraisRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.achats.ReglementFournisseurRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.banques.BanqueRSImpl.class);
@@ -56,11 +58,13 @@ public class ApplicationConfig extends Application {
         resources.add(com.basaccount.jaxrs.impl.search.JournalSaisieViewRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.search.OperationBancaireViewRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.search.PieceComptableViewRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.search.SearchViewRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.CiviliteRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.ConditionPaiementRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.ContactRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.tiers.TierRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.ventes.FactureVenteRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.ventes.LigneReglementClientRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.ventes.NoteFraisVenteRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.ventes.ReglementClientRSImpl.class);
     }

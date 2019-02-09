@@ -135,7 +135,7 @@ public class Tier extends BaseElement implements Serializable,Comparable<Tier>{
         this.fax = tier.fax;
         this.courriel = tier.courriel;
         this.civilite = tier.civilite;
-        if(compte!=null){
+        if(tier.compte!=null){
             this.compte = new Compte(tier.compte);
         }
         this.confiance = tier.getConfiance();

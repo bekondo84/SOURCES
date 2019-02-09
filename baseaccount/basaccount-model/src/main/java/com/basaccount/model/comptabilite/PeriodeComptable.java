@@ -215,6 +215,11 @@ public class PeriodeComptable extends BaseElement implements Serializable,Compar
         statess.add(new State("close", "close"));
         return statess; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public String toString() {
+        return "PeriodeComptable{" + "code=" + code + ", debut=" + debut + ", fin=" + fin + ", ouvert=" + ouvert + ", state=" + state + ", exercice=" + exercice + '}';
+    }
     
     
     

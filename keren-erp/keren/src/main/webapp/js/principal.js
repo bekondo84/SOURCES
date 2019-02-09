@@ -1197,42 +1197,65 @@ angular.module("mainApp")
                                          //this.currentPage = (this.currentPage*this.pageSize)%this.totalPages; 
                                          $scope.pagination.beginIndex = $scope.pagination.endIndex; //+1                                       
                                          //Chargement des donnes
-                                          restService.filter($scope.predicats ,$scope.pagination.beginIndex , $scope.pagination.pageSize)
-                                                .$promise.then(function(data){
-//                                                      console.log('$scope.loadData = function() :::::::::::::::: '+data);
-                                                     if(data){
-                                                         $scope.datas = data;
-                                                         //Traitement des donnÃ©es
-                                                        if($scope.calendarrecord){
-                                                             for(var i=0;i<$scope.datas.length;i++){
-                                                                var data = $scope.datas[i];
-                                                                if($scope.calendarrecord.titlefield){
-                                                                    data['title'] = data[$scope.calendarrecord.titlefield];
-                                                                }
-                                                                if($scope.calendarrecord.startfield){
-                                                                    data['start'] = data[$scope.calendarrecord.startfield];
-                                                                }
-                                                                if($scope.calendarrecord.endfield){
-                                                                    data['end'] = data[$scope.calendarrecord.endfield];
-                                                                }
-                                                                data['allDay'] = $scope.calendarrecord.allday;
-                                                             }//end for(var i=0;i<datas.length;i++){
-                                                             $scope.eventSources = [datas];
-                                                         }//end if($scope.calendarrecord)
-                                                         $scope.pagination.currentPage = $scope.pagination.beginIndex;
-                                                         $scope.pagination.endIndex = $scope.pagination.endIndex+$scope.pagination.pageSize;
-                                                         if($scope.pagination.endIndex>$scope.pagination.totalPages){
-                                                             $scope.pagination.endIndex = $scope.pagination.totalPages;
-                                                         }
-                                                         commonsTools.hideDialogLoading();
-                                                         $rootScope.$broadcast("dataLoad" , {
-                                                             message:"dataLoad"
-                                                         });
-                                                     }
-                                                } ,function(error){
-                                                    commonsTools.hideDialogLoading();
-                                                    commonsTools.showMessageDialog(error);
-                                                });  
+                                         if(!angular.isDefined($scope.currentAction.method)
+                                                ||$scope.currentAction.method==null){
+                                                restService.filter($scope.predicats ,$scope.pagination.beginIndex , $scope.pagination.pageSize)
+                                                      .$promise.then(function(data){
+      //                                                      console.log('$scope.loadData = function() :::::::::::::::: '+data);
+                                                           if(data){
+                                                               $scope.datas = data;
+                                                               //Traitement des donnÃ©es
+                                                                $scope.afterLoadData($scope.datas);
+//                                                              if($scope.calendarrecord){
+//                                                                   for(var i=0;i<$scope.datas.length;i++){
+//                                                                      var data = $scope.datas[i];
+//                                                                      if($scope.calendarrecord.titlefield){
+//                                                                          data['title'] = data[$scope.calendarrecord.titlefield];
+//                                                                      }
+//                                                                      if($scope.calendarrecord.startfield){
+//                                                                          data['start'] = data[$scope.calendarrecord.startfield];
+//                                                                      }
+//                                                                      if($scope.calendarrecord.endfield){
+//                                                                          data['end'] = data[$scope.calendarrecord.endfield];
+//                                                                      }
+//                                                                      data['allDay'] = $scope.calendarrecord.allday;
+//                                                                   }//end for(var i=0;i<datas.length;i++){
+//                                                                   $scope.eventSources = [datas];
+//                                                               }//end if($scope.calendarrecord)
+//                                                               $scope.pagination.currentPage = $scope.pagination.beginIndex;
+//                                                               $scope.pagination.endIndex = $scope.pagination.endIndex+$scope.pagination.pageSize;
+//                                                               if($scope.pagination.endIndex>$scope.pagination.totalPages){
+//                                                                   $scope.pagination.endIndex = $scope.pagination.totalPages;
+//                                                               }
+                                                               commonsTools.hideDialogLoading();
+                                                               $rootScope.$broadcast("dataLoad" , {
+                                                                   message:"dataLoad"
+                                                               });
+                                                           }
+                                                      } ,function(error){
+                                                          commonsTools.hideDialogLoading();
+                                                          commonsTools.showMessageDialog(error);
+                                                      });  
+                                                  }else{
+                                                            var model = angular.lowercase($scope.currentAction.model);
+                                                            var entity = angular.lowercase($scope.currentAction.entityName);
+                                                            var method = angular.lowercase($scope.currentAction.method);
+                                                            $http.defaults.headers.common['predicats']= angular.toJson($scope.predicats);       
+                                                            var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+model+"/"+entity+"/"+method;
+                                                            $http.get(url)
+                                                                    .then(
+                                                                    function(response){
+                                                                        $scope.datas = response.data;
+                                                                        $scope.afterLoadData($scope.datas); 
+                                                                        $rootScope.$broadcast("dataLoad" , {
+                                                                            message:"dataLoad"
+                                                                        });
+                                                                        commonsTools.hideDialogLoading();
+                                                                    },function(error){
+                                                                        commonsTools.hideDialogLoading();
+                                                                        commonsTools.showMessageDialog(error);
+                                                                    });
+                                                  }//end if(!angular.isDefined($scope.currentAction.method)
                                      }//end if(this.hasnext()){
                                  },
                                  hasnext:function(){
@@ -1359,7 +1382,7 @@ angular.module("mainApp")
                                          if(this.beginIndex<0){
                                              this.beginIndex = 0;
                                              this.currentPage = 1;
-                                         }
+                                         }//end if(this.beginIndex<0){
                                          if(interval>=this.pageSize){
                                              this.endIndex = this.endIndex - this.pageSize;
                                          }else{
@@ -1368,20 +1391,42 @@ angular.module("mainApp")
                                          if(this.endIndex<=0){
                                             this.endIndex = this.pageSize;                                                             
                                          }//end if(this.endIndex<=0)
-                                          restService.filter($scope.predicats ,$scope.pagination.beginIndex , $scope.pagination.pageSize)
-                                                .$promise.then(function(data){
-//                                                      console.log('$scope.loadData = function() :::::::::::::::: '+data);
-                                                     if(data){
-                                                         $scope.datas = data;                                                         
-                                                         commonsTools.hideDialogLoading();
-                                                         $rootScope.$broadcast("dataLoad" , {
-                                                             message:"dataLoad"
-                                                         });
-                                                     }
-                                                } ,function(error){
-                                                    commonsTools.hideDialogLoading();
-                                                    commonsTools.showMessageDialog(error);
-                                                });  
+                                            if(!angular.isDefined($scope.currentAction.method)
+                                                   ||$scope.currentAction.method==null){
+                                                   restService.filter($scope.predicats ,$scope.pagination.beginIndex , $scope.pagination.pageSize)
+                                                         .$promise.then(function(data){
+         //                                                      console.log('$scope.loadData = function() :::::::::::::::: '+data);
+                                                              if(data){
+                                                                  $scope.datas = data;                                                         
+                                                                  commonsTools.hideDialogLoading();
+                                                                  $rootScope.$broadcast("dataLoad" , {
+                                                                      message:"dataLoad"
+                                                                  });
+                                                              }
+                                                         } ,function(error){
+                                                             commonsTools.hideDialogLoading();
+                                                             commonsTools.showMessageDialog(error);
+                                                         }); 
+                                             }else{
+                                                 var model = angular.lowercase($scope.currentAction.model);
+                                                 var entity = angular.lowercase($scope.currentAction.entityName);
+                                                 var method = angular.lowercase($scope.currentAction.method);
+                                                 $http.defaults.headers.common['predicats']= angular.toJson($scope.predicats);       
+                                                 var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+model+"/"+entity+"/"+method;
+                                                 $http.get(url)
+                                                        .then(
+                                                        function(response){
+                                                            $scope.datas = response.data;
+                                                            $scope.afterLoadData($scope.datas); 
+                                                            $rootScope.$broadcast("dataLoad" , {
+                                                                message:"dataLoad"
+                                                            });
+                                                            commonsTools.hideDialogLoading();
+                                                        },function(error){
+                                                            commonsTools.hideDialogLoading();
+                                                            commonsTools.showMessageDialog(error);
+                                                        });
+                                          }//end if(!angular.isDefined($scope.currentAction.method)
                                      }//end if(this.hasprevious()){
                                  }
                                  
@@ -2168,7 +2213,7 @@ angular.module("mainApp")
                   
                   //Interdir de modification en mise a jour
                   if(!commonsTools.iseditable($scope,model,field)){
-                      console.log("principal.constraintsProvider = function(field , htmlElem,model) ==== model : "+model+"  ==== windowType : "+$scope.windowType+" ====== field : "+angular.toJson(field))
+//                      console.log("principal.constraintsProvider = function(field , htmlElem,model) ==== model : "+model+"  ==== windowType : "+$scope.windowType+" ====== field : "+angular.toJson(field))
                       htmlElem.setAttribute("readonly","readonly");                      
                   }//end if(!commonsTools.iseditable($scope,model,field)){
 
@@ -6312,8 +6357,11 @@ $scope.gererChangementFichier3 = function(event,model){
                           pbjmenu.replaceWith(ulElem);
                      }//end if(pbjmenu!=null){
                  }//end if(viewElem!=null)
+                if(model.serial && model.id){
+                    return ;
+                }//end if(model.serial && model.id){
                  commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%"); 
-                var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe/pj/"+model.serial+"/"+model.id;
+                var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/piecejointe/pj/"+model.serial+"/"+model.id;                
                 $http.get(url)
                         .then(function(response){
                             var pieces = response.data;
@@ -6714,7 +6762,8 @@ $scope.gererChangementFichier3 = function(event,model){
                  $scope.showpjmenu = true ;
                  $scope.piecejointeMenu(listElem,$scope.currentObject,$scope.metaData);
              }//end if($scope.metaData.activefilelien==true &&($scope.windowType=="update"||$scope.windowType=="view"))
-             if($scope.metaData.activatefollower==true && $scope.windowType!='new'){
+             if($scope.metaData.activatefollower==true && $scope.windowType!='new'
+                     && $scope.currentObject.serial &&$scope.currentObject.id){
                  var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/kerencore/follower/entity/"+$scope.currentObject.serial+"/"+$scope.currentObject.id;
                  $http.get(url)
                          .then(function(response){
@@ -8911,7 +8960,7 @@ $scope.gererChangementFichier3 = function(event,model){
                Rafresh the data from the data store
        **/
        $scope.loadData = function(item){
-           var model = angular.lowercase($scope.currentAction.model);
+            var model = angular.lowercase($scope.currentAction.model);
             var entity = angular.lowercase($scope.currentAction.entityName);
             var method = angular.lowercase($scope.currentAction.method);
            //Chargement des donnees
@@ -8945,7 +8994,7 @@ $scope.gererChangementFichier3 = function(event,model){
                                     .then(
                                     function(response){
                                         $scope.datas = response.data;
-                                        $scope.afterLoadData(datas,item); 
+                                        $scope.afterLoadData($scope.datas,item); 
                                         $rootScope.$broadcast("dataLoad" , {
                                             message:"dataLoad",item:item
                                         });
@@ -9019,18 +9068,37 @@ $scope.gererChangementFichier3 = function(event,model){
                                     }//end if(data.value>0){
                                     $scope.pagination.beginIndex = 0;
                                     $scope.pagination.totalPages = data.value ; 
-                                    restService.filter($scope.predicats ,$scope.pagination.beginIndex , $scope.pagination.pageSize)
-                                        .$promise.then(function(datas){                                    
-                                             if(datas){
-                                                 $scope.datas = datas;
-                                                 $scope.afterLoadData(datas);                                
-                                                 commonsTools.hideDialogLoading();                                                 
-                                             }
-                                        } ,function(error){
-                                            commonsTools.hideDialogLoading();
-                                            commonsTools.showMessageDialog(error);
-                                        });  
-                                }
+                                    if(!angular.isDefined($scope.currentAction.method)
+                                             ||$scope.currentAction.method==null){
+                                            restService.filter($scope.predicats ,$scope.pagination.beginIndex , $scope.pagination.pageSize)
+                                                .$promise.then(function(datas){                                    
+                                                     if(datas){
+                                                         $scope.datas = datas;
+                                                         $scope.afterLoadData(datas);                                
+                                                         commonsTools.hideDialogLoading();                                                 
+                                                     }
+                                                } ,function(error){
+                                                    commonsTools.hideDialogLoading();
+                                                    commonsTools.showMessageDialog(error);
+                                                });                                           
+                                    }else{
+                                            var model = angular.lowercase($scope.currentAction.model);
+                                            var entity = angular.lowercase($scope.currentAction.entityName);
+                                            var method = angular.lowercase($scope.currentAction.method);
+                                            $http.defaults.headers.common['predicats']= angular.toJson($scope.predicats);       
+                                            var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+model+"/"+entity+"/"+method;
+                                            $http.get(url)
+                                                    .then(
+                                                    function(response){
+                                                        $scope.datas = response.data;
+                                                        $scope.afterLoadData($scope.datas); 
+                                                        commonsTools.hideDialogLoading();
+                                                    },function(error){
+                                                        commonsTools.hideDialogLoading();
+                                                        commonsTools.showMessageDialog(error);
+                                                    });
+                                    }//end if(!angular.isDefined($scope.currentAction.method)
+                                }//end .$promise.then(function(data){
                                 , function(error){
                                     commonsTools.hideDialogLoading();
                                     commonsTools.showMessageDialog(error);
@@ -12913,25 +12981,49 @@ $scope.gererChangementFichier3 = function(event,model){
 
 //                    return listElem;
                     commonsTools.showDialogLoading("Chargement ...","white","#9370db","0%","0%");
-                    restService.findAll().$promise
-                           .then(
-                           function(datas){
-                               if(datas.length>0){
-                                    $scope.currentObject = datas[0];
-                                    $scope.viewAction($scope.currentObject);
-                               }else{
-                                   $scope.addElementAction();
-                               }//end if(datas.length>0)                              
-                               //Cacher la navigation
-                               $scope.navigatorcontainer.addRule($scope.currentAction.name,$scope.currentObject.id,$scope.currentObject.designation);
-   //                            console.log("$scope.viewAction ============== "+angular.toJson(data));
-                                                             
-   //                            console.log("$scope.viewAction after display ============== "+angular.toJson(data));
-                               commonsTools.hideDialogLoading();
-                   },function(error){
-                        commonsTools.hideDialogLoading();
-                        commonsTools.showMessageDialog(error);
-                   } );                   
+                    if(!angular.isDefined($scope.currentAction.method)
+                              ||$scope.currentAction.method==null){
+                            restService.findAll().$promise
+                                   .then(
+                                   function(datas){
+                                       if(datas.length>0){
+                                            $scope.currentObject = datas[0];
+                                            $scope.viewAction($scope.currentObject);
+                                       }else{
+                                           $scope.addElementAction();
+                                       }//end if(datas.length>0)                              
+                                       //Cacher la navigation
+                                       $scope.navigatorcontainer.addRule($scope.currentAction.name,$scope.currentObject.id,$scope.currentObject.designation);
+           //                            console.log("$scope.viewAction ============== "+angular.toJson(data));
+
+           //                            console.log("$scope.viewAction after display ============== "+angular.toJson(data));
+                                       commonsTools.hideDialogLoading();
+                           },function(error){
+                                commonsTools.hideDialogLoading();
+                                commonsTools.showMessageDialog(error);
+                           } );   
+                    }else{
+                            var model = angular.lowercase($scope.currentAction.model);
+                            var entity = angular.lowercase($scope.currentAction.entityName);
+                            var method = angular.lowercase($scope.currentAction.method);
+                            var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"+model+"/"+entity+"/"+method;
+                            $http.get(url)
+                                    .then(function(response){
+                                        var datas = response.data;
+                                        if(datas.length>0){
+                                            $scope.currentObject = datas[0];
+                                            $scope.viewAction($scope.currentObject);
+                                       }else{
+                                           $scope.addElementAction();
+                                       }//end if(datas.length>0)                              
+                                       //Cacher la navigation
+                                       $scope.navigatorcontainer.addRule($scope.currentAction.name,$scope.currentObject.id,$scope.currentObject.designation);
+                                        commonsTools.hideDialogLoading();
+                                    },function(error){
+                                        commonsTools.hideDialogLoading();
+                                        commonsTools.showMessageDialog(error);
+                                    });
+                    }//end if(!angular.isDefined($scope.currentAction.method)
           };
             /**
              Fonction de construction des 
@@ -13495,7 +13587,9 @@ $scope.gererChangementFichier3 = function(event,model){
                                                        $scope.kabanFramePanelBuilder(metaData);
                                                        $scope.loadData(item);                                                    
                                                     }else if(mode && mode[0]=="form"){
-                                                        $scope.formFramePanelBuilder($scope.displayEditPanel());                                                       
+                                                        $scope.windowType = "new";
+                                                        $scope.formFramePanelBuilder($scope.displayEditPanel());    
+//                                                        $scope.loadTreeData(item);
                                                     }else if(mode && mode[0]=="list"){
                                                         $scope.treeFramePanelBuilder(metaData); 
                                                         $scope.loadTreeData(item);

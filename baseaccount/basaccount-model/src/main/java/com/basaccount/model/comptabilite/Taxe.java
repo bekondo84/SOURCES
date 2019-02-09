@@ -35,10 +35,15 @@ public class Taxe extends BaseElement implements Serializable,Comparable<Taxe>{
     @Predicate(label = "intitule" ,optional = false,search = true)
     private String label ;
     
+    @ManyToOne
+    @JoinColumn(name = "CMPT_ID")
+    @Predicate(label = "compte.taxe",type = Compte.class,target = "many-to-one",search = true,optional = false)
+    private Compte compte ;
+    
     @Predicate(label = "portee.taxe",target = "combobox",values = "Ventes;Achats;Aucun",search = false)
     private String porte = "0";
     
-    @Predicate(label = "calcul.taxe",target = "combobox",values = "Fixé;Pourcentage du prix;Pourcentage du prix taxes incluses",search = false)
+    @Predicate(label = "calcul.taxe",target = "combobox",values = "Fixé;Pourcentage du prix",search = false)
     private String calculTaxe = "0" ;
     
     @Predicate(label = "montant" ,optional = false,type = Double.class,search = false)
@@ -84,6 +89,9 @@ public class Taxe extends BaseElement implements Serializable,Comparable<Taxe>{
         this.montant = taxe.getMontant();
         this.note = taxe.note;
         this.calculTaxe =taxe.calculTaxe;
+        if(taxe.compte!=null){
+            compte = new Compte(taxe.compte);
+        }
         this.societe = taxe.getSociete();
         
     }
@@ -161,6 +169,16 @@ public class Taxe extends BaseElement implements Serializable,Comparable<Taxe>{
     public void setSociete(Societe societe) {
         this.societe = societe;
     }
+
+    public Compte getCompte() {
+        return compte;
+    }
+
+    public void setCompte(Compte compte) {
+        this.compte = compte;
+    }
+    
+    
     
      @Override
     public String getModuleName() {

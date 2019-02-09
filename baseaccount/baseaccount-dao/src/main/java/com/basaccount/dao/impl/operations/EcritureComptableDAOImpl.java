@@ -12,7 +12,7 @@ import com.basaccount.model.operations.EcritureAnalytique;
 import com.basaccount.model.operations.EcritureComptable;
 import com.basaccount.model.operations.EcritureTier;
 import com.bekosoftware.genericdaolayer.dao.impl.AbstractGenericDAO;
-import java.math.BigDecimal;
+import java.util.Date;
 
 @Stateless(mappedName = "EcritureComptableDAO")
 public class EcritureComptableDAOImpl
@@ -53,6 +53,7 @@ public class EcritureComptableDAOImpl
     private void ecritureAnalytiqueGenerator(EcritureComptable entity){
         Compte compte = em.find(Compte.class, entity.getCompte().getId());
         if(compte.getAnalytiques()!=null&&!compte.getAnalytiques().isEmpty()){
+            int index = 1 ;
             for(SectionAnalytique sec:compte.getAnalytiques()){
                 double debit = 0.0;
                 double credit = 0.0;
@@ -67,6 +68,9 @@ public class EcritureComptableDAOImpl
                     credit = (entity.getCredit()!=null ? sec.getQuantite():0);
                 }//end if(sec.getType().equalsIgnoreCase("0")){
                 EcritureAnalytique ecriture = new EcritureAnalytique(entity, sec.getCompte(),debit,credit);
+                Date today = new Date();
+                ecriture.setCompareid(today.getTime()+index);
+                index++;
                 entity.getAnalytiques().add(ecriture);
             }//end for(SectionAnalytique sec:compte.getAnalytiques())
         }//end if(compte.getAnalytiques()!=null&&!compte.getAnalytiques().isEmpty())
@@ -79,6 +83,8 @@ public class EcritureComptableDAOImpl
     private void ecritureTierGenerator(EcritureComptable entity){
        if(entity.getTier()!=null){ 
             EcritureTier ecriture = new EcritureTier(entity);
+             Date today = new Date();
+             ecriture.setCompareid(today.getTime());
             entity.setEcrituretier(ecriture);
        }//end if(entity.getTier()!=null)
     }

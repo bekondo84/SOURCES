@@ -79,6 +79,7 @@ public class FactureVenteRSImpl
         }
         return meta; //To change body of generated methods, choose Tools | Templates.
     }
+
     
     
 

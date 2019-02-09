@@ -1,8 +1,10 @@
 
 package com.basaccount.core.ifaces.operations;
 
+import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.basaccount.model.operations.PieceComptable;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
+import java.util.List;
 
 
 /**
@@ -23,5 +25,7 @@ public interface PieceComptableManager
      * @return 
      */
     public PieceComptable valider(PieceComptable entity);
+    
+    public List<PieceComptable> priseencompte(Long id,PeriodeComptable periode);
 
 }

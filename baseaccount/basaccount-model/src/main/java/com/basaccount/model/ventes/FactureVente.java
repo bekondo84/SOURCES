@@ -11,6 +11,7 @@ import com.basaccount.model.achats.EcheanceReglement;
 import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.comptabilite.JournalComptable;
 import com.core.base.State;
+import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.KHeader;
 import com.megatim.common.annotations.KHeaders;
 import com.megatim.common.annotations.KValue;
@@ -36,13 +37,13 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("FV")
 @KHeaders(statubar = true,value={
   @KHeader(type = "button",name = "work1",label = "Imprimer la factue",target = "report",roles = {"administrateur","gestionnaire"}
-       ,states = {"transfere","priseencompte"}, value = @KValue("{'name':'baseaccount_facturevente01','model':'baseaccount','entity':'facturevente','method':'imprime'}")
+       ,states = {"transfere","priseencompte","comptabilise"}, value = @KValue("{'name':'baseaccount_facturevente01','model':'baseaccount','entity':'facturevente','method':'imprime'}")
    ),
-   @KHeader(type = "button",name = "work2",label = "Prendre en compte",target = "workflow",roles = {"administrateur","gestionnaire"},pattern = "btn btn-danger"
-       ,states = {"transfere"}, value = @KValue("{'model':'baseaccount','entity':'facturevente','method':'priseencompte'}")
+   @KHeader(type = "button",name = "work2",label = "Prendre en compte",target = "link",roles = {"administrateur","gestionnaire"},pattern = "btn btn-danger"
+       ,states = {"transfere"}, value = @KValue("{'name':'base_account_vte02_1',template:{'facture':'object'},'header':['facture']}")
    ),
-   @KHeader(type = "button",name = "work3",label = "Générer les ecritures",target = "workflow",roles = {"administrateur","gestionnaire"},pattern = "btn btn-danger"
-       ,states = {"priseencompte"}, value = @KValue("{'model':'baseaccount','entity':'facturevente','method':'priseencompte'}")
+   @KHeader(type = "button",name = "work3",label = "Générer les ecritures",target = "link",roles = {"administrateur","gestionnaire"},pattern = "btn btn-danger"
+       ,states = {"priseencompte"}, value = @KValue("{'name':'base_account_vte02_1',template:{'facture':'object'},'header':['facture']}")
    )
 })
 public class FactureVente extends DocumentVente implements Serializable{
@@ -64,14 +65,18 @@ public class FactureVente extends DocumentVente implements Serializable{
     private Double escompte =0.0;
     
     @ManyToOne
-    @JoinColumn(name = "JOCO_ID")
-    @Predicate(label = "journal.comptable",type = JournalComptable.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "valorisation.or.comptabilite")
-    private JournalComptable journal ;
-    
-    @ManyToOne
     @JoinColumn(name = "COMP_ID")
     @Predicate(label = "compte",type = Compte.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "valorisation.or.comptabilite")
+//    @Filter(value = "[{\"fieldName\":\"nature\",\"value\":\"1\"}]")
     private Compte compte ;
+    
+    
+    @ManyToOne
+    @JoinColumn(name = "JOCO_ID")
+    @Predicate(label = "journal.comptable",type = JournalComptable.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "valorisation.or.comptabilite")
+    @Filter(value = "[{\"fieldName\":\"type\",\"value\":\"0\"}]")
+    private JournalComptable journal ;
+    
     
     private Double transport=0.0;
     
@@ -104,6 +109,8 @@ public class FactureVente extends DocumentVente implements Serializable{
      @Predicate(label = " ",target = "state",hide = true,search = true)
      protected String state ="etabli" ;
      
+    private Long piececomptable ;
+     
      private DocumentAchatState typedocument = DocumentAchatState.FACTURE;
     /**
      * 
@@ -121,9 +128,13 @@ public class FactureVente extends DocumentVente implements Serializable{
     public FactureVente(FactureVente da) {
         super(da);
         this.source = da.getCode();
+        this.piececomptable = da.piececomptable;
         if(da.getCompte()!=null){
             this.compte = new Compte(da.getCompte());
-        }
+        }//end if(da.getCompte()!=null){
+//        if(da.piececomptable!=null){
+//            this.piececomptable = new PieceComptable(da.piececomptable);
+//        }//end if(da.piececomptable!=null){
         this.journal = da.getJournal();
         this.escompte = da.escompte;
         this.type = da.type;
@@ -276,6 +287,14 @@ public class FactureVente extends DocumentVente implements Serializable{
         this.typedocument = typedocument;
     }
 
+    public Long getPiececomptable() {
+        return piececomptable;
+    }
+
+    public void setPiececomptable(Long piececomptable) {
+        this.piececomptable = piececomptable;
+    }
+
    
 
     @Override
@@ -295,9 +314,9 @@ public class FactureVente extends DocumentVente implements Serializable{
         }else if(this.state.equalsIgnoreCase("transfere")){
             state = new State("transfere", "Attente de prise en compte");
             states.add(state);
-            state = new State("comptabilise", "Pris en compte");
+            state = new State("prisencompte", "Pris en compte");
             states.add(state);
-        }else if(this.state.equalsIgnoreCase("transfere")){
+        }else{
             state = new State("prisencompte", "Pris en compte");
             states.add(state);
             state = new State("comptabilise", "Comptabilisée");
@@ -326,7 +345,7 @@ public class FactureVente extends DocumentVente implements Serializable{
 
     @Override
     public boolean isDesableupdate() {
-        return false; //To change body of generated methods, choose Tools | Templates.
+        return !state.equalsIgnoreCase("transfere"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

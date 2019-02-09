@@ -5,6 +5,7 @@
  */
 package com.basaccount.model.ventes;
 
+import com.basaccount.model.achats.EcheanceReglement;
 import com.core.base.BaseElement;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
@@ -60,6 +61,16 @@ public class LigneReglement extends BaseElement implements Serializable,Comparab
         super(entity.id, entity.designation, entity.moduleName, entity.compareid);
         this.echeance = entity.echeance;
         this.montant = entity.montant;
+    }
+    
+    /**
+     * 
+     * @param entity 
+     */
+    public LigneReglement(EcheanceReglement entity) {
+        super(-1L, null, null, -1L);
+        this.echeance = entity.getDate();
+        this.montant = 0.0;
     }
 
     public Date getEcheance() {

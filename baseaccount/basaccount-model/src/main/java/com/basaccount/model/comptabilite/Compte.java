@@ -93,15 +93,7 @@ public class Compte extends BaseElement implements Serializable,Comparable<Compt
         super(compte.id, compte.designation, compte.moduleName,compte.compareid);
         this.code = compte.code;
         this.libele = compte.libele;
-        this.societe = compte.societe;
-        if(compte.getTaxe()!=null){
-            this.taxe = new Taxe(compte.getTaxe());
-        }
-        if(compte.getAnalytiques()!=null){
-            for(SectionAnalytique sec:compte.getAnalytiques()){
-                analytiques.add(new SectionAnalytique(sec));
-            }
-        }
+        this.societe = compte.societe;       
         this.note = compte.note;
         this.type = compte.type;
         nature = compte.nature;

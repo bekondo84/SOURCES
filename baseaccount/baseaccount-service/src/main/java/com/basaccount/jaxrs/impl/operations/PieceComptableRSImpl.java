@@ -1,36 +1,32 @@
 
 package com.basaccount.jaxrs.impl.operations;
 
+import com.basaccount.core.ifaces.comptabilite.PeriodeComptableManagerRemote;
 import javax.ws.rs.Path;
 import com.basaccount.core.ifaces.operations.PieceComptableManagerRemote;
+import com.basaccount.core.ifaces.ventes.FactureVenteManagerRemote;
 import com.basaccount.jaxrs.ifaces.operations.PieceComptableRS;
-import com.basaccount.model.operations.EcritureComptable;
+import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.basaccount.model.operations.PieceComptable;
-import com.bekosoftware.genericdaolayer.dao.tools.Predicat;
+import com.basaccount.model.ventes.FactureVente;
 import com.bekosoftware.genericdaolayer.dao.tools.RestrictionsContainer;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kerem.core.KerenExecption;
 import com.kerem.core.MetaDataUtil;
-import com.megatim.common.annotations.OrderType;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
 import com.megatimgroup.generic.jax.rs.layer.impl.FilterPredicat;
 import com.megatimgroup.generic.jax.rs.layer.impl.MetaData;
 import com.megatimgroup.generic.jax.rs.layer.impl.RSNumber;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
 
 
 /**
@@ -51,6 +47,12 @@ public class PieceComptableRSImpl
      */
     @Manager(application = "baseaccount", name = "PieceComptableManagerImpl", interf = PieceComptableManagerRemote.class)
     protected PieceComptableManagerRemote manager;
+    
+    @Manager(application = "baseaccount", name = "FactureVenteManagerImpl", interf = FactureVenteManagerRemote.class)
+    protected FactureVenteManagerRemote fvmanager;
+    
+    @Manager(application = "baseaccount", name = "PeriodeComptableManagerImpl", interf = PeriodeComptableManagerRemote.class)
+    protected PeriodeComptableManagerRemote periodemanager;
 
     public PieceComptableRSImpl() {
         super();
@@ -207,4 +209,20 @@ public class PieceComptableRSImpl
         return data;
     }
 
+    @Override
+    public List<PieceComptable> priseencompte(HttpHeaders headers) {
+        Gson gson = new Gson();
+        if(headers.getRequestHeader("facture")==null || headers.getRequestHeader("facture").isEmpty()){
+            return new ArrayList<PieceComptable>();
+        }//end if(headers.getRequestHeader("facture")==null || headers.getRequestHeader("facture").isEmpty()){
+        Long id = gson.fromJson(headers.getRequestHeader("facture").get(0), Long.class);
+        FactureVente facture = fvmanager.find("id", id);
+        PeriodeComptable periode =periodemanager.getPeriodeFromDate(facture.getDatecommande());
+        if(periode==null){
+            throw new KerenExecption("periode.comptable.not.found");
+        } //end if(periode==null){      
+        return  manager.priseencompte(id,periode);
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

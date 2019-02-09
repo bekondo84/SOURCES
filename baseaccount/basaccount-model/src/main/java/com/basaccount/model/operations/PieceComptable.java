@@ -5,7 +5,9 @@
  */
 package com.basaccount.model.operations;
 
+import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.comptabilite.JournalComptable;
+import com.basaccount.model.ventes.FactureVente;
 import com.core.base.State;
 import com.megatim.common.annotations.KHeader;
 import com.megatim.common.annotations.KHeaders;
@@ -14,7 +16,9 @@ import com.megatim.common.annotations.Predicate;
 import com.megatim.common.annotations.TableFooter;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -22,6 +26,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -57,6 +62,9 @@ public class PieceComptable extends PieceComptableTmp implements Serializable{
     @TableFooter(value = "<tr style='border:none;'><td></td><td></td><td></td><td></td><td>Total Debit</td><td></td><td>this.debit</td><td></td></tr><tr style='border:none;'><td></td><td></td><td></td><td></td><td>Total Credit</td><td></td> <td>this.credit</td><td></td></tr><tr style='border:none;'><td></td><td></td><td></td><td></td><td>Solde</td><td></td><td>this.debit;-;this.credit</td><td></td></tr>")
     private List<LignePieceComptable> ecritures = new ArrayList<LignePieceComptable>();
     
+    
+    private Long facturevente ;
+    
     @Predicate(label = " ",target = "state",search = true,hide = true)
     private String state ="etabli";
 
@@ -81,11 +89,61 @@ public class PieceComptable extends PieceComptableTmp implements Serializable{
         if(piece.journal!=null){
             this.journal = new JournalComptable(piece.journal);
         }
+//        if(piece.facturevente!=null){
+//            this.facturevente = new FactureVente(piece.facturevente);
+//        }
         this.datePiece = piece.datePiece;
         this.debit = piece.debit;
         this.credit = piece.credit;     
         this.state = piece.state;
     }
+    
+     public PieceComptable(FactureVente entity,Map<Compte , Double> taxes) {
+        super(entity);
+        this.code = entity.getCode();
+        this.libelle = entity.getCodeclient();
+        if(entity.getJournal()!=null){
+            this.journal = new JournalComptable(entity.getJournal());
+        }
+        this.facturevente = entity.getId();
+        this.datePiece = entity.getDatecommande();
+        this.debit =0.0;
+        this.credit = 0.0;
+        //Ecriture du client
+        LignePieceComptable ligneclient = new LignePieceComptable();
+        ligneclient.setDateEcriture(entity.getDatecommande());
+        ligneclient.setRefPiece(entity.getCode());
+        ligneclient.setLibelle(entity.getClient().getCompte().getLibele());
+        ligneclient.setCompte(entity.getClient().getCompte());
+        ligneclient.setTier(entity.getClient());
+        ligneclient.setDebit(entity.getTotalttc());
+        ligneclient.setCredit(0.0);
+        this.ecritures.add(ligneclient);
+        //Ecriture compte ventes
+        LignePieceComptable lignevte = new LignePieceComptable();
+        lignevte.setDateEcriture(entity.getDatecommande());
+        lignevte.setRefPiece(entity.getCode());
+        lignevte.setLibelle(entity.getCompte().getLibele());
+        lignevte.setCompte(entity.getCompte());
+        lignevte.setDebit(0.0);
+        lignevte.setCredit(entity.getTotalht());
+        this.ecritures.add(lignevte);
+        //Ecriture des taxes
+        for(Compte compte : taxes.keySet()){
+             LignePieceComptable lignetax = new LignePieceComptable();
+            lignetax.setDateEcriture(entity.getDatecommande());
+            lignetax.setRefPiece(entity.getCode());
+            lignetax.setLibelle(compte.getLibele());
+            lignetax.setCompte(compte);
+            lignetax.setDebit(0.0);
+            lignetax.setCredit(taxes.get(compte));
+            if(lignetax.getCredit()>0){
+                this.ecritures.add(lignetax);
+            }//end if(lignetax.getCredit()>0){
+        }//end for(Compte compte : taxes.keySet()){
+        this.state = "etabli";
+    }
+    
     /**
      * 
      */
@@ -135,8 +193,16 @@ public class PieceComptable extends PieceComptableTmp implements Serializable{
     public void setState(String state) {
         this.state = state;
     }
-    
-    
+
+    public Long getFacturevente() {
+        return facturevente;
+    }
+
+    public void setFacturevente(Long facturevente) {
+        this.facturevente = facturevente;
+    }
+
+   
 
     @Override
     public String getDesignation() {

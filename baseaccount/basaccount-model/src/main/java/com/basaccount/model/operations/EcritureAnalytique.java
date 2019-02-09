@@ -28,6 +28,12 @@ import javax.persistence.TemporalType;
 @Table(name = "T_ECRIT_ANAL")
 public class EcritureAnalytique extends BaseElement implements Serializable,Comparable<EcritureAnalytique>{
 
+     @ManyToOne
+    @JoinColumn(name = "PECBT_ID")
+    @Predicate(label = "periode.comptable",type = PeriodeComptable.class,target = "many-to-one",search = true)
+    private PeriodeComptable periode;
+     
+     
     @Temporal(TemporalType.DATE)
     @Predicate(label = "date.ecriture",target = "date",optional = false,updatable = false,type = Date.class,search = true,colsequence = 1,sequence = 0)
     private Date dateEcriture ;
@@ -51,9 +57,7 @@ public class EcritureAnalytique extends BaseElement implements Serializable,Comp
     @Predicate(label = "credit",type = Double.class,search = true,colsequence = 7,sequence = 7,updatable = false)
     private Double credit = 0.0;
     
-    @ManyToOne
-    @JoinColumn(name = "PECBT_ID")
-    private PeriodeComptable periode;
+   
 
     /**
      * 

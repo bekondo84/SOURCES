@@ -67,12 +67,12 @@ public class CompteManagerImpl
     public Compte find(String propertyName, Long entityID) {
         Compte data = super.find(propertyName, entityID); //To change body of generated methods, choose Tools | Templates.
         Compte result = new Compte(data);
-//        if(data.getTaxe()!=null){
-//            result.setTaxe(new Taxe(data.getTaxe()));
-//        }
-//        for(SectionAnalytique cpte:data.getAnalytiques()){
-//            result.getAnalytiques().add(new SectionAnalytique(cpte));
-//        }
+        if(data.getTaxe()!=null){
+            result.setTaxe(new Taxe(data.getTaxe()));
+        }//end if(data.getTaxe()!=null){
+        for(SectionAnalytique cpte:data.getAnalytiques()){
+            result.getAnalytiques().add(new SectionAnalytique(cpte));
+        }//end for(SectionAnalytique cpte:data.getAnalytiques()){
         return result;
     }
     

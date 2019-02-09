@@ -2,11 +2,14 @@
 package com.basaccount.jaxrs.ifaces.operations;
 
 import com.basaccount.model.operations.EcritureComptable;
+import com.basaccount.model.operations.JournalSaisie;
 import com.megatimgroup.generic.jax.rs.layer.ifaces.GenericService;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 
@@ -23,4 +26,10 @@ public interface EcritureComptableRS
    @Produces({MediaType.APPLICATION_JSON})
    @Path("analytique")
    public List<EcritureComptable> getEcritures();
+   
+   
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("journalsaiaise")
+    public List<JournalSaisie> getJournalSaisies(@Context HttpHeaders headers );
 }
