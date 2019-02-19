@@ -28,4 +28,5 @@ public interface PieceComptableManager
     
     public List<PieceComptable> priseencompte(Long id,PeriodeComptable periode);
 
+    public List<PieceComptable> priseencompteachat(Long id,PeriodeComptable periode);
 }

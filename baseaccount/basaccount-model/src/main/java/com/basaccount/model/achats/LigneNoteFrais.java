@@ -8,6 +8,7 @@ package com.basaccount.model.achats;
 import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.comptabilite.Taxe;
 import com.core.base.BaseElement;
+import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class LigneNoteFrais extends BaseElement implements Serializable,Comparab
     @ManyToMany
     @JoinTable(name = "NOF_TAX_ACH",joinColumns = @JoinColumn(name = "NOF_ID"),inverseJoinColumns = @JoinColumn(name = "TAX_ID"))
     @Predicate(label = "taxes",type = Taxe.class,target = "many-to-many",search = true)
+    @Filter("[{\"fieldName\":\"porte\",\"value\":\"1\"}]")
     private List<Taxe> taxes =new ArrayList<Taxe>();
     
     @Predicate(label = "total.taxes",type = Double.class,search = true,editable = false)

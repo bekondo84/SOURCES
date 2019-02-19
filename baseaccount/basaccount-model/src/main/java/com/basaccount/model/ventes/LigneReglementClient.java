@@ -9,6 +9,7 @@ import com.basaccount.model.achats.EcheanceReglement;
 import com.basaccount.model.achats.ModeReglement;
 import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.tiers.Tier;
+import com.megatim.common.annotations.Observer;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import javax.persistence.DiscriminatorValue;
@@ -25,12 +26,18 @@ import javax.persistence.Transient;
 @DiscriminatorValue("VTE")
 public class LigneReglementClient extends LigneReglement implements Serializable{
 
-     @ManyToOne
+    @ManyToOne
+    @JoinColumn(name = "MOREG_ID")
+    @Predicate(label = "mode.reglement", type = ModeReglement.class, target = "many-to-one",editable = false, search = true, optional = false,observable = true)
+    private ModeReglement modereglement;
+    
+    @ManyToOne
     @JoinColumn(name = "COPA_ID")
     @Predicate(label = "compte",type = Compte.class,target = "many-to-one",search = true,optional = false)
+    @Observer(observable = "modereglement",source = "field:compte")
     private Compte compte;
     
-    @Predicate(label = "type.piece",search = true,editable = false)
+    @Predicate(label = "type.piece",search = false,editable = false)
     private String typepiece;
     
 //    @ManyToOne
@@ -45,14 +52,18 @@ public class LigneReglementClient extends LigneReglement implements Serializable
     @Transient
     private Tier fournisseur;
     
-    @Predicate(label = "mode.reglement",type = ModeReglement.class,target = "many-to-one",search = false)
-    @Transient
-    private ModeReglement modereglement ;
+   
+    
+    private Long echeaneid ;
 
     public LigneReglementClient() {
     }
 
-    
+
+    /**
+     * 
+     * @param entity 
+     */
     public LigneReglementClient(LigneReglementClient entity) {
         super(entity);
         this.typepiece = entity.typepiece;
@@ -60,6 +71,10 @@ public class LigneReglementClient extends LigneReglement implements Serializable
         if(entity.compte!=null){
             this.compte = new Compte(entity.compte);
         }
+        if(entity.modereglement!=null){
+            this.modereglement = new ModeReglement(entity.modereglement);
+        }
+        this.echeaneid = entity.echeaneid;
     }
 
     /**
@@ -69,6 +84,10 @@ public class LigneReglementClient extends LigneReglement implements Serializable
     public LigneReglementClient(EcheanceReglement entity){
         super(entity);
         this.solde = entity.getSolde();
+        this.echeaneid = entity.getId();
+        if(entity.getMode()!=null){
+            this.modereglement = new ModeReglement(entity.getMode());
+        }
         if(entity.getMode()!=null){
             this.compte = new Compte(entity.getMode().getCompte());
         }
@@ -89,14 +108,14 @@ public class LigneReglementClient extends LigneReglement implements Serializable
         this.typepiece = typepiece;
     }
 
-//    public FactureVente getPiece() {
-//        return piece;
-//    }
-//
-//    public void setPiece(FactureVente piece) {
-//        this.piece = piece;
-//    }
+    public Long getEcheaneid() {
+        return echeaneid;
+    }
 
+    public void setEcheaneid(Long echeaneid) {
+        this.echeaneid = echeaneid;
+    }
+    
     public Double getSolde() {
         return solde;
     }
@@ -111,6 +130,14 @@ public class LigneReglementClient extends LigneReglement implements Serializable
 
     public void setFournisseur(Tier fournisseur) {
         this.fournisseur = fournisseur;
+    }
+
+    public ModeReglement getModereglement() {
+        return modereglement;
+    }
+
+    public void setModereglement(ModeReglement modereglement) {
+        this.modereglement = modereglement;
     }
     
     

@@ -119,7 +119,7 @@ angular.module("mainApp" , ["ngResource","ngSanitize","pascalprecht.translate","
 ////            IMPORTDATA:'Importer les données au format CVS',
 ////            VALIDATETITRE:'Compte rendu validation'
 ////        });
-//        $translateProvider.useUrlLoader("http://localhost:8080/keren/auth/resource/translate");
+//        $translateProvider.useUrlLoader("http://localhost:8080/zock/auth/resource/translate");
 //        $translateProvider.preferredLanguage("en");        
 //    }]);
 //Creation du controleur
@@ -844,8 +844,8 @@ angular.module("mainApp")
         var zoneid = "zone"+item.id;
         var idUser = $scope.currentUser.id;
         var idFriend = item.id;
-        var photoUser = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+$scope.currentUser.image;
-        var photoFriend = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+item.image;
+        var photoUser = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/resource/static/"+$scope.currentUser.image;
+        var photoFriend = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/resource/static/"+item.image;
         var nameFriend = item.designation;       
         if(angular.isDefined($scope.currentModule) && $scope.currentModule.name!=="discussionconf"){
             commonsTools.addToTchatContext(zoneid,$scope.currentUser,item);
@@ -862,10 +862,10 @@ angular.module("mainApp")
 //                         $filter('orderBy')(messages,'id',true); 
                          for(var i=messages.length-1 ; i>=0 ;i--){
                              var sens = 0;
-                             var photo = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+$scope.currentUser.image;
+                             var photo = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/resource/static/"+$scope.currentUser.image;
                              if($scope.currentUser.id!=messages[i].sender.id){
                                  sens = 1;
-                                 photo = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+item.image;
+                                 photo = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/resource/static/"+item.image;
                              }//end if($scope.currentUser.id!=messages[i].sender.id){
                              var today = new Date();
                              $scope.addMessage(zoneid,today.getTime(),idUser,sens,photo,messages[i],commonsTools.formatDat(new Date(messages[i].date)));
@@ -1013,8 +1013,8 @@ angular.module("mainApp")
                      commonsTools.addToTchatContext(zoneid,$scope.currentUser,item);
                      instance = commonsTools.getToTchatContext(zoneid);
                 }//end if(!angular.isDefined(instance[zoneid])){
-                var photoUser = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+$scope.currentUser.image;
-                var photoFriend = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+item.image;
+                var photoUser = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/resource/static/"+$scope.currentUser.image;
+                var photoFriend = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/resource/static/"+item.image;
                 var nameFriend = item.designation;
                 if(angular.isDefined($scope.currentModule)&&$scope.currentModule!=null
                         && $scope.currentModule.name!=="discussionconf" && !commonsTools.isTchatOpen(zoneid)){
@@ -1024,10 +1024,10 @@ angular.module("mainApp")
                 if(!commonsTools.contains(instance[zoneid].messages,message)){
                     instance[zoneid].messages.push(message);
                     var sens = 0;
-                    var photo = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+$scope.currentUser.image;
+                    var photo = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/resource/static/"+$scope.currentUser.image;
                     if($scope.currentUser.id!=message.sender.id){
                         sens = 1;
-                        photo = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/static/"+item.image;
+                        photo = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/resource/static/"+item.image;
                     }//end if($scope.currentUser.id!=messages[i].sender.id){
                     var today = new Date();
                     instance[zoneid].messages.push(message);
@@ -2797,7 +2797,7 @@ angular.module("mainApp")
           * @returns {undefined}
           */
          $scope.srcFn = function(filename,entity,modele){
-             var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/";
+             var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/resource/";
              if(filename==null || !angular.isDefined(filename)||filename==''){
                  return "img\\photo.png";
              }//end if(filename==null || !angular.isDefined(filename)){

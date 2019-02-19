@@ -55,7 +55,7 @@ public class DocumentAchat extends BaseElement implements Serializable,Comparabl
     
     @ManyToOne
     @JoinColumn(name = "ENTR_ID")
-    @Predicate(label = "entrepot.livraison",type = Entrepot.class,target = "many-to-one",optional = true,search = true)
+    @Predicate(label = "entrepot.livraison",type = Entrepot.class,target = "many-to-one",optional = true,search = false)
     protected Entrepot emplacement;
     
 //    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
@@ -202,7 +202,7 @@ public class DocumentAchat extends BaseElement implements Serializable,Comparabl
 
     @Override
     public String getModuleName() {
-        return "teratechachat"; //To change body of generated methods, choose Tools | Templates.
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
     }
 
     

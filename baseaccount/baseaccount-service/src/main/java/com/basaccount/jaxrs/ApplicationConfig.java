@@ -31,6 +31,7 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(com.basaccount.jaxrs.impl.achats.EcheanceReglementRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.achats.FactureRSImpl.class);
+        resources.add(com.basaccount.jaxrs.impl.achats.LigneReglementFournisseurRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.achats.ModeReglementRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.achats.NoteFraisRSImpl.class);
         resources.add(com.basaccount.jaxrs.impl.achats.ReglementFournisseurRSImpl.class);

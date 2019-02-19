@@ -36,7 +36,7 @@ public class User extends BaseElement implements Serializable,Comparable<User>{
     @Predicate(label = "LOGIN" ,nullable = false ,optional = false,min = 4,unique = true,updatable = false,search = true,sequence = 3)
     private String intitule ;     
     
-    @Predicate(label = "ADRESSE ELECTRONIQUE",target = "email",unique = false,optional = false,search = true,sequence = 4)
+    @Predicate(label = "courriel",target = "email",unique = false,optional = false,search = true,sequence = 4)
     private String courriel ;
     
     //@Predicate(label = "MOT DE PASSE",target = "password" ,optional = false,search = false)
@@ -47,7 +47,7 @@ public class User extends BaseElement implements Serializable,Comparable<User>{
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastconfirme = null;
     
-    @Predicate(label = "SOCIETE COURANTE" , type = Structure.class,optional = false,sequence = 5,search = true,searchfields ="code" )
+    @Predicate(label = "societe.courante" , type = Structure.class,optional = false,sequence = 5,search = true,searchfields ="code" )
     @ManyToOne
     @JoinColumn(name = "SC_ID")
     private Structure societeCourante ;    
@@ -157,12 +157,12 @@ public class User extends BaseElement implements Serializable,Comparable<User>{
 
     @Override
     public String getListTitle() {
-        return "UTILISATEURS"; //To change body of generated methods, choose Tools | Templates.
+        return "utilisateurs"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "UTILISATEUR"; //To change body of generated methods, choose Tools | Templates.
+        return "utilisateur"; //To change body of generated methods, choose Tools | Templates.
     }
 
     public Date getLastconfirme() {

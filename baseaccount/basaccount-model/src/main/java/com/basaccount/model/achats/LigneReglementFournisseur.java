@@ -6,14 +6,15 @@
 package com.basaccount.model.achats;
 
 import com.basaccount.model.comptabilite.Compte;
+import com.basaccount.model.tiers.Tier;
 import com.basaccount.model.ventes.LigneReglement;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 /**
  *
@@ -22,40 +23,67 @@ import javax.persistence.ManyToOne;
 @Entity
 @DiscriminatorValue("ACH")
 public class LigneReglementFournisseur extends LigneReglement implements Serializable{
-
+    @ManyToOne
+    @JoinColumn(name = "MOREG_ID")
+    @Predicate(label = "mode.reglement",type = ModeReglement.class,target = "many-to-one",search = true,optional = false)
+    private ModeReglement modereglement ;
+ 
     @ManyToOne
     @JoinColumn(name = "COPA_ID")
     @Predicate(label = "compte",type = Compte.class,target = "many-to-one",search = true,optional = false)
     private Compte compte;
     
-    @Predicate(label = "type.piece",search = true,editable = false)
+//    @Predicate(label = "type.piece",search = true,editable = false)
     private String typepiece;
     
-    @ManyToOne
-    @JoinColumn(name = "FAC_ID")
-    @Predicate(label = "numero.piece",type = Facture.class,target = "many-to-one",search = true,editable = false)
-    private Facture piece ;
-    
+   
     @Predicate(label = "solde",type = Double.class,target = "number",search = true,editable = false)
     private Double solde ;
 
-    public LigneReglementFournisseur() {
-    }
-
-  
+    private Long echeanceid ;
     
+     
+    @Predicate(label = "client",type = Tier.class,target = "many-to-one",search = false)
+    @Transient
+    private Tier fournisseur;
+    
+//    @Predicate(label = "mode.reglement",type = ModeReglement.class,target = "many-to-one",search = false)
+//    @Transient
+//    private ModeReglement modereglement ;
+    
+    public LigneReglementFournisseur() {
+    }  
+    
+    /**
+     * 
+     * @param entity 
+     */
     public LigneReglementFournisseur(LigneReglementFournisseur entity) {
         super(entity);
         this.typepiece = entity.typepiece;
-        if(entity.piece!=null){
-            this.piece = new Facture(entity.piece);
-        }
         this.solde = entity.solde;
         if(entity.compte!=null){
             this.compte = new Compte(entity.compte);
         }
+        if(entity.getModereglement()!=null){
+            this.modereglement = new ModeReglement(entity.modereglement);
+        }
+        this.echeanceid = entity.echeanceid;
     }
 
+    /**
+     * 
+     * @param entity 
+     */
+     public LigneReglementFournisseur(EcheanceReglement entity){
+        super(entity);
+        this.solde = entity.getSolde();
+        this.echeanceid = entity.getId();
+        if(entity.getMode()!=null){
+            this.compte = new Compte(entity.getMode().getCompte());
+            this.modereglement = new ModeReglement(entity.getMode());
+        }
+    }
    
     public Compte getCompte() {
         return compte;
@@ -73,14 +101,7 @@ public class LigneReglementFournisseur extends LigneReglement implements Seriali
         this.typepiece = typepiece;
     }
 
-    public Facture getPiece() {
-        return piece;
-    }
-
-    public void setPiece(Facture piece) {
-        this.piece = piece;
-    }
-
+    
     public Double getSolde() {
         return solde;
     }
@@ -89,6 +110,32 @@ public class LigneReglementFournisseur extends LigneReglement implements Seriali
         this.solde = solde;
     }
 
+    public Long getEcheanceid() {
+        return echeanceid;
+    }
+
+    public void setEcheanceid(Long echeanceid) {
+        this.echeanceid = echeanceid;
+    }
+
+    public Tier getFournisseur() {
+        return fournisseur;
+    }
+
+    public void setFournisseur(Tier fournisseur) {
+        this.fournisseur = fournisseur;
+    }
+
+    public ModeReglement getModereglement() {
+        return modereglement;
+    }
+
+    public void setModereglement(ModeReglement modereglement) {
+        this.modereglement = modereglement;
+    }
+
+    
+    
     @Override
     public String getOwnermodule() {
         return "baseaccount"; //To change body of generated methods, choose Tools | Templates.

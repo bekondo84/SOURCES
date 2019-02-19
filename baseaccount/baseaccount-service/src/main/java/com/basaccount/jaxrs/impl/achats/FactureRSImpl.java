@@ -4,8 +4,10 @@ package com.basaccount.jaxrs.impl.achats;
 import javax.ws.rs.Path;
 import com.basaccount.core.ifaces.achats.FactureManagerRemote;
 import com.basaccount.jaxrs.ifaces.achats.FactureRS;
+import com.basaccount.model.achats.DocumentAchatState;
 import com.basaccount.model.achats.Facture;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
+import com.kerem.core.KerenExecption;
 import com.kerem.core.MetaDataUtil;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
@@ -62,27 +64,15 @@ public class FactureRSImpl
             //To change body of generated methods, choose Tools | Templates.
              MetaData meta= MetaDataUtil.getMetaData(new Facture(), new HashMap<String, MetaData>(), new ArrayList<String>());
             MetaColumn workbtn = new MetaColumn("button", "work1", "Imprimer la facture", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'envoyer'}");
-            workbtn.setStates(new String[]{"transfere"});
+            workbtn.setValue("{'model':'baseaccount','entity':'facture','method':'imprime'}");
+            workbtn.setRoles(new String[]{"Administrateur"});
+            workbtn.setStates(new String[]{"transfere","prisencompte","comptabilise"});
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work3", "Accepter", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'accepte'}");
+            workbtn = new MetaColumn("button", "work3", "prise.en.compte", false, "link", null);
+            workbtn.setValue("{'name':'base_account_ach02_1',template:{'facture':'object'},'header':['facture']}");
+            workbtn.setRoles(new String[]{"Administrateur"});
             workbtn.setStates(new String[]{"transfere"});
-//            workbtn.setPattern("btn btn-primary");
-            meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work4", "Valider ", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'valide'}");
-            workbtn.setStates(new String[]{"transfere"});
-//            workbtn.setPattern("btn btn-primary");
-            meta.getHeader().add(workbtn); 
-            workbtn = new MetaColumn("button", "work4", "Comptabiliser ", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'comptabilise'}");
-            workbtn.setStates(new String[]{"transfere"});
-//            workbtn.setPattern("btn btn-primary");
-            meta.getHeader().add(workbtn); 
-            workbtn = new MetaColumn("button", "work5", "Annuler", false, "workflow", null);
-            workbtn.setValue("{'model':'teratechachat','entity':'facture','method':'annule'}");
-            workbtn.setStates(new String[]{"transfere"});
+            workbtn.setPattern("btn btn-danger");
             meta.getHeader().add(workbtn);
             MetaColumn stautsbar = new MetaColumn("workflow", "state", "State", false, "statusbar", null);
             meta.getHeader().add(stautsbar);
@@ -105,6 +95,49 @@ public class FactureRSImpl
         }
         return null;
     }
+
+    @Override
+    protected void processBeforeUpdate(Facture entity) {
+        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
+            throw new KerenExecption("numero.piece.required");
+        }else if(entity.getDatecommande()==null){
+            throw new KerenExecption("date.required");
+        }else if(entity.getFournisseur()==null){
+            throw new KerenExecption("fournisseur.required");
+        }else if(entity.getType()==null||entity.getType().trim().isEmpty()){
+            throw new KerenExecption("type.facture.required");
+        }else if(entity.getCompte()==null){
+            throw new KerenExecption("compte.required");
+        }else if(entity.getJournal()==null){
+            throw new KerenExecption("journal.comptable.required");
+        }else if(entity.getLignes().isEmpty()){
+            throw new KerenExecption("lignes.facture.isempty");
+        }
+        super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void processBeforeSave(Facture entity) {
+        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
+            throw new KerenExecption("numero.piece.required");
+        }else if(entity.getDatecommande()==null){
+            throw new KerenExecption("date.required");
+        }else if(entity.getFournisseur()==null){
+            throw new KerenExecption("fournisseur.required");
+        }else if(entity.getType()==null||entity.getType().trim().isEmpty()){
+            throw new KerenExecption("type.facture.required");
+        }else if(entity.getCompte()==null){
+            throw new KerenExecption("compte.required");
+        }else if(entity.getJournal()==null){
+            throw new KerenExecption("journal.comptable.required");
+        }else if(entity.getLignes().isEmpty()){
+            throw new KerenExecption("lignes.facture.isempty");
+        }
+        entity.setTypedocument(DocumentAchatState.COMPTABILITE);
+        entity.setState("transfere");
+        super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
     
 

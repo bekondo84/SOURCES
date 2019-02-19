@@ -111,7 +111,7 @@ angular.module('keren.core.website')
                              $http.defaults.headers.common['Authorization']='Basic '+$rootScope.globals.currentUser.authdata; 
                              $rootScope.$broadcast("gotowebsite" , {username:$rootScope.globals.currentUser.username});
                       }else{
-                         var urlPath = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/login/crypto"; 
+                         var urlPath = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/login/crypto"; 
                                 $http.post(urlPath ,{username:"website@website",password:"websiteteratech2013"})
                                         .then(function(response){
     //                                        console.log("$scope.login = function() remember == encrypt pwd : "+response.data);                                           
@@ -188,19 +188,19 @@ angular.module('keren.core.website')
                        var type = item.attr('type');
                        var src = item.attr("src");
                        if(type=='css'){
-                           var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
+                           var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/resource/text/"+src;
                            var linkElem = document.createElement('style');
                            linkElem.setAttribute('type','text/css');
                            linkElem.innerHTML='@import url("'+url+'");';
                            item.replaceWith(linkElem);
                        }else if(type=='less'){
-                           var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
+                           var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/resource/text/"+src;
                            var linkElem = document.createElement('style');
                            linkElem.setAttribute('type','text/less');
                            linkElem.innerHTML='@import url("'+url+'");';
                            item.replaceWith(linkElem);
                        }else if(type=='javascript'){
-                           var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/auth/resource/text/"+src;
+                           var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/resource/text/"+src;
                            $('<script />', { type : 'text/javascript', src : url}).appendTo('body');
                            $scope.javascripts.push(url);
 //                           var scriptElem = document.createElement('script');

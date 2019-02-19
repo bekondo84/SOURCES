@@ -109,15 +109,15 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
    
    @ManyToMany(fetch = FetchType.LAZY)
    @JoinTable(name = "T_ART_TAXE_VE",joinColumns = @JoinColumn(name = "ART_ID"),inverseJoinColumns = @JoinColumn(name = "TAX_ID"))
-   @Predicate(label = "taxes.ventes" ,type = Taxe.class,target = "many-to-many",group = true,groupName = "group3",groupLabel = "Facturation")
+   @Predicate(label = "taxes.ventes" ,type = Taxe.class,target = "many-to-many",group = true,groupName = "group3",groupLabel = "facturation")
    private List<Taxe> taxesventes = new ArrayList<Taxe>();
   
-   @Predicate(label = "politique.facturation",target = "combobox",values ="Qté commandées;Qté livrées",group = true,groupName = "group3",groupLabel = "Facturation")
+   @Predicate(label = "politique.facturation",target = "combobox",values ="Qté commandées;Qté livrées",group = true,groupName = "group3",groupLabel = "facturation")
    private String politique ="0";
      
    @ManyToMany(fetch = FetchType.LAZY)
    @JoinTable(name = "T_ART_TAXE_ACH",joinColumns = @JoinColumn(name = "ART_ID"),inverseJoinColumns = @JoinColumn(name = "TAX_ID"))
-   @Predicate(label = "taxes.fournisseurs" ,type = Taxe.class,target = "many-to-many",group = true,groupName = "group3",groupLabel = "Facturation")
+   @Predicate(label = "taxes.fournisseurs" ,type = Taxe.class,target = "many-to-many",group = true,groupName = "group3",groupLabel = "facturation")
    private List<Taxe> taxesachats = new ArrayList<Taxe>();
    
    /**
@@ -346,12 +346,12 @@ public class Article extends BaseElement implements Serializable,Comparable<Arti
 
     @Override
     public String getListTitle() {
-        return "ARTICLES"; //To change body of generated methods, choose Tools | Templates.
+        return "articles"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "ARTICLE"; //To change body of generated methods, choose Tools | Templates.
+        return "article"; //To change body of generated methods, choose Tools | Templates.
     }
 
     public String getPolitiquestock() {

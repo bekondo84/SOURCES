@@ -21,7 +21,7 @@ import javax.persistence.Table;
 @Table(name = "T_UNAC")
 public class UniteAchat extends BaseElement implements Serializable,Comparable<UniteAchat>{
 
-    @Predicate(label = "Code",optional = false,unique = true,search = true)
+    @Predicate(label = "code",optional = false,unique = true,search = true)
     private String code ;    
     
     @Predicate(label = "actif",type = Boolean.class)
@@ -29,10 +29,10 @@ public class UniteAchat extends BaseElement implements Serializable,Comparable<U
     
     @ManyToOne
     @JoinColumn(name = "UNGE_ID")
-    @Predicate(label = "Unité de gestion",type = UniteGestion.class,target = "many-to-one",search = true)
+    @Predicate(label = "unite.de.gestion",type = UniteGestion.class,target = "many-to-one",search = true)
     private UniteGestion unite ;
     
-    @Predicate(label = "Précision",type = Double.class,search = true)
+    @Predicate(label = "precision",type = Double.class,search = true)
     private Double coeff = 0.0;
 
     public UniteAchat(String code, Boolean actif, UniteGestion unite) {
@@ -98,12 +98,12 @@ public class UniteAchat extends BaseElement implements Serializable,Comparable<U
 
     @Override
     public String getListTitle() {
-        return "Unités d'achat"; //To change body of generated methods, choose Tools | Templates.
+        return "unites.achats"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Unité d'achat"; //To change body of generated methods, choose Tools | Templates.
+        return "unite.achat"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

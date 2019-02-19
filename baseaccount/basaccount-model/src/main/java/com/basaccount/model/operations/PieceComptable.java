@@ -5,6 +5,7 @@
  */
 package com.basaccount.model.operations;
 
+import com.basaccount.model.achats.Facture;
 import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.comptabilite.JournalComptable;
 import com.basaccount.model.ventes.FactureVente;
@@ -16,7 +17,6 @@ import com.megatim.common.annotations.Predicate;
 import com.megatim.common.annotations.TableFooter;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.CascadeType;
@@ -26,7 +26,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -65,6 +64,9 @@ public class PieceComptable extends PieceComptableTmp implements Serializable{
     
     private Long facturevente ;
     
+    private Long factureachat;
+    
+    
     @Predicate(label = " ",target = "state",search = true,hide = true)
     private String state ="etabli";
 
@@ -96,8 +98,15 @@ public class PieceComptable extends PieceComptableTmp implements Serializable{
         this.debit = piece.debit;
         this.credit = piece.credit;     
         this.state = piece.state;
+        this.factureachat = piece.factureachat;
+        this.facturevente = piece.facturevente;
     }
     
+    /**
+     * 
+     * @param entity
+     * @param taxes 
+     */
      public PieceComptable(FactureVente entity,Map<Compte , Double> taxes) {
         super(entity);
         this.code = entity.getCode();
@@ -143,7 +152,57 @@ public class PieceComptable extends PieceComptableTmp implements Serializable{
         }//end for(Compte compte : taxes.keySet()){
         this.state = "etabli";
     }
-    
+     
+     /**
+      * 
+      * @param entity
+      * @param taxes 
+      */
+     public PieceComptable(Facture entity,Map<Compte , Double> taxes) {
+        super(entity);
+        this.code = entity.getCode();
+        this.libelle = entity.getCodefourni();
+        if(entity.getJournal()!=null){
+            this.journal = new JournalComptable(entity.getJournal());
+        }
+        this.factureachat = entity.getId();
+        this.datePiece = entity.getDatecommande();
+        this.debit =0.0;
+        this.credit = 0.0;
+        //Ecriture compte ventes
+        LignePieceComptable lignevte = new LignePieceComptable();
+        lignevte.setDateEcriture(entity.getDatecommande());
+        lignevte.setRefPiece(entity.getCode());
+        lignevte.setLibelle(entity.getCompte().getLibele());
+        lignevte.setCompte(entity.getCompte());
+        lignevte.setDebit(entity.getTotalht());
+        lignevte.setCredit(0.0);
+        this.ecritures.add(lignevte);
+        //Ecriture du client
+        LignePieceComptable ligneclient = new LignePieceComptable();
+        ligneclient.setDateEcriture(entity.getDatecommande());
+        ligneclient.setRefPiece(entity.getCode());
+        ligneclient.setLibelle(entity.getFournisseur().getCompte().getLibele());
+        ligneclient.setCompte(entity.getFournisseur().getCompte());
+        ligneclient.setTier(entity.getFournisseur());
+        ligneclient.setDebit(0.0);
+        ligneclient.setCredit(entity.getTotalttc());
+        this.ecritures.add(ligneclient);
+        //Ecriture des taxes
+        for(Compte compte : taxes.keySet()){
+             LignePieceComptable lignetax = new LignePieceComptable();
+            lignetax.setDateEcriture(entity.getDatecommande());
+            lignetax.setRefPiece(entity.getCode());
+            lignetax.setLibelle(compte.getLibele());
+            lignetax.setCompte(compte);
+            lignetax.setDebit(taxes.get(compte));
+            lignetax.setCredit(0.0);
+            if(lignetax.getDebit()>0){
+                this.ecritures.add(lignetax);
+            }//end if(lignetax.getCredit()>0){
+        }//end for(Compte compte : taxes.keySet()){
+        this.state = "etabli";
+    }
     /**
      * 
      */
@@ -200,6 +259,14 @@ public class PieceComptable extends PieceComptableTmp implements Serializable{
 
     public void setFacturevente(Long facturevente) {
         this.facturevente = facturevente;
+    }
+
+    public Long getFactureachat() {
+        return factureachat;
+    }
+
+    public void setFactureachat(Long factureachat) {
+        this.factureachat = factureachat;
     }
 
    

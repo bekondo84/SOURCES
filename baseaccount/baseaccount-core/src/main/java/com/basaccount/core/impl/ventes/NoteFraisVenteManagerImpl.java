@@ -8,6 +8,7 @@ import com.basaccount.core.ifaces.ventes.NoteFraisVenteManagerLocal;
 import com.basaccount.core.ifaces.ventes.NoteFraisVenteManagerRemote;
 import com.basaccount.dao.ifaces.operations.EcritureComptableDAOLocal;
 import com.basaccount.dao.ifaces.ventes.NoteFraisVenteDAOLocal;
+import com.basaccount.model.achats.EcheanceReglement;
 import com.basaccount.model.achats.LigneNoteFrais;
 import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.comptabilite.PeriodeComptable;
@@ -126,6 +127,7 @@ public class NoteFraisVenteManagerImpl
                 ligne.setId(-1L);
             }//end if(ligne.getId()<=0){
         }//end for(LigneNoteFrais ligne:entity.getNotes()){
+        computeNote(entity);
         entity.setTotalht(totalht);
         entity.setTotaltaxes(taxes);
         entity.setTotalttc(totalttc);
@@ -152,6 +154,7 @@ public class NoteFraisVenteManagerImpl
                 }//end for(Taxe tax : ligne.getTaxes()){
             }//end if(ligne.getTaxes()!=null && !ligne.getTaxes().isEmpty()){
         }//end for(LigneNoteFrais ligne:entity.getNotes()){
+        computeNote(entity);
         EcritureComptable ecrittier = new EcritureComptable(entity.getDate(), entity.getCode(), entity.getFournisseur().getCompte().getLibele(), periode, entity.getJournal(), entity.getFournisseur().getCompte(), entity.getFournisseur(), entity.getTotalttc(), 0.0);
         ecrituredao.save(ecrittier);
         EcritureComptable ecritvte = new EcritureComptable(entity.getDate(), entity.getCode(), entity.getMemo(), periode, entity.getJournal(), entity.getComptecompens(), null, 0.0, entity.getTotalht());
@@ -166,5 +169,11 @@ public class NoteFraisVenteManagerImpl
         return entity;
     }
 
-
+    private void computeNote(NoteFraisVente entity){
+        for(EcheanceReglement ech:entity.getEcheances()){
+            if(ech.getId()<0){
+                ech.setId(-1L);
+            }
+        }
+    }
 }

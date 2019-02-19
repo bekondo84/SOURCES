@@ -5,13 +5,9 @@ import javax.ws.rs.Path;
 import com.basaccount.core.ifaces.achats.EcheanceReglementManagerRemote;
 import com.basaccount.jaxrs.ifaces.achats.EcheanceReglementRS;
 import com.basaccount.model.achats.EcheanceReglement;
-import com.bekosoftware.genericdaolayer.dao.tools.RestrictionsContainer;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
-import com.megatimgroup.generic.jax.rs.layer.impl.RSNumber;
-import java.util.List;
-import javax.ws.rs.core.HttpHeaders;
 
 
 /**

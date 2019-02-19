@@ -189,7 +189,12 @@ and open the template in the editor.
                 <role>ADMIN</role>
             </roles>           
         </element>
-         <element type="com.basaccount.model.achats.ModeReglement"  idclass="Long"  idname="id"   deseable="true">
+        <element type="com.basaccount.model.achats.ModeReglement"  idclass="Long"  idname="id"   deseable="true">
+            <roles>
+                <role>ADMIN</role>
+            </roles>           
+        </element>
+        <element type="com.basaccount.model.achats.LigneReglementFournisseur"  idclass="Long"  idname="id"   deseable="true">
             <roles>
                 <role>ADMIN</role>
             </roles>           

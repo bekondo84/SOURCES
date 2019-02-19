@@ -122,7 +122,7 @@ angular.module('keren.core.login')
          };  
              return {
                  login:function(username,password){
-                     var urlPath = "http://"+$location.host()+":"+$location.port()+"/keren/auth/login/authenticate";           
+                     var urlPath = "http://"+$location.host()+":"+$location.port()+"/zock/auth/login/authenticate";           
                      return $http.post(urlPath
                                        ,{username:username,password:password});
                  },

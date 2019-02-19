@@ -21,10 +21,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class POSDevise extends BaseElement implements Serializable,Comparable<POSDevise>{
 
-    @Predicate(label = "Devise" ,optional = false,unique = true,search = true)
+    @Predicate(label = "devise" ,optional = false,unique = true,search = true)
      private String code ;
      
-    @Predicate(label = "Taux actuel" ,optional = false,unique = true,type = Double.class,search = true)
+    @Predicate(label = "taux.actuel" ,optional = false,unique = true,type = Double.class,search = true)
      private Double taux ;
 
     /**
@@ -63,12 +63,12 @@ public class POSDevise extends BaseElement implements Serializable,Comparable<PO
 
     @Override
     public String getListTitle() {
-        return "DEVISES"; //To change body of generated methods, choose Tools | Templates.
+        return "devises"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "DEVISE"; //To change body of generated methods, choose Tools | Templates.
+        return "devise"; //To change body of generated methods, choose Tools | Templates.
     }
     
     @Override

@@ -345,7 +345,7 @@ public class FactureVente extends DocumentVente implements Serializable{
 
     @Override
     public boolean isDesableupdate() {
-        return !state.equalsIgnoreCase("transfere"); //To change body of generated methods, choose Tools | Templates.
+        return state.equalsIgnoreCase("comptabilise"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

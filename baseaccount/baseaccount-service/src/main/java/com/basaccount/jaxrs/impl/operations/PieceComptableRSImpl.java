@@ -1,11 +1,13 @@
 
 package com.basaccount.jaxrs.impl.operations;
 
+import com.basaccount.core.ifaces.achats.FactureManagerRemote;
 import com.basaccount.core.ifaces.comptabilite.PeriodeComptableManagerRemote;
 import javax.ws.rs.Path;
 import com.basaccount.core.ifaces.operations.PieceComptableManagerRemote;
 import com.basaccount.core.ifaces.ventes.FactureVenteManagerRemote;
 import com.basaccount.jaxrs.ifaces.operations.PieceComptableRS;
+import com.basaccount.model.achats.Facture;
 import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.basaccount.model.operations.PieceComptable;
 import com.basaccount.model.ventes.FactureVente;
@@ -53,6 +55,10 @@ public class PieceComptableRSImpl
     
     @Manager(application = "baseaccount", name = "PeriodeComptableManagerImpl", interf = PeriodeComptableManagerRemote.class)
     protected PeriodeComptableManagerRemote periodemanager;
+    
+    @Manager(application = "baseaccount", name = "FactureManagerImpl", interf = FactureManagerRemote.class)
+    protected FactureManagerRemote famanager;
+    
 
     public PieceComptableRSImpl() {
         super();
@@ -223,6 +229,22 @@ public class PieceComptableRSImpl
         } //end if(periode==null){      
         return  manager.priseencompte(id,periode);
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<PieceComptable> priseenccompteachat(HttpHeaders headers) {
+        //To change body of generated methods, choose Tools | Templates.
+       Gson gson = new Gson();
+        if(headers.getRequestHeader("facture")==null || headers.getRequestHeader("facture").isEmpty()){
+            return new ArrayList<PieceComptable>();
+        }//end if(headers.getRequestHeader("facture")==null || headers.getRequestHeader("facture").isEmpty()){
+        Long id = gson.fromJson(headers.getRequestHeader("facture").get(0), Long.class);
+        Facture facture = famanager.find("id", id);
+        PeriodeComptable periode =periodemanager.getPeriodeFromDate(facture.getDatecommande());
+        if(periode==null){
+            throw new KerenExecption("periode.comptable.not.found");
+        } //end if(periode==null){      
+        return  manager.priseencompteachat(id,periode);
     }
     
 }

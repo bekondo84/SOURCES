@@ -28,20 +28,21 @@ public class LigneCommande extends BaseElement implements Serializable,Comparabl
 
     @ManyToOne
     @JoinColumn(name = "ART_ID")
-    @Predicate(label = "Article",type = Article.class,target = "many-to-one",optional = false,search = true)
+    @Predicate(label = "article",type = Article.class,target = "many-to-one",optional = false,search = true)
     private Article article ;
     
-    @Predicate(label = "Quantité",type = Double.class,search = true,optional = false)
+    @Predicate(label = "quantite",type = Double.class,search = true,optional = false)
     private Double quantite ;
     
-    @Predicate(label = "P.U",type = Double.class,search = true,optional = false)
+    @Predicate(label = "pu.ht",type = Double.class,search = true,optional = false)
     private Double pu ;
     
-    @Predicate(label = "Remise(%)",type = Double.class,search = true,optional = false)
+    @Predicate(label = "remise.pourcent",type = Double.class,search = true,optional = false)
     private Double remise ;
    
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "T_LIGCMDE_TAXE",joinColumns = @JoinColumn(name = "LIG_ID"),inverseJoinColumns = @JoinColumn(name = "TAX_ID"))
+    @Predicate(label = "taxes",type = Taxe.class,target = "many-to-many",search = true)
     private List<Taxe> taxes = new ArrayList<Taxe>();
 
     public LigneCommande() {
@@ -109,12 +110,12 @@ public class LigneCommande extends BaseElement implements Serializable,Comparabl
 
     @Override
     public String getListTitle() {
-        return "Lignes Commandes"; //To change body of generated methods, choose Tools | Templates.
+        return "lignes.commandes"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Ligne Commande"; //To change body of generated methods, choose Tools | Templates.
+        return "ligne.commande"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

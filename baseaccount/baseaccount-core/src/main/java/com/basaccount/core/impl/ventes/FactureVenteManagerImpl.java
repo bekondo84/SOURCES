@@ -10,6 +10,7 @@ import com.basaccount.dao.ifaces.ventes.FactureVenteDAOLocal;
 import com.basaccount.model.achats.Acompte;
 import com.basaccount.model.achats.DocumentAchatState;
 import com.basaccount.model.achats.EcheanceReglement;
+import com.basaccount.model.comptabilite.Taxe;
 import com.basaccount.model.ventes.FactureVente;
 import com.basaccount.model.ventes.LigneFactureVente;
 import com.bekosoftware.genericdaolayer.dao.ifaces.GenericDAO;
@@ -96,7 +97,62 @@ public class FactureVenteManagerImpl
         FactureVente data = super.delete(id); //To change body of generated methods, choose Tools | Templates.
         return new FactureVente(data);
     }
+
+    @Override
+    public void processBeforeUpdate(FactureVente entity) {
+       computeFacture(entity);
+        super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void processBeforeSave(FactureVente entity) {
+        computeFacture(entity);
+        super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
+    }
     
-    
+    /**
+     * 
+     * @param entity 
+     */
+    private void computeFacture(FactureVente entity){
+        double totalht = 0.0;
+        double totalttc = 0.0;
+        double taxes = 0.0;
+        double acomptes = 0.0;
+        for(LigneFactureVente ligne:entity.getLignes()){
+            if(ligne.getId()<=0){
+                ligne.setId(-1L);
+            }//end if(ligne.getId()<=0){
+            double montant = ligne.getQuantite()*ligne.getPuht()*(100-(ligne.getRemise()!=null? ligne.getRemise():0.0))/100;
+            totalht+=montant;
+            for(Taxe tax : ligne.getTaxes()){
+                double value = tax.getMontant();
+                if(tax.getCalculTaxe().trim().equalsIgnoreCase("1")){
+                    value = montant*tax.getMontant()/100;
+                }//end if(tax.getCalculTaxe().trim().equalsIgnoreCase("1")){
+                taxes+=value;
+            }//end for(Taxe tax : ligne.getTaxes()){
+        }//end  for(LigneFactureVente ligne:entity.getLignes()){
+        for(Acompte acom:entity.getAcomptes()){
+            if(acom.getId()<=0){
+                acom.setId(-1L);
+            }//end if(acom.getId()<=0){
+            acomptes += acom.getMontant();
+        }//end for(Acompte acom:entity.getAcomptes()){
+        for(EcheanceReglement ech:entity.getEcheances()){
+            if(ech.getId()<=0){
+                ech.setId(-1L);
+            }//end  if(ech.getId()<=0){
+        }//end for(EcheanceReglement ech:entity.getEcheances()){
+        totalttc = totalht + taxes;
+        entity.setTotalht(totalht);
+        entity.setTotalttc(totalttc);
+        entity.setTaxes(taxes);
+        entity.setTotalacompte(acomptes);
+        entity.setEscompte(0.0);
+        if(entity.getEscompte()!=null){
+            entity.setTotalescompte(totalht*entity.getEscompte()/100);
+        }//end if(entity.getEscompte()!=null){
+    }//end  private void computeFacture(FactureVente entity){
 
 }

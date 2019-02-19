@@ -37,10 +37,10 @@ public class EcheanceReglement extends BaseElement implements Serializable,Compa
     @Predicate(label = "mode.reglement",type = ModeReglement.class,target = "many-to-one",optional = false,search = true)
     private ModeReglement mode ;
    
-   @Predicate(label = "montant.percu",type = Double.class,optional = false,search = true)
+   @Predicate(label = "montant.percu",type = Double.class,editable = false,search = true)
     private Double percu = 0.0;
     
-   @Predicate(label = "montant.solde",type = Double.class,optional = false,search = true,compute = true,values = "this.montant;-;this.percu")
+   @Predicate(label = "montant.solde",type = Double.class,editable = false,search = true,compute = true,values = "this.montant;-;this.percu")
     private Double solde = 0.0;
     
     @Predicate(label = "etat",type = Boolean.class,updatable = false,editable = false,search = true)
@@ -142,7 +142,16 @@ public class EcheanceReglement extends BaseElement implements Serializable,Compa
         this.tier = tier;
     }
     
-    
+    /**
+     * 
+     * @param montant 
+     */
+    public void addPercu(Double montant){
+        if(this.percu==null){
+            this.percu = 0.0;
+        }//end if(this.percu==null){
+        this.percu +=montant;
+    }
 
     @Override
     public String getDesignation() {

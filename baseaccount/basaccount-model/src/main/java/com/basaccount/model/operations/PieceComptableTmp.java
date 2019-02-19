@@ -5,6 +5,7 @@
  */
 package com.basaccount.model.operations;
 
+import com.basaccount.model.achats.Facture;
 import com.basaccount.model.comptabilite.ExerciceComptable;
 import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.basaccount.model.ventes.FactureVente;
@@ -91,6 +92,13 @@ public class PieceComptableTmp extends BaseElement implements Serializable,Compa
         this.code = entity.getCode();
         this.datePiece = entity.getDate();
         this.libelle = entity.getCodeclient();        
+    }
+    
+     public PieceComptableTmp(Facture entity) {
+        super(-1, null,null, -1);
+        this.code = entity.getCode();
+        this.datePiece = entity.getDate();
+        this.libelle = entity.getCodefourni();        
     }
     
     @Override

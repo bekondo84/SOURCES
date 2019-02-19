@@ -8,6 +8,7 @@ package com.basaccount.model.ventes;
 import com.basaccount.model.achats.Article;
 import com.basaccount.model.comptabilite.Taxe;
 import com.core.base.BaseElement;
+import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.Observer;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
@@ -69,6 +70,7 @@ public class LigneDocumentVente extends BaseElement implements Serializable,Comp
     @JoinTable(name = "T_LIDOAC_TA",joinColumns = @JoinColumn(name = "LIDOAC_ID")
             ,inverseJoinColumns = @JoinColumn(name = "TAXE_ID"))    
     @Predicate(label = "taxes",type = Taxe.class,target = "many-to-many",optional = false,search = true)
+    @Filter("[{\"fieldName\":\"porte\",\"value\":\"0\"}]")
     protected List<Taxe> taxes =new ArrayList<Taxe>();
     
     @Predicate(label = "remise.pourcent",type = Double.class,search = true)
@@ -134,8 +136,7 @@ public class LigneDocumentVente extends BaseElement implements Serializable,Comp
         this.quantite = ligne.quantite;
         this.puht = ligne.puht;
         this.totalht = ligne.totalht;
-        if(ligne.taxes!=null){
-            
+        if(ligne.taxes!=null){            
             for(Taxe taxe:ligne.taxes){
                 this.taxes.add(new Taxe(taxe));
             }
@@ -280,17 +281,17 @@ public class LigneDocumentVente extends BaseElement implements Serializable,Comp
 
     @Override
     public String getModuleName() {
-        return "teratechvente"; //To change body of generated methods, choose Tools | Templates.
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getListTitle() {
-        return "LIGNES VENTES"; //To change body of generated methods, choose Tools | Templates.
+        return "lignes.ventes"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "VENTE"; //To change body of generated methods, choose Tools | Templates.
+        return "ligne.vente"; //To change body of generated methods, choose Tools | Templates.
     }
 
     public Double getStokdispo() {

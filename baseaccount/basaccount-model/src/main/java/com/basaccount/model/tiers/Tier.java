@@ -108,6 +108,7 @@ public class Tier extends BaseElement implements Serializable,Comparable<Tier>{
     @Predicate(label = " ",group = true,groupName = "group5",groupLabel = "notes.internes",target = "textarea",search = false,sequence = 5)
     private String note;
     
+    private Boolean inuse = Boolean.FALSE;
 
     /**
      * 
@@ -142,6 +143,7 @@ public class Tier extends BaseElement implements Serializable,Comparable<Tier>{
         this.paiementclient = tier.paiementclient;
         this.paiementfourn = tier.paiementfourn;
         this.note = tier.note;
+        this.inuse = tier.inuse;
     }
     
      public Tier(String image, String code, String type, String label, String classe, String adresse, String poste, String tel, String mobile, String fax, String courriel, Civilite civilite, Compte compte, long id, String designation, String moduleName) {
@@ -313,6 +315,16 @@ public class Tier extends BaseElement implements Serializable,Comparable<Tier>{
     public void setComptesbancaire(List<CompteBancaire> comptesbancaire) {
         this.comptesbancaire = comptesbancaire;
     }
+
+    public Boolean getInuse() {
+        return inuse;
+    }
+
+    public void setInuse(Boolean inuse) {
+        this.inuse = inuse;
+    }
+    
+    
 
     public List<Contact> getContacts() {
         return contacts;

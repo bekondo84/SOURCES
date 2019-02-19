@@ -28,26 +28,26 @@ import javax.persistence.Temporal;
 @Table(name = "T_CMDEPOS")
 public class Commande extends BaseElement implements Serializable,Comparable<Commande>{
 
-    @Predicate(label = "Reference",optional = false,search = true)
+    @Predicate(label = "reference",optional = false,search = true)
     private String code ;
     
     @Temporal(javax.persistence.TemporalType.DATE)
-    @Predicate(label = "Date commande",type = Date.class,target = "date",search = true)
+    @Predicate(label = "date.commande",type = Date.class,target = "date",search = true)
     private Date datecmde ;
     
     @ManyToOne
     @JoinColumn(name = "SESS_ID")
-    @Predicate(label = "Session",type = PosSession.class,target = "many-to-one",search = true)
+    @Predicate(label = "session",type = PosSession.class,target = "many-to-one",search = true)
     private PosSession session ;
     
     @ManyToOne
     @JoinColumn(name = "CLIE_ID")
-    @Predicate(label = "Client",type = Client.class,target = "many-to-one",search = true)    
+    @Predicate(label = "client",type = Client.class,target = "many-to-one",search = true)    
     private Client client ;
     
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval =true )
     @JoinColumn(name = "CMDE_ID")
-    @Predicate(label = " ",type = LigneCommande.class,target = "one-to-many",group = true,groupName = "articles",groupLabel = "Articles")
+    @Predicate(label = " ",type = LigneCommande.class,target = "one-to-many",group = true,groupName = "articles",groupLabel = "articles")
     private List<LigneCommande>  lignes = new ArrayList<LigneCommande>();
 
     public Commande() {
@@ -61,7 +61,7 @@ public class Commande extends BaseElement implements Serializable,Comparable<Com
             this.session = new PosSession(entity.session);
         }
         if(entity.client!=null){
-            this.client = client;
+            this.client = new Client(entity.client);
         }
     }
 
@@ -117,12 +117,12 @@ public class Commande extends BaseElement implements Serializable,Comparable<Com
 
     @Override
     public String getListTitle() {
-        return "Commandes"; //To change body of generated methods, choose Tools | Templates.
+        return "commandes"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Commande"; //To change body of generated methods, choose Tools | Templates.
+        return "commande"; //To change body of generated methods, choose Tools | Templates.
     }
     
     

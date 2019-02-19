@@ -4,8 +4,12 @@ package com.basaccount.jaxrs.impl.ventes;
 import javax.ws.rs.Path;
 import com.basaccount.core.ifaces.ventes.FactureVenteManagerRemote;
 import com.basaccount.jaxrs.ifaces.ventes.FactureVenteRS;
+import com.basaccount.model.achats.DocumentAchatState;
+import com.basaccount.model.comptabilite.Taxe;
 import com.basaccount.model.ventes.FactureVente;
+import com.basaccount.model.ventes.LigneFactureVente;
 import com.bekosoftware.genericmanagerlayer.core.ifaces.GenericManager;
+import com.kerem.core.KerenExecption;
 import com.kerem.core.MetaDataUtil;
 import com.megatimgroup.generic.jax.rs.layer.annot.Manager;
 import com.megatimgroup.generic.jax.rs.layer.impl.AbstractGenericService;
@@ -78,6 +82,48 @@ public class FactureVenteRSImpl
             Logger.getLogger(FactureVenteRSImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return meta; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void processBeforeUpdate(FactureVente entity) {
+        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
+            throw new KerenExecption("numero.piece.required");
+        }else if(entity.getDatecommande()==null){
+            throw new KerenExecption("date.required");
+        }else if(entity.getClient()==null){
+            throw new KerenExecption("client.required");
+        }else if(entity.getType()==null||entity.getType().trim().isEmpty()){
+            throw new KerenExecption("type.facture.required");
+        }else if(entity.getCompte()==null){
+            throw new KerenExecption("compte.required");
+        }else if(entity.getJournal()==null){
+            throw new KerenExecption("journal.comptable.required");
+        }else if(entity.getLignes().isEmpty()){
+            throw new KerenExecption("lignes.facture.isempty");
+        }
+        super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void processBeforeSave(FactureVente entity) {
+        if(entity.getCode()==null||entity.getCode().trim().isEmpty()){
+            throw new KerenExecption("numero.piece.required");
+        }else if(entity.getDatecommande()==null){
+            throw new KerenExecption("date.required");
+        }else if(entity.getClient()==null){
+            throw new KerenExecption("client.required");
+        }else if(entity.getType()==null||entity.getType().trim().isEmpty()){
+            throw new KerenExecption("type.facture.required");
+        }else if(entity.getCompte()==null){
+            throw new KerenExecption("compte.required");
+        }else if(entity.getJournal()==null){
+            throw new KerenExecption("journal.comptable.required");
+        }else if(entity.getLignes().isEmpty()){
+            throw new KerenExecption("lignes.facture.isempty");
+        }
+        entity.setTypedocument(DocumentAchatState.COMPTABILITE);
+        entity.setState("transfere");
+        super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
     }
 
     

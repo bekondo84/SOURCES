@@ -34,7 +34,7 @@ public class PosWebDashboard extends BaseElement implements Serializable,Compara
 
     @Override
     public String getDesignation() {
-        return "TABLEAU DE BORD"; //To change body of generated methods, choose Tools | Templates.
+        return "tableau.de.bord"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -44,12 +44,12 @@ public class PosWebDashboard extends BaseElement implements Serializable,Compara
 
     @Override
     public String getListTitle() {
-        return "Tableau de bord"; //To change body of generated methods, choose Tools | Templates.
+        return "tableau.de.bord"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Tableau de bord"; //To change body of generated methods, choose Tools | Templates.
+        return "tableau.de.bord"; //To change body of generated methods, choose Tools | Templates.
     }
 
     

@@ -32,7 +32,7 @@ public class UserAccount extends BaseElement implements Serializable,Comparable<
     private String courriel ;
     
     
-    @Predicate(label = "ACTIF",colsequence = 100,sequence = 2)
+    @Predicate(label = "actif",colsequence = 100,sequence = 2)
     private Boolean actif = Boolean.FALSE; 
     
      //@Predicate(label = "MOT DE PASSE",target = "password" ,optional = false,search = false)

@@ -223,14 +223,14 @@ public class NoteFraisVente extends NoteFraisTMP implements Serializable{
         this.echeances = echeances;
     }
 
-    
-    
-    @Override
+     @Override
     public List<State> getStates() {
         List<State> states = new ArrayList<State>();
         State stat = new State("etabli", "brouillon");
+        stat.setCouleur("#b22222");
         states.add(stat);
         stat = new State("valide", "valide");
+        stat.setCouleur("#008b8b");
         states.add(stat);
         return states; //To change body of generated methods, choose Tools | Templates.
     }

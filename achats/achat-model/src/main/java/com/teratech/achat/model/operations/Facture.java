@@ -69,7 +69,7 @@ public class Facture extends DocumentAchat implements Serializable{
     private List<Acompte> acomptes = new ArrayList<Acompte>();
     
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
-    @JoinColumn(name = "ECRE_ID")
+    @JoinColumn(name = "ECHA_ID")
     @Predicate(label = " ",type = EcheanceReglement.class,target = "one-to-many",group = true,groupName = "group4",groupLabel = "echeances",edittable = true)
     private List<EcheanceReglement> echeances = new ArrayList<EcheanceReglement>();
     
@@ -180,7 +180,7 @@ public class Facture extends DocumentAchat implements Serializable{
             this.bonlivraison = new BonReception(da.bonlivraison);
         }//end if(da.bonlivraison!=null){
         this.source = da.getCode();
-        this.typedocument = DocumentAchatState.FACTURE;
+        this.typedocument = da.getTypedocument();
         if(da.getCompte()!=null){
             this.compte = new Compte(da.getCompte());
         }

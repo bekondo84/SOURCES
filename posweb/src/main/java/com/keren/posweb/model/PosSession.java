@@ -24,21 +24,21 @@ import javax.persistence.TemporalType;
 @Table(name = "T_SESSIONPOS")
 public class PosSession extends BaseElement implements Serializable,Comparable<PosSession>{
 
-    @Predicate(label = "Session",optional = false,search = true,nullable = false)
+    @Predicate(label = "session",optional = false,search = true,nullable = false)
     private String code;
     
     @ManyToOne
     @JoinColumn(name = "RES_ID")
-    @Predicate(label = "Responsable",type = User.class,target = "many-to-one",search = true,optional = false)
+    @Predicate(label = "responsable",type = User.class,target = "many-to-one",search = true,optional = false)
     private User responsable ;
    
     @ManyToOne
     @JoinColumn(name = "POS_ID")
-    @Predicate(label = "Point de Vente",type = PointVente.class,target = "many-to-one",search = true,optional = false)
+    @Predicate(label = "point.de.Vente",type = PointVente.class,target = "many-to-one",search = true,optional = false)
     private PointVente pointvente ;
    
     @Temporal(TemporalType.DATE)
-    @Predicate(label = "Date d'ouverture",type = Date.class,target = "date",search = true)
+    @Predicate(label = "date.ouverture",type = Date.class,target = "date",search = true)
     private Date douverture ;
 
     public PosSession() {
@@ -129,12 +129,12 @@ public class PosSession extends BaseElement implements Serializable,Comparable<P
 
     @Override
     public String getListTitle() {
-        return "Sessions"; //To change body of generated methods, choose Tools | Templates.
+        return "sessions"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Session"; //To change body of generated methods, choose Tools | Templates.
+        return "session"; //To change body of generated methods, choose Tools | Templates.
     }
    
     

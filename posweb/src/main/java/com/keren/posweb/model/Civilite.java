@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Table(name = "T_CIVILITE")
 public class Civilite extends BaseElement implements Serializable,Comparable<Civilite>{
 
-    @Predicate(label = "civilité",unique = true,optional = false,search = true)
+    @Predicate(label = "civilite",unique = true,optional = false,search = true)
     private String code;
     
     @Predicate(label = "abreviation",search = true)
@@ -70,12 +70,12 @@ public class Civilite extends BaseElement implements Serializable,Comparable<Civ
 
     @Override
     public String getListTitle() {
-        return "Civilités"; //To change body of generated methods, choose Tools | Templates.
+        return "civilites"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Civilité"; //To change body of generated methods, choose Tools | Templates.
+        return "civilite"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

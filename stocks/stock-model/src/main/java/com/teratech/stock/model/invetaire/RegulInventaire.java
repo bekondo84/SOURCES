@@ -68,12 +68,12 @@ public class RegulInventaire extends BaseInventaire implements Serializable{
 
     @Override
     public String getEditTitle() {
-        return "Regularisation"; //To change body of generated methods, choose Tools | Templates.
+        return "regularisation"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getListTitle() {
-        return "Inventaires à régulariser"; //To change body of generated methods, choose Tools | Templates.
+        return "inventaires.a.regulariser"; //To change body of generated methods, choose Tools | Templates.
     }
 
     

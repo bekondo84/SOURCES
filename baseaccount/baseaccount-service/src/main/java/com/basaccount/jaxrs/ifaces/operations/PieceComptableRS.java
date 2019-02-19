@@ -34,4 +34,9 @@ public interface PieceComptableRS
     @Produces(MediaType.APPLICATION_JSON)
     @Path("priseenccompte")
     public List<PieceComptable> priseencompte(@Context HttpHeaders headers);
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("priseenccompteachat")
+    public List<PieceComptable> priseenccompteachat(@Context HttpHeaders headers);
 }

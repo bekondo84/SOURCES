@@ -36,21 +36,21 @@ import javax.persistence.Table;
 },statubar = true)
 public class PointVente extends BaseElement implements Serializable,Comparable<PointVente>{
 
-    @Predicate(label = "Reference ",optional = false,unique = true,search = true)
+    @Predicate(label = "reference ",optional = false,unique = true,search = true)
     private String code;
     
-    @Predicate(label = "Nom du POS ",optional = false,search = true)
+    @Predicate(label = "nom.du.pos ",optional = false,search = true)
     private String intitule ;
     
     @ManyToOne
     @JoinColumn(name = "SOC_ID")
-    @Predicate(label = "Socièté",type = Structure.class,target = "many-to-one",optional = true,search = true)
+    @Predicate(label = "societe",type = Structure.class,target = "many-to-one",optional = true,search = true)
     private Structure societe ;
     
-    @Predicate(label = "Actif",type = Boolean.class)
+    @Predicate(label = "actif",type = Boolean.class)
     private Boolean actif =Boolean.TRUE;
     
-    @Predicate(label = "cashiers",type = Caissier.class,target = "many-to-many-list",search = true,edittable = true,group = true,groupName = "group1",groupLabel = "cashiers")
+    @Predicate(label = " ",type = Caissier.class,target = "many-to-many-list",search = true,edittable = true,group = true,groupName = "group1",groupLabel = "cashiers")
     @ManyToMany
     @JoinTable(name = "T_POS_CASHIER_POS"
             ,joinColumns = @JoinColumn(name = "POS_ID")

@@ -7,6 +7,7 @@ package com.basaccount.model.achats;
 
 import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.comptabilite.JournalComptable;
+import com.basaccount.model.tiers.Tier;
 import com.core.base.State;
 import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.Predicate;
@@ -50,7 +51,7 @@ public class Facture extends DocumentAchat implements Serializable{
     @ManyToOne
     @JoinColumn(name = "COMP_ID")
     @Predicate(label = "compte",type = Compte.class,target = "many-to-one",group = true,groupName = "group2",groupLabel = "valorisation.or.comptabilite")
-    @Filter(value = "[{\"fieldName\":\"nature\",\"value\":\"2\"}]")
+//    @Filter(value = "[{\"fieldName\":\"nature\",\"value\":\"2\"}]")
     private Compte compte ;
     
     @ManyToOne
@@ -67,7 +68,7 @@ public class Facture extends DocumentAchat implements Serializable{
     private List<Acompte> acomptes = new ArrayList<Acompte>();
     
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
-    @JoinColumn(name = "ECRE_ID")
+    @JoinColumn(name = "ECHA_ID")
     @Predicate(label = " ",type = EcheanceReglement.class,target = "one-to-many",group = true,groupName = "group4",groupLabel = "echeances",edittable = true)
     private List<EcheanceReglement> echeances = new ArrayList<EcheanceReglement>();
     
@@ -107,9 +108,12 @@ public class Facture extends DocumentAchat implements Serializable{
     public Facture(Facture da) {
         super(da);
         this.source = da.getCode();
-        this.typedocument = DocumentAchatState.FACTURE;
+        this.typedocument = da.getTypedocument();
         if(da.getCompte()!=null){
             this.compte = new Compte(da.getCompte());
+        }
+        if(da.getFournisseur()!=null){
+            this.fournisseur = new Tier(da.fournisseur);
         }
         this.journal = da.getJournal();
         this.escompte = da.escompte;
@@ -120,6 +124,7 @@ public class Facture extends DocumentAchat implements Serializable{
         this.totalacompte = da.totalacompte;
         this.netapayer = da.netapayer;
         this.totaltaxes = da.totaltaxes;
+        this.state = da.state;
     }
 
     public String getSource() {
@@ -271,7 +276,7 @@ public class Facture extends DocumentAchat implements Serializable{
             states.add(state);
             state = new State("comptabilise", "Pris en compte");
             states.add(state);
-        }else if(this.state.equalsIgnoreCase("transfere")){
+        }else{
             state = new State("prisencompte", "Pris en compte");
             states.add(state);
             state = new State("comptabilise", "Comptabilisée");
@@ -301,7 +306,7 @@ public class Facture extends DocumentAchat implements Serializable{
 
     @Override
     public boolean isDesableupdate() {
-        return !this.state.equalsIgnoreCase("etabli"); //To change body of generated methods, choose Tools | Templates.
+        return this.state.equalsIgnoreCase("comptabilise"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

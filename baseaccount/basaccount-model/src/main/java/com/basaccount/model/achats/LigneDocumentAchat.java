@@ -7,6 +7,7 @@ package com.basaccount.model.achats;
 
 import com.basaccount.model.comptabilite.Taxe;
 import com.core.base.BaseElement;
+import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.Observer;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
@@ -68,6 +69,7 @@ public class LigneDocumentAchat extends BaseElement implements Serializable,Comp
     @JoinTable(name = "T_LIDOAC_TA",joinColumns = @JoinColumn(name = "LIDOAC_ID")
             ,inverseJoinColumns = @JoinColumn(name = "TAXE_ID"))    
     @Predicate(label = "taxes",type = Taxe.class,target = "many-to-many",optional = false,search = true)
+    @Filter("[{\"fieldName\":\"porte\",\"value\":\"1\"}]")
     protected List<Taxe> taxes =new ArrayList<Taxe>();
     
     @Predicate(label = "remise.pourcent",type = Double.class,search = true)
@@ -133,8 +135,7 @@ public class LigneDocumentAchat extends BaseElement implements Serializable,Comp
         this.quantite = ligne.quantite;
         this.puht = ligne.puht;
         this.totalht = ligne.totalht;
-        if(ligne.taxes!=null){
-            
+        if(ligne.taxes!=null){            
             for(Taxe taxe:ligne.taxes){
                 this.taxes.add(new Taxe(taxe));
             }

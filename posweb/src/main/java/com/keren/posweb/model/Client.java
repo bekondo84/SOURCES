@@ -245,12 +245,12 @@ public class Client extends BaseElement implements Serializable,Comparable<Clien
    
     @Override
     public String getListTitle() {
-        return "Clients"; //To change body of generated methods, choose Tools | Templates.
+        return "clients"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getEditTitle() {
-        return "Clients"; //To change body of generated methods, choose Tools | Templates.
+        return "clients"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

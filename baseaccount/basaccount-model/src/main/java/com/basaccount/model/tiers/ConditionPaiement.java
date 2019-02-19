@@ -19,13 +19,13 @@ import javax.persistence.Table;
 @Table(name = "T_CPAYMENT")
 public class ConditionPaiement extends BaseElement implements Serializable,Comparable<ConditionPaiement>{
 
-    @Predicate(label = "code",unique = true,optional = false)
+    @Predicate(label = "code",unique = true,optional = false,search = true)
     private String code ;
     
-    @Predicate(label = "intitule")
+    @Predicate(label = "intitule",search = true)
     private String label ;
     
-    @Predicate(label = "uuree.jours",optional = false,type = Short.class)
+    @Predicate(label = "duree.jours",optional = false,type = Short.class,search = true)
     private Short jours = 0;
     
     @Predicate(label = "actif" ,type = Boolean.class)

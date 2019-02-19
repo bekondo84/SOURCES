@@ -34,12 +34,12 @@ import javax.persistence.TemporalType;
  * @author BEKO
  */
 @KHeaders(statubar = true
-        ,value = {
-           @KHeader(type = "button",name = "work1",label = "valider",target = "workflow",roles = {"administrateur","gestionnaire"},states = {"etabli"},pattern = "btn btn-danger"
-                , value = @KValue("{'model':'baseaccount','entity':'notefrais','method':'validate','critical':true,'alert':'cette action est irreversible \nÊtes-vous sûr de vouloir continuer ?'}")
-            ),
+        ,value = {           
             @KHeader(type = "button",name = "work2",label = "imprimer.note",target = "report",roles = {"administrateur","gestionnaire"},pattern = "btn btn-default"
                 , value = @KValue("{'name':'notedefrais_report01','model':'baseaccount','entity':'notefrais','method':'imprime'}")
+            ),
+            @KHeader(type = "button",name = "work1",label = "valider",target = "workflow",roles = {"administrateur","gestionnaire"},states = {"etabli"},pattern = "btn btn-danger"
+                , value = @KValue("{'model':'baseaccount','entity':'notefrais','method':'validate','critical':true,'alert':'cette action est irreversible \nÊtes-vous sûr de vouloir continuer ?'}")
             )
         })
 @Entity
@@ -67,6 +67,7 @@ public class NoteFrais extends NoteFraisTMP implements Serializable{
     @ManyToOne
     @JoinColumn(name = "JOUR_ID")
     @Predicate(label = "journal.comptable",type = JournalComptable.class,target = "many-to-one",optional = false,search = true)
+    @Filter("[{\"fieldName\":\"type\",\"value\":\"1\"}]")
     private JournalComptable journal ;    
     
     
@@ -75,7 +76,12 @@ public class NoteFrais extends NoteFraisTMP implements Serializable{
     @Predicate(label = " ",type = LigneNoteFrais.class,target = "one-to-many",group = true,groupName = "group1",groupLabel = "notes.frais",edittable = true)
     private List<LigneNoteFrais> notes = new ArrayList<LigneNoteFrais>();
 
-    @Predicate(label = " ",target = "textarea",group = true,groupName = "group2",groupLabel = "notes")
+     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+    @JoinColumn(name = "NFA_ID")
+    @Predicate(label = " ",type = EcheanceReglement.class,target = "one-to-many",group = true,groupName = "group2",groupLabel = "echeances",edittable = true)
+    private List<EcheanceReglement> echeances = new ArrayList<EcheanceReglement>();
+     
+    @Predicate(label = " ",target = "textarea",group = true,groupName = "group3",groupLabel = "notes")
     private String commentaire ;
     
     @Predicate(label = "total.ht",type = Double.class,search = true,hide = true,editable = false)
@@ -207,6 +213,14 @@ public class NoteFrais extends NoteFraisTMP implements Serializable{
         this.notes = notes;
     }
 
+    public List<EcheanceReglement> getEcheances() {
+        return echeances;
+    }
+
+    public void setEcheances(List<EcheanceReglement> echeances) {
+        this.echeances = echeances;
+    }    
+    
     public Double getTotalht() {
         return totalht;
     }
@@ -235,12 +249,12 @@ public class NoteFrais extends NoteFraisTMP implements Serializable{
 
     @Override
     public boolean isDesableupdate() {
-        return super.isDesableupdate(); //To change body of generated methods, choose Tools | Templates.
+         return state.equalsIgnoreCase("valide"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean isDesabledelete() {
-        return super.isDesabledelete(); //To change body of generated methods, choose Tools | Templates.
+        return state.equalsIgnoreCase("valide"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -250,7 +264,7 @@ public class NoteFrais extends NoteFraisTMP implements Serializable{
 
     @Override
     public boolean isCreateonfield() {
-        return super.isCreateonfield(); //To change body of generated methods, choose Tools | Templates.
+        return false; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -269,8 +283,10 @@ public class NoteFrais extends NoteFraisTMP implements Serializable{
     public List<State> getStates() {
         List<State> states = new ArrayList<State>();
         State stat = new State("etabli", "brouillon");
+        stat.setCouleur("#b22222");
         states.add(stat);
         stat = new State("valide", "valide");
+        stat.setCouleur("#008b8b");
         states.add(stat);
         return states; //To change body of generated methods, choose Tools | Templates.
     }

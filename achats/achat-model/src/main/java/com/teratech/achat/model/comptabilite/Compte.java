@@ -198,7 +198,7 @@ public class Compte extends BaseElement implements Serializable,Comparable<Compt
 
     @Override
     public String getModuleName() {
-        return "teratechachat"; //To change body of generated methods, choose Tools | Templates.
+        return "baseaccount"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

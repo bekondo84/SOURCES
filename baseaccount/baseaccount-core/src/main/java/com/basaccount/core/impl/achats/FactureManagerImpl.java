@@ -13,6 +13,7 @@ import com.basaccount.model.achats.EcheanceReglement;
 import com.basaccount.model.achats.Facture;
 import com.basaccount.model.achats.LigneDocumentAchat;
 import com.basaccount.model.achats.LigneFacture;
+import com.basaccount.model.comptabilite.Taxe;
 import com.bekosoftware.genericdaolayer.dao.ifaces.GenericDAO;
 import com.bekosoftware.genericdaolayer.dao.tools.Predicat;
 import com.bekosoftware.genericdaolayer.dao.tools.RestrictionsContainer;
@@ -81,10 +82,24 @@ public class FactureManagerImpl
             result.getAcomptes().add(new Acompte(ac));
         }//end for(Acompte ac:data.getAcomptes()){
         for(EcheanceReglement ec:data.getEcheances()){
-            result.getEcheances().add(ec);
+            result.getEcheances().add(new EcheanceReglement(ec));
         }//end for(EcheanceReglement ec:data.getEcheances()){
         return result;
     }
+
+    @Override
+    public void processBeforeUpdate(Facture entity) {
+        computeFacture(entity);
+        super.processBeforeUpdate(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void processBeforeSave(Facture entity) {
+        computeFacture(entity);
+        super.processBeforeSave(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
     @Override
     public Facture delete(Long id) {
@@ -92,4 +107,48 @@ public class FactureManagerImpl
         return new Facture(data);
     }
 
+     /**
+     * 
+     * @param entity 
+     */
+    private void computeFacture(Facture entity){
+        double totalht = 0.0;
+        double totalttc = 0.0;
+        double taxes = 0.0;
+        double acomptes = 0.0;
+        for(LigneFacture ligne:entity.getLignes()){
+            if(ligne.getId()<=0){
+                ligne.setId(-1L);
+            }//end if(ligne.getId()<=0){
+            double montant = ligne.getQuantite()*ligne.getPuht()*(100-(ligne.getRemise()!=null? ligne.getRemise():0.0))/100;
+            totalht+=montant;
+            for(Taxe tax : ligne.getTaxes()){
+                double value = tax.getMontant();
+                if(tax.getCalculTaxe().trim().equalsIgnoreCase("1")){
+                    value = montant*tax.getMontant()/100;
+                }//end if(tax.getCalculTaxe().trim().equalsIgnoreCase("1")){
+                taxes+=value;
+            }//end for(Taxe tax : ligne.getTaxes()){
+        }//end  for(LigneFactureVente ligne:entity.getLignes()){
+        for(Acompte acom:entity.getAcomptes()){
+            if(acom.getId()<=0){
+                acom.setId(-1L);
+            }//end if(acom.getId()<=0){
+            acomptes += acom.getMontant();
+        }//end for(Acompte acom:entity.getAcomptes()){
+        for(EcheanceReglement ech:entity.getEcheances()){
+            if(ech.getId()<=0){
+                ech.setId(-1L);
+            }//end  if(ech.getId()<=0){
+        }//end for(EcheanceReglement ech:entity.getEcheances()){
+        totalttc = totalht + taxes;
+        entity.setTotalht(totalht);
+        entity.setTotalttc(totalttc);
+        entity.setTotaltaxes(taxes);
+        entity.setTotalacompte(acomptes);
+        entity.setEscompte(0.0);
+        if(entity.getEscompte()!=null){
+            entity.setTotalescompte(totalht*entity.getEscompte()/100);
+        }//end if(entity.getEscompte()!=null){
+    }//end  private void co
 }

@@ -31,7 +31,7 @@ angular.module('keren.core.login')
                 }//end if(angular.isDefined(e) && e.key!="Enter"){
                 authenticationService.login($scope.username,$scope.password)
                         .then(function(response){
-                            var urlPath = "http://"+$location.host()+":"+$location.port()+"/keren/auth/login/crypto"; 
+                            var urlPath = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/auth/login/crypto"; 
                             $http.post(urlPath ,{username:$scope.username,password:$scope.password})
                                     .then(function(response){
 //                                        console.log("$scope.login = function() remember == encrypt pwd : "+response.data);                            

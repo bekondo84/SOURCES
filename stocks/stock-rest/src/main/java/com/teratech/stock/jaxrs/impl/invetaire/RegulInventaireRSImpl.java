@@ -67,7 +67,7 @@ public class RegulInventaireRSImpl
             workbtn.setValue("{'model':'teratechstock','entity':'regulinventaire','method':'confirme'}");
             workbtn.setStates(new String[]{"confirme"});
             meta.getHeader().add(workbtn);
-            workbtn = new MetaColumn("button", "work1", "Imprimer la fiche d'inventaire", false, "report", null);
+            workbtn = new MetaColumn("button", "work1", "imprimer.la.fiche.inventaire", false, "report", null);
             workbtn.setValue("{'name':'inventory_report01','model':'teratechstock','entity':'regulinventaire','method':'print'}");
             meta.getHeader().add(workbtn);
             MetaColumn stautsbar = new MetaColumn("workflow", "state", "State", false, "statusbar", null);

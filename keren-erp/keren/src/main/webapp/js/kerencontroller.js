@@ -60,7 +60,7 @@ angular.module("keren.core")
                });
                
                $scope.$on("website" , function(event ,args){
-                   var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/keren/#/website/"+args.website;
+                   var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/zock/#/website/"+args.website;
 //                   console.log('$scope.$on("website" , function(event ,args) :::::::::::::::: '+angular.toJson(args.item));
                      //$location.path("/failed");                     
                      $http.defaults.headers.common['Authorization']='Basic '+args.currentuser.authdata;      

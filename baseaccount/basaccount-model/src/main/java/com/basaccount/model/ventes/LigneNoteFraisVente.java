@@ -8,6 +8,7 @@ package com.basaccount.model.ventes;
 import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.comptabilite.Taxe;
 import com.core.base.BaseElement;
+import com.megatim.common.annotations.Filter;
 import com.megatim.common.annotations.Predicate;
 import java.io.Serializable;
 import javax.persistence.Entity;
@@ -37,6 +38,7 @@ public class LigneNoteFraisVente extends BaseElement implements Serializable,Com
     @ManyToOne
     @JoinColumn(name = "TAX_ID")
     @Predicate(label = "taxes",type = Taxe.class,target = "many-to-one",search = true)
+    @Filter("[{\"fieldName\":\"porte\",\"value\":\"0\"}]")
     private Taxe taxe ;
     
     @Predicate(label = "total.ht",type = Double.class,editable = false)

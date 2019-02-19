@@ -260,7 +260,7 @@ public class LigneInventaire extends BaseElement implements Serializable,Compara
 
     @Override
     public String getEditTitle() {
-        return "Ligne d'inventaire"; //To change body of generated methods, choose Tools | Templates.
+        return "ligne.inventaire"; //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

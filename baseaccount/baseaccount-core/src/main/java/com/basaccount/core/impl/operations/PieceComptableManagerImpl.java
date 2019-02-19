@@ -6,12 +6,15 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import com.basaccount.core.ifaces.operations.PieceComptableManagerLocal;
 import com.basaccount.core.ifaces.operations.PieceComptableManagerRemote;
+import com.basaccount.dao.ifaces.achats.FactureDAOLocal;
 import com.basaccount.dao.ifaces.comptabilite.CompteDAOLocal;
 import com.basaccount.dao.ifaces.comptabilite.PeriodeComptableDAOLocal;
 import com.basaccount.dao.ifaces.operations.EcritureComptableDAOLocal;
 import com.basaccount.dao.ifaces.operations.JournalSaisieDAOLocal;
 import com.basaccount.dao.ifaces.operations.PieceComptableDAOLocal;
 import com.basaccount.dao.ifaces.ventes.FactureVenteDAOLocal;
+import com.basaccount.model.achats.Facture;
+import com.basaccount.model.achats.LigneFacture;
 import com.basaccount.model.comptabilite.Compte;
 import com.basaccount.model.comptabilite.PeriodeComptable;
 import com.basaccount.model.comptabilite.Taxe;
@@ -53,6 +56,9 @@ public class PieceComptableManagerImpl
     
     @EJB(name = "FactureVenteDAO")
     protected FactureVenteDAOLocal fvdao;  
+    
+    @EJB(name = "FactureDAO")
+    protected FactureDAOLocal fadao;  
     
      @EJB(name = "PeriodeComptableDAO")
     protected PeriodeComptableDAOLocal periodedao;  
@@ -155,6 +161,14 @@ public class PieceComptableManagerImpl
             facture.setState("transfere");
             fvdao.update(facture.getId(), facture);
         }//end if(piece.getFacturevente()!=null){
+        if(piece.getFactureachat()!=null){
+            Facture facture = fadao.findByPrimaryKey("id", piece.getFactureachat());
+            facture.getLignes().size();
+            facture.getAcomptes().size();
+            facture.getEcheances().size();
+            facture.setState("transfere");
+            fadao.update(facture.getId(), facture);
+        }
         PieceComptable entity = new PieceComptable(piece);
          return entity;
     } 
@@ -175,6 +189,14 @@ public class PieceComptableManagerImpl
             facture.getEcheances().size();
             facture.setState("comptabilise");
             fvdao.update(facture.getId(), facture);
+        }//end if(entity.getFacturevente()!=null){
+        if(entity.getFactureachat()!=null){
+            Facture facture = fadao.findByPrimaryKey("id", entity.getFactureachat());
+            facture.getLignes().size();
+            facture.getAcomptes().size();
+            facture.getEcheances().size();
+            facture.setState("comptabilise");
+            fadao.update(facture.getId(), facture);
         }//end if(entity.getFacturevente()!=null){
         return entity;
     }
@@ -237,6 +259,61 @@ public class PieceComptableManagerImpl
                 fvdao.update(facture.getId(), facture);
                 container = RestrictionsContainer.newInstance();
                 container.addEq("facturevente", id);
+                pieces = dao.filter(container.getPredicats(), null, null, 0, -1);
+        }//end if(pieces==null||pieces.isEmpty()){
+        List<PieceComptable> output = new ArrayList<PieceComptable>();
+        for(PieceComptable piec:pieces){
+            output.add(new PieceComptable(piec));
+        }
+        return output;
+    }
+
+    @Override
+    public List<PieceComptable> priseencompteachat(Long id, PeriodeComptable periode) {
+          //To change body of generated methods, choose Tools | Templates.
+        RestrictionsContainer container = RestrictionsContainer.newInstance();
+        container.addEq("factureachat", id);
+        List<PieceComptable> pieces = dao.filter(container.getPredicats(), null, null, 0, -1);
+        if(pieces==null||pieces.isEmpty()){
+                Facture facture = fadao.findByPrimaryKey("id", id);
+                facture.getLignes().size();
+                facture.getAcomptes().size();
+                facture.getEcheances().size();
+                double totalht = 0.0;
+                Map<Compte,Double> map = new HashMap<Compte, Double>();               
+                for(LigneFacture ligne:facture.getLignes()){
+                    totalht += ligne.getQuantite()*ligne.getPuht()*(100-(ligne.getRemise()!=null ? ligne.getRemise():0.0))/100;
+                    if(ligne.getTaxes()!=null && !ligne.getTaxes().isEmpty()){
+                        for(Taxe tax:ligne.getTaxes()){
+                            double value = tax.getMontant();
+                            if(tax.getCalculTaxe()!=null && tax.getCalculTaxe().equalsIgnoreCase("1")){
+                                value = ligne.getQuantite()*ligne.getPuht();
+                                if(ligne.getRemise()!=null){
+                                    value = value*(100-ligne.getRemise())/100;
+                                }//end if(ligne.getRemise()!=null){
+                                value = value*tax.getMontant()/100;
+                            }//end if(tax.getCalculTaxe()=="1"){   
+                            
+                            if(map.containsKey(tax.getCompte())){                        
+                                map.put(tax.getCompte(),map.get(tax.getCompte())+value);
+                            }else{
+                                map.put(tax.getCompte(),value);
+                            }//end if(map.containsKey(tax.getCompte())){
+                        }//end for(Taxe tax:ligne.getTaxes()){
+                    }//end if(ligne.getTaxes()!=null && !ligne.getTaxes().isEmpty()){
+                }//end for(LigneFactureVente ligne:facture.getLignes()){
+//                facture.setTotalht(totalht);
+                PieceComptable piece = new PieceComptable(facture, map);
+                piece.setCredit(facture.getTotalttc());
+                piece.setDebit(facture.getTotalttc());
+                Date today = new Date();
+                piece.setCompareid(today.getTime());
+                piece.setPeriode(periode);
+                dao.save(piece);
+                facture.setState("prisencompte");
+                fadao.update(facture.getId(), facture);
+                container = RestrictionsContainer.newInstance();
+                container.addEq("factureachat", id);
                 pieces = dao.filter(container.getPredicats(), null, null, 0, -1);
         }//end if(pieces==null||pieces.isEmpty()){
         List<PieceComptable> output = new ArrayList<PieceComptable>();
